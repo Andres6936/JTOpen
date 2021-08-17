@@ -618,14 +618,23 @@ implements ResultSetMetaData
     @exception  SQLException    This exception is never thrown.
     **/
     private String getCatalogSeparator ()
-    throws SQLException
-    {
+            throws SQLException {
         String catalogSeparator;
-        if (con_.getProperties().equals (JDProperties.NAMING, JDProperties.NAMING_SQL))
+        if (con_.getProperties().equals(JDProperties.NAMING, JDProperties.NAMING_SQL))
             catalogSeparator = ".";
         else
             catalogSeparator = "/";
 
         return catalogSeparator;
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
     }
 }

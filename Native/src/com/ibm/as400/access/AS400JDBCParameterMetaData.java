@@ -224,17 +224,24 @@ endif */
 
     @exception  SQLException  If the prepared statement is not open.
     **/
-    public boolean isSigned (int parameterIndex)
-    throws SQLException
-    {
+    public boolean isSigned(int parameterIndex)
+            throws SQLException {
         return prepStmt_.isSigned(parameterIndex);
     }
 
     //@pda jdbc40
-    protected String[] getValidWrappedList()
-    {
-        return new String[] {  "com.ibm.as400.access.AS400JDBCParameterMetaData", "java.sql.ParameterMetaData" };
-    } 
- 
+    protected String[] getValidWrappedList() {
+        return new String[]{"com.ibm.as400.access.AS400JDBCParameterMetaData", "java.sql.ParameterMetaData"};
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }
 

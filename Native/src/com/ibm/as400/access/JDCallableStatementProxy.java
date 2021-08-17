@@ -14,30 +14,21 @@
 package com.ibm.as400.access;
 
 import java.io.InputStream;
-import java.io.Reader;          
-import java.io.Serializable;    
+import java.io.Reader;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.net.URL;            
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.net.URL;
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 endif */ 
-import java.sql.Ref;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
 /* ifdef JDBC40
 import java.sql.*; 
-endif */ 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Types;
+endif */
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Vector;
@@ -692,24 +683,35 @@ implements CallableStatement
     }
 
 
+    // JDBC 3.0
+    public URL getURL(String parameterName)
+            throws SQLException {
+        return (URL) callMethodRtnRaw("getURL",
+                new Class[]{String.class},
+                new Object[]{parameterName})
+                .getReturnValue();
+    }
 
-// JDBC 3.0
-    public URL getURL (String parameterName)
-    throws SQLException
-    {
-        return(URL) callMethodRtnRaw ("getURL",
-                                      new Class[] { String.class},
-                                      new Object[] { parameterName})
-        .getReturnValue ();
+    @Override
+    public RowId getRowId(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public RowId getRowId(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setRowId(String parameterName, RowId x) throws SQLException {
+
     }
 
 
-
-    private void registerLocally (int parameterIndex, int sqlType)
-    {
-      for (int i=registeredTypes_.size(); i<=parameterIndex; i++)
-        registeredTypes_.addElement (null);
-      registeredTypes_.setElementAt (new Integer(sqlType), parameterIndex);
+    private void registerLocally(int parameterIndex, int sqlType) {
+        for (int i = registeredTypes_.size(); i <= parameterIndex; i++)
+            registeredTypes_.addElement(null);
+        registeredTypes_.setElementAt(new Integer(sqlType), parameterIndex);
     }
 
 
@@ -1641,17 +1643,22 @@ implements CallableStatement
                     Long.TYPE },
                     new Object[] { parameterName,
                     reader,
-                    new Long(length) });
-        }
-        catch (java.io.IOException e) {
-          SQLException throwException = new SQLException(e.getMessage());
-          try {
-            throwException.initCause(e); 
-          } catch (Throwable t) {} 
-          throw throwException;
+                            new Long(length)});
+        } catch (java.io.IOException e) {
+            SQLException throwException = new SQLException(e.getMessage());
+            try {
+                throwException.initCause(e);
+            } catch (Throwable t) {
+            }
+            throw throwException;
         }
     }
-    
+
+    @Override
+    public void setNClob(String parameterName, NClob value) throws SQLException {
+
+    }
+
     //@PDA jdbc40
     /* ifdef JDBC40 
     public void setNClob(String parameterName, NClob value) throws SQLException
@@ -1685,25 +1692,49 @@ implements CallableStatement
                     Long.TYPE },
                     new Object[] { parameterName,
                     serialRreader,
-                    new Long (length) });
-        }
-        catch (java.io.IOException e) {
-          SQLException throwException = new SQLException(e.getMessage());
-          try {
-            throwException.initCause(e); 
-          } catch (Throwable t) {} 
-          throw throwException;
+                            new Long(length)});
+        } catch (java.io.IOException e) {
+            SQLException throwException = new SQLException(e.getMessage());
+            try {
+                throwException.initCause(e);
+            } catch (Throwable t) {
+            }
+            throw throwException;
         }
     }
-    
+
+    @Override
+    public NClob getNClob(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public SQLXML getSQLXML(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String parameterName) throws SQLException {
+        return null;
+    }
+
     //@PDA jdbc40
-    public void setNString(String parameterName, String value) throws SQLException
-    {
-        callMethod ("setNString",
-                new Class[] { String.class, String.class },
-                new Object[] { parameterName, value });          
+    public void setNString(String parameterName, String value) throws SQLException {
+        callMethod("setNString",
+                new Class[]{String.class, String.class},
+                new Object[]{parameterName, value});
     }
-    
+
     //@PDA jdbc40
     /* ifdef JDBC40 
     public void setRowId(String parameterName, RowId x) throws SQLException
@@ -1886,15 +1917,25 @@ implements CallableStatement
             callMethod ("setNClob",
                     new Class[] { String.class, Reader.class },
                     new Object[] { parameterName,
-                    serialRreader });
+                            serialRreader});
+        } catch (java.io.IOException e) {
+            SQLException throwException = new SQLException(e.getMessage());
+            try {
+                throwException.initCause(e);
+            } catch (Throwable t) {
+            }
+            throw throwException;
         }
-        catch (java.io.IOException e) {
-          SQLException throwException = new SQLException(e.getMessage());
-          try {
-            throwException.initCause(e); 
-          } catch (Throwable t) {} 
-          throw throwException;
-        }    
+    }
+
+    @Override
+    public <T> T getObject(int parameterIndex, Class<T> type) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public <T> T getObject(String parameterName, Class<T> type) throws SQLException {
+        return null;
     }
     
 /* ifdef JDBC40 

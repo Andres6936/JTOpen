@@ -14,33 +14,25 @@
 package com.ibm.as400.access;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.ClientInfoStatus;
 endif */ 
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 /* ifdef JDBC40
 import java.sql.NClob;
 endif */ 
-import java.sql.PreparedStatement;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLClientInfoException;
 import java.sql.SQLXML;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.concurrent.Executor;
-endif */ 
-import java.sql.Savepoint;   
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-import java.sql.Struct;
+endif */
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 
 class JDConnectionProxy
@@ -926,12 +918,12 @@ endif */
 //JDBC40DOC   * @see java.sql.Connection#setClientInfo(String, String)
 //JDBC40DOC   *      setClientInfo(String, String)
    */
-  public void setClientInfo(Properties properties) 
-  /* ifdef JDBC40 
+  public void setClientInfo(Properties properties)
+//  /* ifdef JDBC40
   throws SQLClientInfoException
-endif */ 
-/* ifndef JDBC40 */ 
-  throws SQLException
+//endif */
+/* ifndef JDBC40 */
+//  throws SQLException
 /* endif */ 
   {
       try
@@ -941,7 +933,7 @@ endif */
                   new Object[] { properties });
       }catch(SQLException e)
       {
-      /* ifdef JDBC40 
+//      /* ifdef JDBC40
           //may be SQLException or SQLClientInfoException
           if(e instanceof SQLClientInfoException)
               throw (SQLClientInfoException)e;
@@ -960,9 +952,9 @@ endif */
               SQLClientInfoException clientIE = new SQLClientInfoException(e.getMessage(), e.getSQLState(), m);
               throw clientIE;
           }
-          endif */ 
-          /* ifndef JDBC40 */ 
-          	throw e; 
+//          endif */
+          /* ifndef JDBC40 */
+//          	throw e;
           /* endif */ 
       }
   }
@@ -1064,17 +1056,26 @@ endif */
    * returned initially contains no data.  The <code>setBinaryStream</code> and
    * <code>setBytes</code> methods of the <code>Blob</code> interface may be used to add data to
    * the <code>Blob</code>.
-   * @return  An object that implements the <code>Blob</code> interface
+   * @return An object that implements the <code>Blob</code> interface
    * @throws SQLException if an object that implements the
    * <code>Blob</code> interface can not be constructed
    *
    */
-  public Blob createBlob() throws SQLException
-  {
+  public Blob createBlob() throws SQLException {
       return (Blob) callMethodRtnObj("createBlob");
   }
 
-  //@PDA jdbc40
+    @Override
+    public NClob createNClob() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return null;
+    }
+
+    //@PDA jdbc40
 //JDBC40DOC   /**
 //JDBC40DOC    * Constructs an object that implements the <code>NClob</code> interface. The object
 //JDBC40DOC    * returned initially contains no data.  The <code>setAsciiStream</code>,
@@ -1189,26 +1190,44 @@ endif */
   }
 
 endif */
-  
-  // JDBC 4.1
-  public int getNetworkTimeout() throws SQLException {
-    return ((Integer)callMethodRtnObj ("getNetworkTimeout")).intValue();
-  }
 
-  // JDBC 4.1
-  public String getSchema() throws SQLException {
-    return ((String)callMethodRtnObj ("getSchema"));
-  }
+    // JDBC 4.1
+    public int getNetworkTimeout() throws SQLException {
+        return ((Integer) callMethodRtnObj("getNetworkTimeout")).intValue();
+    }
+
+    // JDBC 4.1
+    public String getSchema() throws SQLException {
+        return ((String) callMethodRtnObj("getSchema"));
+    }
+
+    @Override
+    public void abort(Executor executor) throws SQLException {
+
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+
+    }
 
 
-  // JDBC 4.1
-  public void setSchema(String schema) throws SQLException {
-    callMethod ("setSchema",
-        new Class[] { String.class },
-        new Object[] { schema });
-  
-  }
+    // JDBC 4.1
+    public void setSchema(String schema) throws SQLException {
+        callMethod("setSchema",
+                new Class[]{String.class},
+                new Object[]{schema});
+
+    }
 
 
-  
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

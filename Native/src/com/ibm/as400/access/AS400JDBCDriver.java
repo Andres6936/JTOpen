@@ -13,21 +13,17 @@
 
 package com.ibm.as400.access;
 
-import java.beans.PropertyVetoException;	// @B9A
-import java.net.InetAddress;				// @C2A
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.DriverPropertyInfo;
-import java.sql.SQLException;
-/*ifdef JDBC40 
+import java.beans.PropertyVetoException;    // @B9A
+import java.net.InetAddress;                // @C2A
+import java.sql.*;
+/*ifdef JDBC40
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
-endif */ 
+endif */
 import java.util.Properties;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
+import java.util.logging.Logger;
 
 
 /**
@@ -1340,22 +1336,25 @@ endif */
 	}
 
 
-	/**
-	Indicates if the driver is a genuine JDBC compliant driver.
-	
-	@return         Always true.
-	**/
-	public boolean jdbcCompliant ()
-	{
-		return true;
-	}
+    /**
+     * Indicates if the driver is a genuine JDBC compliant driver.
+     *
+     * @return Always true.
+     **/
+    public boolean jdbcCompliant() {
+        return true;
+    }
+
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return null;
+    }
 
 
-	//@B6A -- This logic was formerly in the initializeConnection() method.
-	private Connection prepareConnection(AS400 as400, JDDataSourceURL dataSourceUrl, 
-										 Properties info, JDProperties jdProperties)
-	throws SQLException
-	{
+    //@B6A -- This logic was formerly in the initializeConnection() method.
+    private Connection prepareConnection(AS400 as400, JDDataSourceURL dataSourceUrl,
+                                         Properties info, JDProperties jdProperties)
+            throws SQLException {
 
         // set socket properties
         SocketProperties sockProps = null;

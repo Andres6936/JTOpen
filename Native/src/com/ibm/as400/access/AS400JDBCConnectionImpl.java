@@ -16,7 +16,6 @@ package com.ibm.as400.access;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
-import java.sql.*;
 /* ifdef JDBC40
 import java.sql.ClientInfoStatus;
 import java.sql.SQLClientInfoException;
@@ -28,6 +27,25 @@ endif */
 /* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.ClientInfoStatus;
+import java.sql.Clob;
+import java.sql.DataTruncation;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.*;
 /* ifdef JDBC40
 import java.util.HashMap;

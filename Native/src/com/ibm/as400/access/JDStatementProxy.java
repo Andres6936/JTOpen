@@ -656,19 +656,23 @@ implements java.sql.Statement
 
     public long executeLargeUpdate(String sql,
                                     String[] columnNames)  throws SQLException {
-      
-      cachedResultSet_ = null;
-      // Avoid dragging in JDError
-      throw new SQLException (
-                             AS400JDBCDriver.getResource("JD" + EXC_FUNCTION_NOT_SUPPORTED,null),
-                             EXC_FUNCTION_NOT_SUPPORTED, -99999);
-      
+
+        cachedResultSet_ = null;
+        // Avoid dragging in JDError
+        throw new SQLException(
+                AS400JDBCDriver.getResource("JD" + EXC_FUNCTION_NOT_SUPPORTED, null),
+                EXC_FUNCTION_NOT_SUPPORTED, -99999);
+
     }
 
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
 
-    
-    
-    
-    
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

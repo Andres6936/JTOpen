@@ -25,11 +25,13 @@ import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
 /*ifdef JDBC40 
 import java.sql.SQLFeatureNotSupportedException;
-endif */ 
+endif */
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Random;
+import java.util.logging.Logger;
 /*ifdef JDBC40 
 import java.util.logging.Logger;
 endif */
@@ -1185,20 +1187,25 @@ return connection;
    Rather, the timeout value is determined by the IBM i system.
    @return the maximum time in seconds that this data source can wait while attempting to connect to a database.
    **/
-  public int getLoginTimeout()
-  {
-    return properties_.getInt(JDProperties.LOGIN_TIMEOUT);
+  public int getLoginTimeout() {
+      return properties_.getInt(JDProperties.LOGIN_TIMEOUT);
   }
 
-  // method required by javax.sql.DataSource
-  /**
-   Returns the log writer for this data source.
-   @return The log writer for this data source.
-   @throws SQLException If a database error occurs.
-   **/
-  public PrintWriter getLogWriter() throws SQLException
-  {
-    return writer_;
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return null;
+    }
+
+    // method required by javax.sql.DataSource
+
+    /**
+     * Returns the log writer for this data source.
+     *
+     * @return The log writer for this data source.
+     * @throws SQLException If a database error occurs.
+     **/
+    public PrintWriter getLogWriter() throws SQLException {
+        return writer_;
   }
   
   //@PDA
@@ -5218,15 +5225,24 @@ public boolean isUseDrdaMetadataVersion()
     {
       buf[i] = (char)(buf[i] - adder[i % 9]);
     }
-    return buf;
+      return buf;
   }
 
-  
-  //@pda jdbc40
-  protected String[] getValidWrappedList()
-  {
-      return new String[] {  "com.ibm.as400.access.AS400JDBCManagedDataSource", "javax.sql.DataSource" };
-  } 
+
+    //@pda jdbc40
+    protected String[] getValidWrappedList() {
+        return new String[]{"com.ibm.as400.access.AS400JDBCManagedDataSource", "javax.sql.DataSource"};
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 
   /*ifdef JDBC40 
   public Logger getParentLogger() throws SQLFeatureNotSupportedException {

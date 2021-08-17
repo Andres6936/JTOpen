@@ -18,28 +18,17 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.net.URL;            
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.net.URL;
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 endif */ 
-import java.sql.ParameterMetaData;
-import java.sql.PreparedStatement;
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
-endif */ 
-import java.sql.Time;
-import java.sql.Timestamp;
+endif */
 import java.util.Calendar;
 
 
@@ -144,23 +133,24 @@ implements PreparedStatement
         //@K1D                       AS400JDBCDriver.getResource("JD" + EXC_FUNCTION_NOT_SUPPORTED),
         //@K1D                       EXC_FUNCTION_NOT_SUPPORTED, -99999);
         try {    //@K1A
-        JDParameterMetaDataProxy newMetaData = new JDParameterMetaDataProxy (jdConnection_);
-        return (JDParameterMetaDataProxy) connection_.callFactoryMethod (pxId_, "getParameterMetaData", newMetaData);
-      }
-      catch (InvocationTargetException e) {
-        throw JDConnectionProxy.rethrow1 (e);
-      }
+            JDParameterMetaDataProxy newMetaData = new JDParameterMetaDataProxy(jdConnection_);
+            return (JDParameterMetaDataProxy) connection_.callFactoryMethod(pxId_, "getParameterMetaData", newMetaData);
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
+        }
+    }
+
+    @Override
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
+
     }
 
 
-
-
-// JDBC 2.0
-    public void setArray (int parameterIndex, Array parameterValue)
-      throws SQLException
-    {
-      if (parameterValue != null &&
-          !(parameterValue instanceof Serializable) ){
+    // JDBC 2.0
+    public void setArray(int parameterIndex, Array parameterValue)
+            throws SQLException {
+        if (parameterValue != null &&
+                !(parameterValue instanceof Serializable)) {
         if (JDTrace.isTraceOn())
           JDTrace.logInformation (this, NOT_SERIALIZABLE);
         throw new SQLException ("NOT_SERIALIZABLE: "+parameterValue.getClass().getName());
@@ -679,17 +669,22 @@ implements PreparedStatement
                     Long.TYPE },
                     new Object[] { new Integer (parameterIndex),
                     reader,
-                    new Long(length) });
-        }
-        catch (java.io.IOException e) {
-          SQLException throwException = new SQLException(e.getMessage());
-          try {
-            throwException.initCause(e); 
-          } catch (Throwable t) {} 
-          throw throwException;
+                            new Long(length)});
+        } catch (java.io.IOException e) {
+            SQLException throwException = new SQLException(e.getMessage());
+            try {
+                throwException.initCause(e);
+            } catch (Throwable t) {
+            }
+            throw throwException;
         }
     }
-    
+
+    @Override
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
+
+    }
+
     //@PDA jdbc40
     /* ifdef JDBC40 
     public void setNClob(int parameterIndex, NClob value) throws SQLException
@@ -778,17 +773,22 @@ implements PreparedStatement
                     Long.TYPE },
                     new Object[] { new Integer (parameterIndex),
                     serialRreader,
-                    new Long (length) });
-        }
-        catch (java.io.IOException e) {
-          SQLException throwException = new SQLException(e.getMessage());
-          try {
-            throwException.initCause(e); 
-          } catch (Throwable t) {} 
-          throw throwException;
+                            new Long(length)});
+        } catch (java.io.IOException e) {
+            SQLException throwException = new SQLException(e.getMessage());
+            try {
+                throwException.initCause(e);
+            } catch (Throwable t) {
+            }
+            throw throwException;
         }
     }
-    
+
+    @Override
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
     //@PDA jdbc40
     /* ifdef JDBC40 
     public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException

@@ -28,32 +28,18 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.net.URL;                        //@G4A JDBC 3.0
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.PreparedStatement;
 endif */ 
 
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
-endif */ 
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Types;
+endif */
 import java.util.Calendar;
 import java.util.Hashtable;  //@A2A
 import java.util.Map;
@@ -2371,23 +2357,42 @@ implements RowSet, Serializable             // @A3C
     }
 
     /**
-    *  Removes the RowSetListener from the list.
-    *  @param listener The RowSetListener object.
-    **/
-    public void removeRowSetListener(RowSetListener listener)
-    {
+     * Removes the RowSetListener from the list.
+     *
+     * @param listener The RowSetListener object.
+     **/
+    public void removeRowSetListener(RowSetListener listener) {
         eventSupport_.removeRowSetListener(listener);
     }
 
+    @Override
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
+
+    }
+
+    @Override
+    public void setRowId(String parameterName, RowId x) throws SQLException {
+
+    }
+
     /**
-    *  Indicates if the current row has been deleted. A result set
-    *  of type TYPE_SCROLL_INSENSITIVE may contain rows that have
-    *  been deleted.
-    *
-    *  @return true if current row has been deleted; false otherwise.
-    *
-    *  @throws SQLException If an error occurs.
-    **/
+     * Indicates if the current row has been deleted. A result set
+     * of type TYPE_SCROLL_INSENSITIVE may contain rows that have
+     * been deleted.
+     *
+     * @return true if current row has been deleted; false otherwise.
+     * @throws SQLException If an error occurs.
+     **/
     public boolean rowDeleted () throws SQLException
     {
         validateResultSet();
@@ -3274,10 +3279,9 @@ implements RowSet, Serializable             // @A3C
     @param  columnValue   The column value or null if the value is SQL NULL.
     
     @throws  SQLException    Always thrown because DB2 for IBM i does not support arrays.
-    **/
-    public void updateArray (String columnName, Array columnValue)
-    throws SQLException
-    {
+     **/
+    public void updateArray(String columnName, Array columnValue)
+            throws SQLException {
         validateResultSet();
         resultSet_.updateArray(columnName, columnValue);
 
@@ -3285,15 +3289,40 @@ implements RowSet, Serializable             // @A3C
 
     }
 
+    @Override
+    public RowId getRowId(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public RowId getRowId(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateRowId(int columnIndex, RowId x) throws SQLException {
+
+    }
+
+    @Override
+    public void updateRowId(String columnLabel, RowId x) throws SQLException {
+
+    }
+
+    @Override
+    public int getHoldability() throws SQLException {
+        return 0;
+    }
+
 
     /**
-    *  Updates a column in the current row using an ASCII stream value.
-    *  The driver reads the data from the stream as needed until no more
-    *  bytes are available.  The driver converts this to an SQL VARCHAR
-    *  value.
-    *
-    *  <p>This does not update the database directly.  Instead, it updates
-    *  a copy of the data in memory.  Call updateRow() or insertRow() to
+     *  Updates a column in the current row using an ASCII stream value.
+     *  The driver reads the data from the stream as needed until no more
+     *  bytes are available.  The driver converts this to an SQL VARCHAR
+     *  value.
+     *
+     *  <p>This does not update the database directly.  Instead, it updates
+     *  a copy of the data in memory.  Call updateRow() or insertRow() to
     *  update the database.
     *
     *  @param  columnIndex   The column index (1-based).
@@ -5500,23 +5529,62 @@ implements RowSet, Serializable             // @A3C
      * the result set concurrency is <CODE>CONCUR_READ_ONLY</code> 
      *  or if a database access error occurs
      */
-    public void updateNString(String columnLabel, String nString) throws SQLException
-    {
+    public void updateNString(String columnLabel, String nString) throws SQLException {
         validateResultSet();
-        resultSet_.updateNString (columnLabel, nString);
+        resultSet_.updateNString(columnLabel, nString);
 
-        eventSupport_.fireRowChanged(new RowSetEvent(this));  
+        eventSupport_.fireRowChanged(new RowSetEvent(this));
+    }
+
+    @Override
+    public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public NClob getNClob(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+
     }
 
     //@pda jdbc40
- // JDBC40DOC    /**
- // JDBC40DOC     * Updates the designated column with a <code>RowId</code> value. The updater
- // JDBC40DOC     * methods are used to update column values in the current row or the insert
- // JDBC40DOC     * row. The updater methods do not update the underlying database; instead 
- // JDBC40DOC     * the <code>updateRow</code> or <code>insertRow</code> methods are called 
- // JDBC40DOC     * to update the database.
- // JDBC40DOC     * 
- // JDBC40DOC     * @param columnIndex the first column is 1, the second 2, ...
+    // JDBC40DOC    /**
+    // JDBC40DOC     * Updates the designated column with a <code>RowId</code> value. The updater
+    // JDBC40DOC     * methods are used to update column values in the current row or the insert
+    // JDBC40DOC     * row. The updater methods do not update the underlying database; instead
+    // JDBC40DOC     * the <code>updateRow</code> or <code>insertRow</code> methods are called
+    // JDBC40DOC     * to update the database.
+    // JDBC40DOC     *
+    // JDBC40DOC     * @param columnIndex the first column is 1, the second 2, ...
  // JDBC40DOC     * @param x the column value
  // JDBC40DOC     * @throws SQLException if a database access error occurs,
  // JDBC40DOC     * the result set concurrency is <code>CONCUR_READ_ONLY</code> 
@@ -6364,13 +6432,18 @@ implements RowSet, Serializable             // @A3C
      *  error could occur ; if a database access error occurs; or
      * this method is called on a closed <code>CallableStatement</code>
      */
-    public void setNCharacterStream(String parameterName, Reader value) throws SQLException
-    {
+    public void setNCharacterStream(String parameterName, Reader value) throws SQLException {
         validateStatement();
         statement_.setNCharacterStream(statement_.findParameterIndex(parameterName), value);
     }
 
+    @Override
+    public void setNClob(String parameterName, NClob value) throws SQLException {
+
+    }
+
     //@PDA jdbc40
+
     /**
      * Sets the designated parameter to a <code>Reader</code> object.  The reader must contain  the number
      * of characters specified by length otherwise a <code>SQLException</code> will be
@@ -6391,13 +6464,18 @@ implements RowSet, Serializable             // @A3C
      * this method is called on a closed <code>PreparedStatement</code>
      *
      */
-    public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException
-    {
+    public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
         validateStatement();
         statement_.setNClob(parameterIndex, reader, length);
     }
 
+    @Override
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
+
+    }
+
     //@PDA jdbc40
+
     /**
      * Sets the designated parameter to a <code>Reader</code> object.
      * This method differs from the <code>setCharacterStream (int, Reader)</code> method
@@ -7216,16 +7294,24 @@ implements RowSet, Serializable             // @A3C
 
     public Object getObject(int columnIndex, Class type) throws SQLException {
       validateResultSet();
-      return resultSet_.getObject(columnIndex, type);
+        return resultSet_.getObject(columnIndex, type);
     }
 
     public Object getObject(String columnLabel, Class type)
-        throws SQLException {
-      validateResultSet();
+            throws SQLException {
+        validateResultSet();
         return resultSet_.getObject(columnLabel, type);
 
     }
 
-    
-    
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

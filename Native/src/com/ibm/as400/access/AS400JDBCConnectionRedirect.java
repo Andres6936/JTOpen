@@ -14,8 +14,20 @@
 package com.ibm.as400.access;
 
 import java.beans.PropertyVetoException;
-import java.sql.*;
-import java.sql.SQLData;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Clob;
+import java.sql.DatabaseMetaData;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.SQLXML;
+import java.sql.Savepoint;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -2416,10 +2428,6 @@ endif */
   }
 
   @Override
-  boolean testDataTruncation(AS400JDBCStatement statementWarningObject, AS400JDBCResultSet resultSetWarningObject, int parameterIndex, boolean isParameter, com.ibm.as400.access.SQLData data, JDSQLStatement sqlStatement) throws SQLException {
-    return false;
-  }
-
   public synchronized boolean testDataTruncation(AS400JDBCStatement statementWarningObject,
                                                  AS400JDBCResultSet resultSetWarningObject, int parameterIndex,
                                                  boolean isParameter, SQLData data, JDSQLStatement sqlStatement)

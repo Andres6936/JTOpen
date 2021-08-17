@@ -18,8 +18,12 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.sql.*; // @J1c
-import java.sql.SQLData;
+// @J1c
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.Hashtable;
 
 /**
@@ -210,20 +214,21 @@ class JDUtilities {
         if (!isJDBC3) {
           fieldNames = new String[] { "TABLE_SCHEM" };
 
-          sqlData = new java.sql.SQLData[] { new SQLVarchar(128, settings) }; // schema
+          sqlData = new java.sql.SQLData[]{}; // schema
                                                                      // name
 
           fieldNullables = new int[] { AS400JDBCDatabaseMetaData.columnNoNulls };
           maps = new JDFieldMap[1];
         } else {
-          fieldNames = new String[] { "TABLE_SCHEM", "TABLE_CATALOG" }; // @G4A
+          fieldNames = new String[]{"TABLE_SCHEM", "TABLE_CATALOG"}; // @G4A
 
-          sqlData = new SQLData[] { new SQLVarchar(128, settings), // schema
-                                                                   // name
-              new SQLVarchar(128, settings) }; // table catalog //@G4A
+          sqlData = new java.sql.SQLData[]{,
+                  // schema
+                  // name
+          }; // table catalog //@G4A
 
-          fieldNullables = new int[] { AS400JDBCDatabaseMetaData.columnNoNulls,
-              AS400JDBCDatabaseMetaData.columnNullable }; // @G4A
+          fieldNullables = new int[]{AS400JDBCDatabaseMetaData.columnNoNulls,
+                  AS400JDBCDatabaseMetaData.columnNullable}; // @G4A
           maps = new JDFieldMap[2]; // @G4C
         }
 
@@ -241,8 +246,8 @@ class JDUtilities {
 
         // Create the mapped row cache that is returned in the
         // result set
-        JDMappedRow mappedRow = new JDMappedRow(fieldNames, sqlData,
-            fieldNullables, maps);
+        JDMappedRow mappedRow = new JDMappedRow(fieldNames, (SQLData[]) sqlData,
+                fieldNullables, maps);
         rowCache = new JDMappedRowCache(mappedRow, serverRowCache);
       } finally {
         if (request != null) {

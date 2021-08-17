@@ -199,16 +199,25 @@ public class JDBCClob implements Clob
     }
     catch (UnsupportedEncodingException uee)
     {
-      SQLException sql = new SQLException(uee.toString());
-      sql.initCause(uee);
-      throw sql;
+        SQLException sql = new SQLException(uee.toString());
+        sql.initCause(uee);
+        throw sql;
     }
   }
 
-  public void truncate(long len) throws SQLException
-  {
-    length_ = (len < 0) ? 0 : (int)(len & 0x7FFFFFFF);
-  }
+    public void truncate(long len) throws SQLException {
+        length_ = (len < 0) ? 0 : (int) (len & 0x7FFFFFFF);
+    }
+
+    @Override
+    public void free() throws SQLException {
+
+    }
+
+    @Override
+    public Reader getCharacterStream(long pos, long length) throws SQLException {
+        return null;
+    }
 }
 
 

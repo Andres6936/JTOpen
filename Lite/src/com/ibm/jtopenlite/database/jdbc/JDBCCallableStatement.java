@@ -17,15 +17,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.Ref;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -219,25 +211,40 @@ public class JDBCCallableStatement extends JDBCPreparedStatement implements
 	public Timestamp getTimestamp(String parameterName, Calendar cal)
 			throws SQLException {
 	    throw new NotImplementedException();
-	}
+    }
 
-	public URL getURL(int parameterIndex) throws SQLException {
-	    throw new NotImplementedException();
-	}
+    public URL getURL(int parameterIndex) throws SQLException {
+        throw new NotImplementedException();
+    }
 
-	public URL getURL(String parameterName) throws SQLException {
-	    throw new NotImplementedException();
-	}
+    public URL getURL(String parameterName) throws SQLException {
+        throw new NotImplementedException();
+    }
 
-	public void registerOutParameter(int parameterIndex, int sqlType)
-			throws SQLException {
-	    throw new NotImplementedException();
-	}
+    @Override
+    public RowId getRowId(int parameterIndex) throws SQLException {
+        return null;
+    }
 
-	public void registerOutParameter(String parameterName, int sqlType)
-			throws SQLException {
-	    throw new NotImplementedException();
-	}
+    @Override
+    public RowId getRowId(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setRowId(String parameterName, RowId x) throws SQLException {
+
+    }
+
+    public void registerOutParameter(int parameterIndex, int sqlType)
+            throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    public void registerOutParameter(String parameterName, int sqlType)
+            throws SQLException {
+        throw new NotImplementedException();
+    }
 
 	public void registerOutParameter(int parameterIndex, int sqlType, int scale)
 			throws SQLException {
@@ -588,43 +595,81 @@ public class JDBCCallableStatement extends JDBCPreparedStatement implements
    * @param arg2
    */
   public void setNCharacterStream(String parm, Reader arg1, long arg2)
-      throws SQLException {
-    throw new NotImplementedException();
+          throws SQLException {
+      throw new NotImplementedException();
 
   }
 
+    @Override
+    public void setNClob(String parameterName, NClob value) throws SQLException {
+
+    }
 
 
+    /**
+     * @param parm
+     * @param arg1
+     */
+    public void setNClob(String parm, Reader arg1) throws SQLException {
+        throw new NotImplementedException();
 
-  /**
-   * @param parm
-   * @param arg1
-   */
-  public void setNClob(String parm, Reader arg1) throws SQLException {
-    throw new NotImplementedException();
+    }
 
-  }
+    @Override
+    public <T> T getObject(int parameterIndex, Class<T> type) throws SQLException {
+        return null;
+    }
 
-
-  /**
-   * @param parm
-   * @param arg1
-   * @param arg2
-   */
-  public void setNClob(String parm, Reader arg1, long arg2) throws SQLException {
-    throw new NotImplementedException();
-
-  }
+    @Override
+    public <T> T getObject(String parameterName, Class<T> type) throws SQLException {
+        return null;
+    }
 
 
-  /**
-   * @param parm
-   * @param arg1
-   */
-  public void setNString(String parm, String arg1) throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * @param parm
+     * @param arg1
+     * @param arg2
+     */
+    public void setNClob(String parm, Reader arg1, long arg2) throws SQLException {
+        throw new NotImplementedException();
 
-  }
+    }
+
+    @Override
+    public NClob getNClob(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public SQLXML getSQLXML(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String parameterName) throws SQLException {
+        return null;
+    }
+
+
+    /**
+     * @param parm
+     * @param arg1
+     */
+    public void setNString(String parm, String arg1) throws SQLException {
+        throw new NotImplementedException();
+
+    }
 
 
 

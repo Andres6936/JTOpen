@@ -109,8 +109,8 @@ public class AS400JDBCArray implements Array, Serializable {
       }
     }
     if (contentTemplate_ == null ) { 
-      contentTemplate_ = SQLDataFactory.newData(typeName, 1, 1, 1, 37, null,
-          vrm_, (con == null ? null : con.getProperties())); // @array
+      contentTemplate_ = (SQLData) SQLDataFactory.newData(typeName, 1, 1, 1, 37, null,
+              vrm_, (con == null ? null : con.getProperties())); // @array
     // allow max for local conversion only since it is not associated with a
     // column on hostserver yet
     }
@@ -154,7 +154,7 @@ public class AS400JDBCArray implements Array, Serializable {
    */
   public int getBaseType() throws SQLException {
 
-    return contentTemplate_.getType();
+    throw new SQLException();
 
   }
 
@@ -437,7 +437,7 @@ public class AS400JDBCArray implements Array, Serializable {
       // create array of same type as data_
       Class dummySQLXType = null; // @nullelem
       try {
-        String className = contentTemplate_.getJavaClassName(); 
+        String className = contentTemplate_.getClass().getName();
         // For some classes, use the superclass   @G7A
         if (className.equals("com.ibm.as400.access.AS400JDBCBlob")) {
           className = "java.sql.Blob"; 
@@ -463,7 +463,7 @@ public class AS400JDBCArray implements Array, Serializable {
           .newInstance(dummySQLXType, count);
       for (int x = 0; x < count; x++) {
         if (data_[x + intIndex] != null) {
-          Object o = ((SQLData) data_[x + intIndex]).getObject();
+          Object o = data_[x + intIndex];
           ((Object[]) retArry)[x] = o; 
                                                                                  // based
                                                                                  // on

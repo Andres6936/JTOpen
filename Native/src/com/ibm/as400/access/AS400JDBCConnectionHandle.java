@@ -14,29 +14,19 @@
 package com.ibm.as400.access;
 
 import javax.sql.ConnectionEvent;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-/*ifdef JDBC40 
+import java.sql.*;
+/*ifdef JDBC40
 import java.sql.SQLClientInfoException;
 endif */ 
-import java.sql.Clob;
-import java.sql.Connection;        //@A5A
-import java.sql.DatabaseMetaData;
-/*ifdef JDBC40 
+/*ifdef JDBC40
 import java.sql.NClob;
 endif */ 
-import java.sql.PreparedStatement;
 /*ifdef JDBC40
 import java.sql.SQLXML;
-endif */ 
-import java.sql.Savepoint;         //@A6A
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.Statement;
-import java.sql.Struct;
+endif */
 import java.util.Map;
 import java.util.Properties; //@pda client info
+import java.util.concurrent.Executor;
 /*ifdef JDBC40
 import java.util.concurrent.Executor;
 endif */ 
@@ -1712,32 +1702,30 @@ ResultSet.CONCUR_READ_ONLY.
      * <li>ClientProgramID  -   The client program identification.</li>
      * </ul>
      * <p>
-     * 
+     *
      * @param properties
      *            the list of client info properties to set
      *            <p>
      * see java.sql.Connection#setClientInfo(String, String)
      *      setClientInfo(String, String)
      */
-    public void setClientInfo(Properties properties) 
+    public void setClientInfo(Properties properties) throws SQLClientInfoException
 /*ifdef JDBC40
      throws SQLClientInfoException
-endif */ 
-/* ifndef JDBC40 */     
-    throws SQLException
-/* endif */ 
-    {
-/* ifdef JDBC40 
-    try { 
- endif */     
-        validateConnection();
-        /* ifdef JDBC40 
-          }catch(SQLException e)
-      {
-          SQLClientInfoException clientIE = new SQLClientInfoException(e.getMessage(), e.getSQLState(), null);
-          throw clientIE;
-      }
-          endif */ 
+endif */
+    /* ifndef JDBC40 */
+//    throws SQLException
+    /* endif */ {
+///* ifdef JDBC40
+        try {
+// endif */
+            validateConnection();
+//        /* ifdef JDBC40
+        } catch (SQLException e) {
+            SQLClientInfoException clientIE = new SQLClientInfoException(e.getMessage(), e.getSQLState(), null);
+            throw clientIE;
+        }
+//          endif */
         
         
         connection_.setClientInfo(properties);
@@ -1847,16 +1835,28 @@ endif */
    * <code>Blob</code> interface can not be constructed
    *
    */
-  public Blob createBlob() throws SQLException
-  {
+  public Blob createBlob() throws SQLException {
       validateConnection();
       return connection_.createBlob();
   }
 
+    @Override
+    public NClob createNClob() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isValid(int timeout) throws SQLException {
+        return false;
+    }
 
 
-
-  //@PDA jdbc40
+    //@PDA jdbc40
 //JDBC40DOC  /**
 //JDBC40DOC   * Constructs an object that implements the <code>NClob</code> interface. The object
 //JDBC40DOC   * returned initially contains no data.  The <code>setAsciiStream</code>,
@@ -1976,24 +1976,24 @@ endif */
      *                  property is cleared.
      */
     public void setClientInfo(String name, String value)
-    /* ifdef JDBC40 
+//    /* ifdef JDBC40
      throws SQLClientInfoException
-     endif */
-    /* ifndef JDBC40 */ 
-    throws SQLException
+//     endif */
+    /* ifndef JDBC40 */
+//    throws SQLException
     /* endif */ 
     {
-    /* ifdef JDBC40 	
+//    /* ifdef JDBC40
     	try {
-    endif */ 
+//    endif */
         validateConnection();
-    /* ifdef JDBC40 
+//    /* ifdef JDBC40
            }catch(SQLException e)
         {
             SQLClientInfoException clientIE = new SQLClientInfoException(e.getMessage(), e.getSQLState(), null);
             throw clientIE;
         }
-     endif */ 
+//     endif */
         
         connection_.setClientInfo(name, value);
     }
@@ -2040,11 +2040,25 @@ endif */
     endif */
 
 
+    public String getSchema() throws SQLException {
+        validateConnection();
+        return connection_.getSchema();
+    }
 
-      public String getSchema() throws SQLException {
-        validateConnection(); 
-        return connection_.getSchema(); 
-      }
+    @Override
+    public void abort(Executor executor) throws SQLException {
+
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+
+    }
+
+    @Override
+    public int getNetworkTimeout() throws SQLException {
+        return 0;
+    }
 
 
     /* ifdef JDBC40 
@@ -2057,10 +2071,19 @@ endif */
     endif */
 
 
-      public void setSchema(String schema) throws SQLException {
-	     validateConnection(); 
-	     connection_.setSchema(schema);
-      }
-    
-    
+    public void setSchema(String schema) throws SQLException {
+        validateConnection();
+        connection_.setSchema(schema);
+    }
+
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

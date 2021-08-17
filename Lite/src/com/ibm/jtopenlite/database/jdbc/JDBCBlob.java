@@ -113,16 +113,25 @@ public class JDBCBlob implements Blob
   {
     if (pos <= 0) throw new SQLException("Bad position: "+pos);
     int ipos = (int)(pos & 0x7FFFFFFF);
-    int total = length_-ipos+1;
-    if (total > len) total = len;
-    System.arraycopy(bytes, offset, data_, offset_+ipos-1, total);
-    return total;
+      int total = length_ - ipos + 1;
+      if (total > len) total = len;
+      System.arraycopy(bytes, offset, data_, offset_ + ipos - 1, total);
+      return total;
   }
 
-  public void truncate(long len) throws SQLException
-  {
-    length_ = (len < 0) ? 0 : (int)(len & 0x7FFFFFFF);
-  }
+    public void truncate(long len) throws SQLException {
+        length_ = (len < 0) ? 0 : (int) (len & 0x7FFFFFFF);
+    }
+
+    @Override
+    public void free() throws SQLException {
+
+    }
+
+    @Override
+    public InputStream getBinaryStream(long pos, long length) throws SQLException {
+        return null;
+    }
 }
 
 

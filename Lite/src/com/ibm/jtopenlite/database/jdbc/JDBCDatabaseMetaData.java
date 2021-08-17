@@ -13,13 +13,7 @@
 
 package com.ibm.jtopenlite.database.jdbc;
 
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import com.ibm.jtopenlite.SystemInfo;
 
@@ -3870,26 +3864,29 @@ implements DatabaseMetaData
     }
 
 
-
-
     /**
      * Indicates if statement pooling is supported.
+     *
      * @return Always false. Statement pooling is not supported at this time.
-    **/
-    public boolean supportsStatementPooling()
-    {
+     **/
+    public boolean supportsStatementPooling() {
         return false;
+    }
+
+    @Override
+    public RowIdLifetime getRowIdLifetime() throws SQLException {
+        return null;
     }
 
 
     /**
-    Indicates if stored procedure calls using the stored procedure
-    escape syntax are supported.
+     Indicates if stored procedure calls using the stored procedure
+     escape syntax are supported.
 
-    @return     Always true. Stored procedure calls using the stored
-                procedure escape syntax are supported.
+     @return Always true. Stored procedure calls using the stored
+     procedure escape syntax are supported.
 
-    @exception  SQLException    This exception is never thrown.
+     @exception SQLException    This exception is never thrown.
     **/
     public boolean supportsStoredProcedures ()
     throws SQLException
@@ -4498,20 +4495,23 @@ implements DatabaseMetaData
       cstmt.execute();
       ResultSet rs = cstmt.getResultSet();
       if(rs != null)
-          ((JDBCResultSet)rs).isMetadataResultSet_ = true;
-      else{ 
-          cstmt.close();     
+          ((JDBCResultSet) rs).isMetadataResultSet_ = true;
+      else {
+          cstmt.close();
           // It is an error not to have received a result set
-          JDBCError.throwSQLException(JDBCError.EXC_INTERNAL); 
-      }	
-      return rs;
+          JDBCError.throwSQLException(JDBCError.EXC_INTERNAL);
+      }
+        return rs;
     }
 
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
 
-
-
-
-
-
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

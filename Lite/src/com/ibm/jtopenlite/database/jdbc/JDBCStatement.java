@@ -697,27 +697,42 @@ public class JDBCStatement implements Statement, DatabaseSQLCommunicationsAreaCa
       return closed_;
   }
 
-  protected void setCursorNameInternal(String cursorName) {
-	  cursorName_ = cursorName;
-  }
+    protected void setCursorNameInternal(String cursorName) {
+        cursorName_ = cursorName;
+    }
 
-  public boolean isPoolable() throws SQLException  {
-	    if (closed_) JDBCError.throwSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
-	  return poolable_;
-  }
+    public boolean isPoolable() throws SQLException {
+        if (closed_) JDBCError.throwSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
+        return poolable_;
+    }
 
-  public void setPoolable(boolean poolable) throws SQLException  {
-	    if (closed_) JDBCError.throwSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
-      poolable_ = poolable;
-  }
+    @Override
+    public void closeOnCompletion() throws SQLException {
 
-  public void setCatalog(String catalog) {
-    catalog_ = catalog;
-  }
+    }
+
+    @Override
+    public boolean isCloseOnCompletion() throws SQLException {
+        return false;
+    }
+
+    public void setPoolable(boolean poolable) throws SQLException {
+        if (closed_) JDBCError.throwSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
+        poolable_ = poolable;
+    }
+
+    public void setCatalog(String catalog) {
+        catalog_ = catalog;
+    }
 
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
 
-
-
-
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

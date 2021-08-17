@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.Executor;
 
 /**
 <p>The JDBCConnection class provides a JDBC connection
@@ -795,57 +796,106 @@ void changeDescriptor(DatabaseChangeDescriptorAttributes cda, int handle) throws
 }
 
 
-public Array createArrayOf(String arg0, Object[] arg1) throws SQLException {
-  throw new NotImplementedException();
-}
+    public Array createArrayOf(String arg0, Object[] arg1) throws SQLException {
+        throw new NotImplementedException();
+    }
 
 
-public Blob createBlob() throws SQLException {
-  throw new NotImplementedException();
-}
+    public Blob createBlob() throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public NClob createNClob() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return null;
+    }
 
 
-public Clob createClob() throws SQLException {
-  throw new NotImplementedException();
-}
+    public Clob createClob() throws SQLException {
+        throw new NotImplementedException();
+    }
 
 
+    /**
+     * @param arg0
+     * @param arg1
+     */
+    public Struct createStruct(String arg0, Object[] arg1) throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public String getSchema() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setSchema(String schema) throws SQLException {
+
+    }
+
+    @Override
+    public void abort(Executor executor) throws SQLException {
+
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+
+    }
+
+    @Override
+    public int getNetworkTimeout() throws SQLException {
+        return 0;
+    }
 
 
-/**
- * @param arg0
- * @param arg1
- */
-public Struct createStruct(String arg0, Object[] arg1) throws SQLException {
-  throw new NotImplementedException();
-}
+    public Properties getClientInfo() throws SQLException {
+        throw new NotImplementedException();
+    }
 
 
-public Properties getClientInfo() throws SQLException {
-  throw new NotImplementedException();
-}
-
-
-/**
- * @param arg0
- */
+    /**
+     * @param arg0
+     */
 public String getClientInfo(String arg0) throws SQLException {
-  throw new NotImplementedException();
+    throw new NotImplementedException();
 }
 
-/**
- * @param arg0
- */
-public boolean isValid(int arg0) throws SQLException {
-  throw new NotImplementedException();
-}
+    /**
+     * @param arg0
+     */
+    public boolean isValid(int arg0) throws SQLException {
+        throw new NotImplementedException();
+    }
 
+    @Override
+    public void setClientInfo(Properties properties) throws SQLClientInfoException {
 
+    }
 
+    @Override
+    public void setClientInfo(String name, String value) throws SQLClientInfoException {
 
-SystemInfo getDatabaseInfo() {
-    return conn_.getInfo(); 
-  }
+    }
 
+    SystemInfo getDatabaseInfo() {
+        return conn_.getInfo();
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }
 

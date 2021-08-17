@@ -1178,27 +1178,31 @@ public class AS400JDBCPreparedStatementRedirect  extends AS400JDBCPreparedStatem
           if (retryCount >= 0) {
             // keep trying in loop
           } else {
-            throw e;
+              throw e;
           }
         } else {
-          throw e;
+            throw e;
         }
       }
     } /* retry */
   }
 
-     
-     public void setNClob(int parameterIndex, Reader reader) throws SQLException 
-     {
-       int retryCount = AS400JDBCConnectionRedirect.SEAMLESS_RETRY_COUNT;
-       while (true) {
-         try {
-           stmt_.setNClob(parameterIndex, reader); 
-           return;
-         } catch (AS400JDBCTransientException e) {
-           if (connection_.canSeamlessFailover()) {
-             retryCount--;
-             if (retryCount >= 0) {
+    @Override
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
+
+    }
+
+
+    public void setNClob(int parameterIndex, Reader reader) throws SQLException {
+        int retryCount = AS400JDBCConnectionRedirect.SEAMLESS_RETRY_COUNT;
+        while (true) {
+            try {
+                stmt_.setNClob(parameterIndex, reader);
+                return;
+            } catch (AS400JDBCTransientException e) {
+                if (connection_.canSeamlessFailover()) {
+                    retryCount--;
+                    if (retryCount >= 0) {
                // keep trying in loop
              } else {
                throw e;
@@ -1503,49 +1507,57 @@ while (true) {
       if (retryCount >= 0) {
         // keep trying in loop
       } else {
-        throw e;
+          throw e;
       }
     } else {
-      throw e;
+        throw e;
     }
   }
 } /* retry */
     }
 
-    
+    @Override
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
 
-    
+    }
+
+
     public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException {
-      int retryCount = AS400JDBCConnectionRedirect.SEAMLESS_RETRY_COUNT;
-      while (true) {
-        try {
-          stmt_.setNClob(parameterIndex,  reader, length); 
-          return;
-        } catch (AS400JDBCTransientException e) {
-          if (connection_.canSeamlessFailover()) {
+        int retryCount = AS400JDBCConnectionRedirect.SEAMLESS_RETRY_COUNT;
+        while (true) {
+            try {
+                stmt_.setNClob(parameterIndex, reader, length);
+                return;
+            } catch (AS400JDBCTransientException e) {
+                if (connection_.canSeamlessFailover()) {
             retryCount--;
             if (retryCount >= 0) {
               // keep trying in loop
             } else {
-              throw e;
+                throw e;
             }
-          } else {
-            throw e;
-          }
-        }
-      } /* retry */
+                } else {
+                    throw e;
+                }
+            }
+        } /* retry */
     }
 
-    
+    @Override
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+
     public void setNString(int parameterIndex, String x) throws SQLException {
-      int retryCount = AS400JDBCConnectionRedirect.SEAMLESS_RETRY_COUNT;
-      while (true) {
-        try {
-          stmt_.setNString(parameterIndex, x); 
-          return;
-        } catch (AS400JDBCTransientException e) {
-          if (connection_.canSeamlessFailover()) {
-            retryCount--;
+        int retryCount = AS400JDBCConnectionRedirect.SEAMLESS_RETRY_COUNT;
+        while (true) {
+            try {
+                stmt_.setNString(parameterIndex, x);
+                return;
+            } catch (AS400JDBCTransientException e) {
+                if (connection_.canSeamlessFailover()) {
+                    retryCount--;
             if (retryCount >= 0) {
               // keep trying in loop
             } else {

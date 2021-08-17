@@ -18,28 +18,18 @@ import java.io.Reader;                  //@G4A
 import java.math.BigDecimal;
 import java.net.MalformedURLException;  //@G4A
 import java.net.URL;                    //@G4A
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.DataTruncation;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 endif */ 
-import java.sql.Ref;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.ResultSet;              //@G4A
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
 import java.sql.Statement;              //@G4A
-endif */ 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Types;
+endif */
 import java.util.Calendar;
 import java.util.Map;
 /* ifdef JDBC40 
@@ -2260,25 +2250,39 @@ implements CallableStatement
         
     @exception  SQLException    If the statement is not open,
                                 the name is not valid, the parameter name is
-                                not registered as an output parameter,
-                                the statement was not executed or
-                                the requested conversion is not valid.
-    **/
+    not registered as an output parameter,
+    the statement was not executed or
+    the requested conversion is not valid.
+     **/
     public URL getURL(String parameterName)
-    throws SQLException
-    {
+            throws SQLException {
         return getURL(findParameterIndex(parameterName));
     }
 
+    @Override
+    public RowId getRowId(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public RowId getRowId(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setRowId(String parameterName, RowId x) throws SQLException {
+
+    }
+
     /**
-    Returns the value for an output parameter for the specified
-    index, and performs all appropriate validation.  Also checks
-    for SQL NULL.
-    
-    @param  parameterIndex  The parameter index (1-based).
-    @return                 The parameter value or null if the value is SQL NULL.
-    
-    @exception  SQLException    If the statement is not open,
+     Returns the value for an output parameter for the specified
+     index, and performs all appropriate validation.  Also checks
+     for SQL NULL.
+
+     @param  parameterIndex  The parameter index (1-based).
+     @return The parameter value or null if the value is SQL NULL.
+
+     @exception SQLException    If the statement is not open,
                                 the index is not valid, the index is
                                 not registered as an output parameter,
                                 the statement was not executed, or
@@ -4033,26 +4037,31 @@ implements CallableStatement
      */
     public void setNCharacterStream(String parameterName, Reader value, long length) throws SQLException
     {
-        if(JDTrace.isTraceOn())
-        {  
-            JDTrace.logInformation(this, "setNCharacterStream()"); 
-            if(value == null) 
+        if(JDTrace.isTraceOn()) {
+            JDTrace.logInformation(this, "setNCharacterStream()");
+            if (value == null)
                 JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: NULL");
-            else JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " length: " + length);
+            else
+                JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " length: " + length);
         }
 
         setNCharacterStream(findParameterIndex(parameterName), value, length);
     }
 
+    @Override
+    public void setNClob(String parameterName, NClob value) throws SQLException {
+
+    }
+
     //@PDA jdbc40
-  //JDBC40DOC     /**
-  //JDBC40DOC      * Sets the designated parameter to a <code>java.sql.NClob</code> object. The object
-  //JDBC40DOC      * implements the <code>java.sql.NClob</code> interface. This <code>NClob</code>
-  //JDBC40DOC      * object maps to a SQL <code>NCLOB</code>.
-  //JDBC40DOC      * @param parameterName the name of the parameter to be set
-  //JDBC40DOC      * @param value the parameter value
-  //JDBC40DOC      * @throws SQLException if the driver does not support national
-  //JDBC40DOC      *         character sets;  if the driver can detect that a data conversion
+    //JDBC40DOC     /**
+    //JDBC40DOC      * Sets the designated parameter to a <code>java.sql.NClob</code> object. The object
+    //JDBC40DOC      * implements the <code>java.sql.NClob</code> interface. This <code>NClob</code>
+    //JDBC40DOC      * object maps to a SQL <code>NCLOB</code>.
+    //JDBC40DOC      * @param parameterName the name of the parameter to be set
+    //JDBC40DOC      * @param value the parameter value
+    //JDBC40DOC      * @throws SQLException if the driver does not support national
+    //JDBC40DOC      *         character sets;  if the driver can detect that a data conversion
   //JDBC40DOC      *  error could occur; if a database access error occurs or 
   //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
   //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
@@ -4096,18 +4105,44 @@ implements CallableStatement
      */     
     public void setNClob(String parameterName, Reader reader, long length) throws SQLException
     {
-        if(JDTrace.isTraceOn())
-        {  
-            JDTrace.logInformation(this, "setNClob()"); 
-            if(reader == null) 
+        if(JDTrace.isTraceOn()) {
+            JDTrace.logInformation(this, "setNClob()");
+            if (reader == null)
                 JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: NULL");
-            else JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " length: " + length);
+            else
+                JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " length: " + length);
         }
 
         setNClob(findParameterIndex(parameterName), reader, length);
     }
 
+    @Override
+    public NClob getNClob(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public SQLXML getSQLXML(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String parameterName) throws SQLException {
+        return null;
+    }
+
     //@PDA jdbc40
+
     /**
      * Sets the designated parameter to the given <code>String</code> object.
      * The driver converts this to a SQL <code>NCHAR</code> or

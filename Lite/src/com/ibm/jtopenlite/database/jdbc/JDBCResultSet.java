@@ -1067,23 +1067,41 @@ public class JDBCResultSet implements ResultSet, DatabaseFetchCallback
     throw new NotImplementedException();
   }
 
-  /**
-   * Not implemented.
-  **/
-  public void updateArray(String colName, Array x) throws SQLException
-  {
-    throw new NotImplementedException();
-  }
+    /**
+     * Not implemented.
+     **/
+    public void updateArray(String colName, Array x) throws SQLException {
+        throw new NotImplementedException();
+    }
 
-  /**
-   * Not implemented.
-  **/
-  public void updateAsciiStream(int i, InputStream x, int length) throws SQLException
-  {
-    throw new NotImplementedException();
-  }
+    @Override
+    public RowId getRowId(int columnIndex) throws SQLException {
+        return null;
+    }
 
-  /**
+    @Override
+    public RowId getRowId(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateRowId(int columnIndex, RowId x) throws SQLException {
+
+    }
+
+    @Override
+    public void updateRowId(String columnLabel, RowId x) throws SQLException {
+
+    }
+
+    /**
+     * Not implemented.
+     **/
+    public void updateAsciiStream(int i, InputStream x, int length) throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    /**
    * Not implemented.
   **/
   public void updateAsciiStream(String colName, InputStream x, int length) throws SQLException
@@ -1768,25 +1786,37 @@ public class JDBCResultSet implements ResultSet, DatabaseFetchCallback
   }
 
 
-  /**
-   * Not implemented.
-   * @param arg0
-   * @param arg1
-  **/
-  public void updateNClob(String arg0, Reader arg1) throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * Not implemented.
+     *
+     * @param arg0
+     * @param arg1
+     **/
+    public void updateNClob(String arg0, Reader arg1) throws SQLException {
+        throw new NotImplementedException();
 
-  }
+    }
+
+    @Override
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+        return null;
+    }
 
 
-  /**
-   * Not implemented.
-   * @param arg0
-   * @param arg1
-   * @param arg2
-  **/
-  public void updateNClob(int arg0, Reader arg1, long arg2) throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * Not implemented.
+     *
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     **/
+    public void updateNClob(int arg0, Reader arg1, long arg2) throws SQLException {
+        throw new NotImplementedException();
 
   }
 
@@ -1810,31 +1840,70 @@ public class JDBCResultSet implements ResultSet, DatabaseFetchCallback
    * @param arg1
   **/
   public void updateNString(int arg0, String arg1) throws SQLException {
-    throw new NotImplementedException();
+      throw new NotImplementedException();
 
   }
 
 
-  /**
-   * Not implemented.
-   * @param arg0
-   * @param arg1
-  **/
-  public void updateNString(String arg0, String arg1) throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * Not implemented.
+     *
+     * @param arg0
+     * @param arg1
+     **/
+    public void updateNString(String arg0, String arg1) throws SQLException {
+        throw new NotImplementedException();
 
-  }
+    }
+
+    @Override
+    public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public NClob getNClob(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+
+    }
 
 
-
-
-
-  /**
-   * Not implemented.
-   * @param arg0
-  **/
-  public boolean isWrapperFor(Class<?> arg0) throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * Not implemented.
+     *
+     * @param arg0
+     **/
+    public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+        throw new NotImplementedException();
   }
 
 

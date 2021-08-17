@@ -499,15 +499,24 @@ public class JDBCResultSetMetaData implements ResultSetMetaData, DatabaseDescrib
   public boolean isWritable(int column) throws SQLException
   {
       checkColumn(column);
-    return columns_[column-1].isWritable();
+      return columns_[column - 1].isWritable();
   }
 
-  private void checkColumn(int column) throws SQLException {
-      if ((column < 1) || (column > columns_.length)) {
-	  JDBCError.throwSQLException(JDBCError.EXC_DESCRIPTOR_INDEX_INVALID);
-      }
-  }
+    private void checkColumn(int column) throws SQLException {
+        if ((column < 1) || (column > columns_.length)) {
+            JDBCError.throwSQLException(JDBCError.EXC_DESCRIPTOR_INDEX_INVALID);
+        }
+    }
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }
 
 

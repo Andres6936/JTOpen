@@ -406,25 +406,28 @@ public class JDBCPreparedStatement extends JDBCStatement implements PreparedStat
   public ResultSetMetaData getMetaData() throws SQLException
   {
 	    if (closed_) throw JDBCError.getSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
-	    return rsmd_;
+      return rsmd_;
   }
 
-  public ParameterMetaData getParameterMetaData() throws SQLException
-  {
-    if (closed_) throw JDBCError.getSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
+    public ParameterMetaData getParameterMetaData() throws SQLException {
+        if (closed_) throw JDBCError.getSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
 
-    return pmd_;
-  }
+        return pmd_;
+    }
 
-  /**
-   * Not implemented.
-  **/
-  public void setArray(int parameterIndex, Array x) throws SQLException
-  {
-    throw new NotImplementedException();
-  }
+    @Override
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
 
-  public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException
+    }
+
+    /**
+     * Not implemented.
+     **/
+    public void setArray(int parameterIndex, Array x) throws SQLException {
+        throw new NotImplementedException();
+    }
+
+    public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException
   {
     if (closed_) throw JDBCError.getSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
 
@@ -773,47 +776,55 @@ public class JDBCPreparedStatement extends JDBCStatement implements PreparedStat
   }
 
 
-  /**
-   * @param parameterIndex
-   * @param arg1
-   * @param arg2
-   */
-  public void setNCharacterStream(int parameterIndex, Reader arg1, long arg2)
-      throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * @param parameterIndex
+     * @param arg1
+     * @param arg2
+     */
+    public void setNCharacterStream(int parameterIndex, Reader arg1, long arg2)
+            throws SQLException {
+        throw new NotImplementedException();
 
-  }
+    }
 
+    @Override
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
 
-
-
-  /**
-   * @param parameterIndex
-   * @param arg1
-   */
-  public void setNClob(int parameterIndex, Reader arg1) throws SQLException {
-    throw new NotImplementedException();
-
-  }
+    }
 
 
-  /**
-   * @param parameterIndex
-   * @param arg1
-   * @param arg2
-   */
-  public void setNClob(int parameterIndex, Reader arg1, long arg2) throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * @param parameterIndex
+     * @param arg1
+     */
+    public void setNClob(int parameterIndex, Reader arg1) throws SQLException {
+        throw new NotImplementedException();
 
-  }
+    }
 
 
-  /**
-   * @param parameterIndex
-   * @param arg1
-   */
-  public void setNString(int parameterIndex, String arg1) throws SQLException {
-    throw new NotImplementedException();
+    /**
+     * @param parameterIndex
+     * @param arg1
+     * @param arg2
+     */
+    public void setNClob(int parameterIndex, Reader arg1, long arg2) throws SQLException {
+        throw new NotImplementedException();
+
+    }
+
+    @Override
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+
+    /**
+     * @param parameterIndex
+     * @param arg1
+     */
+    public void setNString(int parameterIndex, String arg1) throws SQLException {
+        throw new NotImplementedException();
 
   }
 

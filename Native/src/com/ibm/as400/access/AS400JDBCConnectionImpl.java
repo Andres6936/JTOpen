@@ -16,32 +16,18 @@ package com.ibm.as400.access;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketException;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.ClientInfoStatus;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLPermission;
 endif */
-import java.sql.Clob;
-import java.sql.DatabaseMetaData;
-import java.sql.DataTruncation;
 /* ifdef JDBC40
 import java.sql.NClob;
 endif */
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
 /* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.sql.Statement;
-import java.sql.Savepoint;                        // @E10a
-import java.sql.Struct;
 import java.util.Enumeration;               // @DAA
 /* ifdef JDBC40
 import java.util.HashMap;
@@ -49,6 +35,7 @@ endif */
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.Executor;
 /* ifdef JDBC40
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.Executor;
@@ -102,11 +89,23 @@ statements.
 //     sendXXX() methods.  This makes debugging cleaner.
 //
 public class AS400JDBCConnectionImpl
-extends AS400JDBCConnection
-{
+        extends AS400JDBCConnection {
 
-    private class CancelLock extends Object {}          //@C7A
-    private class HeldRequestsLock extends Object {}          //@C7A
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
+
+    private class CancelLock extends Object {
+    }          //@C7A
+
+    private class HeldRequestsLock extends Object {
+    }          //@C7A
 
     // Turn this flag on to prevent this Connection object from establishing an actual connection to the IBM i system.  This is useful when doing multi-threaded stress testing on the Toolbox's built-in JDBC connection pool manager, where we create/delete massive numbers of connections.
     // For production, this flag _must_ be set to 'false'.
@@ -5150,11 +5149,11 @@ throws SQLException
 //JDBC40DOC      *          setting the client info value on the database server.
      */
     public void setClientInfo(String name, String value)
-/* ifdef JDBC40
+///* ifdef JDBC40
     throws SQLClientInfoException
-endif */
+//endif */
     /* ifndef JDBC40 */
-    throws SQLException
+//    throws SQLException
     /* endif  */
     {
 
@@ -5309,11 +5308,11 @@ endif */
      *             <p>
      */
     public void setClientInfo(Properties properties)
-    /* ifdef JDBC40
+//    /* ifdef JDBC40
     throws SQLClientInfoException
-    endif */
+//    endif */
     /* ifndef JDBC40 */
-    throws SQLException
+//    throws SQLException
     /* endif */
     {
         String newApplicationName = properties.getProperty(applicationNamePropertyName_);
@@ -5519,25 +5518,39 @@ endif */
      * returned initially contains no data.  The <code>setBinaryStream</code> and
      * <code>setBytes</code> methods of the <code>Blob</code> interface may be used to add data to
      * the <code>Blob</code>.
-     * @return  An object that implements the <code>Blob</code> interface
+     * @return An object that implements the <code>Blob</code> interface
      * @throws SQLException if an object that implements the
      * <code>Blob</code> interface can not be constructed
      *
      */
-    public Blob createBlob() throws SQLException
-    {
+    public Blob createBlob() throws SQLException {
         return new AS400JDBCBlob(new byte[0], AS400JDBCBlob.MAX_LOB_SIZE);  //@pdc 0 len array
     }
 
+    @Override
+    public NClob createNClob() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML createSQLXML() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isValid(int timeout) throws SQLException {
+        return false;
+    }
+
     //@PDA jdbc40
-  //JDBC40DOC    /**
-  //JDBC40DOC     * Constructs an object that implements the <code>NClob</code> interface. The object
-  //JDBC40DOC     * returned initially contains no data.  The <code>setAsciiStream</code>,
-  //JDBC40DOC     * <code>setCharacterStream</code> and <code>setString</code> methods of the <code>NClob</code> interface may
-  //JDBC40DOC     * be used to add data to the <code>NClob</code>.
-  //JDBC40DOC     * @return An object that implements the <code>NClob</code> interface
-  //JDBC40DOC     * @throws SQLException if an object that implements the
-  //JDBC40DOC     * <code>NClob</code> interface can not be constructed.
+    //JDBC40DOC    /**
+    //JDBC40DOC     * Constructs an object that implements the <code>NClob</code> interface. The object
+    //JDBC40DOC     * returned initially contains no data.  The <code>setAsciiStream</code>,
+    //JDBC40DOC     * <code>setCharacterStream</code> and <code>setString</code> methods of the <code>NClob</code> interface may
+    //JDBC40DOC     * be used to add data to the <code>NClob</code>.
+    //JDBC40DOC     * @return An object that implements the <code>NClob</code> interface
+    //JDBC40DOC     * @throws SQLException if an object that implements the
+    //JDBC40DOC     * <code>NClob</code> interface can not be constructed.
   //JDBC40DOC     *
   //JDBC40DOC     */
      /*ifdef JDBC40
@@ -5762,26 +5775,36 @@ endif */
     if (SQLNaming) {
        query = "SELECT CURRENT SCHEMA FROM SYSIBM.SYSDUMMY1";
     } else {
-      query = "SELECT CURRENT SCHEMA FROM SYSIBM/SYSDUMMY1";
+        query = "SELECT CURRENT SCHEMA FROM SYSIBM/SYSDUMMY1";
     }
 
-    ResultSet rs = s.executeQuery(query);
-    rs.next();
-    String schema = rs.getString(1);
-    rs.close();
-    s.close();
-    return schema;
+      ResultSet rs = s.executeQuery(query);
+      rs.next();
+      String schema = rs.getString(1);
+      rs.close();
+      s.close();
+      return schema;
   }
 
-   /**
-    * Sets the maximum period a Connection or objects created from the 
-    * Connection will wait for the database to reply to any one request. If 
-    * any request remains unanswered, the waiting method will return with a
-    * SQLException, and the Connection or objects created from the 
-    * Connection will be marked as closed. Any subsequent use of the objects, 
-    * with the exception of the close, isClosed or Connection.isValid methods,
-    * will result in a SQLException.
-    *
+    @Override
+    public void abort(Executor executor) throws SQLException {
+
+    }
+
+    @Override
+    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+
+    }
+
+    /**
+     * Sets the maximum period a Connection or objects created from the
+     * Connection will wait for the database to reply to any one request. If
+     * any request remains unanswered, the waiting method will return with a
+     * SQLException, and the Connection or objects created from the
+     * Connection will be marked as closed. Any subsequent use of the objects,
+     * with the exception of the close, isClosed or Connection.isValid methods,
+     * will result in a SQLException.
+     *
     *<p>In the JTOpen JDBC driver, this is implemented by setting the SoTimeout
     *   of the underlying socket.
     *<p>Currently, setting the network timeout is only supported when the 

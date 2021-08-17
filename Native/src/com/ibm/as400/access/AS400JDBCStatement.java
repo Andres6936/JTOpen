@@ -4710,16 +4710,23 @@ implements Statement
 
 
   boolean isQueryRunning() {
-    return queryRunning_; 
+    return queryRunning_;
   }
 
-  int getInternalQueryTimeout ()
-  {
-     
-     return queryTimeout_;
-      
-  }
+    int getInternalQueryTimeout() {
+
+        return queryTimeout_;
+
+    }
 
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
 
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

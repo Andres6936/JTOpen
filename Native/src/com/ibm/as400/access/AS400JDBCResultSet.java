@@ -19,29 +19,16 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.DataTruncation;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 endif */ 
-import java.sql.PreparedStatement;
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
 endif */ 
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
 /* ifdef JDBC40
 import java.sql.Types;
 endif */ 
@@ -4227,26 +4214,45 @@ implements ResultSet
     for columnName as in: ResultSet.updateArray("\"MixedCase\"", columnValue).
     
     @param  columnName   The column name.
-    @param  columnValue  The column value or null if the value is SQL NULL.
-    
-    @exception  SQLException    Always thrown because DB2 for IBM i does not support arrays.
-    **/
-    public void updateArray (String columnName, Array columnValue)
-    throws SQLException
-    {
-      updateArray (findColumn (columnName), columnValue);
+     @param  columnValue  The column value or null if the value is SQL NULL.
+
+     @exception SQLException    Always thrown because DB2 for IBM i does not support arrays.
+     **/
+    public void updateArray(String columnName, Array columnValue)
+            throws SQLException {
+        updateArray(findColumn(columnName), columnValue);
+    }
+
+    @Override
+    public RowId getRowId(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public RowId getRowId(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateRowId(int columnIndex, RowId x) throws SQLException {
+
+    }
+
+    @Override
+    public void updateRowId(String columnLabel, RowId x) throws SQLException {
+
     }
 
 
-
     // JDBC 2.0
+
     /**
-    Updates a column in the current row using an ASCII stream value.
-    The driver reads the data from the stream as needed until no more
-    bytes are available.  The driver converts this to an SQL VARCHAR
-    value.
-    
-    <p>This does not update the database directly.  Instead, it updates
+     Updates a column in the current row using an ASCII stream value.
+     The driver reads the data from the stream as needed until no more
+     bytes are available.  The driver converts this to an SQL VARCHAR
+     value.
+
+     <p>This does not update the database directly.  Instead, it updates
     a copy of the data in memory.  Call updateRow() or insertRow() to
     update the database.
     
@@ -6320,20 +6326,59 @@ endif */
      *         character sets;  if the driver can detect that a data conversion
      *  error could occur; or if a database access error occurs
      */
-    public void updateNString(String columnName, String nString) throws SQLException
-    {
-        updateNString (findColumn (columnName), nString);
+    public void updateNString(String columnName, String nString) throws SQLException {
+        updateNString(findColumn(columnName), nString);
+    }
+
+    @Override
+    public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public NClob getNClob(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+
     }
 
     //@PDA jdbc40
- // JDBC40DOC    /**
- // JDBC40DOC     * Updates the designated column with a <code>RowId</code> value. The updater
- // JDBC40DOC     * methods are used to update column values in the current row or the insert
- // JDBC40DOC     * row. The updater methods do not update the underlying database; instead 
- // JDBC40DOC     * the <code>updateRow</code> or <code>insertRow</code> methods are called 
- // JDBC40DOC     * to update the database.
- // JDBC40DOC     * 
- // JDBC40DOC     * @param columnIndex
+    // JDBC40DOC    /**
+    // JDBC40DOC     * Updates the designated column with a <code>RowId</code> value. The updater
+    // JDBC40DOC     * methods are used to update column values in the current row or the insert
+    // JDBC40DOC     * row. The updater methods do not update the underlying database; instead
+    // JDBC40DOC     * the <code>updateRow</code> or <code>insertRow</code> methods are called
+    // JDBC40DOC     * to update the database.
+    // JDBC40DOC     *
+    // JDBC40DOC     * @param columnIndex
  // JDBC40DOC     * @param x the column value
  // JDBC40DOC     * @throws SQLException if a database access occurs 
  // JDBC40DOC     */
@@ -7679,21 +7724,25 @@ Object
                             Object x,
                             /* ifdef JDBC42        
                             SQLType  
-                      endif*/ 
-                      /* ifndef JDBC42 */
-                      Object
-                      /* endif */
-                            targetSqlType)
-                     throws SQLException
-                     {
-                       updateObject(columnLabel, x); 
-                     }
+                      endif*/
+          /* ifndef JDBC42 */
+                           Object
+                                   /* endif */
+                                   targetSqlType)
+          throws SQLException {
+      updateObject(columnLabel, x);
+  }
 
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
 
-  
-  
-  
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }
 
 

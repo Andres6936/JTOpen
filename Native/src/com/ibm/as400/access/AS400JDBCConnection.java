@@ -13,29 +13,18 @@
 
 package com.ibm.as400.access;
 
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.ClientInfoStatus;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLPermission;
 endif */
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 /* ifdef JDBC40
 import java.sql.NClob;
 endif */
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
 /* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.sql.Statement;
-import java.sql.Savepoint;                        // @E10a
-import java.sql.Struct;
 /* ifdef JDBC40
 import java.util.HashMap;
 endif */
@@ -1692,15 +1681,15 @@ implements Connection
      *                  value is null, the current value of the specified
      *                  property is cleared.
      * <p>
-//JDBC40DOC      * @throws  SQLClientInfoException if the database returns an error while
-//JDBC40DOC      *          setting the client info value on the database server.
+    //JDBC40DOC      * @throws  SQLClientInfoException if the database returns an error while
+    //JDBC40DOC      *          setting the client info value on the database server.
      */
-    abstract public void setClientInfo(String name, String value)
+    abstract public void setClientInfo(String name, String value) throws SQLClientInfoException;
 /* ifdef JDBC40
     throws SQLClientInfoException;
 endif */
     /* ifndef JDBC40 */
-    throws SQLException;
+//    throws SQLException;
     /* endif  */
 
     //@PDA 550 client info
@@ -1740,16 +1729,16 @@ endif */
      *
      * @param properties
      *            the list of client info properties to set
-//JDBC40DOC      * @throws SQLClientInfoException If there is a problem with the Client Info. 
-//JDBC40DOC      *             if the database returns an error while setting the
-//JDBC40DOC      *             clientInfo values on the database
+    //JDBC40DOC      * @throws SQLClientInfoException If there is a problem with the Client Info.
+    //JDBC40DOC      *             if the database returns an error while setting the
+    //JDBC40DOC      *             clientInfo values on the database
      */
-    abstract public void setClientInfo(Properties properties)
+    abstract public void setClientInfo(Properties properties) throws SQLClientInfoException;
 /* ifdef JDBC40
     throws SQLClientInfoException;
  endif */
     /* ifndef JDBC40 */
-    throws SQLException;
+//    throws SQLException;
     /* endif */
 
     //@PDA 550 client info

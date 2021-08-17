@@ -15,6 +15,7 @@ package com.ibm.jtopenlite.database.jdbc;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 import com.ibm.jtopenlite.Trace;
 
@@ -285,17 +286,21 @@ static
   {
     if (info == null) info = new Properties();
     return new DriverPropertyInfo[]
-    {
-      new DriverPropertyInfo("debug", info.getProperty("debug", "false"))
-    };
+            {
+                    new DriverPropertyInfo("debug", info.getProperty("debug", "false"))
+            };
   }
 
-  public boolean jdbcCompliant()
-  {
-    return false;
-  }
+    public boolean jdbcCompliant() {
+        return false;
+    }
 
-  public String   toString() {
-	  return DRIVER_NAME_;
-  }
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return null;
+    }
+
+    public String toString() {
+        return DRIVER_NAME_;
+    }
 }

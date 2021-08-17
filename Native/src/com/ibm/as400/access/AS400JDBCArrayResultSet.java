@@ -21,7 +21,9 @@ import java.sql.*;
 import java.sql.SQLData;
 
 //@array new class
-/** AS400JDBCArrayResultSet is a JDBC ResultSet that contains Array data.  This is a client-side only object.  This is used to navigating through
+
+/**
+ * AS400JDBCArrayResultSet is a JDBC ResultSet that contains Array data.  This is a client-side only object.  This is used to navigating through
  * returned data from IBM i DB2 using Toolbox JDBC.  No updates will be functional nor will they be sent back to the host server.
  * Note that this ResultSet is limited in its functionality since it is not tied back to a cursor in the database.
  * Its primary purpose is for retrieving data back from the database.
@@ -29,9 +31,8 @@ import java.sql.SQLData;
 public class AS400JDBCArrayResultSet  
 /* ifdef JDBC40 
 extends ToolboxWrapper 
- endif */ 
-implements ResultSet
-{
+ endif */
+        implements ResultSet {
 
     private int holdability_; // Used by JDBC 40
     private int concurrency_;
@@ -49,8 +50,8 @@ implements ResultSet
  
 
     //////Info from AS400JDBCArray
-  
-    private java.sql.SQLData contentTemplate_;
+
+    private SQLDataBase contentTemplate_;
     private boolean isSQLData_;
  
     private int vrm_;    
@@ -111,7 +112,7 @@ implements ResultSet
         }
         // initialize "VALUE" column
         data[1] = contents;
-        contentTemplate_ = contentTemplate;
+        contentTemplate_ = (SQLDataBase) contentTemplate;
         isSQLData_ = isSQLData;
        
         vrm_ = vrm;
@@ -780,7 +781,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getBoolean();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getBoolean();
         }
         else
         {
@@ -834,7 +835,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getByte();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getByte();
         }
         else
         {
@@ -889,7 +890,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getShort();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getShort();
         }
         else
         {
@@ -944,7 +945,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getInt();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getInt();
         }
         else
         {
@@ -998,7 +999,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getLong();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getLong();
         }
         else
         {
@@ -1051,7 +1052,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getFloat();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getFloat();
         }
         else
         {
@@ -1104,7 +1105,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getDouble();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getDouble();
         }
         else
         {
@@ -1158,7 +1159,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getBigDecimal(-1);
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getBigDecimal(-1);
         }
         else
         {
@@ -1395,7 +1396,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                date = ((java.sql.SQLData)columnData[currentRowInRowset_]).getDate(getCalendar(timeZone));
+                date = ((SQLDataBase) columnData[currentRowInRowset_]).getDate(getCalendar(timeZone));
         }
         else
         {
@@ -1458,7 +1459,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                time = ((java.sql.SQLData)columnData[currentRowInRowset_]).getTime(getCalendar(timeZone));
+                time = ((SQLDataBase) columnData[currentRowInRowset_]).getTime(getCalendar(timeZone));
         }
         else
         {
@@ -1524,7 +1525,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                timestamp = ((java.sql.SQLData)columnData[currentRowInRowset_]).getTimestamp(getCalendar(timeZone));
+                timestamp = ((SQLDataBase) columnData[currentRowInRowset_]).getTimestamp(getCalendar(timeZone));
         }
         else
         {
@@ -1564,7 +1565,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getBytes();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getBytes();
         }
         else
         {
@@ -1622,7 +1623,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getString();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getString();
         }
         else
         {
@@ -1676,7 +1677,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getBinaryStream();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getBinaryStream();
         }
         else
         {
@@ -1732,7 +1733,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getAsciiStream();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getAsciiStream();
         }
         else
         {
@@ -1792,7 +1793,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getUnicodeStream();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getUnicodeStream();
         }
         else
         {
@@ -1851,7 +1852,7 @@ implements ResultSet
         {
         	if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
             {
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getCharacterStream();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getCharacterStream();
             }
         }
         else
@@ -1905,7 +1906,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getBlob();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getBlob();
         }
         else
         {
@@ -1959,7 +1960,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getClob();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getClob();
         }
         else
         {
@@ -2074,7 +2075,7 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                stringResult = ((java.sql.SQLData)columnData[currentRowInRowset_]).getString();
+                stringResult = ((SQLDataBase) columnData[currentRowInRowset_]).getString();
         }
         else
         {
@@ -2145,7 +2146,7 @@ implements ResultSet
         {
             
             if(columnData[currentRowInRowset_] != null) //@nullelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getObject();
+                result = ((SQLDataBase) columnData[currentRowInRowset_]).getObject();
         }
         else
         {
@@ -2962,25 +2963,43 @@ implements ResultSet
     Updates the value of a column as an Array object.
     
     @param  columnName The column index (1-based).
-    @param  x          The column value or null if the value is SQL NULL.
-    
-    @throws  SQLException  If a database error occurs. 
-    **/
-    public void updateArray (String columnName, Array x) throws SQLException
-    {
+     @param  x          The column value or null if the value is SQL NULL.
+
+     @throws SQLException  If a database error occurs.
+     **/
+    public void updateArray(String columnName, Array x) throws SQLException {
         if (JDTrace.isTraceOn()) JDTrace.logInformation(this, "updateArray");
-        updateArray (findColumnX (columnName), x);
+        updateArray(findColumnX(columnName), x);
+    }
+
+    @Override
+    public RowId getRowId(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public RowId getRowId(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateRowId(int columnIndex, RowId x) throws SQLException {
+
+    }
+
+    @Override
+    public void updateRowId(String columnLabel, RowId x) throws SQLException {
+
     }
 
     /**
-    Updates the value of an SQL REF output parameter as a Ref value.
-        
-    @param  column          The column index (1-based).
-    @param  x               The column value or null to update
-                                      the value to SQL NULL.
-        
-    @throws  SQLException  If a database error occurs. 
-    **/
+     * Updates the value of an SQL REF output parameter as a Ref value.
+     *
+     * @param column The column index (1-based).
+     * @param x      The column value or null to update
+     *               the value to SQL NULL.
+     * @throws SQLException If a database error occurs.
+     **/
     public void updateRef (int column, Ref x) throws SQLException
     {
         if (JDTrace.isTraceOn()) JDTrace.logInformation(this, "updateRef");
@@ -3332,10 +3351,8 @@ implements ResultSet
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
-                result = ((java.sql.SQLData)columnData[currentRowInRowset_]).getNCharacterStream();
-        }
-        else
-        {
+                result = ((SQLDataBase)columnData[currentRowInRowset_]).getNCharacterStream();
+        } else {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
             {
                 contentTemplate_.set(columnData[currentRowInRowset_], calendar_, -1); 
@@ -3449,10 +3466,8 @@ endif */
         if(isSQLData_)
         {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem  
-                result = ((SQLData)columnData[currentRowInRowset_]).getNString();
-        }
-        else
-        {
+                result = ((SQLDataBase)columnData[currentRowInRowset_]).getNString();
+        } else {
             if(columnData[currentRowInRowset_] != null) //@nulllocalarrelem
             {
                 contentTemplate_.set(columnData[currentRowInRowset_], calendar_, -1); 
@@ -4141,19 +4156,58 @@ endif */
      *         character sets;  if the driver can detect that a data conversion
      *  error could occur; or if a database access error occurs
      */
-    public void updateNString (String columnName, String x) throws SQLException
-    {
-        if (JDTrace.isTraceOn()) JDTrace.logInformation(this, "updateNString" );
-        updateNString (findColumnX (columnName), x);
+    public void updateNString(String columnName, String x) throws SQLException {
+        if (JDTrace.isTraceOn()) JDTrace.logInformation(this, "updateNString");
+        updateNString(findColumnX(columnName), x);
     }
 
-  //JDBC40DOC     /**
-  //JDBC40DOC      * Updates the designated column with a <code>RowId</code> value. 
-  //JDBC40DOC      * 
-  //JDBC40DOC      * @param column The column index (1-based).
-  //JDBC40DOC      * @param x the column value
-  //JDBC40DOC      * @throws SQLException if a database access occurs 
-  //JDBC40DOC      */
+    @Override
+    public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public NClob getNClob(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    //JDBC40DOC     /**
+    //JDBC40DOC      * Updates the designated column with a <code>RowId</code> value.
+    //JDBC40DOC      *
+    //JDBC40DOC      * @param column The column index (1-based).
+    //JDBC40DOC      * @param x the column value
+    //JDBC40DOC      * @throws SQLException if a database access occurs
+    //JDBC40DOC      */
 /* ifdef JDBC40 
 
     public void updateRowId (int column, java.sql.RowId x) throws java.sql.SQLException
@@ -4322,15 +4376,21 @@ endif */
         throws SQLException {
       
       return getObject(findColumnX (columnLabel), type);
-    } 
-
-    
-    protected String[] getValidWrappedList()
-    {
-        return new String[] {  "com.ibm.as400.access.AS400JDBCArrayResultSet",  "java.sql.ResultSet" };
-    } 
+    }
 
 
-    
-    
+    protected String[] getValidWrappedList() {
+        return new String[]{"com.ibm.as400.access.AS400JDBCArrayResultSet", "java.sql.ResultSet"};
+    }
+
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

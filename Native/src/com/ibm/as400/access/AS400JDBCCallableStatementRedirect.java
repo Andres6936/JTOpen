@@ -356,25 +356,39 @@ public class AS400JDBCCallableStatementRedirect extends
     return getTime(findParameterIndex(parameterName), cal);
   }
 
-  public Timestamp getTimestamp(String parameterName, Calendar cal)
-      throws SQLException {
-    return getTimestamp(findParameterIndex(parameterName), cal);
-  }
+    public Timestamp getTimestamp(String parameterName, Calendar cal)
+            throws SQLException {
+        return getTimestamp(findParameterIndex(parameterName), cal);
+    }
 
-  public URL getURL(String parameterName) throws SQLException {
-    return getURL(findParameterIndex(parameterName));
-  }
+    public URL getURL(String parameterName) throws SQLException {
+        return getURL(findParameterIndex(parameterName));
+    }
+
+    @Override
+    public RowId getRowId(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public RowId getRowId(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setRowId(String parameterName, RowId x) throws SQLException {
+
+    }
 
 
-  
-  public Reader getCharacterStream(int parameterIndex) throws SQLException {
-    return ((AS400JDBCCallableStatement) cstmt_).getCharacterStream(parameterIndex); 
-  }
+    public Reader getCharacterStream(int parameterIndex) throws SQLException {
+        return ((AS400JDBCCallableStatement) cstmt_).getCharacterStream(parameterIndex);
+    }
 
-  
-  public Reader getCharacterStream(String parameterName) throws SQLException {
-    return getCharacterStream(findParameterIndex(parameterName)); 
-  }
+
+    public Reader getCharacterStream(String parameterName) throws SQLException {
+        return getCharacterStream(findParameterIndex(parameterName));
+    }
 
   
   public Reader getNCharacterStream(int parameterIndex) throws SQLException {
@@ -478,40 +492,68 @@ public class AS400JDBCCallableStatementRedirect extends
 
   
   public void setNCharacterStream(String parameterName, Reader reader) throws SQLException {
-    setNCharacterStream(findParameterIndex(parameterName), reader); 
+      setNCharacterStream(findParameterIndex(parameterName), reader);
   }
 
-  
-  public void setNCharacterStream(String parameterName, Reader reader, long length)
-      throws SQLException {
-    setNCharacterStream(findParameterIndex(parameterName), reader, length); 
-    
-  }
 
-  
+    public void setNCharacterStream(String parameterName, Reader reader, long length)
+            throws SQLException {
+        setNCharacterStream(findParameterIndex(parameterName), reader, length);
 
-  
-  public void setNClob(String parameterName, Reader reader) throws SQLException {
-    setNClob(findParameterIndex(parameterName), reader); 
-    
-  }
+    }
 
-  
-  public void setNClob(String parameterName, Reader reader, long length) throws SQLException {
-    setNClob(findParameterIndex(parameterName), reader, length); 
-    
-  }
+    @Override
+    public void setNClob(String parameterName, NClob value) throws SQLException {
 
-  
-  public void setNString(String parameterName, String x) throws SQLException {
-    setNString(findParameterIndex(parameterName), x); 
-    
-  }
-  
-  public Object getObject(String parameterName, Class type)
-      throws SQLException {
-    return getObject(findParameterIndex(parameterName), type); 
-  }
+    }
+
+
+    public void setNClob(String parameterName, Reader reader) throws SQLException {
+        setNClob(findParameterIndex(parameterName), reader);
+
+    }
+
+
+    public void setNClob(String parameterName, Reader reader, long length) throws SQLException {
+        setNClob(findParameterIndex(parameterName), reader, length);
+
+    }
+
+    @Override
+    public NClob getNClob(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String parameterName) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public SQLXML getSQLXML(int parameterIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String parameterName) throws SQLException {
+        return null;
+    }
+
+
+    public void setNString(String parameterName, String x) throws SQLException {
+        setNString(findParameterIndex(parameterName), x);
+
+    }
+
+    public Object getObject(String parameterName, Class type)
+            throws SQLException {
+        return getObject(findParameterIndex(parameterName), type);
+    }
 
   
   public Object getObject(int parameter, Class type)

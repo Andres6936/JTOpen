@@ -179,12 +179,23 @@ public class JDBCParameterMetaData implements ParameterMetaData, DatabaseParamet
       checkRequest();
 
       if (columns_ == null || (param < 1) || (param > columns_.length))
-            throw JDBCError.getSQLException(JDBCError.EXC_DESCRIPTOR_INDEX_INVALID);
+          throw JDBCError.getSQLException(JDBCError.EXC_DESCRIPTOR_INDEX_INVALID);
 
   }
-  private void checkRequest() throws SQLException {
-      if (statement_.isClosed()) {
-	  throw JDBCError.getSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
-      }
-  }
+
+    private void checkRequest() throws SQLException {
+        if (statement_.isClosed()) {
+            throw JDBCError.getSQLException(JDBCError.EXC_FUNCTION_SEQUENCE);
+        }
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

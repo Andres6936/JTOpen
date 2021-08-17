@@ -20,22 +20,13 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.BatchUpdateException;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
+import java.sql.*;
 /* ifdef JDBC40
  import java.sql.NClob;
  endif */
-import java.sql.ParameterMetaData;
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 /* ifdef JDBC40
  import java.sql.RowId;
  endif */
-import java.sql.SQLException;
 /* ifdef JDBC42
 import java.sql.SQLType;
 import java.sql.JDBCType;
@@ -45,10 +36,6 @@ endif */
  import java.sql.SQLXML;
  import java.sql.SQLFeatureNotSupportedException;
  endif */
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Types;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -2034,21 +2021,26 @@ public class AS400JDBCPreparedStatementImpl extends AS400JDBCPreparedStatement  
    * @since Modification 5
    **/
   public ParameterMetaData getParameterMetaData() throws SQLException {
-    synchronized (internalLock_) {
-      checkOpen();
-      return (ParameterMetaData) (Object) new AS400JDBCParameterMetaData(this);
-    }
+      synchronized (internalLock_) {
+          checkOpen();
+          return (ParameterMetaData) (Object) new AS400JDBCParameterMetaData(this);
+      }
   }
 
-  // @G4A
-  // Return the mode of a parameter for ParameterMetaData support.
-  int getParameterMode(int param) throws SQLException {
-    validatePSParameterIndex(param);
-    synchronized (internalLock_) {
-      checkOpen();
+    @Override
+    public void setRowId(int parameterIndex, RowId x) throws SQLException {
 
-      if (useReturnValueParameter_) // @G8a
-      {
+    }
+
+    // @G4A
+    // Return the mode of a parameter for ParameterMetaData support.
+    int getParameterMode(int param) throws SQLException {
+        validatePSParameterIndex(param);
+        synchronized (internalLock_) {
+            checkOpen();
+
+            if (useReturnValueParameter_) // @G8a
+            {
         // @G8a
         if (param == 1) // @G8a
           return ParameterMetaData.parameterModeOut; // @G8a
@@ -3850,25 +3842,30 @@ endif */
       throws SQLException {
     if (JDTrace.isTraceOn()) {
       JDTrace.logInformation(this, "setNCharacterStream()");
-      if (value == null)
-        JDTrace.logInformation(this, "parameter index: " + parameterIndex
-            + " value: NULL");
-      else
-        JDTrace.logInformation(this, "parameter index: " + parameterIndex
-            + " length: " + length);
+        if (value == null)
+            JDTrace.logInformation(this, "parameter index: " + parameterIndex
+                    + " value: NULL");
+        else
+            JDTrace.logInformation(this, "parameter index: " + parameterIndex
+                    + " length: " + length);
     }
-    setCharacterStream(parameterIndex, value, (int) length);
+      setCharacterStream(parameterIndex, value, (int) length);
   }
 
-  // @PDA jdbc40
-  // JDBC40DOC /**
-  // JDBC40DOC     * Sets the designated parameter to a <code>java.sql.NClob</code> object. The driver converts this to a
-  // JDBC40DOC * SQL <code>NCLOB</code> value when it sends it to the database.
-  // JDBC40DOC * @param parameterIndex The parameter index (1-based).
-  // JDBC40DOC * @param value the parameter value
-  // JDBC40DOC * @throws SQLException if the driver does not support national
-  // JDBC40DOC * character sets; if the driver can detect that a data conversion
-  // JDBC40DOC * error could occur ; or if a database access error occurs
+    @Override
+    public void setNClob(int parameterIndex, NClob value) throws SQLException {
+
+    }
+
+    // @PDA jdbc40
+    // JDBC40DOC /**
+    // JDBC40DOC     * Sets the designated parameter to a <code>java.sql.NClob</code> object. The driver converts this to a
+    // JDBC40DOC * SQL <code>NCLOB</code> value when it sends it to the database.
+    // JDBC40DOC * @param parameterIndex The parameter index (1-based).
+    // JDBC40DOC * @param value the parameter value
+    // JDBC40DOC * @throws SQLException if the driver does not support national
+    // JDBC40DOC * character sets; if the driver can detect that a data conversion
+    // JDBC40DOC * error could occur ; or if a database access error occurs
   // JDBC40DOC */
 /* ifdef JDBC40 
      public void setNClob(int parameterIndex, NClob value) throws SQLException
@@ -3977,23 +3974,28 @@ endif */
     if (JDTrace.isTraceOn()) {
       JDTrace.logInformation(this, "setNClob()");
       if (reader == null)
-        JDTrace.logInformation(this, "parameter index: " + parameterIndex
-            + " value: NULL");
+          JDTrace.logInformation(this, "parameter index: " + parameterIndex
+                  + " value: NULL");
       else
-        JDTrace.logInformation(this, "parameter index: " + parameterIndex
-            + " length: " + length);
+          JDTrace.logInformation(this, "parameter index: " + parameterIndex
+                  + " length: " + length);
     }
 
-    setCharacterStream(parameterIndex, reader, (int) length);
+      setCharacterStream(parameterIndex, reader, (int) length);
   }
 
-  // @PDA jdbc40
-  // JDBC40DOC /**
-  // JDBC40DOC      * Sets the designated parameter to the given <code>java.sql.SQLXML</code> object.
-  // JDBC40DOC * @param parameterIndex The parameter index (1-based).
-  // JDBC40DOC      * @param xmlObject a <code>SQLXML</code> object that maps an SQL <code>XML</code> value
-  // JDBC40DOC * @throws SQLException if a database access error occurs
-  // JDBC40DOC */
+    @Override
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    // @PDA jdbc40
+    // JDBC40DOC /**
+    // JDBC40DOC      * Sets the designated parameter to the given <code>java.sql.SQLXML</code> object.
+    // JDBC40DOC * @param parameterIndex The parameter index (1-based).
+    // JDBC40DOC      * @param xmlObject a <code>SQLXML</code> object that maps an SQL <code>XML</code> value
+    // JDBC40DOC * @throws SQLException if a database access error occurs
+    // JDBC40DOC */
   /* ifdef JDBC40 
      public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException
      {

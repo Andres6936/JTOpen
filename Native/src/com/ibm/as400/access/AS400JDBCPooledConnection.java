@@ -16,6 +16,7 @@ package com.ibm.as400.access;
 import javax.sql.ConnectionEvent;
 import javax.sql.ConnectionEventListener;
 import javax.sql.PooledConnection;
+import javax.sql.StatementEventListener;
 /* ifdef JDBC40 
 import javax.sql.StatementEventListener;
 endif */ 
@@ -382,24 +383,33 @@ public class AS400JDBCPooledConnection implements PooledConnection
   }
 
 
-  /**
-  *  Removes a ConnectionEventListener.
-  *  @param listener The listener to be removed.
-  **/
-  public void removeConnectionEventListener(ConnectionEventListener listener)
-  {
-    eventManager_.removeConnectionEventListener(listener);
-  }
+    /**
+     * Removes a ConnectionEventListener.
+     *
+     * @param listener The listener to be removed.
+     **/
+    public void removeConnectionEventListener(ConnectionEventListener listener) {
+        eventManager_.removeConnectionEventListener(listener);
+    }
+
+    @Override
+    public void addStatementEventListener(StatementEventListener listener) {
+
+    }
+
+    @Override
+    public void removeStatementEventListener(StatementEventListener listener) {
+
+    }
 
 
-  /**
-  *  Returns the connection after usage.
-  *  Update the connection timers and invalidate connection handle.
-  **/
-  synchronized void returned()
-  {
-    if (JDTrace.isTraceOn())                                                    //@G2C
-    {
+    /**
+     * Returns the connection after usage.
+     * Update the connection timers and invalidate connection handle.
+     **/
+    synchronized void returned() {
+        if (JDTrace.isTraceOn())                                                    //@G2C
+        {
       JDTrace.logInformation(this, "returned() This AS400JDBCPooledConnection is being returned."); //@G2C
     }
 

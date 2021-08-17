@@ -28,9 +28,11 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 endif */
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Random;                          // @J3a
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;                      // JDBC2.0 std-ext
 import javax.naming.NamingException;              // JNDI
@@ -982,23 +984,27 @@ implements DataSource, Referenceable, Serializable, Cloneable //@PDC 550
     }
 
     /**
-    *  Returns the timeout value in seconds.
-    *  Note: This value is not used or supported.
-    *  The timeout value is determined by the IBM i system.
-    *  @return the maximum time in seconds that this data source can wait while attempting to connect to a database. 
-    **/
-    public int getLoginTimeout()
-    {
+     *  Returns the timeout value in seconds.
+     *  Note: This value is not used or supported.
+     *  The timeout value is determined by the IBM i system.
+     *  @return the maximum time in seconds that this data source can wait while attempting to connect to a database.
+     **/
+    public int getLoginTimeout() {
         return properties_.getInt(JDProperties.LOGIN_TIMEOUT);
     }
 
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return null;
+    }
+
     /**
-    *  Returns the log writer for this data source.
-    *  @return The log writer for this data source.
-    *  @exception SQLException If a database error occurs.
-    **/
-    public PrintWriter getLogWriter() throws SQLException
-    {
+     * Returns the log writer for this data source.
+     *
+     * @return The log writer for this data source.
+     * @throws SQLException If a database error occurs.
+     **/
+    public PrintWriter getLogWriter() throws SQLException {
         return writer_;
     }
 
@@ -5666,17 +5672,24 @@ endif */
     **/
     public void setEnableSeamlessFailover(int setting)
     {
-      String property= "enableSeamlessFailover"; 
+      String property= "enableSeamlessFailover";
         int old = getEnableSeamlessFailover();
-        properties_.setString(JDProperties.ENABLE_SEAMLESS_FAILOVER, ""+setting);
+        properties_.setString(JDProperties.ENABLE_SEAMLESS_FAILOVER, "" + setting);
 
         changes_.firePropertyChange(property, old, setting);
 
-        if (JDTrace.isTraceOn()) 
-            JDTrace.logInformation (this, property + ": " + setting);  
+        if (JDTrace.isTraceOn())
+            JDTrace.logInformation(this, property + ": " + setting);
     }
 
 
-    
-    
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

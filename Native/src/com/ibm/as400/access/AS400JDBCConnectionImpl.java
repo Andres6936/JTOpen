@@ -28,13 +28,10 @@ endif */
 /* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.util.Enumeration;               // @DAA
+import java.util.*;
 /* ifdef JDBC40
 import java.util.HashMap;
 endif */
-import java.util.Map;
-import java.util.Properties;
-import java.util.Vector;
 import java.util.concurrent.Executor;
 /* ifdef JDBC40
 import java.util.concurrent.locks.ReentrantLock;
@@ -5241,16 +5238,16 @@ throws SQLException
                 clientHostname_ = oldValue;
             else if (name.equals(clientProgramIDPropertyName_)) //@pda
                 clientProgramID_ = oldValue;
-/* ifdef JDBC40
+///* ifdef JDBC40
 
             //@PDD jdbc40 merge HashMap<String,ClientInfoStatus> m = new HashMap<String,ClientInfoStatus>();
             HashMap m = new HashMap();
             m.put(name, ClientInfoStatus.REASON_UNKNOWN);
             JDError.throwSQLClientInfoException( this, JDError.EXC_INTERNAL, e, m );
 
-endif */
+//endif */
 /* ifndef JDBC40 */
-            JDError.throwSQLException( this, JDError.EXC_INTERNAL, e);
+//            JDError.throwSQLException( this, JDError.EXC_INTERNAL, e);
 /* endif */
         } finally
         {
@@ -5369,7 +5366,7 @@ endif */
 
         } catch( Exception e)
         {
-/* ifdef JDBC40
+///* ifdef JDBC40
             //create Map<String,ClientInfoStatus> for exception constructor
             //@PDD jdbc40 merge HashMap<String,ClientInfoStatus> m = new HashMap<String,ClientInfoStatus>();
             HashMap m = new HashMap();
@@ -5381,9 +5378,9 @@ endif */
             }
             JDError.throwSQLClientInfoException( this, JDError.EXC_INTERNAL, e, m);
 
-endif */
+//endif */
 /* ifndef JDBC40 */
-        	JDError.throwSQLException( this, JDError.EXC_INTERNAL, e);
+//        	JDError.throwSQLException( this, JDError.EXC_INTERNAL, e);
 /* endif */
         } finally
         {

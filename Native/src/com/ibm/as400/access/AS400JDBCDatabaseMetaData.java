@@ -13,16 +13,10 @@
 
 package com.ibm.as400.access;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.RowIdLifetime;
 endif */
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.Vector;                            // @D0A
 
 
@@ -7464,26 +7458,31 @@ endif */
     }
 
 
-
     //@B0A - We don't support this directly. Use package caching instead.
+
     /**
      * Indicates if statement pooling is supported.
+     *
      * @return Always false. Statement pooling is not supported at this time.
-    **/
-    public boolean supportsStatementPooling()
-    {
+     **/
+    public boolean supportsStatementPooling() {
         return false;
+    }
+
+    @Override
+    public RowIdLifetime getRowIdLifetime() throws SQLException {
+        return null;
     }
 
 
     /**
-    Indicates if stored procedure calls using the stored procedure
-    escape syntax are supported.
+     Indicates if stored procedure calls using the stored procedure
+     escape syntax are supported.
 
-    @return     Always true. Stored procedure calls using the stored
-                procedure escape syntax are supported.
+     @return Always true. Stored procedure calls using the stored
+     procedure escape syntax are supported.
 
-    @exception  SQLException    This exception is never thrown.
+     @exception SQLException    This exception is never thrown.
     **/
     public boolean supportsStoredProcedures ()
     throws SQLException
@@ -8200,9 +8199,17 @@ endif */
      */
 
     public long getMaxLogicalLobSize() throws SQLException {
-       return 2147483647;
+        return 2147483647;
     }
 
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
 
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

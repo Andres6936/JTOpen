@@ -21,6 +21,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.Executor;
 
 /* ifdef JDBC40
 import java.util.concurrent.locks.ReentrantLock;
@@ -2103,12 +2104,12 @@ endif */
 
   }
 
-  public synchronized void setClientInfo(String name, String value) 
-  /* ifdef JDBC40
+  public synchronized void setClientInfo(String name, String value)
+//  /* ifdef JDBC40
   throws SQLClientInfoException
-endif */
+//endif */
   /* ifndef JDBC40 */
-  throws SQLException
+//  throws SQLException
   /* endif  */
       {
     boolean retryOperation = true;
@@ -2133,18 +2134,22 @@ endif */
           /* endif  */
           
           e) {
-        retryOperation = handleSQLClientInfoException(e);
+        try {
+          retryOperation = handleSQLClientInfoException(e);
+        } catch (SQLException throwables) {
+          throwables.printStackTrace();
+        }
       }
     }
 
   }
 
-  public synchronized void setClientInfo(Properties properties) 
-  /* ifdef JDBC40
+  public synchronized void setClientInfo(Properties properties)
+//  /* ifdef JDBC40
   throws SQLClientInfoException
-endif */
+//endif */
   /* ifndef JDBC40 */
-  throws SQLException
+//  throws SQLException
   /* endif  */
 
   {
@@ -2184,7 +2189,11 @@ endif */
          /* endif  */
           
           e) {
-        retryOperation = handleSQLClientInfoException(e);
+        try {
+          retryOperation = handleSQLClientInfoException(e);
+        } catch (SQLException throwables) {
+          throwables.printStackTrace();
+        }
       }
     }
 
@@ -2246,8 +2255,23 @@ endif */
     return null;
   }
 
+  @Override
+  public NClob createNClob() throws SQLException {
+    return null;
+  }
+
+  @Override
+  public SQLXML createSQLXML() throws SQLException {
+    return null;
+  }
+
+  @Override
+  public boolean isValid(int timeout) throws SQLException {
+    return false;
+  }
+
   public synchronized Array createArrayOf(String typeName, Object[] elements)
-      throws SQLException {
+          throws SQLException {
     boolean retryOperation = true;
     while (retryOperation) {
       try {
@@ -2305,14 +2329,24 @@ endif */
     return null;
   }
 
+  @Override
+  public void abort(Executor executor) throws SQLException {
+
+  }
+
+  @Override
+  public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+
+  }
+
   public synchronized void setNetworkTimeout(int timeout) throws SQLException {
     boolean retryOperation = true;
     while (retryOperation) {
       try {
         currentConnection_.setNetworkTimeout(timeout);
         retryOperation = false;
-        networkTimeoutSet_ = true; 
-        networkTimeout_ = timeout; 
+        networkTimeoutSet_ = true;
+        networkTimeout_ = timeout;
       } catch (SQLException e) {
         retryOperation = handleException(e);
       }
@@ -2381,11 +2415,16 @@ endif */
 
   }
 
+  @Override
+  boolean testDataTruncation(AS400JDBCStatement statementWarningObject, AS400JDBCResultSet resultSetWarningObject, int parameterIndex, boolean isParameter, com.ibm.as400.access.SQLData data, JDSQLStatement sqlStatement) throws SQLException {
+    return false;
+  }
+
   public synchronized boolean testDataTruncation(AS400JDBCStatement statementWarningObject,
                                                  AS400JDBCResultSet resultSetWarningObject, int parameterIndex,
                                                  boolean isParameter, SQLData data, JDSQLStatement sqlStatement)
-      throws SQLException {
-    boolean checkRawBytes = false; 
+          throws SQLException {
+    boolean checkRawBytes = false;
     boolean retryOperation = true;
     while (retryOperation) {
       try {
@@ -2452,15 +2491,26 @@ endif */
     return lastConnectionCanSeamlessFailover_; 
   }
 
-  String[] reconnectUrlStrings_ = null; 
+  String[] reconnectUrlStrings_ = null;
+
   public synchronized String[] getReconnectURLs() {
-    if (reconnectUrlStrings_ == null) { 
-       reconnectUrlStrings_ = new String[reconnectUrls_.length];
-       for (int i = 0; i < reconnectUrls_.length; i++ ) { 
-         reconnectUrlStrings_[i] = reconnectUrls_[i].toString();
-       }
-    } 
+    if (reconnectUrlStrings_ == null) {
+      reconnectUrlStrings_ = new String[reconnectUrls_.length];
+      for (int i = 0; i < reconnectUrls_.length; i++) {
+        reconnectUrlStrings_[i] = reconnectUrls_[i].toString();
+      }
+    }
     return reconnectUrlStrings_;
+  }
+
+  @Override
+  public <T> T unwrap(Class<T> iface) throws SQLException {
+    return null;
+  }
+
+  @Override
+  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    return false;
   }
    
   

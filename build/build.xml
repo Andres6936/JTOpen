@@ -835,17 +835,17 @@
 	<target name="compile-jtopenlite" depends="init">
 		<tstamp/>
 		<echo message="compiling jtopenlite on ${DSTAMP}"/>
-		<replaceregexp file="${source-jtopenlite}/com/ibm/jtopenlite/About.java"
-	  	               match="INTERFACE_LEVEL=&quot;.*&quot;"
-	  	               replace="INTERFACE_LEVEL=&quot;${DSTAMP}&quot;"
-	  	               byline="true"
-	  	/>
+		<replaceregexp file="/com/ibm/jtopenlite/About.java"
+					   match="INTERFACE_LEVEL=&quot;.*&quot;"
+					   replace="INTERFACE_LEVEL=&quot;${DSTAMP}&quot;"
+					   byline="true"
+		/>
 		<mkdir dir="${output-jtopenlite}"/>
 		<javac srcdir="${source-jtopenlite}"
-	           destdir="${output-jtopenlite}"
-	           failonerror="true"
-	           debug="on"
-	           debuglevel="lines,source"
+			   destdir="${output-jtopenlite}"
+			   failonerror="true"
+			   debug="on"
+			   debuglevel="lines,source"
 	           fork="true"
 	           encoding="iso-8859-1"
 	           target="1.5"

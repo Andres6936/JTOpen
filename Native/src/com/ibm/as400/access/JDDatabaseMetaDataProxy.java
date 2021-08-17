@@ -17,7 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 /* ifdef JDBC40 
 import java.sql.RowIdLifetime;
-endif */ 
+endif */
+import java.sql.RowIdLifetime;
 import java.sql.SQLException;
 
 
@@ -1388,25 +1389,28 @@ implements java.sql.DatabaseMetaData
     public boolean supportsSelectForUpdate ()
     throws SQLException
     {
-      return callMethodRtnBool ("supportsSelectForUpdate");
+        return callMethodRtnBool("supportsSelectForUpdate");
     }
 
 
     public boolean supportsStatementPooling()
-    throws SQLException
-    {
-        return callMethodRtnBool ("supportsStatementPooling");
+            throws SQLException {
+        return callMethodRtnBool("supportsStatementPooling");
+    }
+
+    @Override
+    public RowIdLifetime getRowIdLifetime() throws SQLException {
+        return null;
     }
 
 
-    public boolean supportsStoredProcedures ()
-    throws SQLException
-    {
-      return callMethodRtnBool ("supportsStoredProcedures");
+    public boolean supportsStoredProcedures()
+            throws SQLException {
+        return callMethodRtnBool("supportsStoredProcedures");
     }
 
 
-    public boolean supportsSubqueriesInComparisons ()
+    public boolean supportsSubqueriesInComparisons()
     throws SQLException
     {
       return callMethodRtnBool ("supportsSubqueriesInComparisons");
@@ -1576,15 +1580,23 @@ implements java.sql.DatabaseMetaData
 
 
       // JDBC 4.1
-    public ResultSet getPseudoColumns(String catalog, String schemaPattern,
-        String tableNamePattern, String columnNamePattern)
-    throws SQLException {
-      return callMethodRtnRSet ("getPseudoColumns",
-          new Class[] { String.class, String.class, String.class, String.class },
-          new Object[] { catalog, schemaPattern, tableNamePattern, columnNamePattern });
+      public ResultSet getPseudoColumns(String catalog, String schemaPattern,
+                                        String tableNamePattern, String columnNamePattern)
+              throws SQLException {
+          return callMethodRtnRSet("getPseudoColumns",
+                  new Class[]{String.class, String.class, String.class, String.class},
+                  new Object[]{catalog, schemaPattern, tableNamePattern, columnNamePattern});
 
+      }
+
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
     }
 
-
-
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

@@ -133,15 +133,22 @@ implements ParameterMetaData
   }
 
   public int getParameterMode(int param)
-  throws SQLException
-  {
-     return callMethodRtnRaw ("getParameterMode", param).getReturnValueInt();
+  throws SQLException {
+      return callMethodRtnRaw("getParameterMode", param).getReturnValueInt();
   }
 
-  //@pda jdbc40
-  protected String[] getValidWrappedList()
-  {
-      return new String[] { "java.sql.ParameterMetaData" };
-  }
+    //@pda jdbc40
+    protected String[] getValidWrappedList() {
+        return new String[]{"java.sql.ParameterMetaData"};
+    }
 
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

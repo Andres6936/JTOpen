@@ -839,11 +839,11 @@ implements Connection
    * <p>
    */
   public void setClientInfo(String name, String value) 
-/* ifdef JDBC40 
+///* ifdef JDBC40
     throws SQLClientInfoException
-endif */ 
-/* ifndef JDBC40 */ 
-   throws SQLException 
+//endif */
+/* ifndef JDBC40 */
+//   throws SQLException
 /* endif */ 
     {
         try
@@ -853,7 +853,7 @@ endif */
                     new Object[] { name, value });
         } catch (SQLException e)
         {
-        /* ifdef JDBC40 
+//        /* ifdef JDBC40
             //may be SQLException or SQLClientInfoException
             if(e instanceof SQLClientInfoException)
                 throw (SQLClientInfoException)e;
@@ -866,9 +866,9 @@ endif */
                 SQLClientInfoException clientIE = new SQLClientInfoException(e.getMessage(), e.getSQLState(), m);
                 throw clientIE;
             }
-endif */ 
-/* ifndef JDBC40 */ 
-	throw e;
+//endif */
+/* ifndef JDBC40 */
+//	throw e;
 /* endif */ 
         }
     }

@@ -246,16 +246,23 @@ implements ResultSetMetaData
       try {
         return (String) connection_.callMethodReturnsObject (pxId_,
                                                                   "toString");
-      }
-      catch (InvocationTargetException e) {
-        throw ProxyClientConnection.rethrow (e);
+      } catch (InvocationTargetException e) {
+          throw ProxyClientConnection.rethrow(e);
       }
     }
-    
+
     //@pda jdbc40
-    protected String[] getValidWrappedList()
-    {
-        return new String[] { "java.sql.ResultSetMetaData" }; //@pdc user cannot cast to AS400JDBCResultSetMetaData
-    } 
-  
+    protected String[] getValidWrappedList() {
+        return new String[]{"java.sql.ResultSetMetaData"}; //@pdc user cannot cast to AS400JDBCResultSetMetaData
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
+    }
 }

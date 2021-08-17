@@ -19,27 +19,16 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.NClob;
 endif */ 
-import java.sql.Ref;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
-endif */ 
-import java.sql.Statement;
-import java.sql.Time;
-import java.sql.Timestamp;
+endif */
 import java.util.Calendar;
 import java.util.Map;
 
@@ -1222,28 +1211,44 @@ implements ResultSet
       if (columnValue != null &&
           !(columnValue instanceof Serializable) ){
         if (JDTrace.isTraceOn())
-          JDTrace.logInformation (this, NOT_SERIALIZABLE);
-        throw new SQLException ();
+            JDTrace.logInformation(this, NOT_SERIALIZABLE);
+          throw new SQLException();
       }
 
-      callMethod ("updateArray",
-                  new Class[] { String.class, Array.class },
-                  new Object[] { columnName,
-                                 columnValue });
+        callMethod("updateArray",
+                new Class[]{String.class, Array.class},
+                new Object[]{columnName,
+                        columnValue});
+    }
+
+    @Override
+    public RowId getRowId(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public RowId getRowId(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateRowId(int columnIndex, RowId x) throws SQLException {
+
+    }
+
+    @Override
+    public void updateRowId(String columnLabel, RowId x) throws SQLException {
+
     }
 
 
-
-
-
-// JDBC 2.0
-    public void updateAsciiStream (int columnIndex,
-                                   InputStream columnValue,
-                                   int length)
-    throws SQLException
-    {
-      InputStream iStream;
-      if (columnValue == null ||
+    // JDBC 2.0
+    public void updateAsciiStream(int columnIndex,
+                                  InputStream columnValue,
+                                  int length)
+            throws SQLException {
+        InputStream iStream;
+        if (columnValue == null ||
           columnValue instanceof Serializable)
         iStream = columnValue;
       else {
@@ -2046,15 +2051,54 @@ implements ResultSet
     public void updateNString(int columnIndex, String nString) throws SQLException
     {
         callMethod ("updateNString",
-                new Class[] { Integer.TYPE, String.class },
-                new Object[] { new Integer (columnIndex),
-                nString });
+                new Class[]{Integer.TYPE, String.class},
+                new Object[]{new Integer(columnIndex),
+                        nString});
     }
-    
+
     //@PDA jdbc40
-    public void updateNString(String columnName, String nString) throws SQLException
-    {
-        updateNString (findColumn (columnName), nString);
+    public void updateNString(String columnName, String nString) throws SQLException {
+        updateNString(findColumn(columnName), nString);
+    }
+
+    @Override
+    public void updateNClob(int columnIndex, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public void updateNClob(String columnLabel, NClob nClob) throws SQLException {
+
+    }
+
+    @Override
+    public NClob getNClob(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public NClob getNClob(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(int columnIndex) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public SQLXML getSQLXML(String columnLabel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException {
+
+    }
+
+    @Override
+    public void updateSQLXML(String columnLabel, SQLXML xmlObject) throws SQLException {
+
     }
     
     /* ifdef JDBC40 
@@ -2494,25 +2538,32 @@ implements ResultSet
           SQLException throwException = new SQLException(e.getMessage());
           try {
             throwException.initCause(e); 
-          } catch (Throwable t) {} 
-          throw throwException;
+          } catch (Throwable t) {}
+            throw throwException;
         }
     }
 
     //@PDA jdbc40 
-    public void updateNClob(String columnLabel, Reader reader) throws SQLException
-    {
-        updateNClob(findColumn (columnLabel), reader);
+    public void updateNClob(String columnLabel, Reader reader) throws SQLException {
+        updateNClob(findColumn(columnLabel), reader);
+    }
+
+    @Override
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+        return null;
     }
 
 
+    public void updateDB2Default(int columnIndex) throws SQLException {
+        callMethod("updateDB2Default",
+                new Class[]{Integer.TYPE},
+                new Object[]{new Integer(columnIndex)});
 
-    public void updateDB2Default(int columnIndex) throws SQLException
-    {
-      callMethod ("updateDB2Default",
-          new Class[] { Integer.TYPE },
-          new Object[] { new Integer (columnIndex) });
- 
     }
 
     public void updateDBDefault(int columnIndex) throws SQLException
@@ -2520,14 +2571,22 @@ implements ResultSet
          updateDB2Default(columnIndex);   
     }
 
-    public void updateDB2Default(String columnName) throws SQLException
-    {
-        updateDB2Default (findColumn (columnName));  
+    public void updateDB2Default(String columnName) throws SQLException {
+        updateDB2Default(findColumn(columnName));
     }
-    
-    public void updateDBDefault(String columnName) throws SQLException
-    {
-        updateDB2Default (findColumn (columnName));  
+
+    public void updateDBDefault(String columnName) throws SQLException {
+        updateDB2Default(findColumn(columnName));
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> iface) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+        return false;
     }
  
     

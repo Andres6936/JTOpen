@@ -752,7 +752,7 @@
     ///////////////////////////////////////////////////////////////////////////-->
   <target name="javadoc" depends="init,checkJavadocIncludes">
     <javadoc packagenames="com.*,utilities"
-             excludepackagenames="com.ibm.as400.security"
+             excludepackagenames="com.ibm.com.ibm.as400.security"
              sourcepath="${source}:${source-contrib}:${source-jtopenlite}:${source-micro}:${include}"
              destdir="${javadoc}"
              use="false"
@@ -771,9 +771,9 @@
         <pathelement location="${include}/midpapi10.jar"/> <!-- Need this for the server-side Micro Edition classes. -->
         <pathelement location="${include}/cldcapi10.jar"/> <!-- Need this for the server-side Micro Edition classes. -->
       </classpath>
-      <group title="Toolbox General API Packages" packages="com.ibm.as400.access,com.ibm.as400.access.list,com.ibm.as400.data,com.ibm.as400.resource,com.ibm.as400.security.auth,com.ibm.as400.vaccess"/>
-      <group title="Toolbox Utility Packages" packages="com.ibm.as400.util,com.ibm.as400.util.html,com.ibm.as400.util.servlet,com.ibm.as400.util.commtrace,utilities"/>
-      <group title="Toolbox Micro Edition Packages" packages="com.ibm.as400.micro"/>
+      <group title="Toolbox General API Packages" packages="com.ibm.com.ibm.as400.access,com.ibm.com.ibm.as400.access.list,com.ibm.com.ibm.as400.data,com.ibm.com.ibm.as400.resource,com.ibm.com.ibm.as400.security.auth,com.ibm.com.ibm.as400.vaccess"/>
+      <group title="Toolbox Utility Packages" packages="com.ibm.com.ibm.as400.util,com.ibm.com.ibm.as400.util.html,com.ibm.com.ibm.as400.util.servlet,com.ibm.com.ibm.as400.util.commtrace,utilities"/>
+      <group title="Toolbox Micro Edition Packages" packages="com.ibm.com.ibm.as400.micro"/>
       <!-- We skip javadoc-ing the java.sql package, otherwise the regular JDBC classes in the
            com.ibm.as400.access package will get erroneously linked to our stubs. -->
     </javadoc>
@@ -794,7 +794,7 @@
 	  <target name="javadoc6" depends="init,source6,checkJavadocIncludes">
         <fail message="Not using JDK 1.6 or higher." unless="jdk16Exists"/> <!-- Sanity. -->
 	    <javadoc packagenames="com.*,utilities"
-	             excludepackagenames="com.ibm.as400.security"
+	             excludepackagenames="com.ibm.com.ibm.as400.security"
                  sourcepath="${source-java6}:${source-contrib}:${include}"
 	             destdir="${javadoc6}"
 	             use="false"
@@ -812,7 +812,7 @@
 	        <pathelement location="${include}/midpapi10.jar"/> <!-- Need this for the server-side Micro Edition classes. -->
 	        <pathelement location="${include}/cldcapi10.jar"/> <!-- Need this for the server-side Micro Edition classes. -->
 	      </classpath>
-	      <group title="Toolbox General API Packages" packages="com.ibm.as400.access,com.ibm.as400.access.list,com.ibm.as400.data,com.ibm.as400.resource,com.ibm.as400.security.auth,com.ibm.as400.vaccess"/>
+	      <group title="Toolbox General API Packages" packages="com.ibm.com.ibm.as400.access,com.ibm.com.ibm.as400.access.list,com.ibm.com.ibm.as400.data,com.ibm.com.ibm.as400.resource,com.ibm.com.ibm.as400.security.auth,com.ibm.com.ibm.as400.vaccess"/>
 	      <!-- We skip javadoc-ing the java.sql package, otherwise the regular JDBC classes in the
 	           com.ibm.as400.access package will get erroneously linked to our stubs. -->
 	    </javadoc>
@@ -853,7 +853,7 @@
     <condition property="pcmlRuntimeExists">
       <and>
         <available classname="java.nio.Buffer"/> <!-- JDK 1.4 and higher. -->
-        <available classname="com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
+        <available classname="com.ibm.com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
       </and>
     </condition>
     <fail message="Can't find PCML runtime." unless="pcmlRuntimeExists"/>
@@ -877,7 +877,7 @@
 	    <condition property="pcmlRuntimeExists">
 	      <and>
 	        <available classname="java.nio.Buffer"/> <!-- JDK 1.4 and higher. -->
-	        <available classname="com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
+	        <available classname="com.ibm.com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
 	      </and>
 	    </condition>
 	    <fail message="Can't find PCML runtime." unless="pcmlRuntimeExists"/>
@@ -902,7 +902,7 @@
 	    <condition property="pcmlRuntimeExists">
 	      <and>
 	        <available classname="java.nio.Buffer"/> <!-- JDK 1.4 and higher. -->
-	        <available classname="com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
+	        <available classname="com.ibm.com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
 	      </and>
 	    </condition>
 	    <fail message="Can't find PCML runtime." unless="pcmlRuntimeExists"/>
@@ -1001,7 +1001,7 @@
 
         <replaceregexp flags="g" >
             <regexp pattern="java.awt" />
-            <substitution expression="com.ibm.as400.jtopenstubs.javaawt" />
+            <substitution expression="com.ibm.com.ibm.as400.jtopenstubs.javaawt" />
             <fileset dir="${source-android}/com/ibm/as400" >
                 <include name="**/*BeanInfo.java" />
                 <include name="**/ToolboxSignonHandler.java" />
@@ -1011,7 +1011,7 @@
 
         <replaceregexp flags="g" >
             <regexp pattern="javax.swing" />
-            <substitution expression="com.ibm.as400.jtopenstubs.javaxswing" />
+            <substitution expression="com.ibm.com.ibm.as400.jtopenstubs.javaxswing" />
             <fileset dir="${source-android}/com/ibm/as400" >
                 <include name="**/ResourceBundleLoader.java" />
             </fileset>
@@ -1019,7 +1019,7 @@
 
         <replaceregexp flags="g" >
             <regexp pattern="java.beans" />
-            <substitution expression="com.ibm.as400.jtopenstubs.javabeans" />
+            <substitution expression="com.ibm.com.ibm.as400.jtopenstubs.javabeans" />
             <fileset dir="${source-android}/com/ibm/as400" >
                 <include name="**/*.java" />
             </fileset>
@@ -1027,7 +1027,7 @@
 
         <replaceregexp flags="g" >
             <regexp pattern="sun.misc" />
-            <substitution expression="com.ibm.as400.jtopenstubs.sunmisc" />
+            <substitution expression="com.ibm.com.ibm.as400.jtopenstubs.sunmisc" />
             <fileset dir="${source-android}/com/ibm/as400" >
                 <include name="**/*Mlog.java" />
             </fileset>
@@ -1035,7 +1035,7 @@
 
         <replaceregexp flags="g" >
             <regexp pattern="sun.util" />
-            <substitution expression="com.ibm.as400.jtopenstubs.sunutil" />
+            <substitution expression="com.ibm.com.ibm.as400.jtopenstubs.sunutil" />
             <fileset dir="${source-android}/com/ibm/as400" >
                 <include name="**/*Calendar.java" />
             </fileset>
@@ -1043,7 +1043,7 @@
 
         <replaceregexp flags="g" >
             <regexp pattern="org.ietf.jgss" />
-            <substitution expression="com.ibm.as400.jtopenstubs.orgietfjgss" />
+            <substitution expression="com.ibm.com.ibm.as400.jtopenstubs.orgietfjgss" />
             <fileset dir="${source-android}/com/ibm/as400" >
                 <include name="**/Token*.java" />
             </fileset>
@@ -1051,7 +1051,7 @@
 
         <replaceregexp flags="g" >
             <regexp pattern="javax.naming" />
-            <substitution expression="com.ibm.as400.jtopenstubs.javaxnaming" />
+            <substitution expression="com.ibm.com.ibm.as400.jtopenstubs.javaxnaming" />
             <fileset dir="${source-android}/com/ibm/as400" >
                 <include name="**/AS400JDBC*" />
             </fileset>

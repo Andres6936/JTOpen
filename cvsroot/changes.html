@@ -47,7 +47,7 @@ with the following error:
     org.xml.sax.SAXNotRecognizedException
     Feature: http://apache.org/xml/features/continue-after-fatal-error
 
-Several classes in deprecated package com.ibm.as400.vaccess are known to
+Several classes in deprecated package com.ibm.com.ibm.as400.vaccess are known to
 fail to serialize when running in Java 6 JVMs.  These classes include:
     AS400DetailsPane
     AS400ExplorerPane
@@ -211,7 +211,7 @@ MISC: Improve CADSPool performance
 
 - Don't make ProfileTokenCredential Refresh while getting connection to server
 - Fix issue that FileAttributes.getAttributes fails when returned data is larger than 2048 bytes
-- Fix reading of com.ibm.as400.access.noDBReplyPooling and com.ibm.as400.access.DBDSPool.monitor properties 
+- Fix reading of com.ibm.com.ibm.as400.access.noDBReplyPooling and com.ibm.com.ibm.as400.access.DBDSPool.monitor properties
 - Add ClassCastException Handle in NPConversation.makeRequest
 - JDBC: Fix Connection.isValid
 - JDBC: JDBC Proxy Support Updates
@@ -827,7 +827,7 @@ MISC: Improve CADSPool performance
 - RLA:  Corrected field length calculation for DBCS VARCHAR and VARGRAPHIC fields.
 - RLA:  Fix for JTOpen bug 1796143 - Writing to a multiple format file fails.
 - System pool:  Improve handling of shared pools.
-- Vaccess: Deprecated last remaining un-deprecated class in package <tt>com.ibm.as400.vaccess</tt>: AS400JDBCDataSourcePane.
+- Vaccess: Deprecated last remaining un-deprecated class in package <tt>com.ibm.com.ibm.as400.vaccess</tt>: AS400JDBCDataSourcePane.
 </PRE>
 
 <HR>
@@ -1094,12 +1094,12 @@ MISC: Improve CADSPool performance
 - Print: Added print attribute ATTR_PUBINF.
 - QSYS object types: Added new and missing object types.
 - RLA: Added Record.getFieldAsBytes() methods.
-- Resource: Deprecated package <tt>com.ibm.as400.resource</tt>
+- Resource: Deprecated package <tt>com.ibm.com.ibm.as400.resource</tt>
 - System status: Added getters for 4 additional properties.
 - System status: Added method getProcessorSharingAttribute().
 - System value: Corrected data type for QTHDRSCAFN.
 - Utilities: Deprecated class <tt>utilities.AS400ToolboxInstaller</tt>
-- Vaccess: Deprecated package <tt>com.ibm.as400.vaccess</tt>
+- Vaccess: Deprecated package <tt>com.ibm.com.ibm.as400.vaccess</tt>
 </PRE>
 
 <HR>
@@ -1357,7 +1357,7 @@ MISC: Improve CADSPool performance
 <PRE>
 - Build: Include build directory in src.zip.
 - Build: Added xpcml.xsd to jt400.jar and jt400Native.jar
-- Build: Added com.ibm.as400.access.list package.
+- Build: Added com.ibm.com.ibm.as400.access.list package.
 - Build: Use old StringBuffer.append() method in RJobLog and HTMLDocument for compatibility with JDK 1.3.
 - Comm trace: Added reverse.
 - Connection: Open sourced AS400ImplRemote.
@@ -1414,7 +1414,7 @@ MISC: Improve CADSPool performance
 - NetServer: Added new ISeriesNetServer classes to replace the ones that relied on PCML/Resource framework.
 - Object: Only call API on-thread if Toolbox property is set.
 - Object: Added ObjectDescription.exists().
-- Open list: Added new package com.ibm.as400.access.list.
+- Open list: Added new package com.ibm.com.ibm.as400.access.list.
 - Open list: Added SpooledFileOpenList classes to use in place of regular SpooledFile classes for performance.
 - PCML: Added support to PCML for XPCML, using XML schemas.
 - PCML: Updated xsl and xsd definitions.
@@ -1459,8 +1459,8 @@ MISC: Improve CADSPool performance
 - Javadoc: Updated SpooledFile.
 - Javadoc: Added javadoc regarding QTEMP.LIB to IFSFile.
 - Javadoc: Corrected javadoc for DirectoryEntry.getCountry().
-- Javadoc: Generate javadoc for com.ibm.as400.util.commtrace package.
-- Javadoc: Handle com.ibm.as400.security.auth package.
+- Javadoc: Generate javadoc for com.ibm.com.ibm.as400.util.commtrace package.
+- Javadoc: Handle com.ibm.com.ibm.as400.security.auth package.
 - Javadoc: Fixed example in DirectoryEntryList.
 - JDBC: Update counts now return SUCCESS_NO_INFO on a blocked insert.
 - JDBC: Support ROWID column type.

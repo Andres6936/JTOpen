@@ -23,10 +23,10 @@
   <LI><STRONG>Using the java.lang.System.setProperties() method</STRONG>
     <P>You can set system properties programmatically by using the java.lang.System.setProperties()
       method.</P>
-    <P>For example, the following code sets the <CODE>com.ibm.as400.access.AS400.proxyServer</CODE>
+    <P>For example, the following code sets the <CODE>com.ibm.com.ibm.as400.access.AS400.proxyServer</CODE>
       property to <CODE>hqoffice</CODE>:</P>
     <PRE>Properties systemProperties = System.getProperties();
-   systemProperties.put (&quot;com.ibm.as400.access.AS400.proxyServer&quot;, &quot;hqoffice&quot;);
+   systemProperties.put (&quot;com.ibm.com.ibm.as400.access.AS400.proxyServer&quot;, &quot;hqoffice&quot;);
    System.setProperties (systemProperties);</PRE>
   </LI>
   <LI><STRONG>Using the <KBD>-D</KBD> option of the <KBD>java</KBD> command</STRONG>
@@ -34,21 +34,21 @@
       from a command line by using the <KBD>-D</KBD> option of the <KBD>java</KBD>
       command.</P>
     <P>For example, the following program runs the application called Inventory
-      with the <CODE>com.ibm.as400.access.AS400.proxyServer</CODE> property set
+      with the <CODE>com.ibm.com.ibm.as400.access.AS400.proxyServer</CODE> property set
       to <CODE>hqoffice</CODE>:</P>
-    <PRE>   java -Dcom.ibm.as400.access.AS400.proxyServer=hqoffice Inventory</PRE>
+    <PRE>   java -Dcom.ibm.com.ibm.as400.access.AS400.proxyServer=hqoffice Inventory</PRE>
   </LI>
   <LI><STRONG>Using a jt400.properties file</STRONG>
     <P>In some environments, it may be inconvenient to instruct all users to set
-      their own system properties. As an alternative, you can specify IBM Toolbox
-      for Java system properties in a file called jt400.properties that is searched
-      for as if it is part of the com.ibm.as400.access package. In other words,
-      place the jt400.properties file in a com/ibm/as400/access directory pointed
-      to by the classpath.</P>
-    <P>For example, set the <CODE>com.ibm.as400.access.AS400.proxyServer</CODE>
+        their own system properties. As an alternative, you can specify IBM Toolbox
+        for Java system properties in a file called jt400.properties that is searched
+        for as if it is part of the com.ibm.com.ibm.as400.access package. In other words,
+        place the jt400.properties file in a com/ibm/as400/access directory pointed
+        to by the classpath.</P>
+    <P>For example, set the <CODE>com.ibm.com.ibm.as400.access.AS400.proxyServer</CODE>
       property to <CODE>hqoffice</CODE> by inserting the following line into the
       jt400.properties file:</P>
-    <PRE>   com.ibm.as400.access.AS400.proxyServer=hqoffice</PRE>
+    <PRE>   com.ibm.com.ibm.as400.access.AS400.proxyServer=hqoffice</PRE>
     <P>The backslash character (\) functions as an escape character in properties
       files. Specify a literal backslash character by using two backslashes (\\).</P>
     <P>Modify this <A HREF="SystemPropertiesSample1.html">sample</A> of a jt400.properties
@@ -56,19 +56,19 @@
   </LI>
   <LI><STRONG>Using a Properties class</STRONG>
     <P>Some browsers do not load properties files without explicitly changing
-      security settings. However, most browsers do allow properties in .class
-      files, so IBM Toolbox for Java system properties can also be specified
-      by a class called com.ibm.as400.access.Properties which extends java.util.Properties.</P>
-    <P>For example, to set the <CODE>com.ibm.as400.access.AS400.proxyServer</CODE>
+        security settings. However, most browsers do allow properties in .class
+        files, so IBM Toolbox for Java system properties can also be specified
+        by a class called com.ibm.com.ibm.as400.access.Properties which extends java.util.Properties.</P>
+    <P>For example, to set the <CODE>com.ibm.com.ibm.as400.access.AS400.proxyServer</CODE>
       property to <CODE>hqoffice</CODE>, use the following Java code:</P>
-    <PRE>   package com.ibm.as400.access;
+    <PRE>   package com.ibm.com.ibm.as400.access;
 
    public class Properties
    extends java.util.Properties
    {
       public Properties ()
       {
-         put (&quot;com.ibm.as400.access.AS400.proxyServer&quot;, &quot;hqoffice&quot;);
+         put (&quot;com.ibm.com.ibm.as400.access.AS400.proxyServer&quot;, &quot;hqoffice&quot;);
       }
    }</PRE>
     <P>Modify and compile this <A HREF="SystemPropertiesSample2.html">sample</A>
@@ -101,13 +101,13 @@ decreasing precedence):</P>
   <TH ID="cat1">Proxy server property</TH>
   <TH ID="cat1t2">Description</TH>
 <TR VALIGN="top">
-  <TD HEADERS="cat1">com.ibm.as400.access.AS400.proxyServer</TD>
+  <TD HEADERS="cat1">com.ibm.com.ibm.as400.access.AS400.proxyServer</TD>
   <TD HEADERS="cat1t2">Specifies the proxy server host name and port number, using the format:
       <PRE>   hostName:portNumber</PRE>
       The port number is optional.</TD>
 </TR>
 <TR VALIGN="top">
-    <TD HEADERS="cat1"> com.ibm.as400.access.SecureAS400.proxyEncryptionMode 
+    <TD HEADERS="cat1"> com.ibm.com.ibm.as400.access.SecureAS400.proxyEncryptionMode
     </TD>
     <TD HEADERS="cat1t2"> 
       <P>Specifies which portion of the proxy data flow is encrypted by using 
@@ -121,7 +121,7 @@ decreasing precedence):</P>
     </TD>
 </TR>
 <TR VALIGN="top">
-    <TD HEADERS="cat1"> <A NAME="clientCleanupInterval">com.ibm.as400.access.TunnelProxyServer.clientCleanupInterval</A> 
+    <TD HEADERS="cat1"> <A NAME="clientCleanupInterval">com.ibm.com.ibm.as400.access.TunnelProxyServer.clientCleanupInterval</A>
     </TD>
     <TD HEADERS="cat1t2">Specifies how often, in seconds, the proxy server looks for idle connections. 
       The proxy server starts a thread to look for clients that are no longer 
@@ -129,7 +129,7 @@ decreasing precedence):</P>
       connections.</TD>
 </TR>
 <TR VALIGN="top">
-    <TD HEADERS="cat1"> <A NAME="clientLifetime">com.ibm.as400.access.TunnelProxyServer.clientLifetime</A> 
+    <TD HEADERS="cat1"> <A NAME="clientLifetime">com.ibm.com.ibm.as400.access.TunnelProxyServer.clientLifetime</A>
     </TD>
     <TD HEADERS="cat1t2"> Specifies how long, in seconds, a client can be idle before the proxy 
       server removes references to the objects so the JVM can garbage collect 
@@ -153,19 +153,19 @@ decreasing precedence):</P>
     <TH ID="cat2t2">Description</TH>
   </TR>
   <TR VALIGN="top"> 
-    <TD HEADERS="cat2">com.ibm.as400.access.Trace.category</TD>
+    <TD HEADERS="cat2">com.ibm.com.ibm.as400.access.Trace.category</TD>
     <TD HEADERS="cat2t2">Specifies which trace categories to enable. This is a comma-delimited 
       list containing any combination of trace categories. The complete list of 
       trace categories is defined in the <A HREF="../Trace.html#navbar_top"> 
       Trace</A> class.</TD>
   </TR>
   <TR VALIGN="top"> 
-    <TD HEADERS="cat2">com.ibm.as400.access.Trace.file</TD>
+    <TD HEADERS="cat2">com.ibm.com.ibm.as400.access.Trace.file</TD>
     <TD HEADERS="cat2t2">Specifies the file to which trace output is written. The 
       default is to write trace output to System.out.</TD>
   </TR>
   <TR VALIGN="top">
-    <TD HEADERS="cat2">com.ibm.as400.access.ServerTrace.JDBC</TD>
+    <TD HEADERS="cat2">com.ibm.com.ibm.as400.access.ServerTrace.JDBC</TD>
     <TD HEADERS="cat2t2">Specifies which trace categories to start on the JDBC server 
       job. For information about supported values, see the <a href="JDBCProperties.html#servertrace">JDBC 
       server trace property</a>.</TD>
@@ -178,7 +178,7 @@ decreasing precedence):</P>
   <TH ID="cat3">CommandCall/ProgramCall property</TH>
   <TH ID="cat3t2">Description</TH>
 <TR VALIGN="top">
-    <TD HEADERS="cat3">com.ibm.as400.access.CommandCall.threadSafe</TD>
+    <TD HEADERS="cat3">com.ibm.com.ibm.as400.access.CommandCall.threadSafe</TD>
     <TD HEADERS="cat3t2">Specifies whether CommandCalls should be assumed to be thread-safe. If <CODE>true</CODE>,
       all CommandCalls are assumed to be thread-safe. If <CODE>false</CODE>, all
       CommandCalls are assumed to be non-thread-safe. This property is ignored
@@ -187,7 +187,7 @@ decreasing precedence):</P>
       object.
   </TR>
 <TR VALIGN="top">
-    <TD HEADERS="cat3">com.ibm.as400.access.ProgramCall.threadSafe</TD>
+    <TD HEADERS="cat3">com.ibm.com.ibm.as400.access.ProgramCall.threadSafe</TD>
     <TD HEADERS="cat3t2">Specifies whether ProgramCalls should be assumed to be thread-safe. If <CODE>true</CODE>,
       all ProgramCalls are assumed to be thread-safe. If <CODE>false</CODE>, all
       ProgramCalls are assumed to be non-thread-safe. This property is ignored

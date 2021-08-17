@@ -519,7 +519,7 @@
     <fail message="Not using JDK 1.4.1 or higher." if="jdk140Exists"/>
     <fail message="Not using JDK 1.4 or higher." unless="jdk14Exists"/> <!-- Sanity. -->
     <javadoc packagenames="com.*,utilities"
-             excludepackagenames="com.ibm.as400.security"
+             excludepackagenames="com.ibm.com.ibm.as400.security"
              sourcepath="${source}:${source-contrib}:${source-micro}:${include}"
              destdir="${javadoc}"
              use="false"
@@ -537,9 +537,9 @@
         <pathelement location="${include}/midpapi10.jar"/> <!-- Need this for the server-side Micro Edition classes. -->
         <pathelement location="${include}/cldcapi10.jar"/> <!-- Need this for the server-side Micro Edition classes. -->
       </classpath>
-      <group title="Toolbox General API Packages" packages="com.ibm.as400.access,com.ibm.as400.access.list,com.ibm.as400.data,com.ibm.as400.resource,com.ibm.as400.security.auth,com.ibm.as400.vaccess"/>
-      <group title="Toolbox Utility Packages" packages="com.ibm.as400.util,com.ibm.as400.util.html,com.ibm.as400.util.servlet,com.ibm.as400.util.commtrace,utilities"/>
-      <group title="Toolbox Micro Edition Packages" packages="com.ibm.as400.micro"/>
+      <group title="Toolbox General API Packages" packages="com.ibm.com.ibm.as400.access,com.ibm.com.ibm.as400.access.list,com.ibm.com.ibm.as400.data,com.ibm.com.ibm.as400.resource,com.ibm.com.ibm.as400.security.auth,com.ibm.com.ibm.as400.vaccess"/>
+      <group title="Toolbox Utility Packages" packages="com.ibm.com.ibm.as400.util,com.ibm.com.ibm.as400.util.html,com.ibm.com.ibm.as400.util.servlet,com.ibm.com.ibm.as400.util.commtrace,utilities"/>
+      <group title="Toolbox Micro Edition Packages" packages="com.ibm.com.ibm.as400.micro"/>
       <!-- We skip javadoc-ing the java.sql package, otherwise the regular JDBC classes in the
            com.ibm.as400.access package will get erroneously linked to our stubs. -->
     </javadoc>
@@ -592,7 +592,7 @@
     <condition property="pcmlRuntimeExists">
       <and>
         <available classname="java.nio.Buffer"/> <!-- JDK 1.4 and higher. -->
-        <available classname="com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
+        <available classname="com.ibm.com.ibm.as400.data.ProgramCallDocument" classpath="${output}:${include}:${source}"/>
       </and>
     </condition>
     <fail message="Can't find PCML runtime." unless="pcmlRuntimeExists"/>

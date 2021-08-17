@@ -30,7 +30,7 @@ for important legal information.
 import java.io.*;
 import java.util.*;
 import java.math.*;
-import com.ibm.as400.access.*;
+import com.ibm.com.ibm.as400.access.*;
 
 public class RLReadFile extends Object
 {
@@ -171,7 +171,7 @@ public class RLReadFile extends Object
 
             // When there are no more records to read, disconnect from the system.
 
-            as400.disconnectAllServices();
+            com.ibm.as400.disconnectAllServices();
          }
 
          catch (Exception e)

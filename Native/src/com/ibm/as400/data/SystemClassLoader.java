@@ -21,21 +21,17 @@ import java.io.*;
  * This is an attempt to unify the handling of system classes and ClassLoader
  * classes.
  */
-class SystemClassLoader extends ClassLoader
-{
-  protected Class loadClass(String name, boolean resolve) throws ClassNotFoundException
-  {
-    return findSystemClass(name);
-  }
+class SystemClassLoader extends ClassLoader {
+    protected Class loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        return findSystemClass(name);
+    }
 
-  public InputStream getResourceAsStream(String name)
-  {
-    return ClassLoader.getSystemResourceAsStream(name);
-  }
+    public InputStream getResourceAsStream(String name) {
+        return ClassLoader.getSystemResourceAsStream(name);
+    }
 
-  public URL getResource(String name)
-  {
-    return ClassLoader.getSystemResource(name);
-  }
+    public URL getResource(String name) {
+        return ClassLoader.getSystemResource(name);
+    }
 }
 

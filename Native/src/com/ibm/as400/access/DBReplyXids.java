@@ -15,37 +15,31 @@ package com.ibm.as400.access;
 
 
 /**
-The DBReplyXids class provides access to the Xids portion
-of the reply data stream.
-**/
-class DBReplyXids
-{
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
+ * The DBReplyXids class provides access to the Xids portion
+ * of the reply data stream.
+ **/
+class DBReplyXids {
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
 
+    private byte[] data_;
+    private int offset_;
+    private int length_;
 
-    private byte[]          data_;
-    private int             offset_;
-    private int             length_;
-
-    private AS400JDBCXid[]  xidArray_;
-
+    private AS400JDBCXid[] xidArray_;
 
 
     public DBReplyXids(byte[] data,
                        int offset,
-                       int length)
-    {
+                       int length) {
         data_ = data;
         offset_ = offset;
         length_ = length;
     }
 
 
-
     public AS400JDBCXid[] getXidArray()
-    throws DBDataStreamException
-    {
+            throws DBDataStreamException {
         if (xidArray_ == null) {
 
             // @A1D if (length_ <= 6)
@@ -53,8 +47,7 @@ class DBReplyXids
             // @A1D else {
             int count = BinaryConverter.byteArrayToInt(data_, offset_ + 6);
             xidArray_ = new AS400JDBCXid[count];
-            for (int i = 0; i < count; ++i)
-            {
+            for (int i = 0; i < count; ++i) {
                 xidArray_[i] = new AS400JDBCXid(data_, offset_ + 14 + i * 140);  // @A1C
             }
             // @A1D }
@@ -62,7 +55,6 @@ class DBReplyXids
         }
         return xidArray_;
     }
-
 
 
 }

@@ -14,14 +14,12 @@
 package com.ibm.as400.access;
 
 // The NativeVersion class is used to hold the version level for the IBM Toolbox for Java Native Classes.
-class NativeVersion
-{
+class NativeVersion {
     private static final int VERSION = 2;  // Mod3 is version 1.
 
     // Hashcode returns the version of the native classes.
     // @return  The native version.
-    public int hashCode()
-    {
+    public int hashCode() {
         return VERSION;
     }
 }

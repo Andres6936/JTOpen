@@ -24,10 +24,10 @@ import java.io.Serializable;
 import java.util.Vector;
 
 /**
- The ProgramCall class allows a user to call an IBM i system program, pass parameters to it (input and output), and access data returned in the output parameters after the program runs.  Use ProgramCall to call programs.  To call service programs, use ServiceProgramCall.
- <P>The following example demonstrates the use of Program Call:
- <br>
- <pre>
+ * The ProgramCall class allows a user to call an IBM i system program, pass parameters to it (input and output), and access data returned in the output parameters after the program runs.  Use ProgramCall to call programs.  To call service programs, use ServiceProgramCall.
+ * <P>The following example demonstrates the use of Program Call:
+ * <br>
+ * <pre>
  *    // Call programs on system named "Hal."
  *    AS400 system = new AS400("Hal");
  *    ProgramCall program = new ProgramCall(system);
@@ -76,9 +76,9 @@ import java.util.Vector;
  *    }
  *    // Done with the system.
  *    system.disconnectAllServices();
- </pre>
- <p>NOTE:  When getting the AS400Message list from programs, users no longer have to create a MessageFile to obtain the program help text.  The load() method can be used to retrieve additional message information. Then the getHelp() method can be called directly on the AS400Message object returned from getMessageList().  Here is an example:
- <pre>
+ * </pre>
+ * <p>NOTE:  When getting the AS400Message list from programs, users no longer have to create a MessageFile to obtain the program help text.  The load() method can be used to retrieve additional message information. Then the getHelp() method can be called directly on the AS400Message object returned from getMessageList().  Here is an example:
+ * <pre>
  *    if (program.run("myPgm", myParmList) != true)
  *    {
  *        // Show messages.
@@ -93,39 +93,39 @@ import java.util.Vector;
  *            System.out.println(messageList[i].getHelp());
  *        }
  *    }
- </pre>
- <p>NOTE:  When the program runs within the host server job, the library list will be the initial library list specified in the job description in the user profile.
- <p>NOTE: There are two ways to run a program in an iasp. Users can call a program directly with path prefixed with the iasp information like "/IASP1/QSYS.LIB/TESTLIB.LIB/TESTPROG.PGM".
- Users can also call AS400.setIASPGroup to set the asp group information firstly, then call the program in regular library-qualified object name syntax. The second way is recommended. For example:
- <pre>
+ * </pre>
+ * <p>NOTE:  When the program runs within the host server job, the library list will be the initial library list specified in the job description in the user profile.
+ * <p>NOTE: There are two ways to run a program in an iasp. Users can call a program directly with path prefixed with the iasp information like "/IASP1/QSYS.LIB/TESTLIB.LIB/TESTPROG.PGM".
+ * Users can also call AS400.setIASPGroup to set the asp group information firstly, then call the program in regular library-qualified object name syntax. The second way is recommended. For example:
+ * <pre>
  *    // Call a program on system named "Hal" on asp "iasp1"
  *    AS400 system = new AS400("Hal");
  *    system.setIASPGroup("iasp1"); //If do not use *CURUSR for current library and library list, call other setIASPGroup interfaces.
  *    ProgramCall program = new ProgramCall(system);
  *    program.setProgram("/QSYS.LIB/TESTLIB.LIB/TESTPROG.PGM");
- </pre>
- 
- @see  ProgramParameter
- @see  AS400Message
- @see  ServiceProgramCall
+ * </pre>
+ *
+ * @see ProgramParameter
+ * @see AS400Message
+ * @see ServiceProgramCall
  **/
-public class ProgramCall implements Serializable
-{
+public class ProgramCall implements Serializable {
     private static final String CLASSNAME = "com.ibm.as400.access.ProgramCall";
-    static
-    {
-        if (Trace.traceOn_) Trace.logLoadPath(CLASSNAME);
-    }
+
+    // property not specified; setThreadSafe() not called
+    private static final int SPECIFIED_BY_PROPERTY = 1;
 
     static final long serialVersionUID = 4L;
 
     // Constants that indicate how thread safety is specified/determined.
     private static final int UNSPECIFIED = 0;
-                     // property not specified; setThreadSafe() not called
-    private static final int SPECIFIED_BY_PROPERTY = 1;
-                     // property was set
+    // property was set
     private static final int SPECIFIED_BY_SETTER = 2;
-                     // setThreadSafe() was called
+
+    static {
+        if (Trace.traceOn_) Trace.logLoadPath(CLASSNAME);
+    }
+    // setThreadSafe() was called
 
     static final Boolean THREADSAFE_TRUE = CommandCall.THREADSAFE_TRUE;
     static final Boolean THREADSAFE_FALSE = CommandCall.THREADSAFE_FALSE;
@@ -136,7 +136,7 @@ public class ProgramCall implements Serializable
     AS400 system_ = null;
     // The full IFS path name of the program.
     String program_ = "";
-    
+
     // Job of current program call
     Job job_ = null;//@D10
     // The library that contains the program.
@@ -170,183 +170,192 @@ public class ProgramCall implements Serializable
     transient PropertyChangeSupport propertyChangeListeners_ = null;  // Set on first add.
     // List of vetoable change event bean listeners.
     transient VetoableChangeSupport vetoableChangeListeners_ = null;  // Set on first add.
-    
+
     private int timeOut_ = 0;//@D10
-    
+
     private boolean running_ = false;//@D10
-    
+
     private boolean cancelling_ = false;//@D10
-    
+
     private ProgramCallCancelThread cancelThread_;//@D10
-    
+
     private Object cancelLock_ = new CancelLock();//@D10
-    private class CancelLock extends Object implements Serializable {static final long serialVersionUID = 4L;}//@D10//@I3
-    
-   //@D10A - Start
-   /**
-    * Sets a valid time to run the program
-    * @param timeOut the valid time in sec
-    */
-    public void setTimeOut(int timeOut) {
-      timeOut_ = timeOut;
+
+    /**
+     * Constructs a ProgramCall object.  The system, program, and parameters must be set before using any method requiring a connection to the system.
+     **/
+    public ProgramCall() {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Constructing ProgramCall object."); //@L8
+        checkThreadSafetyProperty();
     }
-    
+
+    //@D10A - Start
+
+    /**
+     * Constructs a ProgramCall object.  It uses the specified system. The program and parameters must be provided later.
+     *
+     * @param system The system on which to run the program.
+     **/
+    public ProgramCall(AS400 system) {
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, this, "Constructing ProgramCall object, system: " + system); //@L8
+        if (system == null) {
+            throw new NullPointerException("system");
+        }
+        system_ = system;
+        checkThreadSafetyProperty();
+    }
+
+    /**
+     * Constructs a program call object.  It uses the specified system, program name, and parameter list.
+     *
+     * @param system        The system on which to run the program.
+     * @param program       The program name as a fully qualified path name in the library file system.  The library and program name must each be 10 characters or less.
+     * @param parameterList A list of up to 35 parameters with which to run the program.
+     **/
+    public ProgramCall(AS400 system, String program, ProgramParameter[] parameterList) {
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, this, "Constructing ProgramCall object, system: " + system + " program: " + program); //@L8
+        if (system == null) {
+            throw new NullPointerException("system");
+        }
+
+        system_ = system;
+        checkThreadSafetyProperty();
+
+        try {
+            setProgram(program, parameterList);
+        } catch (PropertyVetoException e) {
+            Trace.log(Trace.ERROR, this, "Unexpected PropertyVetoException:", e); //@L8
+            throw new InternalErrorException(InternalErrorException.UNEXPECTED_EXCEPTION);
+        }
+    }
+
+    static String getThreadSafetyProperty() {
+        String val = SystemProperties.getProperty(SystemProperties.PROGRAMCALL_THREADSAFE);
+        return (val == null || val.length() == 0 ? null : val.toLowerCase());
+    }
+
+    static Boolean getDefaultThreadSafety() {
+        return new Boolean(getThreadSafetyProperty());
+    }
+
+    /**
+     * Sets a valid time to run the program
+     *
+     * @param timeOut the valid time in sec
+     */
+    public void setTimeOut(int timeOut) {
+        timeOut_ = timeOut;
+    }
+
     /**
      * Gets a valid time
+     *
      * @return the valid time in sec
      */
     public int getTimeout() {
-      return timeOut_;
+        return timeOut_;
     }
-    
+
     /**
      * Check if the program is still running
+     *
      * @return true if the program is still running, otherwise return false
      */
     public boolean isRunning() {
-       return running_;
+        return running_;
     }
-    
+
+    //@D10A - End
+
     /**
      * End program call if the time exceeds the specified time
      */
     public void cancel() {
-      synchronized(cancelLock_) {
-        cancelling_ = true;
-        if (Trace.traceOn_)
-          Trace.log(Trace.INFORMATION, this, "Cancelling program " + this.getProgram()); //@L8
-        try {
-          //Job job = new Job (new AS400(this.system_), job_.getName(), job_.getUser(), job_.getNumber()); @AB4D
-          //@AB4A
-        	Job job = null;
-        	if (this.system_ instanceof SecureAS400) { 
-                 job = new Job (new SecureAS400(this.system_), job_.getName(), job_.getUser(), job_.getNumber());
-            } else { 
-                 job = new Job (new AS400(this.system_), job_.getName(), job_.getUser(), job_.getNumber());
+        synchronized (cancelLock_) {
+            cancelling_ = true;
+            if (Trace.traceOn_)
+                Trace.log(Trace.INFORMATION, this, "Cancelling program " + this.getProgram()); //@L8
+            try {
+                //Job job = new Job (new AS400(this.system_), job_.getName(), job_.getUser(), job_.getNumber()); @AB4D
+                //@AB4A
+                Job job = null;
+                if (this.system_ instanceof SecureAS400) {
+                    job = new Job(new SecureAS400(this.system_), job_.getName(), job_.getUser(), job_.getNumber());
+                } else {
+                    job = new Job(new AS400(this.system_), job_.getName(), job_.getUser(), job_.getNumber());
+                }
+                job.end(0);
+            } catch (Exception e) {
+                // Do nothing
+                if (Trace.traceOn_)
+                    Trace.log(Trace.INFORMATION, this, "Cancelling program " + this.getProgram(), e); //@L8
+            } finally {
+                cancelling_ = false;
+                cancelLock_.notifyAll();
             }
-          job.end(0);
-        } catch (Exception e) {
-          // Do nothing
-          if (Trace.traceOn_)
-            Trace.log(Trace.INFORMATION, this, "Cancelling program " + this.getProgram(), e); //@L8
-        }  finally {
-          cancelling_ = false;
-          cancelLock_.notifyAll();
         }
-      }
     }
 
     private void startCancelThread() {
         // Start a cancel thread if there is a program running and a timeout value has been specified.
         if (timeOut_ != 0) {
 
-               // Set a flag that a program is running.
+            // Set a flag that a program is running.
 
-                running_ = true;
+            running_ = true;
 
-                // Create a thread to do the cancel if needed.  Start the thread.
-                cancelThread_ = new ProgramCallCancelThread(this);
+            // Create a thread to do the cancel if needed.  Start the thread.
+            cancelThread_ = new ProgramCallCancelThread(this);
 
-                cancelThread_.setDaemon(true);
+            cancelThread_.setDaemon(true);
 
-                cancelThread_.start();
+            cancelThread_.start();
         }
     }
-    
+
     private void endCancelThread() {
-      // Deal with the cancel thread at this point.
-      if (timeOut_ != 0) {
+        // Deal with the cancel thread at this point.
+        if (timeOut_ != 0) {
 
-              // Set the flag saying the program is no longer running.
-              running_ = false;
+            // Set the flag saying the program is no longer running.
+            running_ = false;
 
-              // Create a thread to do the cancel if needed.  Start the thread.
-              cancelThread_.programCall_ = null;
+            // Create a thread to do the cancel if needed.  Start the thread.
+            cancelThread_.programCall_ = null;
 
-              // Interrupt the thread so that it wakes up and dies.
-              cancelThread_.interrupt();
+            // Interrupt the thread so that it wakes up and dies.
+            cancelThread_.interrupt();
 
-      }
-  }
-    
+        }
+    }
+
     private void checkCancel() {
-      synchronized(cancelLock_) {
-        while(cancelling_){
-          try {
-            cancelLock_.wait();
-          } catch(InterruptedException e) {
-            // Ignore
-          }
-        }
-      }
-    }
-    
-    //@D10A - End
-    /**
-     Constructs a ProgramCall object.  The system, program, and parameters must be set before using any method requiring a connection to the system.
-     **/
-    public ProgramCall()
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Constructing ProgramCall object."); //@L8
-        checkThreadSafetyProperty();
-    }
-
-    /**
-     Constructs a ProgramCall object.  It uses the specified system. The program and parameters must be provided later.
-     @param  system  The system on which to run the program.
-     **/
-    public ProgramCall(AS400 system)
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Constructing ProgramCall object, system: " + system); //@L8
-        if (system == null) {
-            throw new NullPointerException("system");
-        }
-        system_ = system;
-        checkThreadSafetyProperty();
-    }
-
-    /**
-     Constructs a program call object.  It uses the specified system, program name, and parameter list.
-     @param  system  The system on which to run the program.
-     @param  program  The program name as a fully qualified path name in the library file system.  The library and program name must each be 10 characters or less.
-     @param  parameterList  A list of up to 35 parameters with which to run the program.
-     **/
-    public ProgramCall(AS400 system, String program, ProgramParameter[] parameterList)
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Constructing ProgramCall object, system: " + system + " program: " + program); //@L8
-        if (system == null) {
-            throw new NullPointerException("system");
-        }
-
-        system_ = system;
-        checkThreadSafetyProperty();
-
-        try
-        {
-            setProgram(program, parameterList);
-        }
-        catch (PropertyVetoException e)
-        {
-            Trace.log(Trace.ERROR, this, "Unexpected PropertyVetoException:", e); //@L8
-            throw new InternalErrorException(InternalErrorException.UNEXPECTED_EXCEPTION);
+        synchronized (cancelLock_) {
+            while (cancelling_) {
+                try {
+                    cancelLock_.wait();
+                } catch (InterruptedException e) {
+                    // Ignore
+                }
+            }
         }
     }
 
     /**
-     Adds an ActionCompletedListener.  The specified ActionCompletedListener's <b>actionCompleted</b> method will be called each time a program has run.  The ActionCompletedListener object is added to a list of ActionCompletedListeners managed by this ProgramCall.  It can be removed with removeActionCompletedListener.
-     @param  listener  The listener object.
+     * Adds an ActionCompletedListener.  The specified ActionCompletedListener's <b>actionCompleted</b> method will be called each time a program has run.  The ActionCompletedListener object is added to a list of ActionCompletedListeners managed by this ProgramCall.  It can be removed with removeActionCompletedListener.
+     *
+     * @param listener The listener object.
      **/
-    public void addActionCompletedListener(ActionCompletedListener listener)
-    {
+    public void addActionCompletedListener(ActionCompletedListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Adding action completed listener."); //@L8
         if (listener == null) {
             throw new NullPointerException("listener");
         }
-        synchronized (this)
-        {
+        synchronized (this) {
             // If first add.
-            if (actionCompletedListeners_ == null)
-            {
+            if (actionCompletedListeners_ == null) {
                 actionCompletedListeners_ = new Vector();
             }
             actionCompletedListeners_.addElement(listener);
@@ -354,12 +363,12 @@ public class ProgramCall implements Serializable
     }
 
     /**
-     Adds a ProgramParameter to the parameter list.
-     @param  parameter  The ProgramParameter.
-     @exception  PropertyVetoException  If the change is vetoed.
+     * Adds a ProgramParameter to the parameter list.
+     *
+     * @param parameter The ProgramParameter.
+     * @throws PropertyVetoException If the change is vetoed.
      **/
-    public void addParameter(ProgramParameter parameter) throws PropertyVetoException
-    {
+    public void addParameter(ProgramParameter parameter) throws PropertyVetoException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Adding parameter to parameter list."); //@L8
         if (parameter == null) {
             throw new NullPointerException("parameter");
@@ -373,20 +382,18 @@ public class ProgramCall implements Serializable
     }
 
     /**
-     Adds a PropertyChangeListener.  The specified PropertyChangeListener's <b>propertyChange</b> method will be called each time the value of any bound property is changed.  The PropertyChangeListener object is added to a list of PropertyChangeListeners managed by this ProgramCall.  It can be removed with removePropertyChangeListener.
-     @param  listener  The listener object.
+     * Adds a PropertyChangeListener.  The specified PropertyChangeListener's <b>propertyChange</b> method will be called each time the value of any bound property is changed.  The PropertyChangeListener object is added to a list of PropertyChangeListeners managed by this ProgramCall.  It can be removed with removePropertyChangeListener.
+     *
+     * @param listener The listener object.
      **/
-    public void addPropertyChangeListener(PropertyChangeListener listener)
-    {
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Adding property change listener."); //@L8
         if (listener == null) {
             throw new NullPointerException("listener");
         }
-        synchronized (this)
-        {
+        synchronized (this) {
             // If first add.
-            if (propertyChangeListeners_ == null)
-            {
+            if (propertyChangeListeners_ == null) {
                 propertyChangeListeners_ = new PropertyChangeSupport(this);
             }
             propertyChangeListeners_.addPropertyChangeListener(listener);
@@ -394,20 +401,18 @@ public class ProgramCall implements Serializable
     }
 
     /**
-     Adds a VetoableChangeListener.  The specified VetoableChangeListener's <b>vetoableChange</b> method will be called each time the value of any constrained property is changed.
-     @param  listener  The listener object.
+     * Adds a VetoableChangeListener.  The specified VetoableChangeListener's <b>vetoableChange</b> method will be called each time the value of any constrained property is changed.
+     *
+     * @param listener The listener object.
      **/
-    public void addVetoableChangeListener(VetoableChangeListener listener)
-    {
+    public void addVetoableChangeListener(VetoableChangeListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Adding vetoable change listener."); //@L8
         if (listener == null) {
             throw new NullPointerException("listener");
         }
-        synchronized (this)
-        {
+        synchronized (this) {
             // If first add.
-            if (vetoableChangeListeners_ == null)
-            {
+            if (vetoableChangeListeners_ == null) {
                 vetoableChangeListeners_ = new VetoableChangeSupport(this);
             }
             vetoableChangeListeners_.addVetoableChangeListener(listener);
@@ -415,13 +420,10 @@ public class ProgramCall implements Serializable
     }
 
     // Chooses the appropriate implementation, synchronize to protect impl_ object.
-    synchronized void chooseImpl() throws AS400SecurityException, IOException
-    {
+    synchronized void chooseImpl() throws AS400SecurityException, IOException {
         if (system_ != null) system_.signon(false);
-        if (impl_ == null)
-        {
-            if (system_ == null)
-            {
+        if (impl_ == null) {
+            if (system_ == null) {
                 /*
                 if (AS400.onAS400)
                 {
@@ -432,20 +434,8 @@ public class ProgramCall implements Serializable
                 throw new ExtendedIllegalStateException("system", ExtendedIllegalStateException.PROPERTY_NOT_SET);
             }
 
-            impl_ = (RemoteCommandImpl)system_.loadImpl3("com.ibm.as400.access.RemoteCommandImplNative", "com.ibm.as400.access.RemoteCommandImplRemote", "com.ibm.as400.access.RemoteCommandImplProxy");
+            impl_ = (RemoteCommandImpl) system_.loadImpl3("com.ibm.as400.access.RemoteCommandImplNative", "com.ibm.as400.access.RemoteCommandImplRemote", "com.ibm.as400.access.RemoteCommandImplProxy");
             impl_.setSystem(system_.getImpl());
-        }
-    }
-
-    // Fires the action completed event.
-    void fireActionCompleted()
-    {
-        Vector targets = (Vector)actionCompletedListeners_.clone();
-        ActionCompletedEvent event = new ActionCompletedEvent(this);
-        for (int i = 0; i < targets.size(); ++i)
-        {
-            ActionCompletedListener target = (ActionCompletedListener)targets.elementAt(i);
-            target.actionCompleted(event);
         }
     }
 
@@ -473,66 +463,172 @@ public class ProgramCall implements Serializable
 //        return new RJob(system_, jobInfo.substring(0, 10).trim(), jobInfo.substring(10, 20).trim(), jobInfo.substring(20, 26).trim());
 //    }
 
+    // Fires the action completed event.
+    void fireActionCompleted() {
+        Vector targets = (Vector) actionCompletedListeners_.clone();
+        ActionCompletedEvent event = new ActionCompletedEvent(this);
+        for (int i = 0; i < targets.size(); ++i) {
+            ActionCompletedListener target = (ActionCompletedListener) targets.elementAt(i);
+            target.actionCompleted(event);
+        }
+    }
+
     /**
-     Returns the list of messages returned from running the program.  It will return an empty list if the program has not been run yet or if there are no messages.
-     @return  The array of messages returned by the program.
+     * Returns the list of messages returned from running the program.  It will return an empty list if the program has not been run yet or if there are no messages.
+     *
+     * @return The array of messages returned by the program.
      **/
-    public AS400Message[] getMessageList()
-    {
+    public AS400Message[] getMessageList() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Getting message list."); //@L8
         return messageList_;
     }
 
     /**
-     Returns the option for how many messages will be retrieved.
-     @return  A constant indicating how many messages will be retrieved.  Valid values are:
-     <ul>
-     <li>{@link AS400Message#MESSAGE_OPTION_UP_TO_10 MESSAGE_OPTION_UP_TO_10}
-     <li>{@link AS400Message#MESSAGE_OPTION_NONE MESSAGE_OPTION_NONE}
-     <li>{@link AS400Message#MESSAGE_OPTION_ALL MESSAGE_OPTION_ALL}
-     </ul>
+     * Returns the option for how many messages will be retrieved.
+     *
+     * @return A constant indicating how many messages will be retrieved.  Valid values are:
+     * <ul>
+     * <li>{@link AS400Message#MESSAGE_OPTION_UP_TO_10 MESSAGE_OPTION_UP_TO_10}
+     * <li>{@link AS400Message#MESSAGE_OPTION_NONE MESSAGE_OPTION_NONE}
+     * <li>{@link AS400Message#MESSAGE_OPTION_ALL MESSAGE_OPTION_ALL}
+     * </ul>
      **/
-    public int getMessageOption()
-    {
+    public int getMessageOption() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Getting message option:", messageOption_); //@L8
         return messageOption_;
     }
 
     /**
-     Returns the list of parameters.  It will return an empty list if not previously set.
-     @return  The list of parameters.
+     * Specifies the option for how many messages should be retrieved.  By default, to preserve compatability, only the messages sent to the program caller and only up to ten messages are retrieved.  This property will only take affect on systems that support the new option.
+     *
+     * @param messageOption A constant indicating how many messages to retrieve.  Valid values are:
+     *                      <ul>
+     *                      <li>AS400Message.MESSAGE_OPTION_UP_TO_10
+     *                      <li>AS400Message.MESSAGE_OPTION_NONE
+     *                      <li>AS400Message.MESSAGE_OPTION_ALL
+     *                      </ul>
      **/
-    public ProgramParameter[] getParameterList()
-    {
+    public void setMessageOption(int messageOption) {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting message option:", messageOption); //@L8
+        // Validate the messageOption parameter.
+        if (messageOption < 0 || messageOption > 2) {
+            throw new ExtendedIllegalArgumentException("messageOption (" + messageOption + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+        }
+        messageOption_ = messageOption;
+    }
+
+    /**
+     * Returns the list of parameters.  It will return an empty list if not previously set.
+     *
+     * @return The list of parameters.
+     **/
+    public ProgramParameter[] getParameterList() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Getting parameter list."); //@L8
         return parameterList_;
     }
 
     /**
-     Returns the integrated file system pathname for the program.  It will return an empty string ("") if not previously set.
-     @return  The integrated file system pathname for the program.
+     * Sets the list of parameters to pass to the program.
+     *
+     * @param parameterList A list of up to 35 parameters with which to run the program.
+     * @throws PropertyVetoException If a change is vetoed.
      **/
-    public String getProgram()
-    {
+    public void setParameterList(ProgramParameter[] parameterList) throws PropertyVetoException {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting parameter list."); //@L8
+        if (parameterList == null) {
+            throw new NullPointerException("parameterList");
+        }
+        //@J3 - Start
+        //boolean isV7R2 = false;//@RCD
+        // boolean isV7R1 = false;//@N6A//@RCD
+        boolean isSupport255 = false;//@RCA
+        try {
+            //isV7R2 = system_.getVRM() == 0x00070200; //@RCD
+            //isV7R1 = system_.getVRM() == 0x00070100;//@RCD //@N6A V7R1 with ptf SI55519 supported parameter with max 255
+            isSupport255 = (system_.getVRM() >= 0x00070100);//@RCA
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if ((isSupport255) && parameterList.length > 255)//@N6C //@RCC
+        {
+            Trace.log(Trace.ERROR, this, "Parameter list length exceeds limit of 255 parameters:", parameterList.length); //@L8
+            throw new ExtendedIllegalArgumentException("parameterList.length (" + parameterList.length + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
+        } else if (!isSupport255 && parameterList.length > 35)//@N6C //@RCC
+        {
+            Trace.log(Trace.ERROR, this, "Parameter list length exceeds limit of 35 parameters:", parameterList.length); //@L8
+            throw new ExtendedIllegalArgumentException("parameterList.length (" + parameterList.length + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
+        }
+        //@J3 - End
+        ProgramParameter[] oldValue = parameterList_;
+        ProgramParameter[] newValue = parameterList;
+
+        if (vetoableChangeListeners_ != null) {
+            vetoableChangeListeners_.fireVetoableChange("parameterList", oldValue, newValue);
+        }
+        parameterList_ = newValue;
+        if (propertyChangeListeners_ != null) {
+            propertyChangeListeners_.firePropertyChange("parameterList", oldValue, newValue);
+        }
+    }
+
+    /**
+     * Returns the integrated file system pathname for the program.  It will return an empty string ("") if not previously set.
+     *
+     * @return The integrated file system pathname for the program.
+     **/
+    public String getProgram() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Getting program: " + program_); //@L8
         return program_;
     }
 
     /**
-     Returns a Job object which represents the server job in which the program will be run.
-     The information contained in the Job object is invalidated by <code>AS400.disconnectService()</code> or <code>AS400.disconnectAllServices()</code>.
-     <br>Typical uses include:
-     <br>(1) before run() to identify the job before calling the program;
-     <br>(2) after run() to see what job the program ran under (to identify the job log, for example).
-     <p><b>Note:</b> This method is not supported in the Toolbox proxy environment.
-     @return  The job in which the program will be run.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  InterruptedException  If this thread is interrupted.
+     * Sets the path name of the program.
+     *
+     * @param program The fully qualified integrated file system path name to the program.  The library and program name must each be 10 characters or less.
+     * @throws PropertyVetoException If the change is vetoed.
      **/
-    public Job getServerJob() throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException
-    {
+    public void setProgram(String program) throws PropertyVetoException {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting program: " + program); //@L8
+        if (program == null) {
+            throw new NullPointerException("program");
+        }
+        if (Trace.traceOn_ && program.length() == 0) {
+
+            Trace.log(Trace.WARNING, this, "Parameter 'program' is has length of 0."); //@L8
+        }
+        // Verify program is valid IFS path name.
+        QSYSObjectPathName ifs = new QSYSObjectPathName(program, "PGM");
+
+        String oldValue = program_;
+        String newValue = program;
+
+        if (vetoableChangeListeners_ != null) {
+            vetoableChangeListeners_.fireVetoableChange("program", oldValue, newValue);
+        }
+        library_ = ifs.getLibraryName();
+        name_ = ifs.getObjectName();
+        program_ = newValue;
+        if (propertyChangeListeners_ != null) {
+            propertyChangeListeners_.firePropertyChange("program", oldValue, newValue);
+        }
+    }
+
+    /**
+     * Returns a Job object which represents the server job in which the program will be run.
+     * The information contained in the Job object is invalidated by <code>AS400.disconnectService()</code> or <code>AS400.disconnectAllServices()</code>.
+     * <br>Typical uses include:
+     * <br>(1) before run() to identify the job before calling the program;
+     * <br>(2) after run() to see what job the program ran under (to identify the job log, for example).
+     * <p><b>Note:</b> This method is not supported in the Toolbox proxy environment.
+     *
+     * @return The job in which the program will be run.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws InterruptedException            If this thread is interrupted.
+     **/
+    public Job getServerJob() throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Getting job."); //@L8
         chooseImpl();
         String jobInfo = impl_.getJobInfo(threadSafetyValue_);
@@ -542,27 +638,55 @@ public class ProgramCall implements Serializable
     }
 
     /**
-     Returns the system on which the program is to be run.
-     @return  The system on which the program is to be run.  If the system has not been set, null is returned.
+     * Returns the system on which the program is to be run.
+     *
+     * @return The system on which the program is to be run.  If the system has not been set, null is returned.
      **/
-    public AS400 getSystem()
-    {
+    public AS400 getSystem() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Getting system: " + system_); //@L8
         return system_;
     }
 
     /**
-     Returns the thread on which the program would be run, if it were to be called on-thread.  Returns null if either:
-     <ul compact>
-     <li> The client is communicating with the system through sockets.
-     <li> The program has not been marked as thread safe.
-     </ul>
-     @return  The thread on which the program would be run.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  IOException  If an error occurs while communicating with the system.
+     * Sets the system to run the program.  The system cannot be changed once a connection is made to the system.
+     *
+     * @param system The system on which to run the program.
+     * @throws PropertyVetoException If the change is vetoed.
      **/
-    public Thread getSystemThread() throws AS400SecurityException, IOException
-    {
+    public void setSystem(AS400 system) throws PropertyVetoException {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting system: " + system); //@L8
+        if (system == null) {
+            throw new NullPointerException("system");
+        }
+        if (impl_ != null) {
+            Trace.log(Trace.ERROR, this, "Cannot set property 'system' after connect."); //@L8
+            throw new ExtendedIllegalStateException("system", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
+        }
+
+        AS400 oldValue = system_;
+        AS400 newValue = system;
+
+        if (vetoableChangeListeners_ != null) {
+            vetoableChangeListeners_.fireVetoableChange("system", oldValue, newValue);
+        }
+        system_ = newValue;
+        if (propertyChangeListeners_ != null) {
+            propertyChangeListeners_.firePropertyChange("system", oldValue, newValue);
+        }
+    }
+
+    /**
+     * Returns the thread on which the program would be run, if it were to be called on-thread.  Returns null if either:
+     * <ul compact>
+     * <li> The client is communicating with the system through sockets.
+     * <li> The program has not been marked as thread safe.
+     * </ul>
+     *
+     * @return The thread on which the program would be run.
+     * @throws AS400SecurityException If a security or authority error occurs.
+     * @throws IOException            If an error occurs while communicating with the system.
+     **/
+    public Thread getSystemThread() throws AS400SecurityException, IOException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Getting system thread."); //@L8
         chooseImpl();
         Thread currentThread = impl_.isNative() ? Thread.currentThread() : null;
@@ -570,74 +694,86 @@ public class ProgramCall implements Serializable
         return currentThread;
     }
 
-    static String getThreadSafetyProperty()
-    {
-        String val = SystemProperties.getProperty(SystemProperties.PROGRAMCALL_THREADSAFE);
-        return (val == null || val.length()==0 ? null : val.toLowerCase());
-    }
-
-    static Boolean getDefaultThreadSafety()
-    {
-        return new Boolean(getThreadSafetyProperty());
-    }
-
     // Check thread safety system property.
-    private void checkThreadSafetyProperty()
-    {
+    private void checkThreadSafetyProperty() {
         String property = getThreadSafetyProperty();
         if (property == null)  // Property not set.
         {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Thread safe system property not set, thread safety property remains unspecified."); //@L8
-        }
-        else
-        {
-          threadSafetyValue_ = (property.equals("true") ? THREADSAFE_TRUE : THREADSAFE_FALSE);
-          threadSafety_ = (THREADSAFE_TRUE.equals(threadSafetyValue_));
-          threadSafetyDetermined_ = SPECIFIED_BY_PROPERTY;
-          if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Thread safe system property: " +  property); //@L8
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, this, "Thread safe system property not set, thread safety property remains unspecified."); //@L8
+        } else {
+            threadSafetyValue_ = (property.equals("true") ? THREADSAFE_TRUE : THREADSAFE_FALSE);
+            threadSafety_ = (THREADSAFE_TRUE.equals(threadSafetyValue_));
+            threadSafetyDetermined_ = SPECIFIED_BY_PROPERTY;
+            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Thread safe system property: " + property); //@L8
         }
     }
 
     /**
-     Indicates whether or not the program will actually get run on the current thread.
-     <br>Note: If the program is run on-thread, it will run in a different job than if it were run off-thread.
-     @return  true if the program will be run on the current thread; false otherwise.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  InterruptedException  If this thread is interrupted.
+     * Indicates whether or not the program will actually get run on the current thread.
+     * <br>Note: If the program is run on-thread, it will run in a different job than if it were run off-thread.
+     *
+     * @return true if the program will be run on the current thread; false otherwise.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws InterruptedException            If this thread is interrupted.
      **/
-    public boolean isStayOnThread() throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Checking if program will actually get run on the current thread."); //@L8
+    public boolean isStayOnThread() throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException {
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, this, "Checking if program will actually get run on the current thread."); //@L8
         chooseImpl();
         boolean isStayOnThread = ((THREADSAFE_TRUE.equals(threadSafetyValue_)) &&
-                                  impl_.isNative());
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Will program actually get run on the current thread:", isStayOnThread); //@L8
+                impl_.isNative());
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, this, "Will program actually get run on the current thread:", isStayOnThread); //@L8
         return isStayOnThread;
     }
 
     /**
-     Indicates whether or not the program will be assumed thread-safe, according to the settings specified by <code>setThreadSafe()</code> or the <code>com.ibm.as400.access.ProgramCall.threadSafe</code> property.
-     <br>Note: If the program is run on-thread, it will run in a different job than if it were run off-thread.
-     @return  true if the program will be assumed thread-safe; false otherwise.
-     @deprecated The name of this method is misleading. Use {@link #isStayOnThread isStayOnThread()} instead.
+     * Indicates whether or not the program will be assumed thread-safe, according to the settings specified by <code>setThreadSafe()</code> or the <code>com.ibm.as400.access.ProgramCall.threadSafe</code> property.
+     * <br>Note: If the program is run on-thread, it will run in a different job than if it were run off-thread.
+     *
+     * @return true if the program will be assumed thread-safe; false otherwise.
+     * @deprecated The name of this method is misleading. Use {@link #isStayOnThread isStayOnThread()} instead.
      **/
-    public boolean isThreadSafe()
-    {
+    public boolean isThreadSafe() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Checking if program will be assumed thread-safe."); //@L8
         return threadSafetyValue_.booleanValue();
     }
 
+    /**
+     * Specifies whether or not the program should be assumed thread-safe.  The default is false.
+     * <br>Note: This method has no effect if the Java application is running remotely, that is, is not running "natively" on an IBM i system.  When running remotely, the Toolbox submits all program calls through the Remote Command Host Server, regardless of the value of the <tt>threadSafe</tt> attribute.
+     * <br>Note: This method does not modify the actual program object on the system.
+     * <br>Note: If the program is run on-thread, it will run in a different job than if it were run off-thread.
+     *
+     * @param threadSafe true if the program should be assumed to be thread-safe; false otherwise.
+     **/
+    public void setThreadSafe(boolean threadSafe) {
+        // Note to maintenance programmer:
+        // Currently all host server jobs are single-threaded.  If that ever changes, then we'll need to communicate the threadsafety of the called program to the host server.
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting thread safe: " + threadSafe); //@L8
+        Boolean newValue = (threadSafe ? THREADSAFE_TRUE : THREADSAFE_FALSE);
+
+        if (propertyChangeListeners_ != null) {
+            Boolean oldValue = threadSafetyValue_;
+            propertyChangeListeners_.firePropertyChange("threadSafe", oldValue, newValue);
+        }
+
+        threadSafetyValue_ = newValue;
+        threadSafety_ = threadSafe;
+        threadSafetyDetermined_ = SPECIFIED_BY_SETTER;
+    }
+
     // Deserializes and initializes the transient data.
-    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException
-    {
+    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "De-serializing ProgramCall object."); //@L8
         in.defaultReadObject();
-        
+
         if (cancelLock_ == null) {
-           if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "cancelLock is NULL, recreate it."); //@L8
-           cancelLock_ =  new CancelLock();
+            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "cancelLock is NULL, recreate it."); //@L8
+            cancelLock_ = new CancelLock();
         }
 
         // impl_ remains null.
@@ -646,21 +782,19 @@ public class ProgramCall implements Serializable
         // vetoableChangeListeners_ remains null.
 
         // See how we determined this object's thread-safety before it was serialized.
-        if (threadSafetyDetermined_ == SPECIFIED_BY_SETTER)
+        if (threadSafetyDetermined_ == SPECIFIED_BY_SETTER) {
+            threadSafetyValue_ = (threadSafety_ == true ? THREADSAFE_TRUE : THREADSAFE_FALSE);
+        } else  // Not specified by 'set' method.
         {
-          threadSafetyValue_ = (threadSafety_ == true ? THREADSAFE_TRUE : THREADSAFE_FALSE);
-        }
-        else  // Not specified by 'set' method.
-        {
-          // This object was serialized when its thread-safe behavior was determined by a system property (that is, not explicitly specified by setThreadSafe()).  This property may have since changed, and we must honor the current local property value.
+            // This object was serialized when its thread-safe behavior was determined by a system property (that is, not explicitly specified by setThreadSafe()).  This property may have since changed, and we must honor the current local property value.
             String property = getThreadSafetyProperty();
             if (property == null)  // Property is not set.
             {
                 threadSafetyValue_ = THREADSAFE_FALSE;
                 threadSafetyDetermined_ = UNSPECIFIED;
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Thread safe system property not set, thread safety property changed to unspecified."); //@L8
-            }
-            else  // Property is set.
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, this, "Thread safe system property not set, thread safety property changed to unspecified."); //@L8
+            } else  // Property is set.
             {
                 threadSafetyValue_ = (property.equals("true") ? THREADSAFE_TRUE : THREADSAFE_FALSE);
                 threadSafetyDetermined_ = SPECIFIED_BY_PROPERTY;
@@ -671,240 +805,176 @@ public class ProgramCall implements Serializable
     }
 
     /**
-     Removes the ActionCompletedListener.  If the ActionCompletedListener is not on the list, nothing is done.
-     @param  listener  The listener object.
+     * Removes the ActionCompletedListener.  If the ActionCompletedListener is not on the list, nothing is done.
+     *
+     * @param listener The listener object.
      **/
-    public void removeActionCompletedListener(ActionCompletedListener listener)
-    {
+    public void removeActionCompletedListener(ActionCompletedListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Removing action completed listener."); //@L8
         if (listener == null) {
             throw new NullPointerException("listener");
         }
         // If we have listeners.
-        if (actionCompletedListeners_ != null)
-        {
+        if (actionCompletedListeners_ != null) {
             actionCompletedListeners_.removeElement(listener);
         }
     }
 
     /**
-     Removes the PropertyChangeListener.  If the PropertyChangeListener is not on the list, nothing is done.
-     @param  listener  The listener object.
+     * Removes the PropertyChangeListener.  If the PropertyChangeListener is not on the list, nothing is done.
+     *
+     * @param listener The listener object.
      **/
-    public void removePropertyChangeListener(PropertyChangeListener listener)
-    {
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Removing property change listener."); //@L8
         if (listener == null) {
             throw new NullPointerException("listener");
         }
         // If we have listeners.
-        if (propertyChangeListeners_ != null)
-        {
+        if (propertyChangeListeners_ != null) {
             propertyChangeListeners_.removePropertyChangeListener(listener);
         }
     }
 
     /**
-     Removes the VetoableChangeListener.  If the VetoableChangeListener is not on the list, nothing is done.
-     @param  listener  The listener object.
+     * Removes the VetoableChangeListener.  If the VetoableChangeListener is not on the list, nothing is done.
+     *
+     * @param listener The listener object.
      **/
-    public void removeVetoableChangeListener(VetoableChangeListener listener)
-    {
+    public void removeVetoableChangeListener(VetoableChangeListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Removing vetoable change listener."); //@L8
         if (listener == null) {
             throw new NullPointerException("listener");
         }
         // If we have listeners.
-        if (vetoableChangeListeners_ != null)
-        {
+        if (vetoableChangeListeners_ != null) {
             vetoableChangeListeners_.removeVetoableChangeListener(listener);
         }
     }
 
     /**
-     Runs the program on the system.  The program and parameter list need to be set prior to this call.
-     @return  true if program ran successfully; false otherwise.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
+     * Runs the program on the system.  The program and parameter list need to be set prior to this call.
+     *
+     * @return true if program ran successfully; false otherwise.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
      **/
-    public boolean run() throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException, ObjectDoesNotExistException
-    {
-      
-      
-      if (Trace.traceOn_) Trace.log(Trace.INFORMATION, this, "Running program: " + program_); //@L8
-      if (program_.length() == 0)
-      {
-          Trace.log(Trace.ERROR, this, "Attempt to run before setting program."); //@L8
-          throw new ExtendedIllegalStateException("program", ExtendedIllegalStateException.PROPERTY_NOT_SET);
-      }
+    public boolean run() throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException, ObjectDoesNotExistException {
 
-      //@M2A Add support for running program located on IASP and path set starting with iasp name.
-      //@P2C
-      String prg = program_.toUpperCase();
-      if(!prg.startsWith("/QSYS.LIB")){
-        String iasp=prg.substring(1, prg.indexOf("/QSYS.LIB"));
-        if(!system_.aspName.equalsIgnoreCase(iasp)){
-          try{
-            String SetASPGrp = "SETASPGRP ASPGRP("+ iasp + ") CURLIB(*CURUSR) USRLIBL(*CURUSR)";//@P2C
 
-            CommandCall commandCall = new CommandCall(system_);
-            Job job = commandCall.getServerJob();
-            String currentASP = job.getJobAsp();
-            system_.aspName= currentASP;
-            if(currentASP!=null && !currentASP.equalsIgnoreCase(iasp)){
-              Trace.log(Trace.DIAGNOSTIC,"ProgramCall call command of setaspgrp "+SetASPGrp);
-              if (commandCall.run(SetASPGrp) != true) {
-                Trace.log(Trace.ERROR, this,"Command SETASPGRP Failed with iasp "+iasp);
-              }
-              else
-                system_.aspName= iasp;
+        if (Trace.traceOn_) Trace.log(Trace.INFORMATION, this, "Running program: " + program_); //@L8
+        if (program_.length() == 0) {
+            Trace.log(Trace.ERROR, this, "Attempt to run before setting program."); //@L8
+            throw new ExtendedIllegalStateException("program", ExtendedIllegalStateException.PROPERTY_NOT_SET);
+        }
+
+        //@M2A Add support for running program located on IASP and path set starting with iasp name.
+        //@P2C
+        String prg = program_.toUpperCase();
+        if (!prg.startsWith("/QSYS.LIB")) {
+            String iasp = prg.substring(1, prg.indexOf("/QSYS.LIB"));
+            if (!system_.aspName.equalsIgnoreCase(iasp)) {
+                try {
+                    String SetASPGrp = "SETASPGRP ASPGRP(" + iasp + ") CURLIB(*CURUSR) USRLIBL(*CURUSR)";//@P2C
+
+                    CommandCall commandCall = new CommandCall(system_);
+                    Job job = commandCall.getServerJob();
+                    String currentASP = job.getJobAsp();
+                    system_.aspName = currentASP;
+                    if (currentASP != null && !currentASP.equalsIgnoreCase(iasp)) {
+                        Trace.log(Trace.DIAGNOSTIC, "ProgramCall call command of setaspgrp " + SetASPGrp);
+                        if (commandCall.run(SetASPGrp) != true) {
+                            Trace.log(Trace.ERROR, this, "Command SETASPGRP Failed with iasp " + iasp);
+                        } else
+                            system_.aspName = iasp;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-          }catch (Exception e){
-            e.printStackTrace();
-          }
-      }
-      }
-      
-      // Validate that all the program parameters have been set.
-      for (int i = 0; i < parameterList_.length; ++i)
-      {
-          if (parameterList_[i] == null)
-          {
-              throw new ExtendedIllegalArgumentException("parameterList[" + i + "] (" + parameterList_[i] + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-          }
-      }
+        }
 
-      chooseImpl();
+        // Validate that all the program parameters have been set.
+        for (int i = 0; i < parameterList_.length; ++i) {
+            if (parameterList_[i] == null) {
+                throw new ExtendedIllegalArgumentException("parameterList[" + i + "] (" + parameterList_[i] + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+            }
+        }
 
-      // Run the program.
-      try
-      {   
-        //@D10C - Start
-        // We can only cancel if running remote
-        boolean result; 
-        if (impl_ instanceof RemoteCommandImplRemote) {
-          job_ = this.getServerJob();
-          checkCancel();
-          startCancelThread();
-          result = impl_.runProgram(library_, name_, parameterList_, threadSafetyValue_, messageOption_);
-          // We treat it as a normal case
-          endCancelThread();
-       } else { 
-           result = impl_.runProgram(library_, name_, parameterList_, threadSafetyValue_, messageOption_);
-       }
-        //@D10C - End
-          // Retrieve the messages.
-          messageList_ = impl_.getMessageList();
-          // Set our system object into each of the messages.
-          if (system_ != null)
-          {
-              for (int i = 0; i < messageList_.length; ++i)
-              {
-                  messageList_[i].setSystem(system_);
-              }
-          }
+        chooseImpl();
 
-          // Fire action completed event.
-          if (actionCompletedListeners_ != null) fireActionCompleted();
-          return result;
-      }
-      
-      catch (ObjectDoesNotExistException e)
-      {
-          // Retrieve the messages.
-          messageList_ = impl_.getMessageList();
-          // Set our system object into each of the messages.
-          if (system_ != null)
-          {
-              for (int i = 0; i < messageList_.length; ++i)
-              {
-                  messageList_[i].setSystem(system_);
-              }
-          }
-          throw e;
-      }
-      
-      
-    
+        // Run the program.
+        try {
+            //@D10C - Start
+            // We can only cancel if running remote
+            boolean result;
+            if (impl_ instanceof RemoteCommandImplRemote) {
+                job_ = this.getServerJob();
+                checkCancel();
+                startCancelThread();
+                result = impl_.runProgram(library_, name_, parameterList_, threadSafetyValue_, messageOption_);
+                // We treat it as a normal case
+                endCancelThread();
+            } else {
+                result = impl_.runProgram(library_, name_, parameterList_, threadSafetyValue_, messageOption_);
+            }
+            //@D10C - End
+            // Retrieve the messages.
+            messageList_ = impl_.getMessageList();
+            // Set our system object into each of the messages.
+            if (system_ != null) {
+                for (int i = 0; i < messageList_.length; ++i) {
+                    messageList_[i].setSystem(system_);
+                }
+            }
+
+            // Fire action completed event.
+            if (actionCompletedListeners_ != null) fireActionCompleted();
+            return result;
+        } catch (ObjectDoesNotExistException e) {
+            // Retrieve the messages.
+            messageList_ = impl_.getMessageList();
+            // Set our system object into each of the messages.
+            if (system_ != null) {
+                for (int i = 0; i < messageList_.length; ++i) {
+                    messageList_[i].setSystem(system_);
+                }
+            }
+            throw e;
+        }
+
+
     }
 
     /**
-     Sets the program name and the parameter list and runs the program on the system.
-     @param  program  The fully qualified integrated file system path name to the program.  The library and program name must each be 10 characters or less.
-     @param  parameterList  The list of parameters with which to run the program.
-     @return  true if program ran successfully, false otherwise.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
-     @exception  PropertyVetoException  If a change is vetoed.
+     * Sets the program name and the parameter list and runs the program on the system.
+     *
+     * @param program       The fully qualified integrated file system path name to the program.  The library and program name must each be 10 characters or less.
+     * @param parameterList The list of parameters with which to run the program.
+     * @return true if program ran successfully, false otherwise.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
+     * @throws PropertyVetoException           If a change is vetoed.
      **/
-    public boolean run(String program, ProgramParameter[] parameterList) throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException, ObjectDoesNotExistException, PropertyVetoException
-    {
+    public boolean run(String program, ProgramParameter[] parameterList) throws AS400SecurityException, ErrorCompletingRequestException, IOException, InterruptedException, ObjectDoesNotExistException, PropertyVetoException {
         setProgram(program, parameterList);
         return run();
     }
 
     /**
-     Sets the list of parameters to pass to the program.
-     @param  parameterList  A list of up to 35 parameters with which to run the program.
-     @exception  PropertyVetoException  If a change is vetoed.
+     * Sets the path name of the program and the parameter list.
+     *
+     * @param program       The fully qualified integrated file system path name to the program.  The library and program name must each be 10 characters or less.
+     * @param parameterList A list of up to 35 parameters with which to run the program.
+     * @throws PropertyVetoException If a change is vetoed.
      **/
-    public void setParameterList(ProgramParameter[] parameterList) throws PropertyVetoException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting parameter list."); //@L8
-        if (parameterList == null) {
-            throw new NullPointerException("parameterList");
-        } 
-        //@J3 - Start
-        //boolean isV7R2 = false;//@RCD
-       // boolean isV7R1 = false;//@N6A//@RCD
-        boolean isSupport255 = false;//@RCA
-        try {
-          //isV7R2 = system_.getVRM() == 0x00070200; //@RCD
-          //isV7R1 = system_.getVRM() == 0x00070100;//@RCD //@N6A V7R1 with ptf SI55519 supported parameter with max 255
-          isSupport255 = (system_.getVRM() >= 0x00070100);//@RCA
-        } catch(Exception e) {
-          e.printStackTrace();
-        }
-        
-        if ((isSupport255)&& parameterList.length > 255)//@N6C //@RCC
-        {
-          Trace.log(Trace.ERROR, this, "Parameter list length exceeds limit of 255 parameters:", parameterList.length); //@L8
-          throw new ExtendedIllegalArgumentException("parameterList.length (" + parameterList.length + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
-        }
-        else if (!isSupport255 && parameterList.length > 35)//@N6C //@RCC
-        {
-          Trace.log(Trace.ERROR, this, "Parameter list length exceeds limit of 35 parameters:", parameterList.length); //@L8
-          throw new ExtendedIllegalArgumentException("parameterList.length (" + parameterList.length + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
-        }
-        //@J3 - End
-        ProgramParameter[] oldValue = parameterList_;
-        ProgramParameter[] newValue = parameterList;
-
-        if (vetoableChangeListeners_ != null)
-        {
-          vetoableChangeListeners_.fireVetoableChange("parameterList", oldValue, newValue);
-        }
-        parameterList_ = newValue;
-        if (propertyChangeListeners_ != null)
-        {
-          propertyChangeListeners_.firePropertyChange("parameterList", oldValue, newValue);
-        }
-    }
-
-    /**
-     Sets the path name of the program and the parameter list.
-     @param  program  The fully qualified integrated file system path name to the program.  The library and program name must each be 10 characters or less.
-     @param  parameterList  A list of up to 35 parameters with which to run the program.
-     @exception  PropertyVetoException  If a change is vetoed.
-     **/
-    public void setProgram(String program, ProgramParameter[] parameterList) throws PropertyVetoException
-    {
+    public void setProgram(String program, ProgramParameter[] parameterList) throws PropertyVetoException {
         // Validate and set program.
         setProgram(program);
         // Validate and set parmlist.
@@ -912,138 +982,29 @@ public class ProgramCall implements Serializable
     }
 
     /**
-     Sets the path name of the program.
-     @param  program  The fully qualified integrated file system path name to the program.  The library and program name must each be 10 characters or less.
-     @exception  PropertyVetoException  If the change is vetoed.
+     * Specifies that the called program should be assumed to be thread-safe.
+     * If the system property <tt>com.ibm.as400.access.ProgramCall.threadSafe</tt> has been set,
+     * this method does nothing.
      **/
-    public void setProgram(String program) throws PropertyVetoException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting program: " + program); //@L8
-        if (program == null) {
-            throw new NullPointerException("program");
-        }
-        if (Trace.traceOn_ && program.length() == 0)
-        {
-
-          Trace.log(Trace.WARNING, this, "Parameter 'program' is has length of 0."); //@L8
-        }
-        // Verify program is valid IFS path name.
-        QSYSObjectPathName ifs = new QSYSObjectPathName(program, "PGM");
-
-        String oldValue = program_;
-        String newValue = program;
-
-        if (vetoableChangeListeners_ != null)
-        {
-          vetoableChangeListeners_.fireVetoableChange("program", oldValue, newValue);
-        }
-        library_ = ifs.getLibraryName();
-        name_ = ifs.getObjectName();
-        program_ = newValue;
-        if (propertyChangeListeners_ != null)
-        {
-          propertyChangeListeners_.firePropertyChange("program", oldValue, newValue);
+    public void suggestThreadsafe() {
+        // Note: Unlike with CL commands, there's no way for us to lookup the threadsafety of an API.
+        if (getThreadSafetyProperty() == null) {
+            setThreadSafe(true);
         }
     }
 
     /**
-     Specifies the option for how many messages should be retrieved.  By default, to preserve compatability, only the messages sent to the program caller and only up to ten messages are retrieved.  This property will only take affect on systems that support the new option.  
-     @param  messageOption  A constant indicating how many messages to retrieve.  Valid values are:
-     <ul>
-     <li>AS400Message.MESSAGE_OPTION_UP_TO_10
-     <li>AS400Message.MESSAGE_OPTION_NONE
-     <li>AS400Message.MESSAGE_OPTION_ALL
-     </ul>
+     * Returns the string representation of this program call object.
+     *
+     * @return The string representing this program call object.
      **/
-    public void setMessageOption(int messageOption)
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting message option:", messageOption); //@L8
-        // Validate the messageOption parameter.
-        if (messageOption < 0 || messageOption > 2)
-        {
-            throw new ExtendedIllegalArgumentException("messageOption (" + messageOption + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
-        messageOption_ = messageOption;
-    }
-
-    /**
-     Sets the system to run the program.  The system cannot be changed once a connection is made to the system.
-     @param  system  The system on which to run the program.
-     @exception  PropertyVetoException  If the change is vetoed.
-     **/
-    public void setSystem(AS400 system) throws PropertyVetoException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting system: " + system); //@L8
-        if (system == null) {
-            throw new NullPointerException("system");
-        }
-        if (impl_ != null)
-        {
-            Trace.log(Trace.ERROR, this, "Cannot set property 'system' after connect."); //@L8
-            throw new ExtendedIllegalStateException("system", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
-        }
-
-        AS400 oldValue = system_;
-        AS400 newValue = system;
-
-        if (vetoableChangeListeners_ != null)
-        {
-          vetoableChangeListeners_.fireVetoableChange("system", oldValue, newValue);
-        }
-        system_ = newValue;
-        if (propertyChangeListeners_ != null)
-        {
-          propertyChangeListeners_.firePropertyChange("system", oldValue, newValue);
-        }
-    }
-
-    /**
-     Specifies whether or not the program should be assumed thread-safe.  The default is false.
-     <br>Note: This method has no effect if the Java application is running remotely, that is, is not running "natively" on an IBM i system.  When running remotely, the Toolbox submits all program calls through the Remote Command Host Server, regardless of the value of the <tt>threadSafe</tt> attribute.
-     <br>Note: This method does not modify the actual program object on the system.
-     <br>Note: If the program is run on-thread, it will run in a different job than if it were run off-thread.
-     @param  threadSafe  true if the program should be assumed to be thread-safe; false otherwise.
-     **/
-    public void setThreadSafe(boolean threadSafe)
-    {
-        // Note to maintenance programmer:
-        // Currently all host server jobs are single-threaded.  If that ever changes, then we'll need to communicate the threadsafety of the called program to the host server.
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, this, "Setting thread safe: " + threadSafe); //@L8
-        Boolean newValue = (threadSafe ? THREADSAFE_TRUE : THREADSAFE_FALSE);
-
-        if (propertyChangeListeners_ != null)
-        {
-          Boolean oldValue = threadSafetyValue_;
-          propertyChangeListeners_.firePropertyChange ("threadSafe", oldValue, newValue);
-        }
-
-        threadSafetyValue_ = newValue;
-        threadSafety_ = threadSafe;
-        threadSafetyDetermined_ = SPECIFIED_BY_SETTER;
-    }
-
-    /**
-     Specifies that the called program should be assumed to be thread-safe.
-     If the system property <tt>com.ibm.as400.access.ProgramCall.threadSafe</tt> has been set,
-     this method does nothing.
-     **/
-    public void suggestThreadsafe()
-    {
-      // Note: Unlike with CL commands, there's no way for us to lookup the threadsafety of an API.
-      if (getThreadSafetyProperty() == null)
-      {
-        setThreadSafe(true);
-      }
-    }
-
-    /**
-     Returns the string representation of this program call object.
-     @return  The string representing this program call object.
-     **/
-    public String toString()
-    {
+    public String toString() {
         return "ProgramCall (system: " + system_ + " program: " + program_ + "):" + super.toString();
     }
-    
-   
+
+    private class CancelLock extends Object implements Serializable {
+        static final long serialVersionUID = 4L;
+    }//@D10//@I3
+
+
 }

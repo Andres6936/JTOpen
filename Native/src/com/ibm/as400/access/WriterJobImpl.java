@@ -16,29 +16,27 @@ package com.ibm.as400.access;
 import java.io.IOException;
 
 /**
-  * The WriterJobImpl interface defines a set of methods
-  * needed for a full implementation of the WriterJob class.
+ * The WriterJobImpl interface defines a set of methods
+ * needed for a full implementation of the WriterJob class.
  **/
 
-interface WriterJobImpl extends PrintObjectImpl
-{
+interface WriterJobImpl extends PrintObjectImpl {
     public void end(String endType)
-      throws AS400Exception,
+            throws AS400Exception,
             AS400SecurityException,
             ErrorCompletingRequestException,
-             IOException,
-             InterruptedException,
+            IOException,
+            InterruptedException,
             RequestNotSupportedException;
 
 
-
-    public  NPCPIDWriter start(AS400Impl system, 
-                               PrintObjectImpl printer,
-                               PrintParameterList options,
-                               OutputQueueImpl outputQueue)
-      throws AS400Exception,
-             AS400SecurityException,
-             ErrorCompletingRequestException,
-             IOException,
-             InterruptedException;
+    public NPCPIDWriter start(AS400Impl system,
+                              PrintObjectImpl printer,
+                              PrintParameterList options,
+                              OutputQueueImpl outputQueue)
+            throws AS400Exception,
+            AS400SecurityException,
+            ErrorCompletingRequestException,
+            IOException,
+            InterruptedException;
 }

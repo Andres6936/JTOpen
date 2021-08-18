@@ -19,106 +19,95 @@ import java.io.IOException;
 import java.util.Hashtable;
 
 
-
 /**
-The PxDSFactory class manufactures new instances
-of datastream objects as they are read from an input stream.
-**/
-class PxDSFactory 
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
-
+ * The PxDSFactory class manufactures new instances
+ * of datastream objects as they are read from an input stream.
+ **/
+class PxDSFactory {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
-    private Hashtable        factory_            = new Hashtable ();
+    private Hashtable factory_ = new Hashtable();
 
 
-
-/**
-Returns the next datastream object from the input stream.
-
-@param input    The input stream.
-@return         The next datastream object.
- * @throws  IOException  If an error occurs while communicating with the system.
-
-**/    
-    public PxDSRV getNextDS (InputStream input)
-        throws IOException
-    {
+    /**
+     * Returns the next datastream object from the input stream.
+     *
+     * @param input The input stream.
+     * @return The next datastream object.
+     * @throws IOException If an error occurs while communicating with the system.
+     **/
+    public PxDSRV getNextDS(InputStream input)
+            throws IOException {
         if (Trace.isTraceProxyOn()) {
-          Trace.log(Trace.PROXY,  this, "getNextDS");
+            Trace.log(Trace.PROXY, this, "getNextDS");
         }
-        try { 
-        // Read the type of the next datastream.
-        DataInputStream dataInput = new DataInputStream (input);
-        Short type = new Short (dataInput.readShort());
+        try {
+            // Read the type of the next datastream.
+            DataInputStream dataInput = new DataInputStream(input);
+            Short type = new Short(dataInput.readShort());
 
-        // If we know how to deal with this type, then manufacture
-        // a new instance.
-        if (factory_.containsKey (type)) {
-            PxDSRV template = (PxDSRV) factory_.get (type);                           
-            if (Trace.isTraceProxyOn())
-                Trace.log(Trace.PROXY, "getNextDS. Factory read ds type " + type + " (" + template + ").");
+            // If we know how to deal with this type, then manufacture
+            // a new instance.
+            if (factory_.containsKey(type)) {
+                PxDSRV template = (PxDSRV) factory_.get(type);
+                if (Trace.isTraceProxyOn())
+                    Trace.log(Trace.PROXY, "getNextDS. Factory read ds type " + type + " (" + template + ").");
 
-            // We can not use the datastream template directly from the 
-            // hashtable, since we may need more than one at a time.  Instead,
-            // we make a copy of it.
-            PxDSRV datastream = null;
-            try {
-                datastream = (PxDSRV) template.clone ();
+                // We can not use the datastream template directly from the
+                // hashtable, since we may need more than one at a time.  Instead,
+                // we make a copy of it.
+                PxDSRV datastream = null;
+                try {
+                    datastream = (PxDSRV) template.clone();
+                } catch (CloneNotSupportedException e) {
+                    if (Trace.isTraceErrorOn())
+                        Trace.log(Trace.ERROR, "Clone error in ds factory", e);
+                }
+
+                // Loads the datastream by reading data from the input stream.  The
+                // actually datastream subclass implements the details.
+                datastream.readFrom(input, this);
+                if (Trace.isTraceProxyOn())
+                    Trace.log(Trace.PROXY, "getNextDS. returning " + datastream);
+                return datastream;
             }
-            catch (CloneNotSupportedException e) { 
-                if (Trace.isTraceErrorOn ())
-                    Trace.log (Trace.ERROR, "Clone error in ds factory", e);
+
+            // Otherwise, this is an internal error.  If this happens,
+            // make sure that all datastreams that you are expecting
+            // are registered with this factory.
+            else {
+                if (Trace.isTraceProxyOn())
+                    Trace.log(Trace.PROXY, "Factory read ds type " + type + ".");
+                if (Trace.isTraceOn())
+                    Trace.log(Trace.ERROR, "Ds type " + type + " not registered in factory.");
+                throw new InternalErrorException(InternalErrorException.DATA_STREAM_UNKNOWN);
             }
-
-            // Loads the datastream by reading data from the input stream.  The
-            // actually datastream subclass implements the details.
-            datastream.readFrom (input, this);
-            if (Trace.isTraceProxyOn())
-              Trace.log(Trace.PROXY, "getNextDS. returning "+datastream); 
-            return datastream;
-        }
-
-        // Otherwise, this is an internal error.  If this happens,
-        // make sure that all datastreams that you are expecting
-        // are registered with this factory.
-        else {
-            if (Trace.isTraceProxyOn())
-                Trace.log(Trace.PROXY, "Factory read ds type " + type + ".");
-            if (Trace.isTraceOn ())
-                Trace.log (Trace.ERROR, "Ds type " + type + " not registered in factory.");
-            throw new InternalErrorException(InternalErrorException.DATA_STREAM_UNKNOWN);
-        }
-        } catch (IOException e) { 
-          if (Trace.isTraceProxyOn()) { 
-            Trace.log(Trace.PROXY, this, "exception thrown from getNextDS "+e);
-          }
-          throw e; 
+        } catch (IOException e) {
+            if (Trace.isTraceProxyOn()) {
+                Trace.log(Trace.PROXY, this, "exception thrown from getNextDS " + e);
+            }
+            throw e;
         }
     }
 
 
-
-/**
-Registers a datastream with this factory.  DSs must be
-registered in order to be recognized when they are read.
-
-@param datastream   The datastream.
-**/
-    public void register (PxDSRV datastream)
-    {
+    /**
+     * Registers a datastream with this factory.  DSs must be
+     * registered in order to be recognized when they are read.
+     *
+     * @param datastream The datastream.
+     **/
+    public void register(PxDSRV datastream) {
         // Add the class to the factory.
-        Short key = new Short (datastream.getType ());
-        if (factory_.contains (key))
-            throw new InternalErrorException (InternalErrorException.PROTOCOL_ERROR);
-        factory_.put (key, datastream);
+        Short key = new Short(datastream.getType());
+        if (factory_.contains(key))
+            throw new InternalErrorException(InternalErrorException.PROTOCOL_ERROR);
+        factory_.put(key, datastream);
 
-        
+
     }
-
 
 
 }

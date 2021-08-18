@@ -23,17 +23,16 @@ abstract class PcmlDocRoot extends PcmlDocNode {
 
     private Hashtable m_hash;
 
-    PcmlDocRoot() 
-    {
+    PcmlDocRoot() {
         m_hash = new Hashtable();
     }
-    
+
     public Object clone()                                           // @C1A
     {                                                               // @C1A
         PcmlDocRoot node = null;                                    // @C1A
         node = (PcmlDocRoot) super.clone();                         // @C1A
         node.m_hash = new Hashtable();                              // @C1A
- 
+
         return node;                                                // @C1A
     }                                                               // @C1A
 
@@ -42,13 +41,11 @@ abstract class PcmlDocRoot extends PcmlDocNode {
         return m_hash.put(elem.getQualifiedName(), elem); //@F4
     }
 
-    public boolean containsElement(String qName) 
-    {
+    public boolean containsElement(String qName) {
         return m_hash.containsKey(qName);
     }
 
-    public PcmlNode getElement(String qName) 
-    {
+    public PcmlNode getElement(String qName) {
         return (PcmlNode) m_hash.get(qName);
     }
 }

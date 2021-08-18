@@ -21,11 +21,10 @@ import java.beans.BeanDescriptor;
 
 
 /**
-*  The HTMLTagAttributesBeanInfo class provides bean information for the HTMLTagAttributes class.
-**/
-public class HTMLTagAttributesBeanInfo extends SimpleBeanInfo
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+ * The HTMLTagAttributesBeanInfo class provides bean information for the HTMLTagAttributes class.
+ **/
+public class HTMLTagAttributesBeanInfo extends SimpleBeanInfo {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Class this bean info represents.
@@ -38,83 +37,79 @@ public class HTMLTagAttributesBeanInfo extends SimpleBeanInfo
     private static PropertyDescriptor[] properties_;
 
 
-    static
-    {
-      
-      try
-      {
-        EventSetDescriptor changed = new EventSetDescriptor(beanClass,
-                         "propertyChange",
-                         java.beans.PropertyChangeListener.class,
-                         "propertyChange");
-        changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
-        changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
+    static {
 
-        EventSetDescriptor[] events = {changed};
+        try {
+            EventSetDescriptor changed = new EventSetDescriptor(beanClass,
+                    "propertyChange",
+                    java.beans.PropertyChangeListener.class,
+                    "propertyChange");
+            changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
+            changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
 
-        events_ = events;
+            EventSetDescriptor[] events = {changed};
 
-        // ***** PROPERTIES
-        PropertyDescriptor attributes = new PropertyDescriptor("attributes", beanClass,
-                                        "getAttributes", "setAttributes");
-        attributes.setBound(true);
-        attributes.setConstrained(true);
-        attributes.setDisplayName(loader_.getText("PROP_NAME_ATTRIBUTES"));
-        attributes.setShortDescription(loader_.getText("PROP_DESC_ATTRIBUTES"));
+            events_ = events;
 
-        properties_ = new PropertyDescriptor[] {attributes};
-      }
-      catch (Exception e)
-      {
-        throw new Error(e.toString());
-      }
+            // ***** PROPERTIES
+            PropertyDescriptor attributes = new PropertyDescriptor("attributes", beanClass,
+                    "getAttributes", "setAttributes");
+            attributes.setBound(true);
+            attributes.setConstrained(true);
+            attributes.setDisplayName(loader_.getText("PROP_NAME_ATTRIBUTES"));
+            attributes.setShortDescription(loader_.getText("PROP_DESC_ATTRIBUTES"));
+
+            properties_ = new PropertyDescriptor[]{attributes};
+        } catch (Exception e) {
+            throw new Error(e.toString());
+        }
     }
 
 
     /**
-    Returns the bean descriptor.
-      @return The bean descriptor.
-    **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
+     **/
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(beanClass);
     }
 
-    
+
     /**
-    Returns the index of the default event.
-      @return The index to the default event.
-    **/
-    public int getDefaultEventIndex()
-    {
+     * Returns the index of the default event.
+     *
+     * @return The index to the default event.
+     **/
+    public int getDefaultEventIndex() {
         return 0;
     }
 
     /**
-      Returns the index of the default property.
-      @return The index to the default property.
-    **/
-    public int getDefaultPropertyIndex()
-    {
+     * Returns the index of the default property.
+     *
+     * @return The index to the default property.
+     **/
+    public int getDefaultPropertyIndex() {
         return 0;
     }
 
     /**
-      Returns the descriptors for all events.
-      @return The descriptors for all events.
-    **/
-    public EventSetDescriptor[] getEventSetDescriptors()
-    {
+     * Returns the descriptors for all events.
+     *
+     * @return The descriptors for all events.
+     **/
+    public EventSetDescriptor[] getEventSetDescriptors() {
         return events_;
     }
 
- 
+
     /**
-    *  Returns the descriptors for all properties.
-    *  @return The descriptors for all properties.
-    **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
+     **/
+    public PropertyDescriptor[] getPropertyDescriptors() {
         return properties_;
     }
 

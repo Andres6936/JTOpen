@@ -15,39 +15,32 @@ package com.ibm.as400.access;
 
 
 /**
-The PxNullParm class represents a null
-parameter in a proxy datastream.
-**/
-class PxNullParm 
-extends PxDS
-implements PxParm 
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+ * The PxNullParm class represents a null
+ * parameter in a proxy datastream.
+ **/
+class PxNullParm
+        extends PxDS
+        implements PxParm {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
+    /**
+     * Constructs a PxNullParm object.
+     **/
+    public PxNullParm() {
+        super(ProxyConstants.DS_NULL_PARM);
 
-
-/**
-Constructs a PxNullParm object.
-**/
-    public PxNullParm ()
-    {
-        super (ProxyConstants.DS_NULL_PARM);
-       
     }
 
 
-
-/**
-Returns the Object value.
-
-@return The Object value.
-**/
-    public Object getObjectValue ()
-    {
+    /**
+     * Returns the Object value.
+     *
+     * @return The Object value.
+     **/
+    public Object getObjectValue() {
         return null;
     }
-
 
 
 }

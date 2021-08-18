@@ -14,6 +14,7 @@
 package com.ibm.as400.data;
 
 import com.ibm.as400.access.Trace;                  // @A1A
+
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -25,8 +26,7 @@ import java.util.*;
  * the string "RESOURCEMISSING", allowing the developer to
  * quickly detect the missing resource and correct the problem.
  */
-class ResourceLoader extends Object
-{
+class ResourceLoader extends Object {
     private ResourceBundle m_bundle = null;
 
     /**
@@ -38,19 +38,14 @@ class ResourceLoader extends Object
      * specific resources.
      *
      * @param name the name of the resource bundle to be loaded.
-     * If the resource bundle could not be found, <code>getString</code>
-     * will return the string "RESOURCE BUNDLE ERROR".
+     *             If the resource bundle could not be found, <code>getString</code>
+     *             will return the string "RESOURCE BUNDLE ERROR".
      */
-    public void setResourceName(String name)
-    {
-        if (m_bundle == null)
-        {
-            try 
-            { 
-            	m_bundle = ResourceBundle.getBundle(name); 
-            }
-            catch (MissingResourceException e) 
-            {
+    public void setResourceName(String name) {
+        if (m_bundle == null) {
+            try {
+                m_bundle = ResourceBundle.getBundle(name);
+            } catch (MissingResourceException e) {
                 Trace.log(Trace.ERROR, e);                  // @A1C
             }
         }
@@ -65,31 +60,22 @@ class ResourceLoader extends Object
      * returns "RESOURCEMISSING".  If the resource bundle could not
      * be loaded, <code>getString</code> returns "RESOURCEBUNDLEERROR".
      *
-     * @param key  the key which identifies the string to be loaded.
+     * @param key the key which identifies the string to be loaded.
      * @return string resource
      */
-    public String getString(String key)
-    {
-        if (m_bundle != null)
-        {
-            try
-            {
+    public String getString(String key) {
+        if (m_bundle != null) {
+            try {
                 return m_bundle.getString(key);
-            }
-            catch (MissingResourceException e)
-            {
+            } catch (MissingResourceException e) {
                 Trace.log(Trace.ERROR, e);                  // @A1C
-                try 
-                {
-                    return MessageFormat.format(m_bundle.getString(DAMRI.MISSING_KEY), new Object[] {key});
-                }
-                catch (Exception eAgain) 
-                {
+                try {
+                    return MessageFormat.format(m_bundle.getString(DAMRI.MISSING_KEY), new Object[]{key});
+                } catch (Exception eAgain) {
                     return "RESOURCE BUNDLE ERROR.";
                 }
             }
-        }
-        else 
+        } else
             return "RESOURCE BUNDLE ERROR.";
     }
 
@@ -102,23 +88,17 @@ class ResourceLoader extends Object
      * returns "RESOURCEMISSING".  If the resource bundle could not
      * be loaded, <code>getString</code> returns "RESOURCEBUNDLEERROR".
      *
-     * @param key  the key which identifies the string to be loaded.
+     * @param key the key which identifies the string to be loaded.
      * @return string resource
      */
-    public String getStringWithNoSubstitute(String key)
-    {
-        if (m_bundle != null)
-        {
-            try
-            {
+    public String getStringWithNoSubstitute(String key) {
+        if (m_bundle != null) {
+            try {
                 return m_bundle.getString(key);
-            }
-            catch (MissingResourceException e)
-            {
+            } catch (MissingResourceException e) {
                 return null;
             }
-        }
-        else 
+        } else
             return null;
     }
 }

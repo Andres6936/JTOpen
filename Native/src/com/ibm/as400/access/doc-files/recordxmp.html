@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC "-//w3c//dtd html 3.2 final//en">
 <HTML>
 <HEAD>
-<TITLE>IBM Toolbox for Java Example: Using the Record classes</TITLE>
-<META CONTENT="text/html; charset=iso-8859-1" HTTP-EQUIV="Content-Type">
+    <TITLE>IBM Toolbox for Java Example: Using the Record classes</TITLE>
+    <META CONTENT="text/html; charset=iso-8859-1" HTTP-EQUIV="Content-Type">
 </head>
 <BODY>
 <H2>Using the FieldDescription, RecordFormat, and Record classes</H2>
 <P>The following examples show how you can use the FieldDescription, RecordFormat
-and Record classes with data queues.</P>
+    and Record classes with data queues.</P>
 <H3>Example: Using the FieldDescription classes</H3>
 <P>You can use the FieldDescription classes can to describe the different types of data that make up
-an entry on a data queue. These examples assume the following format for entries on the data queue:</P>
+    an entry on a data queue. These examples assume the following format for entries on the data queue:</P>
 <PRE>
   Message number    Sender    Time sent      Message text     Reply required
         |             |           |               |                |
@@ -28,7 +28,8 @@ an entry on a data queue. These examples assume the following format for entries
 <H3>Using the RecordFormat class</H3>
 <P>You can use the RecordFormat class to describe the data that makes up the data queue entry.</P>
 <p><strong>Example: Defining RecordFormat and using it dynamically</strong></p>
-The following example uses the RecordFormat class to describe the format of the data queue entry and then dynamically uses it to retrieve a record:</p>
+The following example uses the RecordFormat class to describe the format of the data queue entry and then dynamically
+uses it to retrieve a record:</p>
 <PRE>
   RecordFormat entryFormat = new RecordFormat();
   // Describe the fields in an entry on the data queue
@@ -40,9 +41,10 @@ The following example uses the RecordFormat class to describe the format of the 
 
   // Get a record based on the format of the entries on the data queue
   Record rec = entryFormat.getNewRecord();</PRE>
-  
+
 <strong>Example: Defining RecordFormat statically</strong>
-<P>The following example defines the record format statically, which allows many programs to use the format without coding the record format multiple times.</P>
+<P>The following example defines the record format statically, which allows many programs to use the format without
+    coding the record format multiple times.</P>
 <PRE>
   public class MessageEntryFormat extends RecordFormat
   {
@@ -109,7 +111,10 @@ The following example uses the RecordFormat class to describe the format of the 
 </PRE>
 
 <strong><A NAME="UsingaspecificRecordobject">Example: Using a specific Record object</A></strong>
-<P>You can also statically define and use a Record specific to the format of this data queue, which allows you to provide get() and set() methods for the fields that are more meaningfully named than getField() and setField(). Also, by using the statically defined specific Record, you can return basic Java types instead of objects, and you can identify the return type for your user.</P>
+<P>You can also statically define and use a Record specific to the format of this data queue, which allows you to
+    provide get() and set() methods for the fields that are more meaningfully named than getField() and setField().
+    Also, by using the statically defined specific Record, you can return basic Java types instead of objects, and you
+    can identify the return type for your user.</P>
 <P>Note that this example must explicitly cast the correct Java object.</P>
 <PRE>
   public class MessageEntryRecord extends Record
@@ -151,10 +156,10 @@ The following example uses the RecordFormat class to describe the format of the 
   }</PRE>
 
 <strong>Example: Returning a new MessageEntryRecord</strong>
-<P>We need to override the getNewRecord() method in the MessageEntryFormat class 
-  (in the <A HREF="#UsingaspecificRecordobject">example above</A>) in order to 
-  return a new MessageEntryRecord. To override the method, add the following to 
-  the MessageEntryFormat class:</P>
+<P>We need to override the getNewRecord() method in the MessageEntryFormat class
+    (in the <A HREF="#UsingaspecificRecordobject">example above</A>) in order to
+    return a new MessageEntryRecord. To override the method, add the following to
+    the MessageEntryFormat class:</P>
 <PRE>
     public Record getNewRecord(byte[] data)
     {
@@ -163,8 +168,8 @@ The following example uses the RecordFormat class to describe the format of the 
       return r;
     }
 </PRE>
-<P>After adding the new getNewRecord() method, you can use the MessageEntryRecord 
-  to interpret the data queue entry:</P>
+<P>After adding the new getNewRecord() method, you can use the MessageEntryRecord
+    to interpret the data queue entry:</P>
 <PRE>
   // Get a record object from our record format, initializing it with the data from the entry we
   // just read. Note the use of the new overridden method getNewRecord().

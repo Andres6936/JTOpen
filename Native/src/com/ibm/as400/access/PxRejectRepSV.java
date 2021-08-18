@@ -14,15 +14,13 @@
 package com.ibm.as400.access;
 
 // The PxRejectRepSV class represents the server view of a reject reply.
-class PxRejectRepSV extends PxRepSV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class PxRejectRepSV extends PxRepSV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     // Constructs a PxRejectRepSV object.
     // @param  peer  The suggested peer, or "" if none.
     // @param  secure  true if this is rejecting a secure connection, false otherwise.
-    public PxRejectRepSV(String peer)
-    {
+    public PxRejectRepSV(String peer) {
         super(ProxyConstants.DS_REJECT_REP);
         addParm(new PxStringParm(peer));
     }

@@ -23,11 +23,10 @@ import java.beans.BeanInfo;
 
 
 /**
-*  The HTMLServletBeanInfo class provides bean information for the HTMLServlet class.
-**/
-public class HTMLServletBeanInfo extends SimpleBeanInfo
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+ * The HTMLServletBeanInfo class provides bean information for the HTMLServlet class.
+ **/
+public class HTMLServletBeanInfo extends SimpleBeanInfo {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Class this bean info represents.
@@ -40,49 +39,45 @@ public class HTMLServletBeanInfo extends SimpleBeanInfo
     private static PropertyDescriptor[] properties_;
 
 
-    static
-    {
-      
-      try
-      {
-        EventSetDescriptor changed = new EventSetDescriptor(beanClass,
-                         "propertyChange",
-                         java.beans.PropertyChangeListener.class,
-                         "propertyChange");
-        changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
-        changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
+    static {
 
-        EventSetDescriptor[] events = {changed};
+        try {
+            EventSetDescriptor changed = new EventSetDescriptor(beanClass,
+                    "propertyChange",
+                    java.beans.PropertyChangeListener.class,
+                    "propertyChange");
+            changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
+            changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
 
-        events_ = events;
+            EventSetDescriptor[] events = {changed};
 
-        // ***** PROPERTIES
-        PropertyDescriptor location = new PropertyDescriptor("location", beanClass,
-                                        "getLocation", "setLocation");
-        location.setBound(true);
-        location.setConstrained(false);
-        location.setDisplayName(loader_.getText("PROP_NAME_LOCATION"));
-        location.setShortDescription(loader_.getText("PROP_HS_DESC_LOCATION"));
+            events_ = events;
 
-        PropertyDescriptor name = new PropertyDescriptor("name", beanClass, "getName", "setName");
-        name.setBound(true);
-        name.setConstrained(false);
-        name.setDisplayName(loader_.getText("PROP_NAME_NAME"));
-        name.setShortDescription(loader_.getText("PROP_HS_DESC_NAME"));
+            // ***** PROPERTIES
+            PropertyDescriptor location = new PropertyDescriptor("location", beanClass,
+                    "getLocation", "setLocation");
+            location.setBound(true);
+            location.setConstrained(false);
+            location.setDisplayName(loader_.getText("PROP_NAME_LOCATION"));
+            location.setShortDescription(loader_.getText("PROP_HS_DESC_LOCATION"));
 
-        PropertyDescriptor text = new PropertyDescriptor("text", beanClass, "getText", "setText");
-        text.setBound(true);
-        text.setConstrained(false);
-        text.setDisplayName(loader_.getText("PROP_NAME_TEXT"));
-        text.setShortDescription(loader_.getText("PROP_HS_DESC_TEXT"));
-        
-        
-        properties_ = new PropertyDescriptor[] {location, name, text};
-      }
-      catch (Exception e)
-      {
-        throw new Error(e.toString());
-      }
+            PropertyDescriptor name = new PropertyDescriptor("name", beanClass, "getName", "setName");
+            name.setBound(true);
+            name.setConstrained(false);
+            name.setDisplayName(loader_.getText("PROP_NAME_NAME"));
+            name.setShortDescription(loader_.getText("PROP_HS_DESC_NAME"));
+
+            PropertyDescriptor text = new PropertyDescriptor("text", beanClass, "getText", "setText");
+            text.setBound(true);
+            text.setConstrained(false);
+            text.setDisplayName(loader_.getText("PROP_NAME_TEXT"));
+            text.setShortDescription(loader_.getText("PROP_HS_DESC_TEXT"));
+
+
+            properties_ = new PropertyDescriptor[]{location, name, text};
+        } catch (Exception e) {
+            throw new Error(e.toString());
+        }
     }
 
 
@@ -95,77 +90,76 @@ public class HTMLServletBeanInfo extends SimpleBeanInfo
      **/
     public BeanInfo[] getAdditionalBeanInfo()                            // @Z1A
     {
-       return new BeanInfo[] { new HTMLTagAttributesBeanInfo() };
+        return new BeanInfo[]{new HTMLTagAttributesBeanInfo()};
     }
 
 
     /**
-    Returns the bean descriptor.
-      @return The bean descriptor.
-    **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
+     **/
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(beanClass);
     }
 
-    
+
     /**
-    Returns the index of the default event.
-      @return The index to the default event.
-    **/
-    public int getDefaultEventIndex()
-    {
+     * Returns the index of the default event.
+     *
+     * @return The index to the default event.
+     **/
+    public int getDefaultEventIndex() {
         return 0;
     }
 
     /**
-      Returns the index of the default property.
-      @return The index to the default property.
-    **/
-    public int getDefaultPropertyIndex()
-    {
+     * Returns the index of the default property.
+     *
+     * @return The index to the default property.
+     **/
+    public int getDefaultPropertyIndex() {
         return 0;
     }
 
     /**
-      Returns the descriptors for all events.
-      @return The descriptors for all events.
-    **/
-    public EventSetDescriptor[] getEventSetDescriptors()
-    {
+     * Returns the descriptors for all events.
+     *
+     * @return The descriptors for all events.
+     **/
+    public EventSetDescriptor[] getEventSetDescriptors() {
         return events_;
     }
 
 
     /**
-      Returns an image for the icon.
-
-      @param icon    The icon size and color.
-      @return        The image.
-    **/
-    public Image getIcon (int icon)
-    {
+     * Returns an image for the icon.
+     *
+     * @param icon The icon size and color.
+     * @return The image.
+     **/
+    public Image getIcon(int icon) {
         Image image = null;
         switch (icon) {
             case BeanInfo.ICON_MONO_16x16:
             case BeanInfo.ICON_COLOR_16x16:
-                image = loadImage ("HTMLServlet16.gif");
+                image = loadImage("HTMLServlet16.gif");
                 break;
             case BeanInfo.ICON_MONO_32x32:
             case BeanInfo.ICON_COLOR_32x32:
-                image = loadImage ("HTMLServlet32.gif");
+                image = loadImage("HTMLServlet32.gif");
                 break;
         }
         return image;
     }
 
- 
+
     /**
-    *  Returns the descriptors for all properties.
-    *  @return The descriptors for all properties.
-    **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
+     **/
+    public PropertyDescriptor[] getPropertyDescriptors() {
         return properties_;
     }
 

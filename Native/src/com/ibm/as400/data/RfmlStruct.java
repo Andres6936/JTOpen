@@ -16,29 +16,30 @@ package com.ibm.as400.data;
 class RfmlStruct extends PcmlStruct {
     /***********************************************************
      Static Members
-    ***********************************************************/
+     ***********************************************************/
 
     // Serial verion unique identifier
     ///static final long serialVersionUID = 5539999574454926624L;
 
     private static final String STRUCTATTRIBUTES[] = {
-        "name"
+            "name"
     };
     // Note: The following PcmlStruct attributes are irrelevant to this class:
     // usage, count, minvrm, maxvrm, offset, offsetfrom, outputsize.
 
-    /** Constructor. 
-     * @param attrs **/
-    public RfmlStruct(PcmlAttributeList attrs)
-    {
+    /**
+     * Constructor.
+     *
+     * @param attrs
+     **/
+    public RfmlStruct(PcmlAttributeList attrs) {
         super(attrs);
     }
 
-   /**
-    Returns the list of valid attributes for the data element.
-    **/
-    String[] getAttributeList()
-    {
+    /**
+     * Returns the list of valid attributes for the data element.
+     **/
+    String[] getAttributeList() {
         return STRUCTATTRIBUTES;
     }
 }

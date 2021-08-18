@@ -18,41 +18,35 @@ import java.util.ResourceBundle;
 
 
 // A class representing the ResourceBundleLoader_ct object which is used to load the resource bundle.
-class ResourceBundleLoader_ct 
-{
+class ResourceBundleLoader_ct {
     private static MissingResourceException resourceException_;  // Set if there is an exception during the loading of the resource bundle
     private static ResourceBundle coreResources_;  // Core toolbox resources @B2A
 
-    static
-    { 
-        try {                                                                               
-            coreResources_ = ResourceBundle.getBundle("com.ibm.as400.util.commtrace.CTMRI");   
-        }                                                                                   
-        catch(MissingResourceException e) {                                                 
-            resourceException_ = e;                                                         
-        }                                                                                   
+    static {
+        try {
+            coreResources_ = ResourceBundle.getBundle("com.ibm.as400.util.commtrace.CTMRI");
+        } catch (MissingResourceException e) {
+            resourceException_ = e;
+        }
     }
 
     // No need to create instances of this class, all methods are static
-    private ResourceBundleLoader_ct()
-    {
+    private ResourceBundleLoader_ct() {
     }
 
     // Returns the text associated with the exception.
     // @param  textId  the id which identifies the message text to return.
     // @return  the translatable text which describes the exception.
-    static final String getText(String textId)
-    {
+    static final String getText(String textId) {
         if (coreResources_ == null) {
             throw resourceException_;
         }
 
-        try {                                                                  
+        try {
             return coreResources_.getString(textId);
-        }                                                                       
-        catch (MissingResourceException e) {                                    
-           throw e;
-        }                                                                       
+        } catch (MissingResourceException e) {
+            throw e;
+        }
     }
 }
 

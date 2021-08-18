@@ -16,10 +16,8 @@ package com.ibm.as400.access;
 import java.io.IOException;
 import java.io.OutputStream;
 
-class SignonInfoReq extends ClientAccessDataStream
-{
-    SignonInfoReq(byte[] userIDbytes, byte[] authenticationBytes, int byteType, int serverLevel)
-    {
+class SignonInfoReq extends ClientAccessDataStream {
+    SignonInfoReq(byte[] userIDbytes, byte[] authenticationBytes, int byteType, int serverLevel) {
         super(new byte[37 + authenticationBytes.length + (userIDbytes == null ? 0 : 16) + (serverLevel < 5 ? 0 : 7)]);
 
         setLength(data_.length);
@@ -31,7 +29,7 @@ class SignonInfoReq extends ClientAccessDataStream
         setReqRepID(0x7004);
 
         // Password's always encrypted.
-        data_[20] = (byteType == AS400.AUTHENTICATION_SCHEME_PASSWORD) ? (authenticationBytes.length == 8) ? (byte)0x01 : (byte)0x03 : (byteType == AS400.AUTHENTICATION_SCHEME_GSS_TOKEN) ? (byte)0x05 : (byteType == AS400.AUTHENTICATION_SCHEME_IDENTITY_TOKEN) ? (byte)0x06 : (byte)0x02;
+        data_[20] = (byteType == AS400.AUTHENTICATION_SCHEME_PASSWORD) ? (authenticationBytes.length == 8) ? (byte) 0x01 : (byte) 0x03 : (byteType == AS400.AUTHENTICATION_SCHEME_GSS_TOKEN) ? (byte) 0x05 : (byteType == AS400.AUTHENTICATION_SCHEME_IDENTITY_TOKEN) ? (byte) 0x06 : (byte) 0x02;
 
         // Client CCSID.
         //   LL
@@ -45,19 +43,15 @@ class SignonInfoReq extends ClientAccessDataStream
         //   LL
         set32bit(6 + authenticationBytes.length, 31);
         //   CP
-        if (byteType == AS400.AUTHENTICATION_SCHEME_PASSWORD)
-        {
+        if (byteType == AS400.AUTHENTICATION_SCHEME_PASSWORD) {
             set16bit(0x1105, 35);
-        }
-        else
-        {
+        } else {
             set16bit(0x1115, 35);
         }
         //   Data.
         System.arraycopy(authenticationBytes, 0, data_, 37, authenticationBytes.length);
 
-        if (userIDbytes != null)
-        {
+        if (userIDbytes != null) {
             // Set user ID info.
             //   LL
             set32bit(16, 37 + authenticationBytes.length);
@@ -67,8 +61,7 @@ class SignonInfoReq extends ClientAccessDataStream
             System.arraycopy(userIDbytes, 0, data_, 43 + authenticationBytes.length, 10);
         }
 
-        if (serverLevel >= 5)
-        {
+        if (serverLevel >= 5) {
             int offset = 37 + authenticationBytes.length + (userIDbytes == null ? 0 : 16);
             // Set return error messages.
             //   LL
@@ -80,8 +73,7 @@ class SignonInfoReq extends ClientAccessDataStream
         }
     }
 
-    void write(OutputStream out) throws IOException
-    {
+    void write(OutputStream out) throws IOException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Sending retrieve signon information request...");
         super.write(out);
     }

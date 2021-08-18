@@ -15,56 +15,53 @@ package com.ibm.as400.access;
 
 
 /**
-Read data reply.
-**/
-class IFSReadRep extends IFSDataStream
-{
-  private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
+ * Read data reply.
+ **/
+class IFSReadRep extends IFSDataStream {
+    private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-  private static final int CCSID_OFFSET = 22;
-  private static final int FILE_DATA_LL_OFFSET = 24;
-  private static final int FILE_DATA_OFFSET = 30;
+    private static final int CCSID_OFFSET = 22;
+    private static final int FILE_DATA_LL_OFFSET = 24;
+    private static final int FILE_DATA_OFFSET = 30;
 
-/**
-Construct a read reply.
-**/
-  IFSReadRep()
-  {
-  }
-
-/**
-Generate a new instance of this type.
-@return a reference to the new instance
-**/
-  public Object getNewDataStream()
-  {
-    return new IFSReadRep();
-  }
-
-/**
-Get the data.
-@return the bytes read
-**/
-  public byte[] getData()
-  {
-    int bytesRead = get32bit( FILE_DATA_LL_OFFSET) - 6;
-    byte[] dataRead = new byte[bytesRead];
-    for (int i = 0; i < bytesRead; i++)
-    {
-      dataRead[i] = data_[FILE_DATA_OFFSET + i];
+    /**
+     * Construct a read reply.
+     **/
+    IFSReadRep() {
     }
 
-    return dataRead;
-  }
+    /**
+     * Generate a new instance of this type.
+     *
+     * @return a reference to the new instance
+     **/
+    public Object getNewDataStream() {
+        return new IFSReadRep();
+    }
 
-/**
-Generates a hash code for this data stream.
-@return the hash code
-**/
-  public int hashCode()
-  {
-    return 0x8003;
-  }
+    /**
+     * Get the data.
+     *
+     * @return the bytes read
+     **/
+    public byte[] getData() {
+        int bytesRead = get32bit(FILE_DATA_LL_OFFSET) - 6;
+        byte[] dataRead = new byte[bytesRead];
+        for (int i = 0; i < bytesRead; i++) {
+            dataRead[i] = data_[FILE_DATA_OFFSET + i];
+        }
+
+        return dataRead;
+    }
+
+    /**
+     * Generates a hash code for this data stream.
+     *
+     * @return the hash code
+     **/
+    public int hashCode() {
+        return 0x8003;
+    }
 
 }
 

@@ -16,9 +16,8 @@ package com.ibm.as400.access;
 import java.io.Serializable;
 import java.util.GregorianCalendar;
 
-class SignonInfo implements Serializable
-{
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
+class SignonInfo implements Serializable {
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
     static final long serialVersionUID = 4L;
     GregorianCalendar currentSignonDate;

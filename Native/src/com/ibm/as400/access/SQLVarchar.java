@@ -14,20 +14,17 @@
 package com.ibm.as400.access;
 
 final class SQLVarchar
-extends SQLVarcharBase
-{
+        extends SQLVarcharBase {
     static final String copyright = "Copyright (C) 1997-2013 International Business Machines Corporation and others.";
 
-    SQLVarchar(int maxLength, SQLConversionSettings settings)
-    {
-        super(settings,0,maxLength, ""); 
+    SQLVarchar(int maxLength, SQLConversionSettings settings) {
+        super(settings, 0, maxLength, "");
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLVarchar(maxLength_, settings_);
     }
 
-    
+
 }
 

@@ -14,33 +14,31 @@
 package com.ibm.as400.access;
 
 /**
-  *  The Log interface defines a mechanism for exception and message logging
-  *  in a device-independent  manner.
-  *  <p>
-  *  Implementations of this interface can direct the logged
-  *  information to the appropriate file or output device.  Event logging
-  *  is intended for end-user information.  In contrast,
-  *  {@link com.ibm.as400.access.Trace Trace} is intended for
-  *  debugging information for developers.
-  *
-  **/
+ * The Log interface defines a mechanism for exception and message logging
+ * in a device-independent  manner.
+ * <p>
+ * Implementations of this interface can direct the logged
+ * information to the appropriate file or output device.  Event logging
+ * is intended for end-user information.  In contrast,
+ * {@link com.ibm.as400.access.Trace Trace} is intended for
+ * debugging information for developers.
+ **/
 
-public interface Log
-{
-   /**
-    * Logs a message.
-    *
-    * @param   msg  The message to log.
-    **/
-   public void log(String msg);
+public interface Log {
+    /**
+     * Logs a message.
+     *
+     * @param msg The message to log.
+     **/
+    public void log(String msg);
 
 
-     /**
-      * Logs an exception and message.
-      *
-      * @param   msg  The message to log.
-      * @param   exception  The exception to log.
-      */
-   public void log(String msg, Throwable exception);
+    /**
+     * Logs an exception and message.
+     *
+     * @param msg       The message to log.
+     * @param exception The exception to log.
+     */
+    public void log(String msg, Throwable exception);
 }
 

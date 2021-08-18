@@ -14,12 +14,10 @@
 package com.ibm.as400.access;
 
 // This is a Simplified Chinese character set.
-class ConvTable9029 extends ConvTable4933
-{
+class ConvTable9029 extends ConvTable4933 {
     private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-    ConvTable9029()
-    {
+    ConvTable9029() {
         super(9029);
     }
 }

@@ -15,32 +15,35 @@ package com.ibm.as400.util.commtrace;
 
 /**
  * An AH Header.<br>
- * Extends ExtHeader's methods to parse, print, and allow easy access to the AH Header. 
+ * Extends ExtHeader's methods to parse, print, and allow easy access to the AH Header.
  */
 public class AH extends ExtHeader {
-	
-	/**
-	 * Creates and parses the data of this header.
-	 * @param data  The raw data of this header.
-	 */
-	AH(BitBuf data) {
-	    super(data);
-	    type= Header.EXTAH;
+
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    AH(BitBuf data) {
+        super(data);
+        type = Header.EXTAH;
     }
-    
+
     /**
      * Returns the length of this header.
+     *
      * @return Length of this header.
      */
-	public int getHeaderLen() {
-		return 64 + ((rawheader.getOctet(8) & 0xFF) * 32);
-	}
-	
-	/**
-	 * Returns the next header in this packet.
-	 * @return Will always return null.
-	 */
-	public Header getNextHeader() {
-		return null;
-	}
+    public int getHeaderLen() {
+        return 64 + ((rawheader.getOctet(8) & 0xFF) * 32);
+    }
+
+    /**
+     * Returns the next header in this packet.
+     *
+     * @return Will always return null.
+     */
+    public Header getNextHeader() {
+        return null;
+    }
 }

@@ -18,25 +18,21 @@ class PcmlAttribute extends Object {
     private String value;
     private boolean specified;
 
-    PcmlAttribute(String aName, String aValue, boolean aFlag) 
-    {
+    PcmlAttribute(String aName, String aValue, boolean aFlag) {
         name = aName;
         value = aValue;
         specified = aFlag;
     }
 
-    String getName()
-    {
+    String getName() {
         return name;
     }
 
-    String getAttributeValue()
-    {
+    String getAttributeValue() {
         return value;
     }
 
-    boolean getSpecified()
-    {
+    boolean getSpecified() {
         return specified;
     }
 }

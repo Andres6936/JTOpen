@@ -16,50 +16,44 @@ package com.ibm.as400.access;
 import java.sql.SQLException;
 
 
-
 /**
-The JDFieldMap interface that defines how the client sees
-the data for a field. It is generated based on row data that
-is returned from the system.
-**/
-interface JDFieldMap
-{
-
+ * The JDFieldMap interface that defines how the client sees
+ * the data for a field. It is generated based on row data that
+ * is returned from the system.
+ **/
+interface JDFieldMap {
 
 
     /**
-    Returns the value for a field.
-    
-    @param   row        The row from which to map.
-    @return             The value.
-    
-    @exception       SQLException   If an error occurs.
-    **/
-    public abstract Object getValue (JDRow row)
-    throws SQLException;
+     * Returns the value for a field.
+     *
+     * @param row The row from which to map.
+     * @return The value.
+     * @throws SQLException If an error occurs.
+     **/
+    public abstract Object getValue(JDRow row)
+            throws SQLException;
 
     /**
-    Is there a data mapping error for the field?
-    
-    @param      row     The row from which to map.
-    @return             true or false
-    
-    @exception  SQLException    If an error occurs.
-    **/
+     * Is there a data mapping error for the field?
+     *
+     * @param row The row from which to map.
+     * @return true or false
+     * @throws SQLException If an error occurs.
+     **/
     public abstract boolean isDataMappingError(JDRow row)
-    throws SQLException;
+            throws SQLException;
 
 
     /**
-    Is this field value SQL NULL?
-    
-    @param   row     The row from which to map.
-    @return          true or false
-    
-    @exception       SQLException   If an error occurs.
-    **/
-    public abstract boolean isNull (JDRow row)
-    throws SQLException;
+     * Is this field value SQL NULL?
+     *
+     * @param row The row from which to map.
+     * @return true or false
+     * @throws SQLException If an error occurs.
+     **/
+    public abstract boolean isNull(JDRow row)
+            throws SQLException;
 
 
 }

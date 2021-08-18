@@ -19,19 +19,22 @@ package com.ibm.as400.util.commtrace;
  */
 public class Routing extends ExtHeader {
 
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data  The raw data of this header. 
-	 */
-	Routing(BitBuf data) {
-		super(data);
-		type= Header.EXTROUTE;
-	}
-	/**
-	 * Returns the length of this header.
-	 * @return The length of this header.
-	 */
-	public int getHeaderLen() {
-		return 64 + ((rawheader.getOctet(8) & 0xFF) * 64);
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    Routing(BitBuf data) {
+        super(data);
+        type = Header.EXTROUTE;
+    }
+
+    /**
+     * Returns the length of this header.
+     *
+     * @return The length of this header.
+     */
+    public int getHeaderLen() {
+        return 64 + ((rawheader.getOctet(8) & 0xFF) * 64);
+    }
 }

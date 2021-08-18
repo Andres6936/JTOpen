@@ -21,66 +21,65 @@ import java.beans.VetoableChangeListener;
 import java.io.Serializable;
 
 /**
-*  The HTMLTableCell class represents data in an HTML table cell.
-*
-*  <P>This example creates an HTML text HTMLTableCell object.
-*
-*  <BLOCKQUOTE><PRE>
-*  // Create an HTMLText object.
-*  HTMLText ibmText = new HTMLText("IBM");
-*  ibmText.setBold(true);
-*  ibmText.setItalic(true);
-*  HTMLTableCell textCell = new HTMLTableCell(ibmText);
-*  textCell.setHorizontalAlignment(HTMLConstants.CENTER);
-*  System.out.println(textCell.getTag());
-*  </PRE></BLOCKQUOTE>
-*
-*  Here is the output of the tag:
-*  <BLOCKQUOTE><PRE>
-*  <BR>&lt;td align="center"&gt;&lt;b&gt;&lt;i&gt;IBM&lt;/i&gt;&lt;/b&gt;&lt;/td&gt;
-*  </PRE></BLOCKQUOTE>  
-*  <P>Calling getFOTag() produces the following:
-*  <BLOCKQUOTE><PRE>
-*  &lt;fo:table-cell border-style='solid' border-width='1px' padding='1px' text-align='center'&gt;&lt;fo:block-container&gt;
-*  &lt;fo:block font-weight='bold' font-style='italic'&gt;IBM&lt;/fo:block&gt;
-*  &lt;/fo:block-container&gt;
-*  &lt;/fo:table-cell&gt;
-*  </PRE></BLOCKQUOTE>
-*
-*  <P>This example creates an HTMLTableCell object with the element as an HTMLForm
-*  object containing a submit button.
-*
-*  <BLOCKQUOTE><PRE>
-*  HTMLTableCell formCell = new HTMLTableCell();
-*  // create an HTMLForm object.
-*  SubmitFormInput submitButton = new SubmitFormInput("Submit", "Send");
-*  HTMLForm form = new HTMLForm("http://myCompany.com/myServlet");
-*  form.addElement(submitButton);
-*  // add the form to the table cell.
-*  formCell.setElement(form);
-*  System.out.println(formCell.getTag());
-*  </PRE></BLOCKQUOTE>
-*
-*  Here is the output of the tag:
-*  <BLOCKQUOTE><PRE>
-*  &lt;td&gt;&lt;form action=&quot;http://myCompany.com/myServlet&quot; method=&quot;get&quot;&gt;
-*  &lt;input type=&quot;submit&quot; value=&quot;Send&quot; /&gt;
-*  &lt;/form&gt;&lt;/td&gt;
-*  </PRE></BLOCKQUOTE>
-*
-*  <p>HTMLTableCell objects generate the following events:
-*  <ul>
-*  <li>PropertyChangeEvent
-*  <li>VetoableChangeEvent
-*  </ul>
-*
-*  @see com.ibm.as400.util.html.HTMLTable
-*  @see com.ibm.as400.util.html.HTMLTableRow
-**/
-public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, Serializable
-{
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
-  static final long serialVersionUID = -4848852026390616957L;
+ * The HTMLTableCell class represents data in an HTML table cell.
+ *
+ * <P>This example creates an HTML text HTMLTableCell object.
+ *
+ * <BLOCKQUOTE><PRE>
+ * // Create an HTMLText object.
+ * HTMLText ibmText = new HTMLText("IBM");
+ * ibmText.setBold(true);
+ * ibmText.setItalic(true);
+ * HTMLTableCell textCell = new HTMLTableCell(ibmText);
+ * textCell.setHorizontalAlignment(HTMLConstants.CENTER);
+ * System.out.println(textCell.getTag());
+ * </PRE></BLOCKQUOTE>
+ * <p>
+ * Here is the output of the tag:
+ * <BLOCKQUOTE><PRE>
+ * <BR>&lt;td align="center"&gt;&lt;b&gt;&lt;i&gt;IBM&lt;/i&gt;&lt;/b&gt;&lt;/td&gt;
+ * </PRE></BLOCKQUOTE>
+ * <P>Calling getFOTag() produces the following:
+ * <BLOCKQUOTE><PRE>
+ * &lt;fo:table-cell border-style='solid' border-width='1px' padding='1px' text-align='center'&gt;&lt;fo:block-container&gt;
+ * &lt;fo:block font-weight='bold' font-style='italic'&gt;IBM&lt;/fo:block&gt;
+ * &lt;/fo:block-container&gt;
+ * &lt;/fo:table-cell&gt;
+ * </PRE></BLOCKQUOTE>
+ *
+ * <P>This example creates an HTMLTableCell object with the element as an HTMLForm
+ * object containing a submit button.
+ *
+ * <BLOCKQUOTE><PRE>
+ * HTMLTableCell formCell = new HTMLTableCell();
+ * // create an HTMLForm object.
+ * SubmitFormInput submitButton = new SubmitFormInput("Submit", "Send");
+ * HTMLForm form = new HTMLForm("http://myCompany.com/myServlet");
+ * form.addElement(submitButton);
+ * // add the form to the table cell.
+ * formCell.setElement(form);
+ * System.out.println(formCell.getTag());
+ * </PRE></BLOCKQUOTE>
+ * <p>
+ * Here is the output of the tag:
+ * <BLOCKQUOTE><PRE>
+ * &lt;td&gt;&lt;form action=&quot;http://myCompany.com/myServlet&quot; method=&quot;get&quot;&gt;
+ * &lt;input type=&quot;submit&quot; value=&quot;Send&quot; /&gt;
+ * &lt;/form&gt;&lt;/td&gt;
+ * </PRE></BLOCKQUOTE>
+ *
+ * <p>HTMLTableCell objects generate the following events:
+ * <ul>
+ * <li>PropertyChangeEvent
+ * <li>VetoableChangeEvent
+ * </ul>
+ * <p>
+ * @see com.ibm.as400.util.html.HTMLTable
+ * @see com.ibm.as400.util.html.HTMLTableRow
+ **/
+public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, Serializable {
+    static final long serialVersionUID = -4848852026390616957L;
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
     private HTMLTagElement element_;       // The cell data.
 
@@ -104,19 +103,18 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
     transient private VetoableChangeSupport vetos_; //@CRS
 
     /**
-    *  Constructs a default HTMLTableCell object.
-    **/
-    public HTMLTableCell()
-    {
+     * Constructs a default HTMLTableCell object.
+     **/
+    public HTMLTableCell() {
 
     }
 
     /**
-    *  Constructs an HTMLTableCell.
-    *  @param element The table cell element.
-    **/
-    public HTMLTableCell(HTMLTagElement element)
-    {
+     * Constructs an HTMLTableCell.
+     *
+     * @param element The table cell element.
+     **/
+    public HTMLTableCell(HTMLTagElement element) {
         if (element == null)
             throw new NullPointerException("element");
 
@@ -125,13 +123,13 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
 
 
     /**
-    *  Adds the VetoableChangeListener.  The specified VetoableChangeListener's <b>vetoableChange</b> 
-    *  method is called each time the value of any constrained property is changed.
-    *  @see #removeVetoableChangeListener
-    *  @param listener The VetoableChangeListener.
-    **/
-    public void addVetoableChangeListener(VetoableChangeListener listener)
-    {
+     * Adds the VetoableChangeListener.  The specified VetoableChangeListener's <b>vetoableChange</b>
+     * method is called each time the value of any constrained property is changed.
+     *
+     * @param listener The VetoableChangeListener.
+     * @see #removeVetoableChangeListener
+     **/
+    public void addVetoableChangeListener(VetoableChangeListener listener) {
         if (listener == null)
             throw new NullPointerException("listener");
         if (vetos_ == null) vetos_ = new VetoableChangeSupport(this); //@CRS
@@ -139,35 +137,83 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
     }
 
     /**
-    *  Returns the column span.  The default value is one.
-    *  @return The column span.
-    **/
-    public int getColumnSpan()
-    {
+     * Returns the column span.  The default value is one.
+     *
+     * @return The column span.
+     **/
+    public int getColumnSpan() {
         return colSpan_;
     }
 
     /**
-     *  Returns the <i>direction</i> of the text interpretation.
-     *  @return The direction of the text.
+     * Sets the column span.  The default value is one.
+     *
+     * @param span The column span.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setColumnSpan(int span) throws PropertyVetoException {
+        if (span <= 0)
+            throw new ExtendedIllegalArgumentException("span", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
+
+        //@CRS Integer oldSpan = new Integer(colSpan_);
+        //@CRS Integer newSpan = new Integer(span);
+        int oldSpan = colSpan_; //@CRS
+
+        if (vetos_ != null) vetos_.fireVetoableChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
+
+        colSpan_ = span;
+
+        if (changes_ != null) changes_.firePropertyChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
+    }
+
+    /**
+     * Returns the <i>direction</i> of the text interpretation.
+     *
+     * @return The direction of the text.
      **/
     public String getDirection()                               //$B1A
     {
         return dir_;
     }
 
+    /**
+     * Sets the <i>direction</i> of the text interpretation.
+     *
+     * @param dir The direction.  One of the following constants
+     *            defined in HTMLConstants:  LTR or RTL.
+     * @throws PropertyVetoException If a change is vetoed.
+     * @see com.ibm.as400.util.html.HTMLConstants
+     **/
+    public void setDirection(String dir)                                     //$B1A
+            throws PropertyVetoException {
+        if (dir == null)
+            throw new NullPointerException("dir");
+
+        // If direction is not one of the valid HTMLConstants, throw an exception.
+        if (!(dir.equals(HTMLConstants.LTR)) && !(dir.equals(HTMLConstants.RTL))) {
+            throw new ExtendedIllegalArgumentException("dir", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+        }
+
+        String old = dir_;
+        if (vetos_ != null) vetos_.fireVetoableChange("dir", old, dir); //@CRS
+
+        dir_ = dir;
+
+        if (changes_ != null) changes_.firePropertyChange("dir", old, dir); //@CRS
+    }
 
     /**
-    *  Returns the direction attribute tag.
-    *  @return The direction tag.
-    **/
+     * Returns the direction attribute tag.
+     *
+     * @return The direction tag.
+     **/
     String getDirectionAttributeTag()                                                 //$B1A
     {
-        if(useFO_ )                                                                      //@D1A
+        if (useFO_)                                                                      //@D1A
         {                                                                                //@D1A
-            if((dir_ != null) && (dir_.length()>0))                                      //@D1A
+            if ((dir_ != null) && (dir_.length() > 0))                                      //@D1A
             {                                                                            //@D1A
-                if(dir_.equals(HTMLConstants.RTL))                                       //@D1A
+                if (dir_.equals(HTMLConstants.RTL))                                       //@D1A
                     return " writing-mode='rl'";                                         //@D1A
                 else                                                                     //@D1A
                     return " writing-mode='lr'";                                         //@D1A
@@ -184,65 +230,163 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
             else
                 return "";
         }                                                                                //@D1A
-        
+
     }
 
-
     /**
-    *  Returns the table cell element.
-    *  @return The cell element.
-    **/
-    public HTMLTagElement getElement()
-    {
+     * Returns the table cell element.
+     *
+     * @return The cell element.
+     **/
+    public HTMLTagElement getElement() {
         return element_;
     }
 
     /**
-    *  Returns the table cell end tag.
-    *  @return The end tag.
-    **/
-    String getEndTag()
-    {
-        if(!useFO_)        //@D1A
+     * Sets the table cell element.
+     *
+     * @param element The cell element.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setElement(String element) throws PropertyVetoException {
+        setElement(new HTMLText(element));
+    }
+
+    /**
+     * Sets the table cell element.
+     *
+     * @param element The cell element.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setElement(HTMLTagElement element) throws PropertyVetoException {
+        if (element == null)
+            throw new NullPointerException("element");
+
+        HTMLTagElement old = element_;
+        if (vetos_ != null) vetos_.fireVetoableChange("element", old, element); //@CRS
+
+        element_ = element;
+
+        if (changes_ != null) changes_.firePropertyChange("element", old, element); //@CRS
+    }
+
+    /**
+     * Returns the table cell end tag.
+     *
+     * @return The end tag.
+     **/
+    String getEndTag() {
+        if (!useFO_)        //@D1A
             return "</td>\n";
         else
             return "</fo:table-cell>\n"; // @D1A
     }
 
     /**
-    *  Returns the height relative to the table in pixels or percent.
-    *  @return The height.
-    **/
-    public int getHeight()
-    {
+     * Returns the height relative to the table in pixels or percent.
+     *
+     * @return The height.
+     **/
+    public int getHeight() {
         return height_;
     }
 
     /**
-    *  Returns the horizontal alignment.  The default value is LEFT.
-    *  @return The horizontal alignment.  One of the following constants
-    *  defined in HTMLConstants:  CENTER, LEFT, or RIGHT.
-    *  @see com.ibm.as400.util.html.HTMLConstants
-    **/
-    public String getHorizontalAlignment()
-    {
+     * Sets the height relative to the table.  The default unit is pixels.
+     * A table row can only have one height.
+     * If multiple cell heights are defined for different cells in the row, the outcome is browser
+     * dependent.
+     *
+     * @param height The height.
+     * @throws PropertyVetoException If the change is vetoed.
+     * @see #setHeightInPercent
+     **/
+    public void setHeight(int height) throws PropertyVetoException {
+        if (height <= 0)
+            throw new ExtendedIllegalArgumentException("height", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
+
+        //@CRS Integer oldHeight = new Integer(height_);
+        //@CRS Integer newHeight = new Integer(height);
+        int oldHeight = height_;
+
+        if (vetos_ != null) vetos_.fireVetoableChange("height", new Integer(oldHeight), new Integer(height)); //@CRS
+
+        height_ = height;
+
+        if (changes_ != null) changes_.firePropertyChange("height", new Integer(oldHeight), new Integer(height)); //@CRS
+    }
+
+    /**
+     * Returns the horizontal alignment.  The default value is LEFT.
+     *
+     * @return The horizontal alignment.  One of the following constants
+     * defined in HTMLConstants:  CENTER, LEFT, or RIGHT.
+     * @see com.ibm.as400.util.html.HTMLConstants
+     **/
+    public String getHorizontalAlignment() {
         return align_;
     }
 
     /**
-     *  Returns the <i>language</i> of the table cell.
-     *  @return The language of the table cell.
+     * Sets the horizontal alignment.  The default value is LEFT.
+     *
+     * @param alignment The horizontal alignment.  One of the following constants
+     *                  defined in HTMLConstants:  CENTER, LEFT, or RIGHT.
+     * @throws PropertyVetoException If the change is vetoed.
+     * @see com.ibm.as400.util.html.HTMLConstants
+     **/
+    public void setHorizontalAlignment(String alignment) throws PropertyVetoException {
+        if (alignment == null) {
+            throw new NullPointerException("alignment");
+        } else if (alignment.equalsIgnoreCase(LEFT) ||
+                alignment.equalsIgnoreCase(CENTER) ||
+                alignment.equalsIgnoreCase(RIGHT)) {
+            String old = align_;
+            if (vetos_ != null) vetos_.fireVetoableChange("alignment", old, alignment); //@CRS
+
+            align_ = alignment;
+
+            if (changes_ != null) changes_.firePropertyChange("alignment", old, alignment); //@CRS
+        } else {
+            throw new ExtendedIllegalArgumentException("alignment", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+        }
+    }
+
+    /**
+     * Returns the <i>language</i> of the table cell.
+     *
+     * @return The language of the table cell.
      **/
     public String getLanguage()                                //$B1A
     {
         return lang_;
     }
 
+    /**
+     * Sets the <i>language</i> of the table cell.
+     *
+     * @param lang The language.  Example language tags include:
+     *             en and en-US.
+     * @throws PropertyVetoException If a change is vetoed.
+     **/
+    public void setLanguage(String lang)                                      //$B1A
+            throws PropertyVetoException {
+        if (lang == null)
+            throw new NullPointerException("lang");
+
+        String old = lang_;
+        if (vetos_ != null) vetos_.fireVetoableChange("lang", old, lang); //@CRS
+
+        lang_ = lang;
+
+        if (changes_ != null) changes_.firePropertyChange("lang", old, lang); //@CRS
+    }
 
     /**
-    *  Returns the language attribute tag.                                            
-    *  @return The language tag.                                                      
-    **/                                                                               
+     * Returns the language attribute tag.
+     *
+     * @return The language tag.
+     **/
     String getLanguageAttributeTag()                                                  //$B1A
     {
         //@C1D
@@ -254,64 +398,83 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
     }
 
     /**
-    *  Returns the row span.  The default value is one.
-    *  @return The row span.
-    **/
-    public int getRowSpan()
-    {
+     * Returns the row span.  The default value is one.
+     *
+     * @return The row span.
+     **/
+    public int getRowSpan() {
         return rowSpan_;
     }
 
     /**
-    *  Returns the table cell start tag.
-    *  @return The start tag.
-    **/
-    String getStartTag()
-    {
-        if(!useFO_)        //@D1A
-            return "<td";
-        else                       //must indicate border and padding for each cell     //@D1A
-            return "<fo:table-cell border-style='solid' border-width='" + borderWidth_ + "px' padding='" + cellPadding_ +"px'";    //@D1A
+     * Sets the row span.  The default value is one.
+     *
+     * @param span The row span.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setRowSpan(int span) throws PropertyVetoException {
+        if (span <= 0)
+            throw new ExtendedIllegalArgumentException("span", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
+
+        //@CRS Integer oldSpan = new Integer(rowSpan_);
+        //@CRS Integer newSpan = new Integer(span);
+        int oldSpan = rowSpan_; //@CRS
+
+        if (vetos_ != null) vetos_.fireVetoableChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
+
+        rowSpan_ = span;
+
+        if (changes_ != null) changes_.firePropertyChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
     }
 
     /**
-    *  Returns the table cell attribute tag.
-    *  @return The cell attribute tag.
-    **/
-    String getAttributeTag()
-    {
+     * Returns the table cell start tag.
+     *
+     * @return The start tag.
+     **/
+    String getStartTag() {
+        if (!useFO_)        //@D1A
+            return "<td";
+        else                       //must indicate border and padding for each cell     //@D1A
+            return "<fo:table-cell border-style='solid' border-width='" + borderWidth_ + "px' padding='" + cellPadding_ + "px'";    //@D1A
+    }
+
+    /**
+     * Returns the table cell attribute tag.
+     *
+     * @return The cell attribute tag.
+     **/
+    String getAttributeTag() {
         //@C1D
 
         StringBuffer tag = new StringBuffer();
 
         // Add the alignment attributes.
-        if (align_ != null)
-        {
-            if(!useFO_ )                //@D1A
+        if (align_ != null) {
+            if (!useFO_)                //@D1A
             {
                 tag.append(" align=\"");
                 tag.append(align_);
                 tag.append("\"");
-            }
-            else                                            //@D1A
+            } else                                            //@D1A
             {                                               //@D1A
                 tag.append(" text-align='");                //@D1A
-                if(align_.equalsIgnoreCase("center"))       //@D1A
+                if (align_.equalsIgnoreCase("center"))       //@D1A
                     tag.append("center");                   //@D1A
-                else if(align_.equalsIgnoreCase("left"))    //@D1A
+                else if (align_.equalsIgnoreCase("left"))    //@D1A
                     tag.append("start");                    //@D1A
-                else if(align_.equalsIgnoreCase("right"))   //@D1A
+                else if (align_.equalsIgnoreCase("right"))   //@D1A
                     tag.append("end");                      //@D1A
                 tag.append("'");                            //@D1A
             }                                               //@D1A
         }
-        if(!useFO_ )            //@D1A
+        if (!useFO_)            //@D1A
         {
-            
+
             if (vAlign_ != null)    //@D1A
             {
                 tag.append(" valign=\"");
-                tag.append(vAlign_ );
+                tag.append(vAlign_);
                 tag.append("\"");
             }
 
@@ -356,18 +519,15 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
             tag.append(getLanguageAttributeTag());    //$B1A
             tag.append(getDirectionAttributeTag());   //$B1A
             tag.append(getAttributeString());         // @Z1A
-        }
-        else                 //@D1A
+        } else                 //@D1A
         {
             // Add the span attributes.
-            if (rowSpan_ > 1)   
-            {
+            if (rowSpan_ > 1) {
                 tag.append(" number-rows-spanned='");
                 tag.append(rowSpan_);
                 tag.append("'");
             }
-            if (colSpan_ > 1)  
-            {
+            if (colSpan_ > 1) {
                 tag.append(" number-columns-spanned='");
                 tag.append(colSpan_);
                 tag.append("'");
@@ -382,8 +542,7 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
                     tag.append("%");
                 tag.append("'");
             }
-            if (width_ > 0)     
-            {
+            if (width_ > 0) {
                 tag.append(" width='");
                 tag.append(width_);
 
@@ -399,67 +558,69 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
     }
 
     /**
-    *  Returns the table cell tag.
-    *  @return The cell tag.
-    **/
-    public String getTag()
-    {
+     * Returns the table cell tag.
+     *
+     * @return The cell tag.
+     **/
+    public String getTag() {
         return getTag(element_);
     }
 
     /**
-    *  Returns the XSL-FO table cell tag.
-    *  @return The cell tag.
-    **/
+     * Returns the XSL-FO table cell tag.
+     *
+     * @return The cell tag.
+     **/
     public String getFOTag()        //@D1A
     {
         return getFOTag(element_);
     }
 
     /**
-    *  Returns the XSL-FO table cell tag with the specified <i>element</i>.
-    *  It does not change the cell object's element attribute.
-    *  The valign, wrap and laguage attributes are not supported in XSL-FO.
-    *  @param element The table cell element.
-    *  @return The XSL-FO cell tag.
-    **/
+     * Returns the XSL-FO table cell tag with the specified <i>element</i>.
+     * It does not change the cell object's element attribute.
+     * The valign, wrap and laguage attributes are not supported in XSL-FO.
+     *
+     * @param element The table cell element.
+     * @return The XSL-FO cell tag.
+     **/
     public String getFOTag(HTMLTagElement element)                      //@D1A
     {
         //Save current state of useFO_
-        boolean useFO = useFO_;                                         
+        boolean useFO = useFO_;
 
         setUseFO(true);
-        
+
         // Verify that the element is set.
         if (element == null)
             throw new NullPointerException("element");
 
         StringBuffer tag = new StringBuffer(getStartTag());
         tag.append(getAttributeTag());
-        tag.append("<fo:block-container");                         
-        tag.append(getDirectionAttributeTag());                    
-        tag.append(">\n");                                        
-        tag.append(element.getFOTag());                            
-        tag.append("</fo:block-container>\n");                      
+        tag.append("<fo:block-container");
+        tag.append(getDirectionAttributeTag());
+        tag.append(">\n");
+        tag.append(element.getFOTag());
+        tag.append("</fo:block-container>\n");
         tag.append(getEndTag());
 
-        //Set useFO_ to previous state                                                 
-        setUseFO(useFO);                                           
+        //Set useFO_ to previous state
+        setUseFO(useFO);
 
-        return tag.toString();                                          
+        return tag.toString();
     }
 
     /**
-    *  Returns the table cell tag with the specified <i>element</i>.
-    *  It does not change the cell object's element attribute.
-    *  @param element The table cell element.
-    *  @return The cell tag.
-    **/
-    public String getTag(HTMLTagElement element)
-    {
+     * Returns the table cell tag with the specified <i>element</i>.
+     * It does not change the cell object's element attribute.
+     *
+     * @param element The table cell element.
+     * @return The cell tag.
+     **/
+    public String getTag(HTMLTagElement element) {
         //@C1D
 
-        if(useFO_)                      //@D1A
+        if (useFO_)                      //@D1A
             return getFOTag(element);          //@D1A
 
         // Verify that the element is set.
@@ -475,398 +636,61 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
     }
 
     /**
-    *  Returns the vertical alignment.
-    *  @return The vertical alignment.  One of the following constants
-    *  defined in HTMLConstants:  BASELINE, BOTTOM, MIDDLE, or TOP.
-    *  @see com.ibm.as400.util.html.HTMLConstants
-    **/
-    public String getVerticalAlignment()
-    {
+     * Returns the vertical alignment.
+     *
+     * @return The vertical alignment.  One of the following constants
+     * defined in HTMLConstants:  BASELINE, BOTTOM, MIDDLE, or TOP.
+     * @see com.ibm.as400.util.html.HTMLConstants
+     **/
+    public String getVerticalAlignment() {
         return vAlign_;
     }
 
     /**
-    *  Returns the width relative to the table in pixels or percent.
-    *  @return The width.
-    **/
-    public int getWidth()
-    {
-        return width_;
-    }
-
-
-
-    /**
-    *  Indicates if the height is in percent or pixels.
-    *  The default value is false.
-    *  @return true if percent; pixels otherwise.
-    **/
-    public boolean isHeightInPercent()
-    {
-        return heightPercent_;
-    }
-
-    /**
-    *  Returns if Formatting Object tags are outputted.
-    *  The default value is false.
-    *  @return true if the output generated is an XSL formatting object, false if the output generated is HTML.
-    **/
-    public boolean isUseFO()
-    {
-        //@D1A
-        return useFO_;
-    }
-
-    /**
-    *  Indicates if the width is in percent or pixels.
-    *  The default value is false.
-    *  @return true if percent; pixels otherwise.
-    **/
-    public boolean isWidthInPercent()
-    {
-        return widthPercent_;
-    }
-
-    /**
-    *  Indicates if the cell data will use normal HTML linebreaking conventions.
-    *  The default value is true.
-    *  @return true if normal HTML linebreaking is used; false otherwise.
-    **/
-    public boolean isWrap()
-    {
-        return wrap_;
-    }
-
-    /**
-    *  Deserializes and initializes transient data.
-    **/
-    private void readObject(java.io.ObjectInputStream in)         
-    throws java.io.IOException, ClassNotFoundException
-    {
-        in.defaultReadObject();
-        //@CRS changes_ = new PropertyChangeSupport(this);
-        //@CRS vetos_ = new VetoableChangeSupport(this);
-    }
-
-
-    /**
-    *  Removes the VetoableChangeListener from the internal list.
-    *  If the VetoableChangeListener is not on the list, nothing is done.
-    *  @see #addVetoableChangeListener
-    *  @param listener The VetoableChangeListener.
-    **/
-    public void removeVetoableChangeListener(VetoableChangeListener listener)
-    {
-        if (listener == null)
-            throw new NullPointerException("listener");
-        if (vetos_ != null) vetos_.removeVetoableChangeListener(listener); //@CRS
-    }
-
-    /**
-    *  Sets the column span.  The default value is one.
-    *  @param span The column span.
-    *  @exception PropertyVetoException If the change is vetoed.
-    **/
-    public void setColumnSpan(int span) throws PropertyVetoException
-    {
-        if (span <= 0)
-            throw new ExtendedIllegalArgumentException("span", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
-
-        //@CRS Integer oldSpan = new Integer(colSpan_);
-        //@CRS Integer newSpan = new Integer(span);
-        int oldSpan = colSpan_; //@CRS
-
-        if (vetos_ != null) vetos_.fireVetoableChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
-
-        colSpan_ = span;
-
-        if (changes_ != null) changes_.firePropertyChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
-    }
-
-    /**
-     *  Sets the <i>direction</i> of the text interpretation.
-     *  @param dir The direction.  One of the following constants
-     *  defined in HTMLConstants:  LTR or RTL.
+     * Sets the vertical alignment.
      *
-     *  @see com.ibm.as400.util.html.HTMLConstants
-     *
-     *  @exception PropertyVetoException If a change is vetoed.
+     * @param alignment The vertical alignment.  One of the following constants
+     *                  defined in HTMLConstants:  BASELINE, BOTTOM, MIDDLE, or TOP.
+     * @throws PropertyVetoException If the change is vetoed.
+     * @see com.ibm.as400.util.html.HTMLConstants
      **/
-    public void setDirection(String dir)                                     //$B1A
-    throws PropertyVetoException
-    {   
-        if (dir == null)
-            throw new NullPointerException("dir");
-
-        // If direction is not one of the valid HTMLConstants, throw an exception.
-        if ( !(dir.equals(HTMLConstants.LTR))  && !(dir.equals(HTMLConstants.RTL)) )
-        {
-            throw new ExtendedIllegalArgumentException("dir", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
-
-        String old = dir_;
-        if (vetos_ != null) vetos_.fireVetoableChange("dir", old, dir ); //@CRS
-
-        dir_ = dir;
-
-        if (changes_ != null) changes_.firePropertyChange("dir", old, dir ); //@CRS
-    }
-
-    /**
-    *  Sets the table cell element.
-    *  @param element The cell element.
-    *  @exception PropertyVetoException If the change is vetoed.
-    **/
-    public void setElement(String element) throws PropertyVetoException
-    {
-        setElement(new HTMLText(element));
-    }
-
-    /**
-    *  Sets the table cell element.
-    *  @param element The cell element.
-    *  @exception PropertyVetoException If the change is vetoed.
-    **/
-    public void setElement(HTMLTagElement element) throws PropertyVetoException
-    {
-        if (element == null)
-            throw new NullPointerException("element");
-
-        HTMLTagElement old = element_;
-        if (vetos_ != null) vetos_.fireVetoableChange("element", old, element ); //@CRS
-
-        element_ = element; 
-
-        if (changes_ != null) changes_.firePropertyChange("element", old, element ); //@CRS
-    }
-
-    /**
-    *  Sets the height relative to the table.  The default unit is pixels.
-    *  A table row can only have one height.
-    *  If multiple cell heights are defined for different cells in the row, the outcome is browser
-    *  dependent.
-    *  @param height The height.
-    *  @exception PropertyVetoException If the change is vetoed.
-    *  @see #setHeightInPercent
-    **/
-    public void setHeight(int height) throws PropertyVetoException
-    {
-        if (height <= 0)
-            throw new ExtendedIllegalArgumentException("height", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
-
-        //@CRS Integer oldHeight = new Integer(height_);
-        //@CRS Integer newHeight = new Integer(height);
-        int oldHeight = height_;
-
-        if (vetos_ != null) vetos_.fireVetoableChange("height", new Integer(oldHeight), new Integer(height)); //@CRS
-
-        height_ = height;
-
-        if (changes_ != null) changes_.firePropertyChange("height", new Integer(oldHeight), new Integer(height)); //@CRS
-    }
-
-    /**
-    *  Sets the height relative to the table in pixels or percent.
-    *  A table row can only have one height.
-    *  If multiple cell heights are defined for different cells in the row, the outcome is browser dependent.
-    *  @param height The height.
-    *  @param heightInPercent true if unit is percent; false if pixels.
-    *  @exception PropertyVetoException If the change is vetoed.
-    **/
-    public void setHeight(int height, boolean heightInPercent) throws PropertyVetoException
-    {
-        int oldHeight = height_;
-
-        setHeight(height);
-
-        try
-        {
-            setHeightInPercent(heightInPercent);
-        }
-        catch (PropertyVetoException e)
-        {
-            // Restore the original height.
-            height_ = oldHeight;
-            throw new PropertyVetoException("heightInPercent", e.getPropertyChangeEvent());
-        }
-    }
-
-    /**
-    *  Sets the height unit in percent or pixels.  The default is false.
-    *  @param heightInPercent true if unit is percent; false if pixels.
-    *  @exception PropertyVetoException If the change is vetoed.
-    *  @see #setHeight
-    **/
-    public void setHeightInPercent(boolean heightInPercent) throws PropertyVetoException
-    {
-        //@CRS Boolean oldHeight = new Boolean(heightPercent_);
-        //@CRS Boolean newHeight = new Boolean(heightInPercent);
-      boolean oldHeight = heightPercent_; //@CRS
-
-        if (vetos_ != null) vetos_.fireVetoableChange("heightInPercent", new Boolean(oldHeight), new Boolean(heightInPercent)); //@CRS
-
-        heightPercent_ = heightInPercent;
-
-        if (changes_ != null) changes_.firePropertyChange("heightInPercent", new Boolean(oldHeight), new Boolean(heightInPercent)); //@CRS
-    }
-
-    /**
-    *  Sets the horizontal alignment.  The default value is LEFT.
-    *  @param alignment The horizontal alignment.  One of the following constants
-    *  defined in HTMLConstants:  CENTER, LEFT, or RIGHT.
-    *  @exception PropertyVetoException If the change is vetoed.
-    *  @see com.ibm.as400.util.html.HTMLConstants
-    **/
-    public void setHorizontalAlignment(String alignment) throws PropertyVetoException
-    {
-        if (alignment == null)
-        {
+    public void setVerticalAlignment(String alignment) throws PropertyVetoException {
+        if (alignment == null) {
             throw new NullPointerException("alignment");
-        }
-        else if (alignment.equalsIgnoreCase(LEFT) || 
-                 alignment.equalsIgnoreCase(CENTER) || 
-                 alignment.equalsIgnoreCase(RIGHT))
-        {
-            String old = align_;
-            if (vetos_ != null) vetos_.fireVetoableChange("alignment", old, alignment ); //@CRS
-
-            align_ = alignment;
-
-            if (changes_ != null) changes_.firePropertyChange("alignment", old, alignment ); //@CRS
-        }
-        else
-        {
-            throw new ExtendedIllegalArgumentException("alignment", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
-    }
-
-    /**
-     *  Sets the <i>language</i> of the table cell.
-     *  @param lang The language.  Example language tags include:
-     *  en and en-US.
-     *
-     *  @exception PropertyVetoException If a change is vetoed.
-     **/
-    public void setLanguage(String lang)                                      //$B1A
-    throws PropertyVetoException
-    {   
-        if (lang == null)
-            throw new NullPointerException("lang");
-
-        String old = lang_;
-        if (vetos_ != null) vetos_.fireVetoableChange("lang", old, lang ); //@CRS
-
-        lang_ = lang;
-
-        if (changes_ != null) changes_.firePropertyChange("lang", old, lang ); //@CRS
-    }
-
-    /**
-    *  Sets the row span.  The default value is one.
-    *  @param span The row span.
-    *  @exception PropertyVetoException If the change is vetoed.
-    **/
-    public void setRowSpan(int span) throws PropertyVetoException
-    {
-        if (span <= 0)
-            throw new ExtendedIllegalArgumentException("span", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
-
-        //@CRS Integer oldSpan = new Integer(rowSpan_);
-        //@CRS Integer newSpan = new Integer(span);
-        int oldSpan = rowSpan_; //@CRS
-
-        if (vetos_ != null) vetos_.fireVetoableChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
-
-        rowSpan_ = span;
-
-        if (changes_ != null) changes_.firePropertyChange("span", new Integer(oldSpan), new Integer(span)); //@CRS
-    }
-
-    /** 
-    * Sets if Formatting Object tags should be used.
-    *  The default value is false.
-    * @param useFO - true if output generated is a XSL formatting object, false if the output generated is HTML. 
-    **/
-    public void setUseFO(boolean useFO)                // @D1A
-    {
-        boolean old = useFO_;
-
-        useFO_ = useFO;
-
-        if (changes_ != null) changes_.firePropertyChange("useFO", old, useFO );
-    }
-
-    /**
-    *  Sets the border width in pixels.  A value of zero indicates no border.
-    *  The default value is one.
-    *  @param borderWidth The border width.
-    **/
-    public void setBorderWidth(int borderWidth)                // @D1A
-    {
-        Integer oldWidth = new Integer(borderWidth_);
-        Integer newWidth = new Integer(borderWidth);
-
-        borderWidth_ = borderWidth;
-
-        if (changes_ != null) changes_.firePropertyChange("borderWidth", oldWidth, newWidth);
-    }
-
-    /**
-    *  Sets the global table cell padding.  The cell padding is the spacing between
-    *  data in a table cell and the border of the cell.
-    *  @param cellPadding The cell padding.
-    **/
-    public void setCellPadding(int cellPadding)         // @D1A
-    {
-        Integer oldPadding = new Integer(cellPadding_);
-        Integer newPadding = new Integer(cellPadding);
-
-        cellPadding_ = cellPadding;
-
-        if (changes_ != null) changes_.firePropertyChange("cellPadding", oldPadding, newPadding);
-    }
-
-    /**
-    *  Sets the vertical alignment.
-    *  @param alignment The vertical alignment.  One of the following constants
-    *  defined in HTMLConstants:  BASELINE, BOTTOM, MIDDLE, or TOP.
-    *  @exception PropertyVetoException If the change is vetoed.
-    *  @see com.ibm.as400.util.html.HTMLConstants
-    **/
-    public void setVerticalAlignment(String alignment) throws PropertyVetoException
-    {
-        if (alignment == null)
-        {
-            throw new NullPointerException("alignment");
-        }
-        else if (alignment.equalsIgnoreCase(TOP) || 
-                 alignment.equalsIgnoreCase(MIDDLE) || 
-                 alignment.equalsIgnoreCase(BOTTOM) ||
-                 alignment.equalsIgnoreCase(BASELINE))
-        {
+        } else if (alignment.equalsIgnoreCase(TOP) ||
+                alignment.equalsIgnoreCase(MIDDLE) ||
+                alignment.equalsIgnoreCase(BOTTOM) ||
+                alignment.equalsIgnoreCase(BASELINE)) {
             String old = vAlign_;
-            if (vetos_ != null) vetos_.fireVetoableChange("alignment", old, alignment ); //@CRS
+            if (vetos_ != null) vetos_.fireVetoableChange("alignment", old, alignment); //@CRS
 
             vAlign_ = alignment;
 
-            if (changes_ != null) changes_.firePropertyChange("alignment", old, alignment ); //@CRS
-        }
-        else
-        {
+            if (changes_ != null) changes_.firePropertyChange("alignment", old, alignment); //@CRS
+        } else {
             throw new ExtendedIllegalArgumentException("alignment", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
         }
     }
 
     /**
-    *  Sets the width relative to the table.  The default width unit is pixels.
-    *  A table column can only have one width and the width used is usually the widest.
-    *  If multiple cell widths are defined for different cells in the column, the outcome is browser dependent.
-    *  @param width The width.
-    *  @exception PropertyVetoException If the change is vetoed.
-    *  @see #setWidthInPercent
-    **/
-    public void setWidth(int width) throws PropertyVetoException
-    {
+     * Returns the width relative to the table in pixels or percent.
+     *
+     * @return The width.
+     **/
+    public int getWidth() {
+        return width_;
+    }
+
+    /**
+     * Sets the width relative to the table.  The default width unit is pixels.
+     * A table column can only have one width and the width used is usually the widest.
+     * If multiple cell widths are defined for different cells in the column, the outcome is browser dependent.
+     *
+     * @param width The width.
+     * @throws PropertyVetoException If the change is vetoed.
+     * @see #setWidthInPercent
+     **/
+    public void setWidth(int width) throws PropertyVetoException {
         if (width <= 0)
             throw new ExtendedIllegalArgumentException("width", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
 
@@ -882,58 +706,111 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
     }
 
     /**
-    *  Sets the width relative to the table in percent or pixels.
-    *  A table column can only have one width and the width used is usually the widest.
-    *  If multiple cell widths are defined for different cells in the column, the outcome
-    *  is browser dependent.
-    *  @param width The width.
-    *  @param widthInPercent true if unit is percent; false if pixels.
-    *  @exception PropertyVetoException If the change is vetoed.
-    **/
-    public void setWidth(int width, boolean widthInPercent) throws PropertyVetoException
-    {
-        int oldWidth = width_;
-
-        setWidth(width);
-
-        try
-        {
-            setWidthInPercent(widthInPercent);
-        }
-        catch (PropertyVetoException e)
-        {
-            width_ = oldWidth;
-            throw new PropertyVetoException("widthInPercent", e.getPropertyChangeEvent());
-        }
+     * Indicates if the height is in percent or pixels.
+     * The default value is false.
+     *
+     * @return true if percent; pixels otherwise.
+     **/
+    public boolean isHeightInPercent() {
+        return heightPercent_;
     }
 
     /**
-    *  Sets the width unit in percent or pixels.  The default is false.
-    *  @param widthInPercent true if unit is percent; false if pixels.
-    *  @exception PropertyVetoException If the change is vetoed.
-    *  @see #setWidth
-    **/
-    public void setWidthInPercent(boolean widthInPercent) throws PropertyVetoException
+     * Sets the height unit in percent or pixels.  The default is false.
+     *
+     * @param heightInPercent true if unit is percent; false if pixels.
+     * @throws PropertyVetoException If the change is vetoed.
+     * @see #setHeight
+     **/
+    public void setHeightInPercent(boolean heightInPercent) throws PropertyVetoException {
+        //@CRS Boolean oldHeight = new Boolean(heightPercent_);
+        //@CRS Boolean newHeight = new Boolean(heightInPercent);
+        boolean oldHeight = heightPercent_; //@CRS
+
+        if (vetos_ != null)
+            vetos_.fireVetoableChange("heightInPercent", new Boolean(oldHeight), new Boolean(heightInPercent)); //@CRS
+
+        heightPercent_ = heightInPercent;
+
+        if (changes_ != null)
+            changes_.firePropertyChange("heightInPercent", new Boolean(oldHeight), new Boolean(heightInPercent)); //@CRS
+    }
+
+    /**
+     * Returns if Formatting Object tags are outputted.
+     * The default value is false.
+     *
+     * @return true if the output generated is an XSL formatting object, false if the output generated is HTML.
+     **/
+    public boolean isUseFO() {
+        //@D1A
+        return useFO_;
+    }
+
+    /**
+     * Sets if Formatting Object tags should be used.
+     * The default value is false.
+     *
+     * @param useFO - true if output generated is a XSL formatting object, false if the output generated is HTML.
+     **/
+    public void setUseFO(boolean useFO)                // @D1A
     {
+        boolean old = useFO_;
+
+        useFO_ = useFO;
+
+        if (changes_ != null) changes_.firePropertyChange("useFO", old, useFO);
+    }
+
+    /**
+     * Indicates if the width is in percent or pixels.
+     * The default value is false.
+     *
+     * @return true if percent; pixels otherwise.
+     **/
+    public boolean isWidthInPercent() {
+        return widthPercent_;
+    }
+
+    /**
+     * Sets the width unit in percent or pixels.  The default is false.
+     *
+     * @param widthInPercent true if unit is percent; false if pixels.
+     * @throws PropertyVetoException If the change is vetoed.
+     * @see #setWidth
+     **/
+    public void setWidthInPercent(boolean widthInPercent) throws PropertyVetoException {
         //@CRS Boolean oldWidth = new Boolean(widthPercent_);
         //@CRS Boolean newWidth = new Boolean(widthInPercent);
-      boolean oldWidth = widthPercent_; //@CRS
+        boolean oldWidth = widthPercent_; //@CRS
 
-        if (vetos_ != null) vetos_.fireVetoableChange("widthInPercent", new Boolean(oldWidth), new Boolean(widthInPercent)); //@CRS
+        if (vetos_ != null)
+            vetos_.fireVetoableChange("widthInPercent", new Boolean(oldWidth), new Boolean(widthInPercent)); //@CRS
 
         widthPercent_ = widthInPercent;
 
-        if (changes_ != null) changes_.firePropertyChange("widthInPercent", new Boolean(oldWidth), new Boolean(widthInPercent)); //@CRS
+        if (changes_ != null)
+            changes_.firePropertyChange("widthInPercent", new Boolean(oldWidth), new Boolean(widthInPercent)); //@CRS
     }
 
     /**
-    *  Sets if the cell data will use normal HTML linebreaking conventions.
-    *  The default value is true.
-    *  @param wrap true if normal HTML linebreaking is used; false otherwise.
-    *  @exception PropertyVetoException If the change is vetoed.
-    **/
-    public void setWrap(boolean wrap) throws PropertyVetoException
-    {
+     * Indicates if the cell data will use normal HTML linebreaking conventions.
+     * The default value is true.
+     *
+     * @return true if normal HTML linebreaking is used; false otherwise.
+     **/
+    public boolean isWrap() {
+        return wrap_;
+    }
+
+    /**
+     * Sets if the cell data will use normal HTML linebreaking conventions.
+     * The default value is true.
+     *
+     * @param wrap true if normal HTML linebreaking is used; false otherwise.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setWrap(boolean wrap) throws PropertyVetoException {
         //@CRS Boolean oldWrap = new Boolean(wrap_);
         //@CRS Boolean newWrap = new Boolean(wrap);
         boolean oldWrap = wrap_; //@CRS
@@ -946,11 +823,112 @@ public class HTMLTableCell extends HTMLTagAttributes implements HTMLConstants, S
     }
 
     /**
-    *  Returns the HTML table cell tag.
-    *  @return The cell tag.
-    **/
-    public String toString()
+     * Deserializes and initializes transient data.
+     **/
+    private void readObject(java.io.ObjectInputStream in)
+            throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        //@CRS changes_ = new PropertyChangeSupport(this);
+        //@CRS vetos_ = new VetoableChangeSupport(this);
+    }
+
+    /**
+     * Removes the VetoableChangeListener from the internal list.
+     * If the VetoableChangeListener is not on the list, nothing is done.
+     *
+     * @param listener The VetoableChangeListener.
+     * @see #addVetoableChangeListener
+     **/
+    public void removeVetoableChangeListener(VetoableChangeListener listener) {
+        if (listener == null)
+            throw new NullPointerException("listener");
+        if (vetos_ != null) vetos_.removeVetoableChangeListener(listener); //@CRS
+    }
+
+    /**
+     * Sets the height relative to the table in pixels or percent.
+     * A table row can only have one height.
+     * If multiple cell heights are defined for different cells in the row, the outcome is browser dependent.
+     *
+     * @param height          The height.
+     * @param heightInPercent true if unit is percent; false if pixels.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setHeight(int height, boolean heightInPercent) throws PropertyVetoException {
+        int oldHeight = height_;
+
+        setHeight(height);
+
+        try {
+            setHeightInPercent(heightInPercent);
+        } catch (PropertyVetoException e) {
+            // Restore the original height.
+            height_ = oldHeight;
+            throw new PropertyVetoException("heightInPercent", e.getPropertyChangeEvent());
+        }
+    }
+
+    /**
+     * Sets the border width in pixels.  A value of zero indicates no border.
+     * The default value is one.
+     *
+     * @param borderWidth The border width.
+     **/
+    public void setBorderWidth(int borderWidth)                // @D1A
     {
+        Integer oldWidth = new Integer(borderWidth_);
+        Integer newWidth = new Integer(borderWidth);
+
+        borderWidth_ = borderWidth;
+
+        if (changes_ != null) changes_.firePropertyChange("borderWidth", oldWidth, newWidth);
+    }
+
+    /**
+     * Sets the global table cell padding.  The cell padding is the spacing between
+     * data in a table cell and the border of the cell.
+     *
+     * @param cellPadding The cell padding.
+     **/
+    public void setCellPadding(int cellPadding)         // @D1A
+    {
+        Integer oldPadding = new Integer(cellPadding_);
+        Integer newPadding = new Integer(cellPadding);
+
+        cellPadding_ = cellPadding;
+
+        if (changes_ != null) changes_.firePropertyChange("cellPadding", oldPadding, newPadding);
+    }
+
+    /**
+     * Sets the width relative to the table in percent or pixels.
+     * A table column can only have one width and the width used is usually the widest.
+     * If multiple cell widths are defined for different cells in the column, the outcome
+     * is browser dependent.
+     *
+     * @param width          The width.
+     * @param widthInPercent true if unit is percent; false if pixels.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setWidth(int width, boolean widthInPercent) throws PropertyVetoException {
+        int oldWidth = width_;
+
+        setWidth(width);
+
+        try {
+            setWidthInPercent(widthInPercent);
+        } catch (PropertyVetoException e) {
+            width_ = oldWidth;
+            throw new PropertyVetoException("widthInPercent", e.getPropertyChangeEvent());
+        }
+    }
+
+    /**
+     * Returns the HTML table cell tag.
+     *
+     * @return The cell tag.
+     **/
+    public String toString() {
         return getTag();
     }
 }

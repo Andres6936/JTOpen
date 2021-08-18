@@ -16,50 +16,50 @@ package com.ibm.as400.access;
 import java.io.PrintStream;
 
 
-
 /**
-The Verbose class prints verbose output depending
-on the state of a flag.
-**/
-public class Verbose
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+ * The Verbose class prints verbose output depending
+ * on the state of a flag.
+ **/
+public class Verbose {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
-    private static PrintStream output_         = System.out;
-    private static boolean state_              = false;
+    private static PrintStream output_ = System.out;
+    private static boolean state_ = false;
 
 
-
-/**
-Prints text.
-
-@param text The text.
-**/
-    public static void forcePrintln (String text)
-    {
-        output_.println (text);
-        if (Trace.isTraceInformationOn ())
-            Trace.log (Trace.INFORMATION, text);
+    /**
+     * Prints text.
+     *
+     * @param text The text.
+     **/
+    public static void forcePrintln(String text) {
+        output_.println(text);
+        if (Trace.isTraceInformationOn())
+            Trace.log(Trace.INFORMATION, text);
     }
 
 
-
-/**
-Indicates if verbose output is printed.
-
-@return true if verbose output is printed; false otherwise.
-**/
-    public static boolean isVerbose ()
-    {
+    /**
+     * Indicates if verbose output is printed.
+     *
+     * @return true if verbose output is printed; false otherwise.
+     **/
+    public static boolean isVerbose() {
         return state_;
     }
 
+    /**
+     * Sets whether verbose output is printed.
+     *
+     * @param verbose true if verbose output is printed; false otherwise.
+     **/
+    public static void setVerbose(boolean verbose) {
+        state_ = verbose;
+    }
 
-
-    public static void println (Exception e)
-    {
+    public static void println(Exception e) {
         if (state_) {
             String text = e.getMessage();
             if (text == null)
@@ -68,32 +68,15 @@ Indicates if verbose output is printed.
         }
     }
 
-
-
-/**
-Prints text, if appropriate.
-
-@param text The text.
-**/
-    public static void println (String text)
-    {
+    /**
+     * Prints text, if appropriate.
+     *
+     * @param text The text.
+     **/
+    public static void println(String text) {
         if (state_)
-            forcePrintln (text);
+            forcePrintln(text);
     }
-
-
-
-/**
-Sets whether verbose output is printed.
-
-@param verbose true if verbose output is printed; false otherwise.
-**/
-    public static void setVerbose (boolean verbose)
-    {
-        state_ = verbose;
-    }
-
-
 
 
 }

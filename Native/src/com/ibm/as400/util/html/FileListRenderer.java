@@ -30,46 +30,45 @@ import javax.servlet.http.HttpServletRequest;
 
 
 /**
-*  The FileListRenderer class renders the name field for directories and files
-*  in a FileListElement.
-*  <P>
-*  If the behavior of the default FileListRenderer is not desired, subclass
-*  FileListRenderer and override the appropriate methods until the
-*  FileListElement achieves the desired behavior.
-*  <p>
-*  Subclassing FileListRenderer will allow your servlet to include/exclude
-*  or change the action of any directory or file in the FileListElement.
-*  For example, if a servlet did not want users to see any *.exe files,
-*  A subclass of FileListRenderer would be created and the new class
-*  would override the getFileName() method to figure out if the File object
-*  passed to it was a *.exe file, if it is, null could be returned, which
-*  would indicate that the file should not be displayed.
-*
-*  <P>Overriding the getRowData method will allow the addition
-*  of columns in the row data and also enable the reordering of the
-*  columns.
-*
-*  <P>
-*  This example creates an FileListElement object with a renderer:
-*  
-*  <PRE>
-*   // Create a FileListElement.
-*  FileListElement fileList = new FileListElement(sys, httpservletrequest);
-*  
-*  // Set the renderer specific to this servlet, which extends
-*  // FileListRenderer and overrides applicable methods.
-*  fileList.setRenderer(new myFileListRenderer(request));
-*  </PRE>
-**/
-public class FileListRenderer implements java.io.Serializable
-{
+ * The FileListRenderer class renders the name field for directories and files
+ * in a FileListElement.
+ * <p>
+ * If the behavior of the default FileListRenderer is not desired, subclass
+ * FileListRenderer and override the appropriate methods until the
+ * FileListElement achieves the desired behavior.
+ * <p>
+ * Subclassing FileListRenderer will allow your servlet to include/exclude
+ * or change the action of any directory or file in the FileListElement.
+ * For example, if a servlet did not want users to see any *.exe files,
+ * A subclass of FileListRenderer would be created and the new class
+ * would override the getFileName() method to figure out if the File object
+ * passed to it was a *.exe file, if it is, null could be returned, which
+ * would indicate that the file should not be displayed.
+ *
+ * <P>Overriding the getRowData method will allow the addition
+ * of columns in the row data and also enable the reordering of the
+ * columns.
+ *
+ * <p>
+ * This example creates an FileListElement object with a renderer:
+ *
+ * <PRE>
+ * // Create a FileListElement.
+ * FileListElement fileList = new FileListElement(sys, httpservletrequest);
+ * <p>
+ * // Set the renderer specific to this servlet, which extends
+ * // FileListRenderer and overrides applicable methods.
+ * fileList.setRenderer(new myFileListRenderer(request));
+ * </PRE>
+ **/
+public class FileListRenderer implements java.io.Serializable {
     private String uri_;
-    private String reqPath_;              
+    private String reqPath_;
     private StringBuffer sharePath_;            // @B1A
     private StringBuffer shareName_;            // @B1A
 
 
-    private SimpleDateFormat   formatter_ = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");  // @B4A
+    private SimpleDateFormat formatter_ = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");  // @B4A
 
     // Handles loading the appropriate resource bundle
     private static ResourceBundleLoader_h loader_;         // @A5A     //$B4A
@@ -79,13 +78,13 @@ public class FileListRenderer implements java.io.Serializable
     private static String size = loader_.getText("PROP_FLE_NAME_SIZE");                    // @A5A        //$B4A
     private static String type = loader_.getText("PROP_FLE_NAME_TYPE");                    // @A5A       //$B4A
     private static String modified = loader_.getText("PROP_FLE_NAME_MODIFIED");            // @A5A   //$B4A
+
     /**
-     *  Constructs a FileListRenderer with the specified <i>request</i>.
+     * Constructs a FileListRenderer with the specified <i>request</i>.
      *
-     *  @param request The Http servlet request.
+     * @param request The Http servlet request.
      **/
-    public FileListRenderer(HttpServletRequest request)
-    {
+    public FileListRenderer(HttpServletRequest request) {
         if (request == null)
             throw new NullPointerException("request");
 
@@ -117,20 +116,19 @@ public class FileListRenderer implements java.io.Serializable
 
         uri_ = uri_.substring(0, i + servletPath.length());            // @B3C
 
-        reqPath_ = request.getPathInfo();                             
+        reqPath_ = request.getPathInfo();
     }
 
 
     /**
-     *  Constructs a FileListRenderer with the specified <i>request</i>, NetServer <i>sharePath</i>,
-     *  and the NetServer <i>shareName</i>.
+     * Constructs a FileListRenderer with the specified <i>request</i>, NetServer <i>sharePath</i>,
+     * and the NetServer <i>shareName</i>.
      *
-     *  @param request   The Http servlet request.
-     *  @param shareName The NetServer share name.
-     *  @param sharePath The NetServer share path.
+     * @param request   The Http servlet request.
+     * @param shareName The NetServer share name.
+     * @param sharePath The NetServer share path.
      **/
-    public FileListRenderer(HttpServletRequest request, String shareName, String sharePath)
-    {
+    public FileListRenderer(HttpServletRequest request, String shareName, String sharePath) {
         this(request);
 
         if (sharePath == null)                                       // @B1A
@@ -152,16 +150,14 @@ public class FileListRenderer implements java.io.Serializable
 
 
     /**
-     *  Return the directory name string.  A link to the calling servlet with the
-     *  directory included in the path info by default.  If the directory should 
-     *  not be added to the FileListElement, a null string should be returned.
+     * Return the directory name string.  A link to the calling servlet with the
+     * directory included in the path info by default.  If the directory should
+     * not be added to the FileListElement, a null string should be returned.
      *
-     *  @param file The File.
-     *
-     *  @return The directory name string.
+     * @param file The File.
+     * @return The directory name string.
      **/
-    public String getDirectoryName(File file)
-    {
+    public String getDirectoryName(File file) {
         if (file == null)
             throw new NullPointerException("file");
 
@@ -169,8 +165,8 @@ public class FileListRenderer implements java.io.Serializable
 
         StringBuffer buffer = new StringBuffer("<a href=\"");
         buffer.append(uri_);
-        buffer.append(URLEncoder.encode(reqPath_.replace('\\','/'), false));        // @A1C
-        buffer.append(reqPath_.endsWith("/") ? "" :"/");
+        buffer.append(URLEncoder.encode(reqPath_.replace('\\', '/'), false));        // @A1C
+        buffer.append(reqPath_.endsWith("/") ? "" : "/");
         buffer.append(URLEncoder.encode(name, false));                           // @A1C
         buffer.append("\">");
         buffer.append(name);
@@ -181,16 +177,14 @@ public class FileListRenderer implements java.io.Serializable
 
 
     /**
-     *  Return the file name string.  The file name will be returned by default.  
-     *  If the file should not be displayed in the FileListElement, a null string 
-     *  should be returned.
+     * Return the file name string.  The file name will be returned by default.
+     * If the file should not be displayed in the FileListElement, a null string
+     * should be returned.
      *
-     *  @param file The File.
-     *
-     *  @return The file name string.
+     * @param file The File.
+     * @return The file name string.
      **/
-    public String getFileName(File file)
-    {
+    public String getFileName(File file) {
         if (file == null)
             throw new NullPointerException("file");
 
@@ -198,16 +192,14 @@ public class FileListRenderer implements java.io.Serializable
     }
 
     /**
-     *  Return the parent directory name string.  A link to the calling servlet with the 
-     *  parent directory included in the path info will be returned by default.  If the 
-     *  parent should not be display in the FileListElement, a null string should be returned.
+     * Return the parent directory name string.  A link to the calling servlet with the
+     * parent directory included in the path info will be returned by default.  If the
+     * parent should not be display in the FileListElement, a null string should be returned.
      *
-     *  @param file The File.
-     *
-     *  @return The parent name string.
+     * @param file The File.
+     * @return The parent name string.
      **/
-    public String getParentName(File file)
-    {
+    public String getParentName(File file) {
         if (file == null)
             throw new NullPointerException("file");
         String parent = file.getParent();
@@ -239,31 +231,28 @@ public class FileListRenderer implements java.io.Serializable
             StringBuffer buffer = new StringBuffer("<a href=\"");
             buffer.append(uri_);
             buffer.append(parent.startsWith("\\") || parent.startsWith("/") ? "" : "/");            // @A2A
-            buffer.append(parent!=null ? URLEncoder.encode(parent.replace('\\','/'), false) : "");  // @A1C
+            buffer.append(parent != null ? URLEncoder.encode(parent.replace('\\', '/'), false) : "");  // @A1C
             buffer.append("\">../ (Parent Directory)</a>");
 
             return buffer.toString();
-        }
-        else                                                                                        // @A2A
+        } else                                                                                        // @A2A
             return null;                                                                            // @A2A
     }
 
 
     // $B4A
+
     /**
-     *  Return the row data to be displayed in the FileListElement.
+     * Return the row data to be displayed in the FileListElement.
      *
-     *  @param file The File.
-     *  @param sort true if the elements are sorted; false otherwise.
-     *              The default is true.
-     *  @param collator The Collator.
-     *
-     *  @return ListRowData The row data.
-     *
-     *  @exception RowDataException If a row data error occurs.
+     * @param file     The File.
+     * @param sort     true if the elements are sorted; false otherwise.
+     *                 The default is true.
+     * @param collator The Collator.
+     * @return ListRowData The row data.
+     * @throws RowDataException If a row data error occurs.
      **/
-    public ListRowData getRowData(File file, boolean sort, Collator collator) throws RowDataException
-    {
+    public ListRowData getRowData(File file, boolean sort, Collator collator) throws RowDataException {
         // This method used to be in the FileListElement class but was moved into the 
         //  the rederer class so that the user could have more control over the columns
         //  by being able to add, and reorder the columns (just to name a few).
@@ -279,7 +268,7 @@ public class FileListRenderer implements java.io.Serializable
 
         metaData.setColumnName(2, "Type");
         metaData.setColumnLabel(2, type);                                       // @A5C
-        metaData.setColumnType(2, RowMetaDataType.STRING_DATA_TYPE);      
+        metaData.setColumnType(2, RowMetaDataType.STRING_DATA_TYPE);
 
         metaData.setColumnName(3, "Modified");                                  // @A3C
         metaData.setColumnLabel(3, modified);                                     // @A3C @A5C
@@ -287,12 +276,9 @@ public class FileListRenderer implements java.io.Serializable
 
         ListRowData rowData = new ListRowData();
 
-        try
-        {
-            rowData.setMetaData(metaData);      
-        }
-        catch (PropertyVetoException e)
-        { /* Ignore */
+        try {
+            rowData.setMetaData(metaData);
+        } catch (PropertyVetoException e) { /* Ignore */
         }
 
         // Get the string to display from the renderer.  This allows          // @A4A
@@ -304,7 +290,7 @@ public class FileListRenderer implements java.io.Serializable
         {
             Object[] row = new Object[4];
 
-            row[0] = parentName.replace('\\','/');                                   // @A4C
+            row[0] = parentName.replace('\\', '/');                                   // @A4C
             row[1] = "";
             row[2] = "";
             row[3] = "";
@@ -333,7 +319,7 @@ public class FileListRenderer implements java.io.Serializable
             // The vector of files.
             Vector fv = new Vector();                                         // @B3A
 
-            for (int i=0; i<filesAndDirs.length; i++)                        // @B3A
+            for (int i = 0; i < filesAndDirs.length; i++)                        // @B3A
             {
                 // Determine if the file is a directory or not and       // @B3A
                 // add it to the appropriate directory.                     // @B3A
@@ -350,8 +336,7 @@ public class FileListRenderer implements java.io.Serializable
             // Copy the vectors into their appropriate array.           // @B3A
             dv.copyInto(dirList);                                                  // @B3A
             fv.copyInto(fileList);                                                  // @B3A
-        }
-        else   // If we are dealing with normal File objects and not IFSJavaFile objects.   //$A1A
+        } else   // If we are dealing with normal File objects and not IFSJavaFile objects.   //$A1A
         {
             // $A1D
             // We don't want to require webservers to use JDK1.2 because
@@ -373,23 +358,21 @@ public class FileListRenderer implements java.io.Serializable
 
             // Get the list of files that satisfy the directory filter.
             // Build the File array of Directories.
-            String[] dlist = file.list(new DirFilter());                        
+            String[] dlist = file.list(new DirFilter());
 
             dirList = new File[dlist.length];
 
-            for (int i=0; i<dlist.length; ++i)
-            {
+            for (int i = 0; i < dlist.length; ++i) {
                 dirList[i] = new File(file, dlist[i]);                             //$A1A
             }
 
             // Get the list of files that satisfy the file filter.
             // Build the File array of files.
-            String[] flist = file.list(new HTMLFileFilter());                                   
+            String[] flist = file.list(new HTMLFileFilter());
 
             fileList = new File[flist.length];
 
-            for (int i=0; i<flist.length; ++i)
-            {
+            for (int i = 0; i < flist.length; ++i) {
                 fileList[i] = new File(file, flist[i]);                             //$A1A
             }
         }
@@ -402,19 +385,18 @@ public class FileListRenderer implements java.io.Serializable
             if (sort)                                                                    // @A2A
             {
                 v = new Vector();                                                 // @B5A
-                for (int i=0; i<dirList.length; i++)                             // @B5A                                    
+                for (int i = 0; i < dirList.length; i++)                             // @B5A
                 {                                                                        // @B5A
                     v.addElement(dirList[i]);                                    // @B5A                                    
                 }                                                                        // @B5A
-                
+
                 HTMLTree.sort(collator, v);                          // @A2A  @B3C  @B5C
 
                 v.copyInto(dirList);                                               // @B5A
             }
 
             //$A1A
-            for (int i=0; i<dirList.length; i++)
-            {
+            for (int i = 0; i < dirList.length; i++) {
                 // Get the string to display from the renderer.  This allows          // @A4A
                 // the servlet more flexibility as to which files to display          // @A4A
                 // and how to display them.                                           // @A4A
@@ -422,11 +404,11 @@ public class FileListRenderer implements java.io.Serializable
 
                 if (dirName != null)                                                  // @A4A
                 {
-                    Object[] row = new Object[4];                  
+                    Object[] row = new Object[4];
 
                     Date d = new Date(dirList[i].lastModified());                      // @A4C
 
-                    row[0] = dirName.replace('\\','/');                                // @A4C
+                    row[0] = dirName.replace('\\', '/');                                // @A4C
                     row[1] = "";                                                       // @A3C
                     row[2] = "Directory";
                     row[3] = formatter_.format(d);                                     // @A3C
@@ -441,18 +423,17 @@ public class FileListRenderer implements java.io.Serializable
             if (sort)                                                                     // @A2A
             {
                 v = new Vector();                                                  // @B5A
-                for (int i=0; i<fileList.length; i++)                             // @B5A                                    
+                for (int i = 0; i < fileList.length; i++)                             // @B5A
                 {                                                                         // @B5A
                     v.addElement(fileList[i]);                                    // @B5A                                    
                 }                                                                         // @B5A
-                
+
                 HTMLTree.sort(collator, v);                           // @A2A    @B3C      @B5C
 
                 v.copyInto(fileList);                                               // @B5A
             }
 
-            for (int i=0; i<fileList.length; i++)
-            {
+            for (int i = 0; i < fileList.length; i++) {
                 // Get the string to display from the renderer.  This allows          // @A4A
                 // the servlet more flexibility as to which files to display             // @A4A
                 // and how to display them.                                                    // @A4A
@@ -460,16 +441,16 @@ public class FileListRenderer implements java.io.Serializable
 
                 if (fileName != null)                                                                 // @A4A
                 {
-                    Object[] row = new Object[4];          
+                    Object[] row = new Object[4];
 
-                    Date d = new Date(fileList[i].lastModified());                     
+                    Date d = new Date(fileList[i].lastModified());
 
-                    row[0] = fileName.replace('\\','/');                         // @A4C
-                    row[1] = new Long(fileList[i].length());                             
+                    row[0] = fileName.replace('\\', '/');                         // @A4C
+                    row[1] = new Long(fileList[i].length());
                     row[2] = "File";                                                   // @A3C
-                    row[3] = formatter_.format(d);                                       
+                    row[3] = formatter_.format(d);
 
-                    rowData.addRow(row);          
+                    rowData.addRow(row);
                 }
             }
         }

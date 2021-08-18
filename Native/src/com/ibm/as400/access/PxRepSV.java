@@ -19,87 +19,72 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 
-
 /**
-The PxRepSV class represents the client
-portion of a reply.
-**/
+ * The PxRepSV class represents the client
+ * portion of a reply.
+ **/
 abstract class PxRepSV
-extends PxCompDS
-implements PxDSWV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
-
+        extends PxCompDS
+        implements PxDSWV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
-    private long    correlationId_  = -1;
-    private long    clientId_       = -1;  //@B2A
+    private long correlationId_ = -1;
+    private long clientId_ = -1;  //@B2A
 
-/**
-Constructs a PxRepSV object.
-
-@param type The datastream type.  Valid values are listed in
-            the ProxyConstants class.
-**/
-    public PxRepSV (short type)
-    {
-        super (type);
+    /**
+     * Constructs a PxRepSV object.
+     *
+     * @param type The datastream type.  Valid values are listed in
+     *             the ProxyConstants class.
+     **/
+    public PxRepSV(short type) {
+        super(type);
     }
 
 
-/**
-Dumps the datastream for debugging and tracing.
-
-@param output   The print writer.
-**/
-    public void dump (PrintWriter output)
-    {
+    /**
+     * Dumps the datastream for debugging and tracing.
+     *
+     * @param output The print writer.
+     **/
+    public void dump(PrintWriter output) {
         synchronized (output) {
-           super.dump (output);
-           output.println("   Correlation id = " + correlationId_);
-           output.println("   Client id = " + clientId_); //@B2A
+            super.dump(output);
+            output.println("   Correlation id = " + correlationId_);
+            output.println("   Client id = " + clientId_); //@B2A
         }
     }
 
 
     //@B3A  Add for tunneling.
-    public long getClientId()
-    {
-	return clientId_;
+    public long getClientId() {
+        return clientId_;
     }
-    
-
-    public void setCorrelationId(long correlationId)
-    {
-        correlationId_ = correlationId;
-    }
-
 
     //@B2A  Add for tunneling.
-    public void setClientId(long clientId)
-    {
+    public void setClientId(long clientId) {
         clientId_ = clientId;
     }
 
+    public void setCorrelationId(long correlationId) {
+        correlationId_ = correlationId;
+    }
 
-/**
-Writes the contents of the datastream to an output stream.
-
-@param output   The output stream.
-
-@exception IOException  If an error occurs.
-**/
-    public void writeTo (OutputStream output)
-        throws IOException
-    {
-        super.writeTo (output);
-        DataOutputStream dataOutput = new DataOutputStream (output);
+    /**
+     * Writes the contents of the datastream to an output stream.
+     *
+     * @param output The output stream.
+     * @throws IOException If an error occurs.
+     **/
+    public void writeTo(OutputStream output)
+            throws IOException {
+        super.writeTo(output);
+        DataOutputStream dataOutput = new DataOutputStream(output);
         dataOutput.writeLong(correlationId_);
         dataOutput.writeLong(clientId_); //@B2A
     }
-
 
 
 }

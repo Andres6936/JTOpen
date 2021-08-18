@@ -14,27 +14,29 @@
 package com.ibm.as400.util.html;
 
 /**
-*  The ElementListener interface provides a listener
-*  interface for receiving element events.
-**/
-public interface ElementListener extends java.util.EventListener
-{
-    
-   /**
-   *  Invoked when an element has been added.
-   *  @param event The event. 
-   **/
-   public abstract void elementAdded(ElementEvent event);
-      
-   /**
-   *  Invoked when an element has been changed.
-   *  @param event The event. 
-   **/
-   public abstract void elementChanged(ElementEvent event);
+ * The ElementListener interface provides a listener
+ * interface for receiving element events.
+ **/
+public interface ElementListener extends java.util.EventListener {
 
-   /**
-   *  Invoked when an element has been removed.
-   *  @param event The event. 
-   **/
-   public abstract void elementRemoved(ElementEvent event);
+    /**
+     * Invoked when an element has been added.
+     *
+     * @param event The event.
+     **/
+    public abstract void elementAdded(ElementEvent event);
+
+    /**
+     * Invoked when an element has been changed.
+     *
+     * @param event The event.
+     **/
+    public abstract void elementChanged(ElementEvent event);
+
+    /**
+     * Invoked when an element has been removed.
+     *
+     * @param event The event.
+     **/
+    public abstract void elementRemoved(ElementEvent event);
 }

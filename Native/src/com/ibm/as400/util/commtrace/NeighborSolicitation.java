@@ -19,51 +19,56 @@ package com.ibm.as400.util.commtrace;
  * Neighbor Solicitation Header.
  */
 public class NeighborSolicitation extends Message {
-	private Field targetaddress= new IP6Address(rawheader.slice(32, 128));
+    private Field targetaddress = new IP6Address(rawheader.slice(32, 128));
 
-	/**
-	 * Returns the next header in the packet.
-	 * @return Will always return a NDOption header.
-	 */
-	public Header getNextHeader() {
-		return NDOption.createNDOption(rawpayload);
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    NeighborSolicitation(BitBuf data) {
+        super(data);
+        super.type = NGHSOL;
+    }
 
-	/**
-	 * Returns the length of this header.
-	 * @return Will always return 160
-	 */
-	public int getHeaderLen() {
-		return 160;
-	}
+    /**
+     * Returns the next header in the packet.
+     *
+     * @return Will always return a NDOption header.
+     */
+    public Header getNextHeader() {
+        return NDOption.createNDOption(rawpayload);
+    }
 
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data The raw data of this header.
-	 */
-	NeighborSolicitation(BitBuf data) {
-		super(data);
-		super.type= NGHSOL;
-	}
+    /**
+     * Returns the length of this header.
+     *
+     * @return Will always return 160
+     */
+    public int getHeaderLen() {
+        return 160;
+    }
 
     /**
      * Returns a printable representation of this header.
-     * @param filter	FormatProperties object for filtering this header.
+     *
+     * @param filter FormatProperties object for filtering this header.
      * @return Returns a string representation of this header.
      */
-	public String toString(FormatProperties filter) {
+    public String toString(FormatProperties filter) {
 
-		Object[] args= { targetaddress };
-		return Formatter.jsprintf(TARGET + ":  {0}\n", args)
-			+ printHexHeader()
-			+ printnext(filter);
-	}
+        Object[] args = {targetaddress};
+        return Formatter.jsprintf(TARGET + ":  {0}\n", args)
+                + printHexHeader()
+                + printnext(filter);
+    }
 
-	/**
-	 * Returns the target address of this NeighborSolicitation Message. 
-	 * @return String containing a delimited IPv6 address. 
-	 */
-	public String getTargetAddress() {
-		return targetaddress.toString();
-	}
+    /**
+     * Returns the target address of this NeighborSolicitation Message.
+     *
+     * @return String containing a delimited IPv6 address.
+     */
+    public String getTargetAddress() {
+        return targetaddress.toString();
+    }
 }

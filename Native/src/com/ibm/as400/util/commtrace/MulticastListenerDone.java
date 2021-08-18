@@ -15,17 +15,17 @@ package com.ibm.as400.util.commtrace;
 
 /**
  * A Mulitcast Listener Done Header.<br>
- * Extends MLMessage's methods to to parse, print, and allow easy access to the 
+ * Extends MLMessage's methods to to parse, print, and allow easy access to the
  * Multicast Listener Done Header.
- * 
  */
 public class MulticastListenerDone extends MLMessage {
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data	The raw data of this header. 
-	 */
-	MulticastListenerDone(BitBuf data) {
-		super(data);
-		super.type= MLTLSTDNE;
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    MulticastListenerDone(BitBuf data) {
+        super(data);
+        super.type = MLTLSTDNE;
+    }
 }

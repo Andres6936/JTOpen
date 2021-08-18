@@ -15,42 +15,36 @@ package com.ibm.as400.access;
 
 
 /**
-The PxLoadReqSV class represents the
-server view of a load request.
-**/
+ * The PxLoadReqSV class represents the
+ * server view of a load request.
+ **/
 class PxLoadReqSV
-extends PxReqSV 
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
+        extends PxReqSV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
     private PSLoad load_;
 
 
-
-/**
-Constructs a PxLoadReqSV object.
-
-@param load The load.
-**/
-    public PxLoadReqSV (PSLoad load)
-    {
-        super (ProxyConstants.DS_LOAD_REQ);
+    /**
+     * Constructs a PxLoadReqSV object.
+     *
+     * @param load The load.
+     **/
+    public PxLoadReqSV(PSLoad load) {
+        super(ProxyConstants.DS_LOAD_REQ);
         load_ = load;
     }
 
 
-                                  
-/**
-Processes the request.
-
-@return The corresponding reply, or null if none.
-**/
-    public PxRepSV process ()
-    {
-        return new PxLoadRepSV (load_);
+    /**
+     * Processes the request.
+     *
+     * @return The corresponding reply, or null if none.
+     **/
+    public PxRepSV process() {
+        return new PxLoadRepSV(load_);
     }
 
 

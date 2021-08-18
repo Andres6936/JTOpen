@@ -14,14 +14,13 @@
 package com.ibm.as400.access;
 
 
-
 interface SQLLocator
-extends SQLData
-{
+        extends SQLData {
 
 
-    public abstract void setHandle (int handle);
-    public abstract int getHandle ();  //@loch
+    public abstract int getHandle();  //@loch
+
+    public abstract void setHandle(int handle);
 
 
 }

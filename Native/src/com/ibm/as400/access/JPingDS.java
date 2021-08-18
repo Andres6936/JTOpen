@@ -14,35 +14,31 @@
 package com.ibm.as400.access;
 
 /**
- *  The JPingDS is the datastream sent to the AS/400 server
- *  during a ping to determine if the server is running.
- *
+ * The JPingDS is the datastream sent to the AS/400 server
+ * during a ping to determine if the server is running.
  **/
-class JPingDS extends ClientAccessDataStream
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class JPingDS extends ClientAccessDataStream {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     /**
-     *  Constructs a JPingDS object.
+     * Constructs a JPingDS object.
      *
-     *  @param serverId The AS/400 service.
-     *  @param buffer The datastream.
-     *  @param i The request correlation for this datastream.
-     *
+     * @param serverId The AS/400 service.
+     * @param buffer   The datastream.
+     * @param i        The request correlation for this datastream.
      **/
-    JPingDS(int serverId, byte[] buffer)
-    {
-       super();
-       // Add 20, which is the datastream header size, to the buffer length.
-       data_ = new byte[buffer.length + 20];
-       setLength(buffer.length + 20);
-       setHeaderID(0);
-       setServerID(serverId);
-       setCSInstance(0xFFFFFFFF);  //The CS ID of the Ping datastream (no particular reason for having 0xffffffff).
-       //setCorrelation(i);
-       setTemplateLen(buffer.length);
-       setReqRepID(0x7FFF);  //The ID of the Ping datastream (no particular reason for having 0x7fff).
-       
-       System.arraycopy(buffer, 0, data_, 20, buffer.length);
+    JPingDS(int serverId, byte[] buffer) {
+        super();
+        // Add 20, which is the datastream header size, to the buffer length.
+        data_ = new byte[buffer.length + 20];
+        setLength(buffer.length + 20);
+        setHeaderID(0);
+        setServerID(serverId);
+        setCSInstance(0xFFFFFFFF);  //The CS ID of the Ping datastream (no particular reason for having 0xffffffff).
+        //setCorrelation(i);
+        setTemplateLen(buffer.length);
+        setReqRepID(0x7FFF);  //The ID of the Ping datastream (no particular reason for having 0x7fff).
+
+        System.arraycopy(buffer, 0, data_, 20, buffer.length);
     }
 }

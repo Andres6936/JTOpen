@@ -21,11 +21,10 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 
 /**
-*  The ResourceListRowDataBeanInfo class provides bean information 
-*  for the ResourceListRowData class.
-**/
-public class ResourceListRowDataBeanInfo extends SimpleBeanInfo
-{   
+ * The ResourceListRowDataBeanInfo class provides bean information
+ * for the ResourceListRowData class.
+ **/
+public class ResourceListRowDataBeanInfo extends SimpleBeanInfo {
     // Class this bean info represents.
     private final static Class beanClass = ResourceListRowData.class;
 
@@ -34,121 +33,116 @@ public class ResourceListRowDataBeanInfo extends SimpleBeanInfo
     private static EventSetDescriptor[] events_;
     private static PropertyDescriptor[] properties_;
 
-    static
-    {      
-      try
-      {
-        EventSetDescriptor changed = new EventSetDescriptor(beanClass,
-                                                            "propertyChange",
-                                                            java.beans.PropertyChangeListener.class,
-                                                            "propertyChange");
-        changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
-        changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
+    static {
+        try {
+            EventSetDescriptor changed = new EventSetDescriptor(beanClass,
+                    "propertyChange",
+                    java.beans.PropertyChangeListener.class,
+                    "propertyChange");
+            changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
+            changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
 
-        EventSetDescriptor[] events = { changed };
+            EventSetDescriptor[] events = {changed};
 
-        events_ = events;
+            events_ = events;
 
-        PropertyDescriptor currentPosition = new PropertyDescriptor("currentPosition", beanClass,                                                                     "getCurrentPosition", null);
-        currentPosition.setBound(false);
-        currentPosition.setConstrained(false);
-        currentPosition.setDisplayName(loader_.getText("PROP_NAME_CURRENTPOSITION"));
-        currentPosition.setShortDescription(loader_.getText("PROP_DESC_RL_CURRENTPOSITION"));
+            PropertyDescriptor currentPosition = new PropertyDescriptor("currentPosition", beanClass, "getCurrentPosition", null);
+            currentPosition.setBound(false);
+            currentPosition.setConstrained(false);
+            currentPosition.setDisplayName(loader_.getText("PROP_NAME_CURRENTPOSITION"));
+            currentPosition.setShortDescription(loader_.getText("PROP_DESC_RL_CURRENTPOSITION"));
 
-        PropertyDescriptor length = new PropertyDescriptor("length", beanClass, "length", null);
-        length.setBound(false);
-        length.setConstrained(false);
-        length.setDisplayName(loader_.getText("PROP_NAME_LENGTH"));
-        length.setShortDescription(loader_.getText("PROP_DESC_RL_LENGTH"));
+            PropertyDescriptor length = new PropertyDescriptor("length", beanClass, "length", null);
+            length.setBound(false);
+            length.setConstrained(false);
+            length.setDisplayName(loader_.getText("PROP_NAME_LENGTH"));
+            length.setShortDescription(loader_.getText("PROP_DESC_RL_LENGTH"));
 
-        PropertyDescriptor resourceList = new PropertyDescriptor("resourceList", beanClass,
-                                                             "getResourceList", "setResourceList");
-        resourceList.setBound(true);
-        resourceList.setConstrained(false);
-        resourceList.setDisplayName(loader_.getText("PROP_NAME_RESOURCELIST"));
-        resourceList.setShortDescription(loader_.getText("PROP_DESC_RESOURCELIST"));
+            PropertyDescriptor resourceList = new PropertyDescriptor("resourceList", beanClass,
+                    "getResourceList", "setResourceList");
+            resourceList.setBound(true);
+            resourceList.setConstrained(false);
+            resourceList.setDisplayName(loader_.getText("PROP_NAME_RESOURCELIST"));
+            resourceList.setShortDescription(loader_.getText("PROP_DESC_RESOURCELIST"));
 
-        PropertyDescriptor columnAttribute = new PropertyDescriptor("columnAttributeIDs", beanClass,
-                                                             "getColumnAttributeIDs", "setColumnAttributeIDs");
-        columnAttribute.setBound(true);
-        columnAttribute.setConstrained(false);
-        columnAttribute.setDisplayName(loader_.getText("PROP_NAME_RL_COLUMNATTRIBUTE"));
-        columnAttribute.setShortDescription(loader_.getText("PROP_DESC_RL_COLUMNATTRIBUTE"));
+            PropertyDescriptor columnAttribute = new PropertyDescriptor("columnAttributeIDs", beanClass,
+                    "getColumnAttributeIDs", "setColumnAttributeIDs");
+            columnAttribute.setBound(true);
+            columnAttribute.setConstrained(false);
+            columnAttribute.setDisplayName(loader_.getText("PROP_NAME_RL_COLUMNATTRIBUTE"));
+            columnAttribute.setShortDescription(loader_.getText("PROP_DESC_RL_COLUMNATTRIBUTE"));
 
-        properties_ = new PropertyDescriptor[] { currentPosition, length, resourceList, columnAttribute };
-      }
-      catch (Exception e)
-      {
-        throw new Error(e.toString());
-      }
+            properties_ = new PropertyDescriptor[]{currentPosition, length, resourceList, columnAttribute};
+        } catch (Exception e) {
+            throw new Error(e.toString());
+        }
     }
 
 
     /**
-     *  Returns the bean descriptor.
-     *  @return The bean descriptor.
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
      **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(beanClass);
     }
 
 
-    /** 
-     *  Returns the index of the default event.
-     *  @return The index to the default event.
+    /**
+     * Returns the index of the default event.
+     *
+     * @return The index to the default event.
      **/
-    public int getDefaultEventIndex()
-    {
-       return 0;
+    public int getDefaultEventIndex() {
+        return 0;
     }
 
     /**
-     *  Returns the index of the default property.
-     *  @return The index to the default property.
+     * Returns the index of the default property.
+     *
+     * @return The index to the default property.
      **/
-    public int getDefaultPropertyIndex()
-    {
-       return 0;
+    public int getDefaultPropertyIndex() {
+        return 0;
     }
 
     /**
-     *  Returns the descriptors for all events.
-     *  @return The descriptors for all events.
+     * Returns the descriptors for all events.
+     *
+     * @return The descriptors for all events.
      **/
-    public EventSetDescriptor[] getEventSetDescriptors()
-    {
+    public EventSetDescriptor[] getEventSetDescriptors() {
         return events_;
     }
 
     /**
-     *  Returns an image for the icon.
-     *  
-     *  @param icon    The icon size and color.
-     *  @return        The image.
+     * Returns an image for the icon.
+     *
+     * @param icon The icon size and color.
+     * @return The image.
      **/
-    public Image getIcon (int icon)
-    {
+    public Image getIcon(int icon) {
         Image image = null;
         switch (icon) {
             case BeanInfo.ICON_MONO_16x16:
             case BeanInfo.ICON_COLOR_16x16:
-                image = loadImage ("ResourceListRowData16.gif");
+                image = loadImage("ResourceListRowData16.gif");
                 break;
             case BeanInfo.ICON_MONO_32x32:
             case BeanInfo.ICON_COLOR_32x32:
-                image = loadImage ("ResourceListRowData32.gif");
+                image = loadImage("ResourceListRowData32.gif");
                 break;
         }
         return image;
     }
-    
+
     /**
-     *  Returns the descriptors for all properties.
-     *  @return The descriptors for all properties.
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
      **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+    public PropertyDescriptor[] getPropertyDescriptors() {
         return properties_;
     }
 }

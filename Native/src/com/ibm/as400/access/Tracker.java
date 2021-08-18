@@ -13,19 +13,16 @@
 
 package com.ibm.as400.access;
 
-final class Tracker
-{
-  private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
+final class Tracker {
+    private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-  private boolean set_ = true;
+    private boolean set_ = true;
 
-  public boolean isSet()
-  {
-    return set_;
-  }
+    public boolean isSet() {
+        return set_;
+    }
 
-  public void set(boolean set)
-  {
-    set_ = set;
-  }
+    public void set(boolean set) {
+        set_ = set;
+    }
 }

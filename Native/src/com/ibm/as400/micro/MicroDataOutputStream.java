@@ -14,48 +14,48 @@
 package com.ibm.as400.micro;
 
 import java.io.*;
+
 import com.ibm.as400.access.Trace;
 
 
 /**
-This class allows the DataOutputStream used for client/server
-communication to be optionally traced.
-**/
-class MicroDataOutputStream 
-{
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
+ * This class allows the DataOutputStream used for client/server
+ * communication to be optionally traced.
+ **/
+class MicroDataOutputStream {
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
-    DataOutputStream  out_;
+    DataOutputStream out_;
 
     /**
-    Constructor.
-     * @param out 
-     * @throws IOException 
-    **/
-    public MicroDataOutputStream(OutputStream out) throws IOException 
-    {
+     * Constructor.
+     *
+     * @param out
+     * @throws IOException
+     **/
+    public MicroDataOutputStream(OutputStream out) throws IOException {
         out_ = new DataOutputStream(out);
     }
 
 
     /**
-    Flush the underlying DataOutputStream.
-     * @throws IOException 
-    **/
-    public void flush() throws IOException 
-    {
+     * Flush the underlying DataOutputStream.
+     *
+     * @throws IOException
+     **/
+    public void flush() throws IOException {
         out_.flush();
     }
 
 
     /**
-    Write a boolean to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param b 
-     * @throws IOException 
-    **/
-    public void writeBoolean(boolean b) throws IOException 
-    {
+     * Write a boolean to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param b
+     * @throws IOException
+     **/
+    public void writeBoolean(boolean b) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + b);
 
@@ -63,14 +63,14 @@ class MicroDataOutputStream
     }
 
 
-    /**   
-    Write a byte to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param b 
-     * @throws IOException 
-    **/
-    public void writeByte(byte b) throws IOException 
-    {
+    /**
+     * Write a byte to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param b
+     * @throws IOException
+     **/
+    public void writeByte(byte b) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + b);
 
@@ -78,29 +78,29 @@ class MicroDataOutputStream
     }
 
 
-    /**   
-    Write an array of bytes to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param b 
-     * @throws IOException 
-    **/
-    public void writeBytes(byte[] b) throws IOException 
-    {
+    /**
+     * Write an array of bytes to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param b
+     * @throws IOException
+     **/
+    public void writeBytes(byte[] b) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, "  " + Thread.currentThread().getName() + " out < ", b);
 
         out_.write(b, 0, b.length);
     }
 
-    
+
     /**
-    Write a double to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param d 
-     * @throws IOException 
-    **/
-    public void writeDouble(double d) throws IOException 
-    {
+     * Write a double to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param d
+     * @throws IOException
+     **/
+    public void writeDouble(double d) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + d);
 
@@ -109,28 +109,28 @@ class MicroDataOutputStream
 
 
     /**
-    Write a float to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param f 
-     * @throws IOException 
-    **/
-    public void writeFloat(float f) throws IOException 
-    {
+     * Write a float to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param f
+     * @throws IOException
+     **/
+    public void writeFloat(float f) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + f);
 
         out_.writeFloat(f);
-    }      
+    }
 
 
-    /**   
-    Write an int to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param i 
-     * @throws IOException 
-    **/
-    public void writeInt(int i) throws IOException 
-    {
+    /**
+     * Write an int to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param i
+     * @throws IOException
+     **/
+    public void writeInt(int i) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + Integer.toHexString(i));
 
@@ -139,28 +139,28 @@ class MicroDataOutputStream
 
 
     /**
-    Write a long to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param l 
-     * @throws IOException 
-    **/
-    public void writeLong(long l) throws IOException 
-    {
+     * Write a long to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param l
+     * @throws IOException
+     **/
+    public void writeLong(long l) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + l);
 
         out_.writeLong(l);
-    }      
+    }
 
 
     /**
-    Write a short to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param s 
-     * @throws IOException 
-    **/
-    public void writeShort(short s) throws IOException 
-    {
+     * Write a short to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param s
+     * @throws IOException
+     **/
+    public void writeShort(short s) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + s);
 
@@ -169,25 +169,25 @@ class MicroDataOutputStream
 
 
     /**
-    Convenience method... the fact that a string gets put into UTF format is 
-    just an implementation detail.
-     * @param s 
-     * @throws IOException 
-    **/
-    public void writeString(String s) throws IOException 
-    {
+     * Convenience method... the fact that a string gets put into UTF format is
+     * just an implementation detail.
+     *
+     * @param s
+     * @throws IOException
+     **/
+    public void writeString(String s) throws IOException {
         writeUTF(s);
     }
 
 
     /**
-    Write a String to the underlying DataOutputStream.  Optionally trace
-    the value.
-     * @param s 
-     * @throws IOException 
-    **/
-    public void writeUTF(String s) throws IOException 
-    {
+     * Write a String to the underlying DataOutputStream.  Optionally trace
+     * the value.
+     *
+     * @param s
+     * @throws IOException
+     **/
+    public void writeUTF(String s) throws IOException {
         if (Trace.isTraceOn())
             Trace.log(Trace.PROXY, Thread.currentThread().getName() + " out < " + s);
 

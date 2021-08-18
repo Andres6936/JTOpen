@@ -27,108 +27,106 @@ import java.beans.PropertyVetoException;
 import javax.servlet.http.*;
 
 /**
-*  The ServletHyperlink class represents an HTML hyperlink tag.
-*  
-*  <P>This example creates an ServletHyperlink and displays the HTML tag.
-*  <BLOCKQUOTE><PRE>
-*  ServletHyperlink link = new ServletHyperlink("http://www.myCompany.com", "myCompany Home Page");
-*  link.setHttpServletResponse(resp);
-*  link.setPathInfo("/myServletDirectory/servlet");
-*  System.out.println(link.getTag());
-*  </PRE></BLOCKQUOTE>
-*
-*  <P>Here is the output of the ServletHyperlink:
-*  <BLOCKQUOTE><PRE>
-*  &lt;a href=&quot;http://www.myCompany.com/myServletDirectory/servlet&amp;SomeSessionID=942349280740&quot;&gt;myCompany Home Page&lt;/a&gt;
-*  </PRE></BLOCKQUOTE>
-*
-*  <P>This example creates an ServletHyperlink and sets two properties.
-*  <BLOCKQUOTE><PRE>
-*  ServletHyperlink link = new ServletHyperlink("http://www.myCompany.com", "myCompany Home Page");
-*  Properties properties = new Properties();
-*  properties.put("userID", "fred");
-*  properties.put("employeeID", "01234567");
-*  link.setProperties(properties);
-*  link.setHttpServletResponse(resp);
-*  link.setPathInfo("/myServletDirectory/servlet");
-*  System.out.println(link.getTag());
-*  </PRE></BLOCKQUOTE>
-*
-*  <P>Here is the output of the ServletHyperlink:
-*  <BLOCKQUOTE><PRE>
-*  &lt;a href=&quot;http://www.myCompany.com/myServletDirectory/servlet?userid=fred&amp;employeeID=01234567&amp;SomeSessionID=942349280740&quot;&gt;myCompany Home Page&lt;/a&gt;
-*  </PRE></BLOCKQUOTE>
-*
-*  <p>ServletHyperlink objects generate the following events:
-*  <ul>
-*  <li>PropertyChangeEvent
-*  </ul>
-**/
-public class ServletHyperlink extends HTMLHyperlink 
-{
-  static final long serialVersionUID = 6349134986210346587L;
+ * The ServletHyperlink class represents an HTML hyperlink tag.
+ *
+ * <P>This example creates an ServletHyperlink and displays the HTML tag.
+ * <BLOCKQUOTE><PRE>
+ * ServletHyperlink link = new ServletHyperlink("http://www.myCompany.com", "myCompany Home Page");
+ * link.setHttpServletResponse(resp);
+ * link.setPathInfo("/myServletDirectory/servlet");
+ * System.out.println(link.getTag());
+ * </PRE></BLOCKQUOTE>
+ *
+ * <P>Here is the output of the ServletHyperlink:
+ * <BLOCKQUOTE><PRE>
+ * &lt;a href=&quot;http://www.myCompany.com/myServletDirectory/servlet&amp;SomeSessionID=942349280740&quot;&gt;myCompany Home Page&lt;/a&gt;
+ * </PRE></BLOCKQUOTE>
+ *
+ * <P>This example creates an ServletHyperlink and sets two properties.
+ * <BLOCKQUOTE><PRE>
+ * ServletHyperlink link = new ServletHyperlink("http://www.myCompany.com", "myCompany Home Page");
+ * Properties properties = new Properties();
+ * properties.put("userID", "fred");
+ * properties.put("employeeID", "01234567");
+ * link.setProperties(properties);
+ * link.setHttpServletResponse(resp);
+ * link.setPathInfo("/myServletDirectory/servlet");
+ * System.out.println(link.getTag());
+ * </PRE></BLOCKQUOTE>
+ *
+ * <P>Here is the output of the ServletHyperlink:
+ * <BLOCKQUOTE><PRE>
+ * &lt;a href=&quot;http://www.myCompany.com/myServletDirectory/servlet?userid=fred&amp;employeeID=01234567&amp;SomeSessionID=942349280740&quot;&gt;myCompany Home Page&lt;/a&gt;
+ * </PRE></BLOCKQUOTE>
+ *
+ * <p>ServletHyperlink objects generate the following events:
+ * <ul>
+ * <li>PropertyChangeEvent
+ * </ul>
+ **/
+public class ServletHyperlink extends HTMLHyperlink {
+    static final long serialVersionUID = 6349134986210346587L;
 
     private HttpServletResponse response_;             // An http servlet response **this needs to be
-                                                       // transient or else you can't do serialization.
+    // transient or else you can't do serialization.
 
     private String pathInfo_;                          // The extra path info to the servlet location.  
-                                                       //   ex. - http://myServlet/myPathInfo
+    //   ex. - http://myServlet/myPathInfo
 
 
     transient PropertyChangeSupport changes_; //@CRS
 
 
     /**
-    *  Creates a default ServletHyperlink object.
-    **/
-    public ServletHyperlink()
-    {
+     * Creates a default ServletHyperlink object.
+     **/
+    public ServletHyperlink() {
     }
 
     /**
-    *  Creates a ServletHyperlink object with the specified resource <i>link</i>.
-    *  @param link The Uniform Resource Identifier (URI).
-    **/
-    public ServletHyperlink(String link)
-    {
-        super(link);      
+     * Creates a ServletHyperlink object with the specified resource <i>link</i>.
+     *
+     * @param link The Uniform Resource Identifier (URI).
+     **/
+    public ServletHyperlink(String link) {
+        super(link);
     }
 
     /**
-    *  Creates a ServletHyperlink object with the specified resource <i>link</i>
-    *  represented by the specified <i>text</i>.
-    *  @param link The Uniform Resource Identifier (URI).
-    *  @param text The text representation for the resource.
-    **/
-    public ServletHyperlink(String link, String text)
-    {
+     * Creates a ServletHyperlink object with the specified resource <i>link</i>
+     * represented by the specified <i>text</i>.
+     *
+     * @param link The Uniform Resource Identifier (URI).
+     * @param text The text representation for the resource.
+     **/
+    public ServletHyperlink(String link, String text) {
         super(link, text);
     }
 
     /**
-    *  Creates a ServletHyperlink object with the specified resource <i>link</i>
-    *  and <i>target</i> frame represented by the specified <i>text</i>.
-    *  @param link The Uniform Resource Identifier (URI).
-    *  @param text The text representation for the resource.
-    *  @param target The target frame.
-    **/
-    public ServletHyperlink(String link, String text, String target)
-    {
+     * Creates a ServletHyperlink object with the specified resource <i>link</i>
+     * and <i>target</i> frame represented by the specified <i>text</i>.
+     *
+     * @param link   The Uniform Resource Identifier (URI).
+     * @param text   The text representation for the resource.
+     * @param target The target frame.
+     **/
+    public ServletHyperlink(String link, String text, String target) {
         super(link, text, target);
     }
 
 
     /**
-    *  Creates a ServletHyperlink object with the specified resource <i>link</i>, link <i>text</i>, 
-    *  <i>target</i> frame, resource link <i>path</i>, and HTTPServlet <i>response</i>.
-    *  @param link The Uniform Resource Identifier (URI).
-    *  @param text The text representation for the resource.
-    *  @param target The target frame.
-    *  @param path  The resource link path information.
-    *  @param response The Http servlet response.
-    **/
-    public ServletHyperlink(String link, String text, String target, String path, HttpServletResponse response)
-    {
+     * Creates a ServletHyperlink object with the specified resource <i>link</i>, link <i>text</i>,
+     * <i>target</i> frame, resource link <i>path</i>, and HTTPServlet <i>response</i>.
+     *
+     * @param link     The Uniform Resource Identifier (URI).
+     * @param text     The text representation for the resource.
+     * @param target   The target frame.
+     * @param path     The resource link path information.
+     * @param response The Http servlet response.
+     **/
+    public ServletHyperlink(String link, String text, String target, String path, HttpServletResponse response) {
         super(link, text, target);
 
         setPathInfo(path);
@@ -137,15 +135,15 @@ public class ServletHyperlink extends HTMLHyperlink
 
 
     /**
-    Adds a PropertyChangeListener.  The specified 
-    PropertyChangeListener's <b>propertyChange</b> 
-    method is called each time the value of any
-    bound property is changed.
-      @see #removePropertyChangeListener
-      @param listener The PropertyChangeListener.
-    **/
-    public void addPropertyChangeListener(PropertyChangeListener listener)
-    {
+     * Adds a PropertyChangeListener.  The specified
+     * PropertyChangeListener's <b>propertyChange</b>
+     * method is called each time the value of any
+     * bound property is changed.
+     *
+     * @param listener The PropertyChangeListener.
+     * @see #removePropertyChangeListener
+     **/
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (listener == null)
             throw new NullPointerException("listener");
         if (changes_ == null) changes_ = new PropertyChangeSupport(this); //@CRS
@@ -158,16 +156,15 @@ public class ServletHyperlink extends HTMLHyperlink
 
 
     /**
-     *  Returns a copy of the ServletHyperlink.
+     * Returns a copy of the ServletHyperlink.
      *
-     *  @return An ServletHyperlink.  
+     * @return An ServletHyperlink.
      **/
     public Object clone()                           //$A2A
     {
         ServletHyperlink l = new ServletHyperlink();
 
-        try
-        {
+        try {
             if (getHttpServletResponse() != null)
                 l.setHttpServletResponse(getHttpServletResponse());
 
@@ -203,9 +200,7 @@ public class ServletHyperlink extends HTMLHyperlink
 
             if (getName() != null)
                 l.setName(getName());
-        }
-        catch (PropertyVetoException e)
-        { /* Ignore */
+        } catch (PropertyVetoException e) { /* Ignore */
         }
 
         return l;
@@ -213,11 +208,11 @@ public class ServletHyperlink extends HTMLHyperlink
 
 
     /**
-    *  Returns the direction attribute tag.
-    *  @return The direction tag.
+     * Returns the direction attribute tag.
+     *
+     * @return The direction tag.
      **/
-    String getDirectionTag()                                                 
-    {
+    String getDirectionTag() {
 
         if ((getDirection() != null) && (getDirection().length() > 0))
             return " dir=\"" + getDirection() + "\"";
@@ -227,21 +222,36 @@ public class ServletHyperlink extends HTMLHyperlink
 
 
     /**
-    *  Returns the Http servlet response.
-    *  @return The response.   
-    **/
-    public HttpServletResponse getHttpServletResponse()
-    {
+     * Returns the Http servlet response.
+     *
+     * @return The response.
+     **/
+    public HttpServletResponse getHttpServletResponse() {
         return response_;
     }
 
+    /**
+     * Sets the Http servlet <i>response</i> for the resource link.
+     *
+     * @param response The Http servlet response.
+     **/
+    public void setHttpServletResponse(HttpServletResponse response) {
+        if (response == null)
+            throw new NullPointerException("response");
+
+        HttpServletResponse old = response_;
+
+        response_ = response;
+
+        if (changes_ != null) changes_.firePropertyChange("response", old, response); //@CRS
+    }
 
     /**
-    *  Returns the language attribute tag.                                            
-    *  @return The language tag.                                                      
-    **/                                                                               
-    String getLanguageTag()                                                  
-    {
+     * Returns the language attribute tag.
+     *
+     * @return The language tag.
+     **/
+    String getLanguageTag() {
 
         if ((getLanguage() != null) && (getLanguage().length() > 0))
             return " lang=\"" + getLanguage() + "\"";
@@ -249,40 +259,54 @@ public class ServletHyperlink extends HTMLHyperlink
             return "";
     }
 
-
     /**
-    *  Returns the path information.
-    *  @return The path.   
-    **/
-    public String getPathInfo()
-    {
+     * Returns the path information.
+     *
+     * @return The path.
+     **/
+    public String getPathInfo() {
         return pathInfo_;
     }
 
+    /**
+     * Sets the <i>path</i> information for the resource link.
+     *
+     * @param path The path information.
+     **/
+    public void setPathInfo(String path) {
+
+        if (path == null)
+            throw new NullPointerException("path");
+
+        String old = pathInfo_;
+
+        pathInfo_ = path;
+
+        if (changes_ != null) changes_.firePropertyChange("path", old, path); //@CRS
+    }
 
     /**
-    *  Returns the HTML tag that represents the resource link.
-    *  @return The HTML tag.
-    **/
-    public String getTag()
-    {
+     * Returns the HTML tag that represents the resource link.
+     *
+     * @return The HTML tag.
+     **/
+    public String getTag() {
         return getTag(getText(), getProperties());
     }
 
     /**
-    *  Returns the HTML tag that represents the resource link 
-    *  with the specified <i>text</i> and <i>properties</i>.  The original ServletHyperlink object <i>text</i> 
-    *  and <i>properties</i> are not changed/updated.
-    *  @param text The text.
-    *  @param properties The Properties.
-    *  @return The HTML tag.
-    **/
-    public String getTag(String text, Properties properties)
-    {
+     * Returns the HTML tag that represents the resource link
+     * with the specified <i>text</i> and <i>properties</i>.  The original ServletHyperlink object <i>text</i>
+     * and <i>properties</i> are not changed/updated.
+     *
+     * @param text       The text.
+     * @param properties The Properties.
+     * @return The HTML tag.
+     **/
+    public String getTag(String text, Properties properties) {
 
         // Verify that the link has been set.
-        if (getLink() == null)
-        {
+        if (getLink() == null) {
             Trace.log(Trace.ERROR, "Attempting to get tag before setting the link.");
             throw new ExtendedIllegalStateException("link", ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
@@ -296,18 +320,15 @@ public class ServletHyperlink extends HTMLHyperlink
         StringBuffer link = new StringBuffer(getLink());
 
         //path info for servlet ex.- http://myServer/myPathInfo
-        if (pathInfo_ != null)
-        {
+        if (pathInfo_ != null) {
             // if the link ends with a "/", the path does not need a leading "/"
-            if (getLink().endsWith("/"))
-            {
+            if (getLink().endsWith("/")) {
                 if (pathInfo_.startsWith("/")) {
                     pathInfo_ = pathInfo_.substring(1);
                 } else {
                     // pathInfo_ = pathInfo_;
                 }
-            }
-            else   //link does not end with a "/", so the path needs to start with "/"
+            } else   //link does not end with a "/", so the path needs to start with "/"
             {
                 if (pathInfo_.startsWith("/")) {
                     // pathInfo_ = pathInfo_;
@@ -320,14 +341,12 @@ public class ServletHyperlink extends HTMLHyperlink
             link.append(URLEncoder.encode(pathInfo_, false));
         }
 
-        if (properties != null)
-        {
+        if (properties != null) {
             String name;
             String parmStart = "?";
             Enumeration propertyList = properties.propertyNames();
-            while (propertyList.hasMoreElements())
-            {
-                name = (String)propertyList.nextElement();
+            while (propertyList.hasMoreElements()) {
+                name = (String) propertyList.nextElement();
                 link.append(parmStart);
                 link.append(URLEncoder.encode(name));
                 link.append("=");
@@ -359,31 +378,28 @@ public class ServletHyperlink extends HTMLHyperlink
         buffer.append("\"");
 
         String name = getName();
-        if (name != null)
-        {
+        if (name != null) {
             buffer.append(" name=\"");
             buffer.append(name);
             buffer.append("\"");
         }
 
         String title = getTitle();
-        if (title != null)
-        {
+        if (title != null) {
             buffer.append(" title=\"");
             buffer.append(title);
             buffer.append("\"");
         }
 
         String target = getTarget();
-        if (target != null)
-        {
+        if (target != null) {
             buffer.append(" target=\"");
             buffer.append(target);
             buffer.append("\"");
         }
 
-        buffer.append(getLanguageTag());                                          
-        buffer.append(getDirectionTag());                                         
+        buffer.append(getLanguageTag());
+        buffer.append(getDirectionTag());
         buffer.append(getAttributeString());              // @Z1A
 
         buffer.append(">");
@@ -393,26 +409,24 @@ public class ServletHyperlink extends HTMLHyperlink
         return buffer.toString();
     }
 
-
     /**
-    *  Deserializes and initializes transient data.
-    **/
-    private void readObject(java.io.ObjectInputStream in)         
-    throws java.io.IOException, ClassNotFoundException
-    {
+     * Deserializes and initializes transient data.
+     **/
+    private void readObject(java.io.ObjectInputStream in)
+            throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
 
         //@CRS changes_ = new PropertyChangeSupport(this);
     }
 
     /**
-    Removes the PropertyChangeListener from the internal list.
-    If the PropertyChangeListener is not on the list, nothing is done.
-      @see #addPropertyChangeListener
-      @param listener The PropertyChangeListener.
-    **/
-    public void removePropertyChangeListener(PropertyChangeListener listener)
-    {
+     * Removes the PropertyChangeListener from the internal list.
+     * If the PropertyChangeListener is not on the list, nothing is done.
+     *
+     * @param listener The PropertyChangeListener.
+     * @see #addPropertyChangeListener
+     **/
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
         if (listener == null)
             throw new NullPointerException("listener");
         if (changes_ != null) changes_.removePropertyChangeListener(listener); //@CRS
@@ -420,43 +434,6 @@ public class ServletHyperlink extends HTMLHyperlink
         //must call the parents change listener since it is
         //in a different package.
         super.removePropertyChangeListener(listener);
-    }
-
-
-    /**
-    *  Sets the Http servlet <i>response</i> for the resource link.
-    *
-    *  @param response The Http servlet response.
-    **/
-    public void setHttpServletResponse(HttpServletResponse response)
-    {
-        if (response == null)
-            throw new NullPointerException("response");
-
-        HttpServletResponse old = response_;
-
-        response_ = response;
-
-        if (changes_ != null) changes_.firePropertyChange("response", old, response); //@CRS
-    }
-
-
-    /**
-    *  Sets the <i>path</i> information for the resource link.
-    *
-    *  @param path The path information.
-    **/
-    public void setPathInfo(String path) 
-    {
-
-        if (path == null)
-            throw new NullPointerException("path");
-
-        String old = pathInfo_;
-
-        pathInfo_ = path;
-
-        if (changes_ != null) changes_.firePropertyChange("path", old, path); //@CRS
     }
 
 }

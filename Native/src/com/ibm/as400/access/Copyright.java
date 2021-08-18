@@ -14,7 +14,7 @@
 package com.ibm.as400.access;
 
 /**
- The Copyright interface is used to hold the copyright string and the version information for the IBM Toolbox for Java.
+ * The Copyright interface is used to hold the copyright string and the version information for the IBM Toolbox for Java.
  **/
 
 //
@@ -300,20 +300,21 @@ package com.ibm.as400.access;
 // NOTE:  When adding a line above, adjust the "String version" with the flag value.
 //--------------------------------------------------------------------
 
-public interface Copyright
-{
-    /** @deprecated  This field is reserved for use within the Toolbox product. **/
+public interface Copyright {
+    /**
+     * @deprecated This field is reserved for use within the Toolbox product.
+     **/
     public static String copyright = "Copyright (C) 1997-2020 International Business Machines Corporation and others.";
     // Name of current release to be picked up by Java doc build. 
-    public static String JTOpenName = "JTOpen 10.6"; 
+    public static String JTOpenName = "JTOpen 10.6";
     //                                                                                         built=20210402 automatically set by the build (see build.xml)
-    public static String version   = "Open Source Software, "+JTOpenName+" codebase 5770-SS1 V7R4M0.00 built=20210402 @AE3";  
+    public static String version = "Open Source Software, " + JTOpenName + " codebase 5770-SS1 V7R4M0.00 built=20210402 @AE3";
 
 
     // Constants for reference by AS400JDBCDriver.
-    static final int    MAJOR_VERSION = 12; // ex: "12" indicates V7R4, "10" indicates V7R2, while "9" indicates V7R1
-    static final int    MINOR_VERSION = 6; // ex: "1" indicates PTF #1 (1 is first PTF in a release)
-                                           //Note: JTOpen 10.1 is synching with ptf 12.1
-    static final String DRIVER_LEVEL  = "07040006"; //(ex: 07030008 -> V7R3M0 PTF#8) (needed for hidden clientInfo) (each # is 2 digits in length)
+    static final int MAJOR_VERSION = 12; // ex: "12" indicates V7R4, "10" indicates V7R2, while "9" indicates V7R1
+    static final int MINOR_VERSION = 6; // ex: "1" indicates PTF #1 (1 is first PTF in a release)
+    //Note: JTOpen 10.1 is synching with ptf 12.1
+    static final String DRIVER_LEVEL = "07040006"; //(ex: 07030008 -> V7R3M0 PTF#8) (needed for hidden clientInfo) (each # is 2 digits in length)
 
 }

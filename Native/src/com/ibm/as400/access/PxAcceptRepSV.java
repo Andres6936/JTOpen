@@ -15,23 +15,19 @@ package com.ibm.as400.access;
 
 
 /**
-The PxAcceptRepSV class represents the
-server view of an accept reply.
-**/
+ * The PxAcceptRepSV class represents the
+ * server view of an accept reply.
+ **/
 class PxAcceptRepSV
-extends PxRepSV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+        extends PxRepSV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
-
-
-/**
-Constructs a PxAcceptRepSV object.
-**/
-    public PxAcceptRepSV ()
-    {          
-        super (ProxyConstants.DS_ACCEPT_REP);
+    /**
+     * Constructs a PxAcceptRepSV object.
+     **/
+    public PxAcceptRepSV() {
+        super(ProxyConstants.DS_ACCEPT_REP);
     }
 
 

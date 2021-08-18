@@ -25,42 +25,37 @@ public class PcmlException extends XmlException            // @C3C
     /**
      * Constructs a <code>PcmlException</code> without a
      * user message.
-     *
      */
-    PcmlException()
-	{
-		super();
+    PcmlException() {
+        super();
     }
 
     /**
      * Constructs a <code>PcmlException</code> with a user message.
      *
-     * @param   key   the resource key for the message string
+     * @param key the resource key for the message string
      */
-    PcmlException(String key)
-    {
+    PcmlException(String key) {
         super(key);            // @C3C
     }
 
     /**
      * Constructs a <code>PcmlException</code> with a user message and substitution values.
      *
-     * @param   key   The resource key for the message string
-     * @param   args  Array of substitution values
+     * @param key  The resource key for the message string
+     * @param args Array of substitution values
      */
-    PcmlException(String key, Object[] args)
-    {
+    PcmlException(String key, Object[] args) {
         super(key, args);            // @C3C
     }
 
     /**
      * Constructs a <code>PcmlException</code> with another exception.
-	 *
-     * @param   e   the exception wrapped by the PcmlException
+     *
+     * @param e the exception wrapped by the PcmlException
      */
-    PcmlException(Exception e)
-	{
-	    super(e);          // @C3C
+    PcmlException(Exception e) {
+        super(e);          // @C3C
     }
 
 

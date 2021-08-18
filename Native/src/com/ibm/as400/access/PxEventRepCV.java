@@ -18,66 +18,58 @@ import java.util.EventObject;
 
 
 /**
-The PxEventRepCV class represents the client
-view of an event reply.
-**/
+ * The PxEventRepCV class represents the client
+ * view of an event reply.
+ **/
 class PxEventRepCV
-extends PxRepCV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
-    
+        extends PxRepCV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
     private PxEventSupport eventSupport_;
 
 
-
-/**
-Constructs a PxEventRepCV object.
-
-@param eventSupport The event support.
-**/
-    public PxEventRepCV (PxEventSupport eventSupport)
-    { 
-        super (ProxyConstants.DS_EVENT_REP);
+    /**
+     * Constructs a PxEventRepCV object.
+     *
+     * @param eventSupport The event support.
+     **/
+    public PxEventRepCV(PxEventSupport eventSupport) {
+        super(ProxyConstants.DS_EVENT_REP);
 
         eventSupport_ = eventSupport;
 
-        
+
     }
 
 
-
-/**
-Processes the reply.
-
-@return The returned object, or null if none.
-**/
-    public Object process ()
-        throws InvocationTargetException
-    {
+    /**
+     * Processes the reply.
+     *
+     * @return The returned object, or null if none.
+     **/
+    public Object process()
+            throws InvocationTargetException {
         try {
             // Gather the contents of the datastream.
-            PxPxObjectParm eventSourceParm = (PxPxObjectParm) getParm (0);
-            long pxId = eventSourceParm.getPxId ();
-            String listenerInterfaceName = ((PxStringParm) getParm (1)).getStringValue ();
-            String listenerMethodName = ((PxStringParm) getParm (2)).getStringValue ();
-            EventObject eventObject = (EventObject) ((PxParm) getParm (3)).getObjectValue ();
+            PxPxObjectParm eventSourceParm = (PxPxObjectParm) getParm(0);
+            long pxId = eventSourceParm.getPxId();
+            String listenerInterfaceName = ((PxStringParm) getParm(1)).getStringValue();
+            String listenerMethodName = ((PxStringParm) getParm(2)).getStringValue();
+            EventObject eventObject = (EventObject) ((PxParm) getParm(3)).getObjectValue();
 
             // Note: The event source never gets set!  
 
             // Fire the event.
-            eventSupport_.fireEvent (pxId, listenerInterfaceName, listenerMethodName, eventObject);
+            eventSupport_.fireEvent(pxId, listenerInterfaceName, listenerMethodName, eventObject);
             return null;
-        }
-        catch (Exception e) {
-            if (Trace.isTraceErrorOn ())
-                Trace.log (Trace.ERROR, "Exception occured while processing event reply", e);
+        } catch (Exception e) {
+            if (Trace.isTraceErrorOn())
+                Trace.log(Trace.ERROR, "Exception occured while processing event reply", e);
             throw new InternalErrorException(InternalErrorException.PROTOCOL_ERROR);
         }
     }
-      
+
 
 }

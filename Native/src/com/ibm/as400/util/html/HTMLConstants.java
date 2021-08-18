@@ -14,143 +14,142 @@
 package com.ibm.as400.util.html;
 
 /**
-*  The HTMLConstants class is a collection of constants generally used 
-*  for positioning and orienting HTML components.
-**/
-public interface HTMLConstants
-{
-   /**
-   *  Vertical baseline alignment.
-   **/
-   public final static String BASELINE = "baseline";
+ * The HTMLConstants class is a collection of constants generally used
+ * for positioning and orienting HTML components.
+ **/
+public interface HTMLConstants {
+    /**
+     * Vertical baseline alignment.
+     **/
+    public final static String BASELINE = "baseline";
 
-   /**
-   *  New, unnamed window as the target frame.
-   **/
-   public final static String TARGET_BLANK = "_blank";
+    /**
+     * New, unnamed window as the target frame.
+     **/
+    public final static String TARGET_BLANK = "_blank";
 
-   /**
-   *  Vertical bottom alignment.
-   **/
-   public final static String BOTTOM = "bottom";
+    /**
+     * Vertical bottom alignment.
+     **/
+    public final static String BOTTOM = "bottom";
 
-   /**
-   *  Vertical absolute bottom alignment
-   **/
-   public final static String ABSBOTTOM = "absbottom";
+    /**
+     * Vertical absolute bottom alignment
+     **/
+    public final static String ABSBOTTOM = "absbottom";
 
-   /**
-   *  Horizontal alignment in center of page.
-   **/
-   public final static String CENTER = "center";
+    /**
+     * Horizontal alignment in center of page.
+     **/
+    public final static String CENTER = "center";
 
-   /**
-   *  Horizontal alignment between both text margins.
-   **/
-   public final static String JUSTIFY = "justify";
+    /**
+     * Horizontal alignment between both text margins.
+     **/
+    public final static String JUSTIFY = "justify";
 
-   /**
-   *  Horizontal left alignment.
-   **/
-   public final static String LEFT = "left";
-                              
-   /**
-   *  Vertical middle alignment.
-   **/
-   public final static String MIDDLE = "middle";
+    /**
+     * Horizontal left alignment.
+     **/
+    public final static String LEFT = "left";
 
-   /**
-   *  Vertical absolute middle alignment.
-   **/
-   public final static String ABSMIDDLE = "absmiddle";
+    /**
+     * Vertical middle alignment.
+     **/
+    public final static String MIDDLE = "middle";
 
-   /**
-   *  Frameset parent of current window as target frame.
-   **/
-   public final static String TARGET_PARENT = "_parent";
+    /**
+     * Vertical absolute middle alignment.
+     **/
+    public final static String ABSMIDDLE = "absmiddle";
 
-   /**
-   *  Horizontal right alignment.
-   **/
-   public final static String RIGHT = "right";
+    /**
+     * Frameset parent of current window as target frame.
+     **/
+    public final static String TARGET_PARENT = "_parent";
 
-   /**
-   *  Current frame as the target frame.
-   **/
-   public final static String TARGET_SELF = "_self";
+    /**
+     * Horizontal right alignment.
+     **/
+    public final static String RIGHT = "right";
 
-   /**
-   *  Full, original window as target frame.
-   **/
-   public final static String TARGET_TOP = "_top";
+    /**
+     * Current frame as the target frame.
+     **/
+    public final static String TARGET_SELF = "_self";
 
-   /**
-   *  Vertical top alignment.
-   **/
-   public final static String TOP = "top";
+    /**
+     * Full, original window as target frame.
+     **/
+    public final static String TARGET_TOP = "_top";
 
-   /**
-   *  Vertical text top alignment.
-   **/
-   public final static String TEXTTOP = "texttop";
+    /**
+     * Vertical top alignment.
+     **/
+    public final static String TOP = "top";
 
-   /**
-   *  Disc, solid bullet, labeling scheme.
-   **/
-   public final static String DISC = "disc";          //$B0A
+    /**
+     * Vertical text top alignment.
+     **/
+    public final static String TEXTTOP = "texttop";
 
-
-   /**
-   *  Square, solid square, labeling scheme.
-   **/
-   public final static String SQUARE = "square";      //$B0A
+    /**
+     * Disc, solid bullet, labeling scheme.
+     **/
+    public final static String DISC = "disc";          //$B0A
 
 
-   /**
-   *  Circle, hollow circle, labeling scheme.
-   **/
-   public final static String CIRCLE = "circle";      //$B0A
-
-   
-   /**
-    *  Numbered ordered labeling scheme.
-    **/
-   public final static String NUMBERS = "numbers";     //$B0A
+    /**
+     * Square, solid square, labeling scheme.
+     **/
+    public final static String SQUARE = "square";      //$B0A
 
 
-   /**
-    *  Capital letter ordered labeling scheme.
-    **/
-   public final static String CAPITALS = "capitals";      //$B0A
+    /**
+     * Circle, hollow circle, labeling scheme.
+     **/
+    public final static String CIRCLE = "circle";      //$B0A
 
 
-   /**
-    *  Lower-case letter ordered labeling scheme.
-    */
-   public final static String LOWER_CASE = "lower_case";    //$B0A
-   
-   
-   /**
-    *  Large Roman numeral ordered labeling scheme.
-    **/
-   public final static String LARGE_ROMAN = "large_roman";  //$B0A
+    /**
+     * Numbered ordered labeling scheme.
+     **/
+    public final static String NUMBERS = "numbers";     //$B0A
 
 
-   /**
-    *  Small Roman numeral ordered labeling scheme.
-    **/
-   public final static String SMALL_ROMAN = "small_roman";  //$B0A
+    /**
+     * Capital letter ordered labeling scheme.
+     **/
+    public final static String CAPITALS = "capitals";      //$B0A
 
 
-   /**
-    *  Left to Right text interpretation direction.
-    **/
-   public final static String LTR = "ltr";               //$B1A
+    /**
+     * Lower-case letter ordered labeling scheme.
+     */
+    public final static String LOWER_CASE = "lower_case";    //$B0A
 
-   /**
-    *  Right to Left text interpretation direction.
-    **/
-   public final static String RTL = "rtl";               //$B1A
 
-   
+    /**
+     * Large Roman numeral ordered labeling scheme.
+     **/
+    public final static String LARGE_ROMAN = "large_roman";  //$B0A
+
+
+    /**
+     * Small Roman numeral ordered labeling scheme.
+     **/
+    public final static String SMALL_ROMAN = "small_roman";  //$B0A
+
+
+    /**
+     * Left to Right text interpretation direction.
+     **/
+    public final static String LTR = "ltr";               //$B1A
+
+    /**
+     * Right to Left text interpretation direction.
+     **/
+    public final static String RTL = "rtl";               //$B1A
+
+
 }

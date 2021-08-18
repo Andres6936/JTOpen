@@ -14,53 +14,46 @@
 package com.ibm.as400.data;
 
 /**
-  *  The ProgramDescriptor class implements the methods of the Descriptor interface
-  *  that are unique to the <program> tag.
-  *
-  **/
+ * The ProgramDescriptor class implements the methods of the Descriptor interface
+ * that are unique to the <program> tag.
+ **/
 
-class ProgramDescriptor extends DocNodeDescriptor
-{
+class ProgramDescriptor extends DocNodeDescriptor {
     /* Constructor */
-    public ProgramDescriptor(PcmlDocNode node)
-    {
+    public ProgramDescriptor(PcmlDocNode node) {
         super(node);
     }
-   /**
-    * Return list of valid attributes for the <pcml> tag.
-    **/
-    public String[] getAttributeList()
-    {
-        return ((PcmlProgram)getDocNode()).getAttributeList();
+
+    /**
+     * Return list of valid attributes for the <pcml> tag.
+     **/
+    public String[] getAttributeList() {
+        return ((PcmlProgram) getDocNode()).getAttributeList();
     }
 
-   /**
-    * Return a String containing the current value for the requested attribute.
-    **/
-    public String getAttributeValue(String attr)
-    {
-        if (attr != null)
-        {
-            if (attr.equals("name"))
-            {
+    /**
+     * Return a String containing the current value for the requested attribute.
+     **/
+    public String getAttributeValue(String attr) {
+        if (attr != null) {
+            if (attr.equals("name")) {
                 String name = getDocNode().getName();
                 if (name.equals(""))
                     return null;
                 else
                     return name;
-            }
-            else if (attr.equals("path"))
-                return ((PcmlProgram)getDocNode()).getPath();
+            } else if (attr.equals("path"))
+                return ((PcmlProgram) getDocNode()).getPath();
             else if (attr.equals("parseorder"))
-                return ((PcmlProgram)getDocNode()).getParseorder();
+                return ((PcmlProgram) getDocNode()).getParseorder();
             else if (attr.equals("entrypoint"))
-                return ((PcmlProgram)getDocNode()).getEntrypoint();
+                return ((PcmlProgram) getDocNode()).getEntrypoint();
             else if (attr.equals("returnvalue"))
-                return ((PcmlProgram)getDocNode()).getReturnvalue();
+                return ((PcmlProgram) getDocNode()).getReturnvalue();
             else if (attr.equals("threadsafe"))                     // @A1A
-                return ((PcmlProgram)getDocNode()).getThreadsafe(); // @A1A
+                return ((PcmlProgram) getDocNode()).getThreadsafe(); // @A1A
             else if (attr.equals("epccsid"))                        // @D1A
-                return Integer.toString(((PcmlProgram)getDocNode()).getEpCcsid());  // @D1A
+                return Integer.toString(((PcmlProgram) getDocNode()).getEpCcsid());  // @D1A
             else
                 return null;
         }

@@ -19,20 +19,22 @@ package com.ibm.as400.util.commtrace;
  */
 public class UnknownMessage extends Message {
 
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data	The raw data of this header. 
-	 */
-	UnknownMessage(BitBuf data) {
-		super(data);
-		super.type= MSGUNK;
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    UnknownMessage(BitBuf data) {
+        super(data);
+        super.type = MSGUNK;
+    }
 
-	/**
-	 * Returns the next header in this packet.
-	 * @return Will always return null.
-	 */
-	public Header getNextHeader() {
-		return null;
-	}
+    /**
+     * Returns the next header in this packet.
+     *
+     * @return Will always return null.
+     */
+    public Header getNextHeader() {
+        return null;
+    }
 }

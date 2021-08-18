@@ -21,63 +21,63 @@ import java.util.Vector;
 
 
 /**
-*  The HTMLAlign class represents a block formatting element, which uses the HTML
-*  &lt;DIV&gt; tag, within an HTML page.  The tag has an implied line break before
-*  and after the tag.
-*  <P>
-*  This example creates a HTMLAlign tag:
-*  <BLOCKQUOTE><PRE>
-*  // Create an ordered list.
-*  OrderedList list = new OrderedList(HTMLConstants.LARGE_ROMAN);
-*  OrderedListItem listItem = new OrderedListItem();
-*  listItem.setItemData(new HTMLText("my list item"));
-*  list.addListItem(listItem);
-*  
-*  // Align the list.
-*  HTMLAlign align = new HTMLAlign(list, HTMLConstants.CENTER);
-*  System.out.println(align);
-*  </PRE></BLOCKQUOTE>
-*  <P>
-*  Here is the output of the HTMLAlign tag:<br>
-*  <BLOCKQUOTE><PRE>
-*  &lt;div align=&quot;center&quot;&gt;
-*  &lt;ol type=&quot;I&quot;&gt;
-*  &lt;li type=&quot;i&quot;&gt;my list item&lt;/li&gt;
-*  &lt;/ol&gt;
-*  &lt;/div&gt;
-*  </PRE></BLOCKQUOTE>
-*
-*  <p>
-*  Calling getFOTag() would produce the following:
-*  <BLOCKQUOTE><PRE>
-*  &lt;fo:block text-align='center'&gt;
-*  &lt;fo:block-container&gt;
-*  &lt;fo:list-block&gt;
-*  &lt;fo:list-item&gt;
-*  &lt;fo:list-item-label&gt;I.&lt;/fo:list-item-label&gt;
-*  &lt;fo:list-item-body&gt;&lt;fo:block-container&gt;&lt;fo:block&gt;my list item&lt;/fo:block&gt;
-*  &lt;/fo:block-container&gt;
-*  &lt;/fo:list-item-body&gt;
-*  &lt;/fo:list-item&gt;
-*  &lt;/fo:list-block&gt;
-*  &lt;/fo:block-container&gt;
-*  &lt;/fo:block&gt;
-*  </PRE></BLOCKQUOTE>
-*
-*  <p>HTMLAlign objects generate the following events:
-*  <ul>
-*  <LI><A HREF="ElementEvent.html">ElementEvent</A> - The events fired are:
-*    <ul>
-*      <li>elementAdded
-*      <li>elementRemoved
-*    </ul>
-*    <li>PropertyChangeEvent
-*  </ul>
-**/
+ * The HTMLAlign class represents a block formatting element, which uses the HTML
+ * &lt;DIV&gt; tag, within an HTML page.  The tag has an implied line break before
+ * and after the tag.
+ * <p>
+ * This example creates a HTMLAlign tag:
+ * <BLOCKQUOTE><PRE>
+ * // Create an ordered list.
+ * OrderedList list = new OrderedList(HTMLConstants.LARGE_ROMAN);
+ * OrderedListItem listItem = new OrderedListItem();
+ * listItem.setItemData(new HTMLText("my list item"));
+ * list.addListItem(listItem);
+ * <p>
+ * // Align the list.
+ * HTMLAlign align = new HTMLAlign(list, HTMLConstants.CENTER);
+ * System.out.println(align);
+ * </PRE></BLOCKQUOTE>
+ * <p>
+ * Here is the output of the HTMLAlign tag:<br>
+ * <BLOCKQUOTE><PRE>
+ * &lt;div align=&quot;center&quot;&gt;
+ * &lt;ol type=&quot;I&quot;&gt;
+ * &lt;li type=&quot;i&quot;&gt;my list item&lt;/li&gt;
+ * &lt;/ol&gt;
+ * &lt;/div&gt;
+ * </PRE></BLOCKQUOTE>
+ *
+ * <p>
+ * Calling getFOTag() would produce the following:
+ * <BLOCKQUOTE><PRE>
+ * &lt;fo:block text-align='center'&gt;
+ * &lt;fo:block-container&gt;
+ * &lt;fo:list-block&gt;
+ * &lt;fo:list-item&gt;
+ * &lt;fo:list-item-label&gt;I.&lt;/fo:list-item-label&gt;
+ * &lt;fo:list-item-body&gt;&lt;fo:block-container&gt;&lt;fo:block&gt;my list item&lt;/fo:block&gt;
+ * &lt;/fo:block-container&gt;
+ * &lt;/fo:list-item-body&gt;
+ * &lt;/fo:list-item&gt;
+ * &lt;/fo:list-block&gt;
+ * &lt;/fo:block-container&gt;
+ * &lt;/fo:block&gt;
+ * </PRE></BLOCKQUOTE>
+ *
+ * <p>HTMLAlign objects generate the following events:
+ * <ul>
+ * <LI><A HREF="ElementEvent.html">ElementEvent</A> - The events fired are:
+ *   <ul>
+ *     <li>elementAdded
+ *     <li>elementRemoved
+ *   </ul>
+ *   <li>PropertyChangeEvent
+ * </ul>
+ **/
 public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable             // @Z1C
 {
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-  static final long serialVersionUID = -7673670119386729128L;
+    static final long serialVersionUID = -7673670119386729128L;
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     private String align_ = HTMLConstants.LEFT;
 
@@ -91,23 +91,21 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
 
 
     /**
-    *  Constructs a default HTMLAlign object.
-    **/
-    public HTMLAlign()
-    {
+     * Constructs a default HTMLAlign object.
+     **/
+    public HTMLAlign() {
         super();
 
     }
 
 
     /**
-    *  Constructs an HTMLAlign object with the specified <i>data</i>.
-    *  The default alignment is left.
-    *
-    *  @param data The data to align.
-    **/
-    public HTMLAlign(HTMLTagElement data)
-    {
+     * Constructs an HTMLAlign object with the specified <i>data</i>.
+     * The default alignment is left.
+     *
+     * @param data The data to align.
+     **/
+    public HTMLAlign(HTMLTagElement data) {
         super();
 
         addItem(data);
@@ -116,14 +114,13 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
 
 
     /**
-    *  Constructs an HTMLAlign object with the specified <i>data</i> and <i>align</i> attribute.
-    *
-    *  @param data The data to align.
-    *  @param align The type of alignment.  One of the following constants
-    *  defined in HTMLConstants:  LEFT, RIGHT, or CENTER.
-    **/
-    public HTMLAlign(HTMLTagElement data, String align)
-    {
+     * Constructs an HTMLAlign object with the specified <i>data</i> and <i>align</i> attribute.
+     *
+     * @param data  The data to align.
+     * @param align The type of alignment.  One of the following constants
+     *              defined in HTMLConstants:  LEFT, RIGHT, or CENTER.
+     **/
+    public HTMLAlign(HTMLTagElement data, String align) {
         super();
 
         addItem(data);
@@ -132,12 +129,11 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
 
 
     /**
-    *  Adds an HTMLTagElement to the list of tags to align.
-    *
-    *  @param data The data to align.
-    **/
-    public void addItem(HTMLTagElement data)
-    {
+     * Adds an HTMLTagElement to the list of tags to align.
+     *
+     * @param data The data to align.
+     **/
+    public void addItem(HTMLTagElement data) {
         //@C1D
 
         if (data == null)
@@ -150,12 +146,11 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
 
 
     /**
-    *  Adds an ElementListener.
-    *
-    *  @param listener The ElementListener.
-    **/
-    public void addItemElementListener(ElementListener listener)
-    {
+     * Adds an ElementListener.
+     *
+     * @param listener The ElementListener.
+     **/
+    public void addItemElementListener(ElementListener listener) {
         if (listener == null)
             throw new NullPointerException("listener");
 
@@ -164,19 +159,16 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
     }
 
 
-
     /**
-     *  Fires the element event.
+     * Fires the element event.
      **/
-    private void fireElementEvent(int evt)
-    {
-      if (elementListeners == null) return;
+    private void fireElementEvent(int evt) {
+        if (elementListeners == null) return;
         Vector targets;
         targets = (Vector) elementListeners.clone();
         ElementEvent elementEvt = new ElementEvent(this, evt);
-        for (int i = 0; i < targets.size(); i++)
-        {
-            ElementListener target = (ElementListener)targets.elementAt(i);
+        for (int i = 0; i < targets.size(); i++) {
+            ElementListener target = (ElementListener) targets.elementAt(i);
             if (evt == ElementEvent.ELEMENT_ADDED)
                 target.elementAdded(elementEvt);
             else if (evt == ElementEvent.ELEMENT_REMOVED)
@@ -186,39 +178,90 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
 
 
     /**
-     *  Returns the alignment of the HTMLAlign object.
-     *  @return The alignment.
+     * Returns the alignment of the HTMLAlign object.
+     *
+     * @return The alignment.
      **/
-    public String getAlign()
-    {
+    public String getAlign() {
         return align_;
     }
 
+    /**
+     * Sets the horizontal alignment for a block of HTML.  The default is left alignment.
+     *
+     * @param align The alignment.  One of the following constants
+     *              defined in HTMLConstants:  LEFT, RIGHT, or CENTER.
+     * @see HTMLConstants
+     **/
+    public void setAlign(String align) {
+        if (align == null)
+            throw new NullPointerException("align");
+
+        // If align is not one of the valid HTMLConstants, throw an exception.
+        if (!(align.equals(HTMLConstants.LEFT)) && !(align.equals(HTMLConstants.RIGHT)) && !(align.equals(HTMLConstants.CENTER))) {
+            throw new ExtendedIllegalArgumentException("align", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+        }
+
+        if (Trace.isTraceOn())
+            Trace.log(Trace.INFORMATION, "   Setting alignment for <div>.");
+
+        String old = align_;
+
+        align_ = align;
+
+        if (changes_ != null) changes_.firePropertyChange("align", old, align); //@CRS
+
+    }
 
     /**
-    *  Returns the <i>direction</i> of the text interpretation.
-    *  @return The direction of the text.
-    **/
+     * Returns the <i>direction</i> of the text interpretation.
+     *
+     * @return The direction of the text.
+     **/
     public String getDirection()                               //$B1A
     {
         return dir_;
     }
 
+    /**
+     * Sets the <i>direction</i> of the text interpretation.
+     *
+     * @param dir The direction.  One of the following constants
+     *            defined in HTMLConstants:  LTR or RTL.
+     * @see HTMLConstants
+     **/
+    public void setDirection(String dir)                                     //$B1A
+    {
+        if (dir == null)
+            throw new NullPointerException("dir");
+
+        // If direction is not one of the valid HTMLConstants, throw an exception.
+        if (!(dir.equals(HTMLConstants.LTR)) && !(dir.equals(HTMLConstants.RTL))) {
+            throw new ExtendedIllegalArgumentException("dir", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+        }
+
+        String old = dir_;
+
+        dir_ = dir;
+
+        if (changes_ != null) changes_.firePropertyChange("dir", old, dir); //@CRS
+    }
 
     /**
-    *  Returns the direction attribute tag.
-    *  @return The direction tag.
-    **/
+     * Returns the direction attribute tag.
+     *
+     * @return The direction tag.
+     **/
     String getDirectionAttributeTag()                                                 //$B1A
     {
-        
 
-        if(useFO_)                                                                    //@D1A  
+
+        if (useFO_)                                                                    //@D1A
         {                                                                             //@D1A
             //If outputting XSL-FO Tags                                               //@D1A
-            if((dir_!=null) && (dir_.length()>0))                                     //@D1A
+            if ((dir_ != null) && (dir_.length() > 0))                                     //@D1A
             {                                                                         //@D1A
-                if(dir_.equals(HTMLConstants.RTL))                                    //@D1A
+                if (dir_.equals(HTMLConstants.RTL))                                    //@D1A
                     return " writing-mode='rl'";                                      //@D1A
                 else                                                                  //@D1A
                     return " writing-mode='lr'";                                      //@D1A
@@ -228,31 +271,49 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
         }                                                                             //@D1A
         else                                                                          //@D1A
         {                                                                             //@D1A
-            
+
             //@C1D
 
             if ((dir_ != null) && (dir_.length() > 0))
                 return " dir=\"" + dir_ + "\"";
             else
-                return "";        
+                return "";
         }                                                                             //@D1A
     }
 
-
     /**
-    *  Returns the <i>language</i> of the input element.
-    *  @return The language of the input element.
-    **/
+     * Returns the <i>language</i> of the input element.
+     *
+     * @return The language of the input element.
+     **/
     public String getLanguage()                                //$B1A
     {
         return lang_;
     }
 
+    /**
+     * Sets the <i>language</i> of the HTMLAlign tag.
+     *
+     * @param lang The language.  Example language tags include:
+     *             en and en-US.
+     **/
+    public void setLanguage(String lang)                                      //$B1A
+    {
+        if (lang == null)
+            throw new NullPointerException("lang");
+
+        String old = lang_;
+
+        lang_ = lang;
+
+        if (changes_ != null) changes_.firePropertyChange("lang", old, lang); //@CRS
+    }
 
     /**
-    *  Returns the language attribute tag.
-    *  @return The language tag.
-    **/
+     * Returns the language attribute tag.
+     *
+     * @return The language tag.
+     **/
     String getLanguageAttributeTag()                                                  //$B1A
     {
         //@C1D
@@ -263,29 +324,26 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
             return "";
     }
 
-
     /**
-    *  Returns the tag for the HTML alignment.
-    *  @return The tag.
-    **/
-    public String getTag()
-    {
+     * Returns the tag for the HTML alignment.
+     *
+     * @return The tag.
+     **/
+    public String getTag() {
         //@C1D
 
-        if(useFO_)                                          //@D1A
+        if (useFO_)                                          //@D1A
             return getFOTag();                              //@D1A
 
-        if (list_.isEmpty())
-        {
+        if (list_.isEmpty()) {
             Trace.log(Trace.ERROR, "Attempting to get tag before adding items to list.");
             throw new ExtendedIllegalStateException(
-                                                   "data", ExtendedIllegalStateException.PROPERTY_NOT_SET );
+                    "data", ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
 
         StringBuffer s = new StringBuffer("");
 
-        if (align_ != null)
-        {
+        if (align_ != null) {
             if (align_.equals(HTMLConstants.LEFT))
                 s.append("<div align=\"left\"");                                         //$B1C
             else if (align_.equals(HTMLConstants.RIGHT))
@@ -301,9 +359,8 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
 
         s.append(">\n");                                                              //$B1C
 
-        for (int i=0; i < list_.size(); i++)
-        {
-            HTMLTagElement data = (HTMLTagElement)list_.elementAt(i);
+        for (int i = 0; i < list_.size(); i++) {
+            HTMLTagElement data = (HTMLTagElement) list_.elementAt(i);
             s.append(data.getTag());
         }
 
@@ -312,12 +369,12 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
         return s.toString();
     }
 
-
     /**
-    *  Returns the tag for the XSL-FO alignment.
-    *  The language attribute is not supported in XSL-FO.
-    *  @return The tag.
-    **/
+     * Returns the tag for the XSL-FO alignment.
+     * The language attribute is not supported in XSL-FO.
+     *
+     * @return The tag.
+     **/
     public String getFOTag()                                //@D1A
     {
         //Save current useFO_ value
@@ -326,61 +383,57 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
         //Indicate that XSL-FO tags are outputted.
         setUseFO(true);
 
-        if (list_.isEmpty())
-        {
+        if (list_.isEmpty()) {
             Trace.log(Trace.ERROR, "Attempting to get XSL-FO tag before adding items to list.");
             throw new ExtendedIllegalStateException(
-                                                   "data", ExtendedIllegalStateException.PROPERTY_NOT_SET );
+                    "data", ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
 
         StringBuffer s = new StringBuffer("");
 
-        if (align_ != null)                                             
-        {                                                               
-            if(align_.equals(HTMLConstants.LEFT))                       
-                s.append("<fo:block text-align='start'");               
-            else if(align_.equals(HTMLConstants.RIGHT))                 
-                s.append("<fo:block text-align='end'");                 
-            else if(align_.equals(HTMLConstants.CENTER))                
-                s.append("<fo:block text-align='center'");              
-        }                                                               
+        if (align_ != null) {
+            if (align_.equals(HTMLConstants.LEFT))
+                s.append("<fo:block text-align='start'");
+            else if (align_.equals(HTMLConstants.RIGHT))
+                s.append("<fo:block text-align='end'");
+            else if (align_.equals(HTMLConstants.CENTER))
+                s.append("<fo:block text-align='center'");
+        }
 
-        s.append(getDirectionAttributeTag());                           
-        s.append(">\n");                                                
+        s.append(getDirectionAttributeTag());
+        s.append(">\n");
 
-        for (int i = 0; i<list_.size(); i++)                            
-        {                                                               
-            HTMLTagElement data = (HTMLTagElement)list_.elementAt(i);   
-            s.append(data.getFOTag());                                  
-            s.append("\n");                                             
-        }                                                               
-        
-        s.append("</fo:block>\n");                                      
+        for (int i = 0; i < list_.size(); i++) {
+            HTMLTagElement data = (HTMLTagElement) list_.elementAt(i);
+            s.append(data.getFOTag());
+            s.append("\n");
+        }
+
+        s.append("</fo:block>\n");
 
         //Set useFO_ to previous state.
-        setUseFO(useFO);    
+        setUseFO(useFO);
 
         return s.toString();
     }
 
     /**
-     *  Removes this ElementListener.
+     * Removes this ElementListener.
      *
-     *  @param listener The ElementListener.
+     * @param listener The ElementListener.
      **/
-    public void removeItemElementListener(ElementListener listener)
-    {
+    public void removeItemElementListener(ElementListener listener) {
         if (listener == null)
             throw new NullPointerException("listener");
 
         if (elementListeners != null) elementListeners.removeElement(listener); //@CRS
     }
 
-
     /**
-     *  Returns if Formatting Object tags are outputted.
-     *  The default value is false.
-     *  @return true if the output generated is an XSL formatting object, false if the output generated is HTML.
+     * Returns if Formatting Object tags are outputted.
+     * The default value is false.
+     *
+     * @return true if the output generated is an XSL formatting object, false if the output generated is HTML.
      **/
     public boolean isUseFO()                                          //@D1A
     {
@@ -388,24 +441,36 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
     }
 
     /**
-    *  Deserializes and initializes transient data.
-    **/
-    private void readObject(java.io.ObjectInputStream in)
-    throws java.io.IOException, ClassNotFoundException
+     * Sets if Formatting Object tags should be used.
+     * The default value is false.
+     *
+     * @param useFO - true if output generated is an XSL formatting object, false if the output generated is HTML.
+     **/
+    public void setUseFO(boolean useFO)                            //@D1A
     {
+        boolean old = useFO_;
+
+        useFO_ = useFO;
+
+        if (changes_ != null) changes_.firePropertyChange("useFO", old, useFO);
+    }
+
+    /**
+     * Deserializes and initializes transient data.
+     **/
+    private void readObject(java.io.ObjectInputStream in)
+            throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
         //@CRS changes_ = new PropertyChangeSupport(this);
         //@CRS elementListeners = new Vector();
     }
 
-
     /**
-    *  Removes an HTMLTagElement from the list of tags to align.
-    *
-    *  @param data The data to remove.
-    **/
-    public void removeItem(HTMLTagElement data)
-    {
+     * Removes an HTMLTagElement from the list of tags to align.
+     *
+     * @param data The data to remove.
+     **/
+    public void removeItem(HTMLTagElement data) {
         //@C1D
 
         if (data == null)
@@ -415,105 +480,12 @@ public class HTMLAlign extends HTMLTagAttributes implements java.io.Serializable
             fireElementEvent(ElementEvent.ELEMENT_REMOVED);
     }
 
-
-
     /**
-     *  Sets the horizontal alignment for a block of HTML.  The default is left alignment.
-     *  @param align The alignment.  One of the following constants
-     *  defined in HTMLConstants:  LEFT, RIGHT, or CENTER.
+     * Returns a String representation for the HTMLAlign tag.
      *
-     *  @see HTMLConstants
+     * @return The tag.
      **/
-    public void setAlign(String align)
-    {
-        if (align == null)
-            throw new NullPointerException("align");
-
-        // If align is not one of the valid HTMLConstants, throw an exception.
-        if ( !(align.equals(HTMLConstants.LEFT))  && !(align.equals(HTMLConstants.RIGHT)) && !(align.equals(HTMLConstants.CENTER)) )
-        {
-            throw new ExtendedIllegalArgumentException("align", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
-
-        if (Trace.isTraceOn())
-            Trace.log(Trace.INFORMATION, "   Setting alignment for <div>.");
-
-        String old = align_;
-
-        align_ = align;
-
-        if (changes_ != null) changes_.firePropertyChange("align", old, align ); //@CRS
-
-    }
-
-
-    /**
-    *  Sets the <i>direction</i> of the text interpretation.
-    *  @param dir The direction.  One of the following constants
-    *  defined in HTMLConstants:  LTR or RTL.
-    *
-    *  @see HTMLConstants
-    *
-    **/
-    public void setDirection(String dir)                                     //$B1A
-    {
-        if (dir == null)
-            throw new NullPointerException("dir");
-
-        // If direction is not one of the valid HTMLConstants, throw an exception.
-        if ( !(dir.equals(HTMLConstants.LTR))  && !(dir.equals(HTMLConstants.RTL)) )
-        {
-            throw new ExtendedIllegalArgumentException("dir", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
-
-        String old = dir_;
-
-        dir_ = dir;
-
-        if (changes_ != null) changes_.firePropertyChange("dir", old, dir ); //@CRS
-    }
-
-
-    /**
-    *  Sets the <i>language</i> of the HTMLAlign tag.
-    *  @param lang The language.  Example language tags include:
-    *  en and en-US.
-    *
-    **/
-    public void setLanguage(String lang)                                      //$B1A
-    {
-        if (lang == null)
-            throw new NullPointerException("lang");
-
-        String old = lang_;
-
-        lang_ = lang;
-
-        if (changes_ != null) changes_.firePropertyChange("lang", old, lang ); //@CRS
-    }
-
-
-    /** 
-    * Sets if Formatting Object tags should be used.  
-    *  The default value is false.
-    * @param useFO - true if output generated is an XSL formatting object, false if the output generated is HTML.
-    **/     
-    public void setUseFO(boolean useFO)                            //@D1A
-    {
-        boolean old = useFO_;
-
-        useFO_ = useFO;
-
-        if (changes_ != null) changes_.firePropertyChange("useFO", old, useFO );
-    }
-
-
-    /**
-    *  Returns a String representation for the HTMLAlign tag.
-    *  @return The tag.
-    **/
-    public String toString()
-    {
+    public String toString() {
         return getTag();
     }
 }

@@ -23,8 +23,7 @@ import java.net.Socket;
 import java.util.Vector;
 
 // Represents a connection to a client of the proxy server.
-class PSController extends StoppableThread
-{
+class PSController extends StoppableThread {
     // Private data.
     private static long nextConnectionId_ = 1000;
     private static Object nextConnectionIdLock_ = new Object();
@@ -48,8 +47,7 @@ class PSController extends StoppableThread
     // @param  loadBalancer  The load balancer.
     // @param  config  The configuration.
     // @param  serverSocket  The server socket container.
-    public PSController(Vector threadGroup, ProxyServer proxyServer, PSLoad load, PSLoadBalancer loadBalancer, PSConfig config, PSServerSocketContainerAdapter serverSocket)
-    {
+    public PSController(Vector threadGroup, ProxyServer proxyServer, PSLoad load, PSLoadBalancer loadBalancer, PSConfig config, PSServerSocketContainerAdapter serverSocket) {
         super("PSController-" + serverSocket);
 
         //threadGroup_ = threadGroup;
@@ -69,34 +67,25 @@ class PSController extends StoppableThread
         if (Trace.isTraceOn()) Trace.log(Trace.PROXY, "Px server controller " + this + " opened.");
     }
 
-    public void closeServerSocket()
-    {
+    public void closeServerSocket() {
         if (Trace.isTraceOn()) Trace.log(Trace.PROXY, "Px server controller " + this + " closed.");
 
         closeSocket();
 
-        try
-        {
+        try {
             serverSocket_.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             Trace.log(Trace.ERROR, e.getMessage(), e);
         }
 
         closed_ = true;
     }
 
-    public void closeSocket()
-    {
-        if (ownSocket_)
-        {
-            try
-            {
+    public void closeSocket() {
+        if (ownSocket_) {
+            try {
                 if (connectedSocket_ != null) connectedSocket_.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 Trace.log(Trace.ERROR, "Exception closing proxy socket:", e);
             }
 
@@ -104,23 +93,20 @@ class PSController extends StoppableThread
         }
     }
 
-    protected void finalize() throws Throwable
-    {
+    protected void finalize() throws Throwable {
         if (closed_ == false) closeServerSocket();
         super.finalize();
     }
 
     // Returns the current requesting client's address.
     // @return  The current requesting client's address.
-    public InetAddress getClientAddress()
-    {
+    public InetAddress getClientAddress() {
         return connectedSocket_.getInetAddress();
     }
 
     // Returns the current requesting client's socket.
     // @return  The current requesting client's socket.
-    public Socket getConnectedSocket()
-    {
+    public Socket getConnectedSocket() {
         // Give up ownership of the socket.  A connection owns it now.
         ownSocket_ = false;
         return connectedSocket_;
@@ -128,86 +114,70 @@ class PSController extends StoppableThread
 
     // Returns the current requesting client's unique connection id.
     // @return  The current requesting client's unique connection id.
-    public long getConnectionId()
-    {
+    public long getConnectionId() {
         return connectionId_;
     }
 
     // Returns the input stream used for receiving requests from the current client.
     // @return  The input stream used for receiving requests from the current client.
-    public InputStream getInputStream()
-    {
+    public InputStream getInputStream() {
         return input_;
     }
 
     // Returns the output stream used for sending replies to the current client.
     // @return  The output stream used for sending replies to the current client.
-    public OutputStream getOutputStream()
-    {
+    public OutputStream getOutputStream() {
         return output_;
     }
 
     // Runs the controller.
-    public void run()
-    {
+    public void run() {
         running_ = true;
 
         // Loop forever, handling each connection that comes in.
-        while (canContinue())
-        {
+        while (canContinue()) {
             // If anything goes wrong here, stop the controller.
-            try
-            {
+            try {
                 connectedSocket_ = serverSocket_.accept();
                 // Test note: We see the phrase "Address in use: bind" on occasion when calling this method.  My best guess is that the JDK is printing it!
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
                 Verbose.println(e);
                 Trace.log(Trace.ERROR, "Exception accepting proxy socket:", e);
                 break;
             }
 
             // From here on out, if anything goes wrong, we just loop and try again!
-            try
-            {
+            try {
                 input_ = new BufferedInputStream(connectedSocket_.getInputStream());
                 output_ = new BufferedOutputStream(connectedSocket_.getOutputStream());
 
                 // For now, this class "owns" the socket... at least until a connection gets it for its own use.
                 ownSocket_ = true;
 
-                synchronized (nextConnectionIdLock_)
-                {
+                synchronized (nextConnectionIdLock_) {
                     connectionId_ = ++nextConnectionId_;
                 }
 
                 // Get the next request.
                 if (Trace.isTraceProxyOn())
-                  Trace.log(Trace.PROXY,this,"calling factory_.getNextDS"); 
-                PxReqSV request = (PxReqSV)factory_.getNextDS(input_);
+                    Trace.log(Trace.PROXY, this, "calling factory_.getNextDS");
+                PxReqSV request = (PxReqSV) factory_.getNextDS(input_);
                 if (Trace.isTraceProxyOn()) request.dump(Trace.getPrintWriter());
 
                 // Process the request and return the reply, if any.
-                PxRepSV reply = (PxRepSV)request.process();
-                if (reply != null)
-                {
+                PxRepSV reply = (PxRepSV) request.process();
+                if (reply != null) {
                     reply.setCorrelationId(request.getCorrelationId());
-                    synchronized (output_)
-                    {
+                    synchronized (output_) {
                         if (Trace.isTraceProxyOn()) reply.dump(Trace.getPrintWriter());
                         reply.writeTo(output_);
                         output_.flush();
                     }
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Verbose.println(e);
                 Trace.log(Trace.ERROR, "Exception processing proxy request:", e);
-            }
-            finally
-            {
+            } finally {
                 closeSocket();
             }
         }
@@ -216,28 +186,23 @@ class PSController extends StoppableThread
     }
 
     // Stops the thread safely.
-    public void stopSafely()
-    {
+    public void stopSafely() {
         super.stopSafely();
 
         // Close the sockets, etc.
         closeServerSocket();
 
         // Wait for controller loop to finish.  This verifies that the socket was finally closed.  (On some platforms (e.g. Windows) it seems like the close does not take full effect until a few seconds after close() is called.
-        try
-        {
+        try {
             while (running_) Thread.sleep(500);
-        }
-        catch(InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             // Ignore.
         }
 
         Verbose.println(ResourceBundleLoader.getText("PROXY_SERVER_ENDED", serverSocket_));
     }
 
-    public String toString()
-    {
+    public String toString() {
         return serverSocket_.toString();
     }
 }

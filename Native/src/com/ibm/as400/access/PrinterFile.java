@@ -20,28 +20,24 @@ import java.beans.PropertyVetoException;
  * The PrinterFile class represents a printer file.
  * An instance of this class can be used to manipulate an individual
  * printer file.
- *
+ * <p>
  * See <a href="doc-files/PrinterFileAttrs.html">Printer File Attributes</a> for
  * valid attributes.
- *
  **/
 
 public class PrinterFile extends PrintObject
-implements java.io.Serializable
-{
+        implements java.io.Serializable {
     private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-    
+
     static final long serialVersionUID = 4L;
 
     private static final String PATH = "path";
 
     // constructor used internally (not externalized since it takes
     // an ID code point
-    PrinterFile(AS400 system, NPCPIDPrinterFile id, NPCPAttribute attrs)
-    {
-       super(system, id, attrs, NPConstants.PRINTER_FILE);
+    PrinterFile(AS400 system, NPCPIDPrinterFile id, NPCPAttribute attrs) {
+        super(system, id, attrs, NPConstants.PRINTER_FILE);
     }
-
 
 
     /**
@@ -54,8 +50,7 @@ implements java.io.Serializable
      * @see PrintObject#setSystem
      * @see #setPath
      **/
-    public PrinterFile()
-    {
+    public PrinterFile() {
         super(null, null, NPConstants.PRINTER_FILE);
 
         // Because of this constructor we will need to check the
@@ -63,18 +58,16 @@ implements java.io.Serializable
     }
 
 
-
     /**
      * Constructs a PrinterFile object. It uses the specified system name and
      * printer file that identify it on the system.
      *
-     * @param system The system on which this printer file exists.
+     * @param system          The system on which this printer file exists.
      * @param printerFileName The integrated file system name of the printer file. The format of
-     * the printer file string must be in the format of \QSYS.LIB\libname.LIB\printerfilename.FILE.
+     *                        the printer file string must be in the format of \QSYS.LIB\libname.LIB\printerfilename.FILE.
      **/
     public PrinterFile(AS400 system,
-		       String printerFileName)
-    {
+                       String printerFileName) {
         super(system, buildIDCodePoint(printerFileName), null, NPConstants.PRINTER_FILE);
 
         // Base class constructor checks for a null system.
@@ -82,54 +75,47 @@ implements java.io.Serializable
     }
 
 
-
     // builds the ID CodePoint
-    private static NPCPIDPrinterFile buildIDCodePoint(String IFSPrinterFileName)
-    {
-	    QSYSObjectPathName ifsPath = new QSYSObjectPathName(IFSPrinterFileName, "FILE");
+    private static NPCPIDPrinterFile buildIDCodePoint(String IFSPrinterFileName) {
+        QSYSObjectPathName ifsPath = new QSYSObjectPathName(IFSPrinterFileName, "FILE");
 
-	    return new NPCPIDPrinterFile(ifsPath.getObjectName(), ifsPath.getLibraryName());
+        return new NPCPIDPrinterFile(ifsPath.getObjectName(), ifsPath.getLibraryName());
     }
 
 
-
     // Check the run time state
-    void checkRunTimeState()
-    {
+    void checkRunTimeState() {
         // check whatever the base class needs to check
         super.checkRunTimeState();
 
         // PrinterFile's need to additionally check the IFS pathname.
-        if( getIDCodePoint() == null )
-        {
+        if (getIDCodePoint() == null) {
             Trace.log(Trace.ERROR, "Parameter 'path' has not been set.");
             throw new ExtendedIllegalStateException(
-              PATH, ExtendedIllegalStateException.PROPERTY_NOT_SET);
+                    PATH, ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
     }
 
 
-
     // A1A - Added chooseImpl() method
+
     /**
      * Chooses the appropriate implementation.
      **/
     void chooseImpl()
-    throws IOException, AS400SecurityException
-    {
+            throws IOException, AS400SecurityException {
         // We need to get the system to connect to...
         AS400 system = getSystem();
         if (system == null) {
-            Trace.log( Trace.ERROR, "Attempt to use PrinterFile before setting system." );
+            Trace.log(Trace.ERROR, "Attempt to use PrinterFile before setting system.");
             throw new ExtendedIllegalStateException("system",
-                                    ExtendedIllegalStateException.PROPERTY_NOT_SET);
+                    ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
 
         impl_ = (PrinterFileImpl) system.loadImpl2("com.ibm.as400.access.PrinterFileImplRemote",
-                                                   "com.ibm.as400.access.PrinterFileImplProxy");
+                "com.ibm.as400.access.PrinterFileImplProxy");
         super.setImpl();
     }
-
 
 
     /**
@@ -137,11 +123,10 @@ implements java.io.Serializable
      *
      * @return The name of the printer file.
      **/
-    public String getName()
-    {
+    public String getName() {
         NPCPID IDCodePoint = getIDCodePoint();
 
-        if( IDCodePoint == null ) {
+        if (IDCodePoint == null) {
             return EMPTY_STRING; // ""
         } else {
             return IDCodePoint.getStringValue(ATTR_PRTFILE);
@@ -149,87 +134,42 @@ implements java.io.Serializable
     }
 
 
-
     /**
      * Returns the integrated file system pathname of the printer file.
      *
      * @return The integrated file system pathname of the printer file.
      **/
-    public String getPath()
-    {
+    public String getPath() {
         NPCPID IDCodePoint = getIDCodePoint();
 
-        if( IDCodePoint == null ) {
+        if (IDCodePoint == null) {
             return EMPTY_STRING; // ""
         } else {
             return QSYSObjectPathName.toPath(
-              IDCodePoint.getStringValue(ATTR_PRTFLIB),  // library name
-              IDCodePoint.getStringValue(ATTR_PRTFILE),  // printer file name
-              "FILE");                                   // type
+                    IDCodePoint.getStringValue(ATTR_PRTFLIB),  // library name
+                    IDCodePoint.getStringValue(ATTR_PRTFILE),  // printer file name
+                    "FILE");                                   // type
         }
     }
-
-
-
-    /**
-     * Sets one or more attributes of the object.  See
-     * <a href="doc-files/PrinterFileAttrs.html">Printer File Attributes</a> for
-     * a list of valid attributes that can be changed.
-     *
-     * @param attributes A print parameter list that contains the
-     *  attributes to be changed.
-     *
-     * @exception AS400Exception If the system returns an error message.
-     * @exception AS400SecurityException If a security or authority error occurs.
-     * @exception ErrorCompletingRequestException If an error occurs before the request is completed.
-     * @exception IOException If an error occurs while communicating with the system.
-     * @exception InterruptedException If this thread is interrupted.
-     **/
-    public void setAttributes(PrintParameterList attributes)
-      throws AS400Exception,
-             AS400SecurityException,
-             ErrorCompletingRequestException,
-             IOException,
-             InterruptedException
-    {
-        if (attributes == null) {
-	        Trace.log(Trace.ERROR, "Parameter 'attributes' is null.");
-	        throw new NullPointerException("attributes");
-	    }
-
-        checkRunTimeState();
-
-        if (impl_ == null)                                      
-            chooseImpl();                                       
-        ((PrinterFileImpl) impl_).setAttributes(attributes);    
-        // propagate any changes to attrs                       
-        attrs = impl_.getAttrValue();                           
-    }
-
-
 
     /**
      * Sets the integrated file system pathname of the printer file.
      *
      * @param path The integrated file system name of the printer file. The format of
-     * the printer file string must be in the format of \QSYS.LIB\libname.LIB\printerfilename.FILE.
-     *
-     * @exception PropertyVetoException If the change is vetoed.
-     *
+     *             the printer file string must be in the format of \QSYS.LIB\libname.LIB\printerfilename.FILE.
+     * @throws PropertyVetoException If the change is vetoed.
      **/
     public void setPath(String path)
-      throws PropertyVetoException
-    {
-        if( path == null )
-        {
-            Trace.log( Trace.ERROR, "Parameter 'path' is null" );
-            throw new NullPointerException( PATH );
+            throws PropertyVetoException {
+        if (path == null) {
+            Trace.log(Trace.ERROR, "Parameter 'path' is null");
+            throw new NullPointerException(PATH);
         }
 
-        // check for connection...                                                  
-        if (impl_ != null) {                                                        
-            Trace.log(Trace.ERROR, "Cannot set property 'path' after connect.");    
-            throw new ExtendedIllegalStateException(PATH, ExtendedIllegalStateException.PROPERTY_NOT_CHANGED );
+        // check for connection...
+        if (impl_ != null) {
+            Trace.log(Trace.ERROR, "Cannot set property 'path' after connect.");
+            throw new ExtendedIllegalStateException(PATH, ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
         }
 
         String oldPath = getPath();
@@ -237,13 +177,46 @@ implements java.io.Serializable
         // Tell any vetoers about the change. If anyone objects
         // we let the PropertyVetoException propagate back to
         // our caller.
-        vetos.fireVetoableChange( PATH, oldPath, path );
+        vetos.fireVetoableChange(PATH, oldPath, path);
 
         // No one vetoed, make the change.
         setIDCodePoint(buildIDCodePoint(path));
 
         // Notify any property change listeners.
-        changes.firePropertyChange( PATH, oldPath, path );
+        changes.firePropertyChange(PATH, oldPath, path);
+    }
+
+    /**
+     * Sets one or more attributes of the object.  See
+     * <a href="doc-files/PrinterFileAttrs.html">Printer File Attributes</a> for
+     * a list of valid attributes that can be changed.
+     *
+     * @param attributes A print parameter list that contains the
+     *                   attributes to be changed.
+     * @throws AS400Exception                  If the system returns an error message.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws InterruptedException            If this thread is interrupted.
+     **/
+    public void setAttributes(PrintParameterList attributes)
+            throws AS400Exception,
+            AS400SecurityException,
+            ErrorCompletingRequestException,
+            IOException,
+            InterruptedException {
+        if (attributes == null) {
+            Trace.log(Trace.ERROR, "Parameter 'attributes' is null.");
+            throw new NullPointerException("attributes");
+        }
+
+        checkRunTimeState();
+
+        if (impl_ == null)
+            chooseImpl();
+        ((PrinterFileImpl) impl_).setAttributes(attributes);
+        // propagate any changes to attrs
+        attrs = impl_.getAttrValue();
     }
 
 } // end PrinterFile class

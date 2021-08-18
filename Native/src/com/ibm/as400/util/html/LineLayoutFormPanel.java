@@ -16,38 +16,36 @@ package com.ibm.as400.util.html;
 import com.ibm.as400.access.Trace;
 
 /**
-*  The LineLayoutFormPanel class represents a line layout of HTML form elements.
-*  Form elements in the panel are aligned in a single row.  The trailing slash &quot;/&quot; 
-*  on the LineLayoutFormPanel tag allows it to conform to the XHTML specification.
-*
-*  <P>
-*  This example creates a LineLayoutFormPanel object and adds two form elements.
-*  <BLOCKQUOTE><PRE>  
-*  CheckboxFormInput privacyCheckbox = new CheckboxFormInput("confidential", "yes", "Confidential", true);
-*  CheckboxFormInput mailCheckbox = new CheckboxFormInput("mailingList", "yes", "Join our mailing list", false);
-*  LineLayoutFormPanel panel = new LineLayoutFormPanel();
-*  panel.addElement(privacyCheckbox);
-*  panel.addElement(mailCheckbox);
-*  String tag = panel.getTag();
-*  </PRE></BLOCKQUOTE>
-*  <P>
-*  The HTML tag that is generated would look like this:<BR>
-*  &lt;input type=&quot;checkbox&quot; name=&quot;confidential&quot; value=&quot;yes&quot; checked=&quot;checked&quot; /&gt; Confidential 
-*  &lt;input type=&quot;checkbox&quot; name=&quot;mailingList&quot; value=&quot;yes&quot; /&gt; Join our mailing list
-*  &lt;br /&gt;
-**/
-public class LineLayoutFormPanel extends LayoutFormPanel
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-  static final long serialVersionUID = -1117648771160826907L;
+ * The LineLayoutFormPanel class represents a line layout of HTML form elements.
+ * Form elements in the panel are aligned in a single row.  The trailing slash &quot;/&quot;
+ * on the LineLayoutFormPanel tag allows it to conform to the XHTML specification.
+ *
+ * <p>
+ * This example creates a LineLayoutFormPanel object and adds two form elements.
+ * <BLOCKQUOTE><PRE>
+ * CheckboxFormInput privacyCheckbox = new CheckboxFormInput("confidential", "yes", "Confidential", true);
+ * CheckboxFormInput mailCheckbox = new CheckboxFormInput("mailingList", "yes", "Join our mailing list", false);
+ * LineLayoutFormPanel panel = new LineLayoutFormPanel();
+ * panel.addElement(privacyCheckbox);
+ * panel.addElement(mailCheckbox);
+ * String tag = panel.getTag();
+ * </PRE></BLOCKQUOTE>
+ * <p>
+ * The HTML tag that is generated would look like this:<BR>
+ * &lt;input type=&quot;checkbox&quot; name=&quot;confidential&quot; value=&quot;yes&quot; checked=&quot;checked&quot; /&gt; Confidential
+ * &lt;input type=&quot;checkbox&quot; name=&quot;mailingList&quot; value=&quot;yes&quot; /&gt; Join our mailing list
+ * &lt;br /&gt;
+ **/
+public class LineLayoutFormPanel extends LayoutFormPanel {
+    static final long serialVersionUID = -1117648771160826907L;
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
-    
-    
     /**
-    *  Returns a comment tag.
-    *  This method should not be called.  There is no XSL-FO support for this class.
-    *  @return The comment tag.
-    **/
+     * Returns a comment tag.
+     * This method should not be called.  There is no XSL-FO support for this class.
+     *
+     * @return The comment tag.
+     **/
     public String getFOTag()                                                //@B1A
     {
         Trace.log(Trace.ERROR, "Attempting to getFOTag() for an object that doesn't support it.");
@@ -55,17 +53,16 @@ public class LineLayoutFormPanel extends LayoutFormPanel
     }
 
     /**
-    *  Returns the line layout panel tag.
-    *  @return The tag.
-    **/
-    public String getTag()
-    {
+     * Returns the line layout panel tag.
+     *
+     * @return The tag.
+     **/
+    public String getTag() {
         if (Trace.isTraceOn())
-           Trace.log(Trace.INFORMATION, "Generating LineLayoutFormPanel tag...");
+            Trace.log(Trace.INFORMATION, "Generating LineLayoutFormPanel tag...");
 
         StringBuffer s = new StringBuffer("");
-        for (int i=0; i< getSize(); i++)
-        {
+        for (int i = 0; i < getSize(); i++) {
             HTMLTagElement e = getElement(i);
             s.append(e.getTag());
             s.append("\n");

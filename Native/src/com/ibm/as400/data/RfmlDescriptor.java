@@ -14,27 +14,26 @@
 package com.ibm.as400.data;
 
 /**
-  *  The RfmlDescriptor class implements the methods of the Descriptor interface
-  *  that are unique to the &lt;rfml&gt; tag.
-  *
-  **/
+ * The RfmlDescriptor class implements the methods of the Descriptor interface
+ * that are unique to the &lt;rfml&gt; tag.
+ **/
 
-class RfmlDescriptor extends PcmlDescriptor
-{
-    /** Constructor. 
-     * @param node **/
-    public RfmlDescriptor(PcmlDocNode node)
-    {
+class RfmlDescriptor extends PcmlDescriptor {
+    /**
+     * Constructor.
+     *
+     * @param node
+     **/
+    public RfmlDescriptor(PcmlDocNode node) {
         super(node);
     }
 
-   /**
-    * Returns a String containing the current value for the requested attribute.
-    **/
-    public String getAttributeValue(String attr)
-    {
+    /**
+     * Returns a String containing the current value for the requested attribute.
+     **/
+    public String getAttributeValue(String attr) {
         if (attr != null && attr.equals("ccsid"))
-            return ((RfmlDocument)getDocNode()).getCcsid();
+            return ((RfmlDocument) getDocNode()).getCcsid();
         else
             return super.getAttributeValue(attr);
     }

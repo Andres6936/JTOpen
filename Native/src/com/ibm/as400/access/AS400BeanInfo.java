@@ -24,10 +24,9 @@ import java.beans.SimpleBeanInfo;
 import java.beans.VetoableChangeListener;
 
 /**
- The AS400BeanInfo class provides bean information for the AS400 class.
+ * The AS400BeanInfo class provides bean information for the AS400 class.
  **/
-public class AS400BeanInfo extends SimpleBeanInfo
-{
+public class AS400BeanInfo extends SimpleBeanInfo {
     private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
     // Class this bean info represents.
@@ -36,11 +35,9 @@ public class AS400BeanInfo extends SimpleBeanInfo
     private static EventSetDescriptor[] eventSetDescriptors;
     static PropertyDescriptor[] propertyDescriptors;
 
-    static
-    {
-        try
-        {
-            EventSetDescriptor connection = new EventSetDescriptor(BEAN_CLASS, "connection", ConnectionListener.class, new String[] { "connected", "disconnected" }, "addConnectionListener", "removeConnectionListener");
+    static {
+        try {
+            EventSetDescriptor connection = new EventSetDescriptor(BEAN_CLASS, "connection", ConnectionListener.class, new String[]{"connected", "disconnected"}, "addConnectionListener", "removeConnectionListener");
             connection.setDisplayName(ResourceBundleLoader.getText("EVT_NAME_CONNECTION_EVENT"));
             connection.setShortDescription(ResourceBundleLoader.getText("EVT_DESC_CONNECTION_EVENT"));
 
@@ -52,7 +49,7 @@ public class AS400BeanInfo extends SimpleBeanInfo
             vetoableChange.setDisplayName(ResourceBundleLoader.getText("EVT_NAME_PROPERTY_VETO"));
             vetoableChange.setShortDescription(ResourceBundleLoader.getText("EVT_DESC_PROPERTY_VETO"));
 
-            eventSetDescriptors = new EventSetDescriptor[] { connection, propertyChange, vetoableChange };
+            eventSetDescriptors = new EventSetDescriptor[]{connection, propertyChange, vetoableChange};
 
             PropertyDescriptor systemName = new PropertyDescriptor("systemName", BEAN_CLASS);
             systemName.setBound(true);
@@ -122,71 +119,68 @@ public class AS400BeanInfo extends SimpleBeanInfo
             usePasswordCache.setDisplayName(ResourceBundleLoader.getText("PROP_NAME_AS400_PWCACHE"));
             usePasswordCache.setShortDescription(ResourceBundleLoader.getText("PROP_DESC_AS400_PWCACHE"));
 
-            propertyDescriptors = new PropertyDescriptor[] { systemName, userId, password, profileToken, proxyServer, guiAvailable, mustUseSockets, showCheckboxes, threadUsed, useDefaultUser, usePasswordCache };
-        }
-        catch (IntrospectionException e)
-        {
+            propertyDescriptors = new PropertyDescriptor[]{systemName, userId, password, profileToken, proxyServer, guiAvailable, mustUseSockets, showCheckboxes, threadUsed, useDefaultUser, usePasswordCache};
+        } catch (IntrospectionException e) {
             Trace.log(Trace.ERROR, "Unexpected IntrospectionException:", e);
             throw new InternalErrorException(InternalErrorException.UNEXPECTED_EXCEPTION);
         }
     }
 
     /**
-     Returns the bean descriptor.
-     @return  The bean descriptor.
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
      **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(BEAN_CLASS);
     }
 
     /**
-     Returns the index of the default event.
-     @return  Zero (0), the index to the default event.
+     * Returns the index of the default event.
+     *
+     * @return Zero (0), the index to the default event.
      **/
-    public int getDefaultEventIndex()
-    {
+    public int getDefaultEventIndex() {
         // The index for the "connection" event.
         return 0;
     }
 
     /**
-     Returns the index of the default property.
-     @return  Zero (0), the index to the default property.
+     * Returns the index of the default property.
+     *
+     * @return Zero (0), the index to the default property.
      **/
-    public int getDefaultPropertyIndex()
-    {
+    public int getDefaultPropertyIndex() {
         // The index for the "systemName" property.
         return 0;
     }
 
     /**
-     Returns the descriptors for all events.
-     @return  The descriptors for all events.
+     * Returns the descriptors for all events.
+     *
+     * @return The descriptors for all events.
      **/
-    public EventSetDescriptor[] getEventSetDescriptors()
-    {
+    public EventSetDescriptor[] getEventSetDescriptors() {
         return eventSetDescriptors;
     }
 
     /**
-     Returns the descriptors for all properties.
-     @return  The descriptors for all properties.
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
      **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+    public PropertyDescriptor[] getPropertyDescriptors() {
         return propertyDescriptors;
     }
 
     /**
-     Returns an Image for this bean's icon.
-     @param  icon  The desired icon size and color.
-     @return  The Image for the icon.
+     * Returns an Image for this bean's icon.
+     *
+     * @param icon The desired icon size and color.
+     * @return The Image for the icon.
      **/
-    public Image getIcon(int icon)
-    {
-        switch (icon)
-        {
+    public Image getIcon(int icon) {
+        switch (icon) {
             case BeanInfo.ICON_MONO_16x16:
             case BeanInfo.ICON_COLOR_16x16:
                 return loadImage("AS40016.gif");

@@ -24,20 +24,17 @@ import java.beans.SimpleBeanInfo;
 import java.beans.VetoableChangeListener;
 
 /**
- The JobBeanInfo class represents the bean information for the Job class.
+ * The JobBeanInfo class represents the bean information for the Job class.
  **/
-public class JobBeanInfo extends SimpleBeanInfo
-{
+public class JobBeanInfo extends SimpleBeanInfo {
     // Class this bean info represents.
     private static final Class BEAN_CLASS = Job.class;
 
     private static EventSetDescriptor[] eventSetDescriptors;
     private static PropertyDescriptor[] propertyDescriptors;
 
-    static
-    {
-        try
-        {
+    static {
+        try {
             // Set up the event set descriptors.
             EventSetDescriptor propertyChange = new EventSetDescriptor(BEAN_CLASS, "propertyChange", PropertyChangeListener.class, "propertyChange");
             propertyChange.setDisplayName(ResourceBundleLoader.getText("EVT_NAME_PROPERTY_CHANGE"));
@@ -47,7 +44,7 @@ public class JobBeanInfo extends SimpleBeanInfo
             vetoableChange.setDisplayName(ResourceBundleLoader.getText("EVT_NAME_PROPERTY_VETO"));
             vetoableChange.setShortDescription(ResourceBundleLoader.getText("EVT_DESC_PROPERTY_VETO"));
 
-            eventSetDescriptors = new EventSetDescriptor[] { propertyChange, vetoableChange };
+            eventSetDescriptors = new EventSetDescriptor[]{propertyChange, vetoableChange};
 
             // Set up the property descriptors.
             PropertyDescriptor system = new PropertyDescriptor("system", BEAN_CLASS);
@@ -74,67 +71,64 @@ public class JobBeanInfo extends SimpleBeanInfo
             user.setDisplayName(ResourceBundleLoader.getText("PROP_NAME_JOB_USER"));
             user.setShortDescription(ResourceBundleLoader.getText("PROP_DESC_JOB_USER"));
 
-            propertyDescriptors = new PropertyDescriptor[] { system, name, number, user };
-        }
-        catch (IntrospectionException e)
-        {
+            propertyDescriptors = new PropertyDescriptor[]{system, name, number, user};
+        } catch (IntrospectionException e) {
             Trace.log(Trace.ERROR, "Unexpected IntrospectionException:", e);
             throw new InternalErrorException(InternalErrorException.UNEXPECTED_EXCEPTION);
         }
     }
 
     /**
-     Returns the additional bean information.
-     @return  The additional bean information.
+     * Returns the additional bean information.
+     *
+     * @return The additional bean information.
      **/
-    public BeanInfo[] getAdditionalBeanInfo()
-    {
+    public BeanInfo[] getAdditionalBeanInfo() {
         return null;
     }
 
     /**
-     Returns the bean descriptor.
-     @return  The bean descriptor.
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
      **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(BEAN_CLASS);
     }
 
     /**
-     Returns the index of the default event.
-     @return  Zero (0), the index to the default event.
+     * Returns the index of the default event.
+     *
+     * @return Zero (0), the index to the default event.
      **/
-    public int getDefaultEventIndex()
-    {
+    public int getDefaultEventIndex() {
         // The index for the "propertyChange" event.
         return 0;
     }
 
     /**
-     Returns the descriptors for all events.
-     @return  The descriptors for all events.
+     * Returns the descriptors for all events.
+     *
+     * @return The descriptors for all events.
      **/
-    public EventSetDescriptor[] getEventSetDescriptors()
-    {
+    public EventSetDescriptor[] getEventSetDescriptors() {
         return eventSetDescriptors;
     }
 
     /**
-     Returns an Image for this bean's icon.
-     @param  icon  The desired icon size and color.  Possible values are:
-     <ul>
-     <li>BeanInfo.ICON_MONO_16x16
-     <li>BeanInfo.ICON_MONO_32x32
-     <li>BeanInfo.ICON_COLOR_16x16
-     <li>BeanInfo.ICON_COLOR_32x32
-     </ul>
-     @return  The Image for the icon.
+     * Returns an Image for this bean's icon.
+     *
+     * @param icon The desired icon size and color.  Possible values are:
+     *             <ul>
+     *             <li>BeanInfo.ICON_MONO_16x16
+     *             <li>BeanInfo.ICON_MONO_32x32
+     *             <li>BeanInfo.ICON_COLOR_16x16
+     *             <li>BeanInfo.ICON_COLOR_32x32
+     *             </ul>
+     * @return The Image for the icon.
      **/
-    public Image getIcon(int icon)
-    {
-        switch (icon)
-        {
+    public Image getIcon(int icon) {
+        switch (icon) {
             case BeanInfo.ICON_MONO_16x16:
             case BeanInfo.ICON_COLOR_16x16:
                 return loadImage("Job16.gif");
@@ -148,11 +142,11 @@ public class JobBeanInfo extends SimpleBeanInfo
     }
 
     /**
-     Returns the descriptors for all properties.
-     @return  The descriptors for all properties.
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
      **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+    public PropertyDescriptor[] getPropertyDescriptors() {
         return propertyDescriptors;
     }
 }

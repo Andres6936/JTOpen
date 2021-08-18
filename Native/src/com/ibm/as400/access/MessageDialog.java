@@ -28,9 +28,8 @@ import java.awt.Panel;
 import java.util.StringTokenizer;
 
 // This class represents a dialog window that is used to display a message and optionally allow a choice to be made by the user.
-class MessageDialog extends Dialog
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class MessageDialog extends Dialog {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     static final long serialVersionUID = 4L;
     private Button positiveButton_ = null;  // Push button for OK or Yes.
@@ -42,8 +41,7 @@ class MessageDialog extends Dialog
     // @param  messageText  The message to display.
     // @param  titleText  The window title text.
     // @param  allowChoice  true for yes & no buttons, false for OK button.
-    MessageDialog(Frame parent, String messageText, String titleText, boolean allowChoice)
-    {
+    MessageDialog(Frame parent, String messageText, String titleText, boolean allowChoice) {
         // Create a frame.
         super(parent, titleText, true);
 
@@ -65,8 +63,7 @@ class MessageDialog extends Dialog
         Panel panel = new Panel();
         StringTokenizer tokenizer = new StringTokenizer(messageText, "\n");
         panel.setLayout(new GridLayout(tokenizer.countTokens(), 1));
-        while(tokenizer.hasMoreTokens())
-        {
+        while (tokenizer.hasMoreTokens()) {
             panel.add(new Label(tokenizer.nextToken()));
         }
         add(panel, layout, constraints, 0, 0, 1, 1);
@@ -81,8 +78,7 @@ class MessageDialog extends Dialog
         centeringPanel.add(buttonPanel);
 
         // Add the buttons to the panel.  Add event listeners to the buttons.
-        if (allowChoice)
-        {
+        if (allowChoice) {
             positiveButton_ = new Button(ResourceBundleLoader.getText("DLG_YES_BUTTON"));
             positiveButton_.addActionListener(listener_);
             positiveButton_.addFocusListener(listener_);
@@ -93,9 +89,7 @@ class MessageDialog extends Dialog
             negativeButton_.addFocusListener(listener_);
             negativeButton_.addKeyListener(listener_);
             buttonPanel.add(negativeButton_);
-        }
-        else
-        {
+        } else {
             positiveButton_ = new Button(ResourceBundleLoader.getCoreText("DLG_OK_BUTTON"));
             positiveButton_.addActionListener(listener_);
             positiveButton_.addFocusListener(listener_);
@@ -112,8 +106,7 @@ class MessageDialog extends Dialog
 
     // Display the dialog and wait for user response.
     // @return  true if user pressed OK or Yes; false if user pressed No.
-    boolean display()
-    {
+    boolean display() {
         // Set focus on the default button.
         listener_.setFocalPoint(positiveButton_);
 
@@ -131,8 +124,7 @@ class MessageDialog extends Dialog
     // @param  y  The y coordinate of the topmost cell of the component.
     // @param  width  The horizontal measurement of the component in cells.
     // @param  height  The vertical measurement of the component in cells.
-    protected void add(Component component, GridBagLayout layout, GridBagConstraints constraints, int x, int y, int width, int height)
-    {
+    protected void add(Component component, GridBagLayout layout, GridBagConstraints constraints, int x, int y, int width, int height) {
         constraints.gridx = x;
         constraints.gridy = y;
         constraints.gridwidth = width;

@@ -14,12 +14,10 @@
 package com.ibm.as400.access;
 
 // This is a Korean character set.
-class ConvTable9026 extends ConvTable4930
-{
+class ConvTable9026 extends ConvTable4930 {
     private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-    ConvTable9026()
-    {
+    ConvTable9026() {
         super(9026);
     }
 }

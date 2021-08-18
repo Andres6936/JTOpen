@@ -23,14 +23,13 @@ import java.beans.PropertyVetoException;
  **/
 
 public class WriterJobList extends PrintObjectList
-implements java.io.Serializable
-{
+        implements java.io.Serializable {
     private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-    
+
     static final long serialVersionUID = 4L;
 
     private static final String QUEUE_FILTER = "queueFilter";
-    private static final String WRITER_FILTER = "writerFilter";   
+    private static final String WRITER_FILTER = "writerFilter";
 
     /**
      * Constructs a WriterJobList object. The system must
@@ -40,8 +39,7 @@ implements java.io.Serializable
      *
      * @see PrintObjectList#setSystem
      **/
-    public WriterJobList()
-    {
+    public WriterJobList() {
         super(NPConstants.WRITER_JOB, new NPCPSelWrtJ());
         // Because of this constructor we will need to check the
         // system before trying to use it.
@@ -53,90 +51,60 @@ implements java.io.Serializable
      * The default list filter will list all writer jobs on the specified system.
      *
      * @param system The system on which the writer jobs exist.
-     *
      **/
-    public WriterJobList(AS400 system)
-    {
+    public WriterJobList(AS400 system) {
         super(NPConstants.WRITER_JOB, new NPCPSelWrtJ(), system);
     }
- 
- 
+
+
     /**
      * Chooses the appropriate implementation.
      **/
-    void chooseImpl()
-    {
+    void chooseImpl() {
         AS400 system = getSystem();
         if (system == null) {
-            Trace.log( Trace.ERROR, "Attempt to use WriterJobList before setting system.");
+            Trace.log(Trace.ERROR, "Attempt to use WriterJobList before setting system.");
             throw new ExtendedIllegalStateException("system", ExtendedIllegalStateException.PROPERTY_NOT_SET);
-        }  
+        }
         impl_ = (PrintObjectListImpl) system.loadImpl2("com.ibm.as400.access.WriterJobListImplRemote",
-                                                       "com.ibm.as400.access.WriterJobListImplProxy");
-        super.setImpl();                                               
+                "com.ibm.as400.access.WriterJobListImplProxy");
+        super.setImpl();
     }
-   
+
 
     /**
-      * Returns the output queue filter.
+     * Returns the output queue filter.
+     *
      * @return queue filter
-      *
-      **/
-    public String getQueueFilter()
-    {
+     **/
+    public String getQueueFilter() {
         // The selection code point is always present, the Queue Filter
         // may not have been set. If empty, getQueue() returns
         // an empty string.
 
-        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ)getSelectionCP();
-        return( selectionCP.getQueue() );
+        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ) getSelectionCP();
+        return (selectionCP.getQueue());
     }
-
 
     /**
-      * Returns the writer filter.
-     * @return writer filter
-      *
-      **/
-    public String getWriterFilter()
-    {
-        // The selection code point is always present, the writer Filter
-        // may not have been set. If empty, getWriter() returns an
-        // empty string.
-
-        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ)getSelectionCP();
-        return( selectionCP.getWriter() );
-    }
-
-
-    PrintObject newNPObject(NPCPID cpid, NPCPAttribute cpattr)
-    {
-        return new WriterJob(system_, (NPCPIDWriter)cpid, cpattr);
-    }
-
-
-    /**
-      * Sets the output queue filter.  Only writers active for this output queue
-      * will be listed.
-      * @param queueFilter Specifies the library and output queue name for which the writer
-      *  jobs will be listed.   The format of the queueFilter string must be in the
-      *  format of /QSYS.LIB/libname.LIB/queuename.OUTQ, where
-      * <br>
-      *   <I>libname</I> is the library name that contains the queue for which to list writer
-      *     jobs.  It must be a specific library name.
-      *   <I>queuename</I> is the name of an output queue for which to list writer jobs.
-      *     It must be a specific output queue name.
-      *
-      * @exception PropertyVetoException If the change is vetoed.
-      *
-      **/
+     * Sets the output queue filter.  Only writers active for this output queue
+     * will be listed.
+     *
+     * @param queueFilter Specifies the library and output queue name for which the writer
+     *                    jobs will be listed.   The format of the queueFilter string must be in the
+     *                    format of /QSYS.LIB/libname.LIB/queuename.OUTQ, where
+     *                    <br>
+     *                    <I>libname</I> is the library name that contains the queue for which to list writer
+     *                    jobs.  It must be a specific library name.
+     *                    <I>queuename</I> is the name of an output queue for which to list writer jobs.
+     *                    It must be a specific output queue name.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
     public void setQueueFilter(String queueFilter)
-      throws PropertyVetoException
-    {
-        if( queueFilter == null )
-        {
-            Trace.log( Trace.ERROR, "Parameter 'queueFilter' is null" );
-            throw new NullPointerException( QUEUE_FILTER );
+            throws PropertyVetoException {
+        if (queueFilter == null) {
+            Trace.log(Trace.ERROR, "Parameter 'queueFilter' is null");
+            throw new NullPointerException(QUEUE_FILTER);
         }
 
         String oldQueueFilter = getQueueFilter();
@@ -144,49 +112,58 @@ implements java.io.Serializable
         // Tell any vetoers about the change. If anyone objects
         // we let the PropertyVetoException propagate back to
         // our caller.
-        vetos.fireVetoableChange( QUEUE_FILTER, oldQueueFilter, queueFilter );
+        vetos.fireVetoableChange(QUEUE_FILTER, oldQueueFilter, queueFilter);
 
         // No one vetoed, make the change.
-        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ)getSelectionCP();
+        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ) getSelectionCP();
         selectionCP.setQueue(queueFilter);
-        
+
         // Propagate change to ImplRemote if necessary...
         if (impl_ != null)
             impl_.setFilter("writerJobQueue", queueFilter);
 
         // Notify any property change listeners.
-        changes.firePropertyChange( QUEUE_FILTER, oldQueueFilter, queueFilter );
+        changes.firePropertyChange(QUEUE_FILTER, oldQueueFilter, queueFilter);
     }
 
+    /**
+     * Returns the writer filter.
+     *
+     * @return writer filter
+     **/
+    public String getWriterFilter() {
+        // The selection code point is always present, the writer Filter
+        // may not have been set. If empty, getWriter() returns an
+        // empty string.
+
+        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ) getSelectionCP();
+        return (selectionCP.getWriter());
+    }
 
     /**
      * Sets writer list filter.
+     *
      * @param writerFilter The name of the writers to list.
-     *   <I>writer</I> is the name of the writers to list.
-     *     It can be a specific name, a generic name, or the special value *ALL.
-     *  The default for the writerFilter is *ALL.
-     *
-     * @exception PropertyVetoException If the change is vetoed.
-     *
+     *                     <I>writer</I> is the name of the writers to list.
+     *                     It can be a specific name, a generic name, or the special value *ALL.
+     *                     The default for the writerFilter is *ALL.
+     * @throws PropertyVetoException If the change is vetoed.
      **/
     public void setWriterFilter(String writerFilter)
-      throws PropertyVetoException
-    {
-        if( writerFilter == null )
-        {
-            Trace.log( Trace.ERROR, "Parameter 'writerFilter' is null" );
-            throw new NullPointerException( WRITER_FILTER );
+            throws PropertyVetoException {
+        if (writerFilter == null) {
+            Trace.log(Trace.ERROR, "Parameter 'writerFilter' is null");
+            throw new NullPointerException(WRITER_FILTER);
         }
 
         // Allow a length of 0 to remove the filter from the
         // selection code point. writerFilter.length() == 0 is OK.
 
-        if( writerFilter.length() > 10 )
-        {
+        if (writerFilter.length() > 10) {
             Trace.log(Trace.ERROR, "Parameter 'writerFilter' is greater than 10 characters in length.");
             throw new ExtendedIllegalArgumentException(
-                "writerFilter("+writerFilter+")",
-                ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
+                    "writerFilter(" + writerFilter + ")",
+                    ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
         }
 
         String oldWriterFilter = getWriterFilter();
@@ -194,20 +171,24 @@ implements java.io.Serializable
         // Tell any vetoers about the change. If anyone objects
         // we let the PropertyVetoException propagate back to
         // our caller.
-        vetos.fireVetoableChange( WRITER_FILTER,
-                                  oldWriterFilter, writerFilter );
+        vetos.fireVetoableChange(WRITER_FILTER,
+                oldWriterFilter, writerFilter);
 
         // No one vetoed, make the change.
-        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ)getSelectionCP();
+        NPCPSelWrtJ selectionCP = (NPCPSelWrtJ) getSelectionCP();
         selectionCP.setWriter(writerFilter);
-        
+
         // Propagate change to ImplRemote if necessary...
         if (impl_ != null)
             impl_.setFilter("writer", writerFilter);
 
         // Notify any property change listeners.
-        changes.firePropertyChange( WRITER_FILTER,
-                                    oldWriterFilter, writerFilter );
+        changes.firePropertyChange(WRITER_FILTER,
+                oldWriterFilter, writerFilter);
+    }
+
+    PrintObject newNPObject(NPCPID cpid, NPCPAttribute cpattr) {
+        return new WriterJob(system_, (NPCPIDWriter) cpid, cpattr);
     }
 
 } // WriterJobList class

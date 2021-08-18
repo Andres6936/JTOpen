@@ -17,18 +17,21 @@ package com.ibm.as400.util.commtrace;
  * A decimal field.
  */
 class Dec extends Field {
-	/**
-	 * Base constructor which creates a default decimal field.  
-	 * @param data         BitBuf which contains this decimal field.     
-	 */
-	public Dec(BitBuf data) {
-		super(data);
-	}
-	/**
-	 * Creates a String representation of this decimal field.   
-	 * @return          A String representing this decimal field. 
-	 */
-	public String toString() {
-		return Long.toString(data.toLong());
-	}
+    /**
+     * Base constructor which creates a default decimal field.
+     *
+     * @param data BitBuf which contains this decimal field.
+     */
+    public Dec(BitBuf data) {
+        super(data);
+    }
+
+    /**
+     * Creates a String representation of this decimal field.
+     *
+     * @return A String representing this decimal field.
+     */
+    public String toString() {
+        return Long.toString(data.toLong());
+    }
 }

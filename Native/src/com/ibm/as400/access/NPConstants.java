@@ -13,9 +13,8 @@
 
 package com.ibm.as400.access;
 
-class NPConstants
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class NPConstants {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Network Print Server "objects".

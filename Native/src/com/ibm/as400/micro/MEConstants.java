@@ -14,18 +14,17 @@
 package com.ibm.as400.micro;
 
 /**
- *  The MEConstants class defines global constants for the
- *  ToolboxME for i5/OS support.
-**/
+ * The MEConstants class defines global constants for the
+ * ToolboxME for i5/OS support.
+ **/
 
-interface MEConstants
-{
+interface MEConstants {
     // THE COMPONENT REQUEST DATASTREAM TYPES.
     static final int SERVICE_COMMAND = 2;
     static final int SERVICE_DATAQUEUE = 3;
     static final int SERVICE_DATABASE = 4;
     static final int SERVICE_ALL_SERVICES = 99;
-    
+
     // The default port number.  This port number was registered
     // with the Internet Assigned Numbers Authority (http://www.iana.org)
     // on 01/29/1999.  For a complete list of registered port numbers,
@@ -33,10 +32,10 @@ interface MEConstants
     static final int ME_SERVER_PORT = 3470;
 
     // Client/Server Seed information.
-    static final int ADDER_LENGTH  = 18;  // number of bytes
+    static final int ADDER_LENGTH = 18;  // number of bytes
     static final int MASK_LENGTH = 14;  // number of bytes
     static final int ADDER_PLUS_MASK_LENGTH = ADDER_LENGTH + MASK_LENGTH;
-    
+
     // THE REQUEST DATASTREAM TYPES.
     static final int SIGNON = 0x1122;
     static final int COMMAND_CALL = 0x1123;
@@ -49,13 +48,13 @@ interface MEConstants
 
     // THE REPLY DATASTREAM TYPTES.
     static final int SIGNON_SUCCEEDED = 0x1234;
-    static final int SIGNON_FAILED    = 0x1235;
+    static final int SIGNON_FAILED = 0x1235;
     static final int XML_DOCUMENT_NOT_REGISTERED = 0x1236;
     static final int XML_DOCUMENT_REGISTERED = 0x1237;
     static final int DATA_QUEUE_ACTION_SUCCESSFUL = 0x1238;
     static final int EXCEPTION_OCCURRED = 0x1239;
     static final int REQUEST_NOT_SUPPORTED = 0x01240;
-    
+
     // JDBCME functions 
     // Connection functions
     static final int CONN_NEW = 0x1250;
@@ -98,16 +97,16 @@ interface MEConstants
     static final int RS_RELATIVE = 0x1296;
 
     // JDBC-ME Service functions
-    static final int JDBCME_DATA_TYPE_FLOW   = 0x1900;
+    static final int JDBCME_DATA_TYPE_FLOW = 0x1900;
 
     // Include the data flow constants here.
-   // There are multiple types of data flows that the server can
-   // be setup to provide.  This allows the creation of frontends 
-   // of varying complexity.
-   //
-   // LIMITED is the only one supported today (and the default).
-   // The others will be added as time/needs allow.
-   static final int DATA_FLOW_ALL          = 1;
-   static final int DATA_FLOW_LIMITED      = 2;
-   static final int DATA_FLOW_STRINGS_ONLY = 3;
+    // There are multiple types of data flows that the server can
+    // be setup to provide.  This allows the creation of frontends
+    // of varying complexity.
+    //
+    // LIMITED is the only one supported today (and the default).
+    // The others will be added as time/needs allow.
+    static final int DATA_FLOW_ALL = 1;
+    static final int DATA_FLOW_LIMITED = 2;
+    static final int DATA_FLOW_STRINGS_ONLY = 3;
 }

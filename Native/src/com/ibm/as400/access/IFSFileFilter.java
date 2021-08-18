@@ -14,17 +14,17 @@
 package com.ibm.as400.access;
 
 /**
-The IFSFileFilter interface provides an interface for filtering files.
-It can be used to filter directory listings in the list method of the class IFSFile.
-**/
-public interface IFSFileFilter 
-{
- /**
-    Tests if a specified file should be in a file list.
- * @param file 
- * @return true if file is accepted by the filter
- **/ 
-  public abstract boolean accept(IFSFile file);
+ * The IFSFileFilter interface provides an interface for filtering files.
+ * It can be used to filter directory listings in the list method of the class IFSFile.
+ **/
+public interface IFSFileFilter {
+    /**
+     * Tests if a specified file should be in a file list.
+     *
+     * @param file
+     * @return true if file is accepted by the filter
+     **/
+    public abstract boolean accept(IFSFile file);
 }
 
 

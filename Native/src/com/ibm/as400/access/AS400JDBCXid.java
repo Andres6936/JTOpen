@@ -16,11 +16,10 @@ package com.ibm.as400.access;
 import javax.transaction.xa.Xid;
 
 
-
 /**
-The AS400JDBCXid class represents an Xid for use with an
-<a href="AS400JDBCXAResource.html">AS400JDBCXAResource</a>.
-**/
+ * The AS400JDBCXid class represents an Xid for use with an
+ * <a href="AS400JDBCXAResource.html">AS400JDBCXAResource</a>.
+ **/
 //
 // Implementation notes:
 //
@@ -39,28 +38,23 @@ The AS400JDBCXid class represents an Xid for use with an
 // +--------+--------+---------------------------------------------+
 //
 public class AS400JDBCXid
-implements Xid
-{
-  static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
-
-
+        implements Xid {
+    static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
 
     // Private data.
-    private int     formatId_               = -1;
-    private byte[]  globalTransactionId_    = null;
-    private byte[]  branchQualifier_        = null;
+    private int formatId_ = -1;
+    private byte[] globalTransactionId_ = null;
+    private byte[] branchQualifier_ = null;
 
 
-
-/**
-Constructs an AS400JDBCXid object.
-
-@param xidBytes     The Xid bytes.
-@param offset       The offset.
-**/
-    AS400JDBCXid(byte[] xidBytes, int offset)
-    {
+    /**
+     * Constructs an AS400JDBCXid object.
+     *
+     * @param xidBytes The Xid bytes.
+     * @param offset   The offset.
+     **/
+    AS400JDBCXid(byte[] xidBytes, int offset) {
         formatId_ = BinaryConverter.byteArrayToInt(xidBytes, offset);
         int globalTransactionIdLength = BinaryConverter.byteArrayToInt(xidBytes, offset + 4);
         int branchQualifierIdLength = BinaryConverter.byteArrayToInt(xidBytes, offset + 8);
@@ -70,67 +64,16 @@ Constructs an AS400JDBCXid object.
         System.arraycopy(xidBytes, globalTransactionIdLength + offset + 12, branchQualifier_, 0, branchQualifierIdLength);
     }
 
-
-
-/**
-Returns the branch qualifier.
-
-@return The branch qualifier.
-**/
-    public byte[] getBranchQualifier()
-    {
-        return branchQualifier_;
-    }
-
-
-
-/**
-Returns the format ID.
-
-@return The format ID.
-**/
-    public int getFormatId()
-    {
-        return formatId_;
-    }
-
-
-
-/**
-Returns the global transaction ID.
-
-@return The global transaction ID.
-**/
-    public byte[] getGlobalTransactionId()
-    {
-        return globalTransactionId_;
-    }
-
-
-
-/**
-Returns the Xid bytes.
-
-@return The Xid bytes.
-**/
-    byte[] toBytes()
-    {
-        return xidToBytes(this);
-    }
-
-
-
-/**
-Returns the Xid bytes.
-
-@param xid      The Xid.
-@return         The Xid bytes.
-**/
-    static byte[] xidToBytes(Xid xid)
-    {
-        int formatId                = xid.getFormatId();
-        byte[] globalTransactionId  = xid.getGlobalTransactionId();
-        byte[] branchQualifier      = xid.getBranchQualifier();
+    /**
+     * Returns the Xid bytes.
+     *
+     * @param xid The Xid.
+     * @return The Xid bytes.
+     **/
+    static byte[] xidToBytes(Xid xid) {
+        int formatId = xid.getFormatId();
+        byte[] globalTransactionId = xid.getGlobalTransactionId();
+        byte[] branchQualifier = xid.getBranchQualifier();
 
         byte[] xidBytes = new byte[140];
         BinaryConverter.intToByteArray(formatId, xidBytes, 0);
@@ -141,6 +84,41 @@ Returns the Xid bytes.
         return xidBytes;
     }
 
+    /**
+     * Returns the branch qualifier.
+     *
+     * @return The branch qualifier.
+     **/
+    public byte[] getBranchQualifier() {
+        return branchQualifier_;
+    }
+
+    /**
+     * Returns the format ID.
+     *
+     * @return The format ID.
+     **/
+    public int getFormatId() {
+        return formatId_;
+    }
+
+    /**
+     * Returns the global transaction ID.
+     *
+     * @return The global transaction ID.
+     **/
+    public byte[] getGlobalTransactionId() {
+        return globalTransactionId_;
+    }
+
+    /**
+     * Returns the Xid bytes.
+     *
+     * @return The Xid bytes.
+     **/
+    byte[] toBytes() {
+        return xidToBytes(this);
+    }
 
 
 }

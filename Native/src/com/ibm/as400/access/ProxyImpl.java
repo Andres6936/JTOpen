@@ -15,26 +15,21 @@ package com.ibm.as400.access;
 
 
 /**
-The ProxyImpl interface represents proxy implementation of
-IBM Toolbox for Java classes.
-**/
-interface ProxyImpl 
-{
+ * The ProxyImpl interface represents proxy implementation of
+ * IBM Toolbox for Java classes.
+ **/
+interface ProxyImpl {
 
 
+    /**
+     * Constructs an object on the proxy server.
+     *
+     * @param connection The connection.
+     **/
+    public abstract void construct(ProxyClientConnection connection);
 
 
-/**
-Constructs an object on the proxy server.
-
-@param connection   The connection.
-**/
-    public abstract void construct (ProxyClientConnection connection);
-
-
-    
     public long getPxId();
-
 
 
 }

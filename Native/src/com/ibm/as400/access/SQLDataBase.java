@@ -30,47 +30,99 @@ import java.sql.Types;
 import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.RowId;
- endif */ 
+ endif */
 import java.sql.SQLException;
 /* ifdef JDBC40  
 import java.sql.SQLXML;
- endif */ 
+ endif */
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
-The SQLData interface represents native SQL data.  A specific
-implementation of this interface will implement a specific
-type of SQL data.
+ * The SQLData interface represents native SQL data.  A specific
+ * implementation of this interface will implement a specific
+ * type of SQL data.
+ *
+ * <p>This base class contains conversion methods usable by the sub classes.
+ **/
+public abstract class SQLDataBase implements SQLData {
 
-<p>This base class contains conversion methods usable by the sub classes. 
-**/
-public abstract class SQLDataBase implements SQLData
-{
-    
     static final String copyright = "Copyright (C) 1997-2006 International Business Machines Corporation and others.";
-    
-   protected int                     truncated_;
-   protected boolean                 outOfBounds_; 
-   protected SQLConversionSettings settings_;
-   Object    savedValue_ = null;  
-    
-   /**
-    * Create a new SQLDataBase object with the specified settings
-   * @param settings
-   */
-  public SQLDataBase(SQLConversionSettings settings) {
-     this.settings_= settings; 
-     truncated_ = 0; outOfBounds_ = false; 
 
-   }
+    protected int truncated_;
+    protected boolean outOfBounds_;
+    protected SQLConversionSettings settings_;
+    Object savedValue_ = null;
+
     /**
-    Returns a clone of the SQLData object.  Use this sparingly
-    so that we minimize the number of copies.
-    @return     The clone.
-    **/
-    public abstract Object clone();
+     * Create a new SQLDataBase object with the specified settings
+     *
+     * @param settings
+     */
+    public SQLDataBase(SQLConversionSettings settings) {
+        this.settings_ = settings;
+        truncated_ = 0;
+        outOfBounds_ = false;
+
+    }
+
+    static String getStringFromReader(Reader stream, int length, Object exceptionObject) throws SQLException {
+        String value = null;
+        if (length >= 0) {
+            try {
+                int blockSize = length < AS400JDBCPreparedStatement.LOB_BLOCK_SIZE ? length : AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
+
+                StringBuffer buf = new StringBuffer();
+                char[] charBuffer = new char[blockSize];
+                int totalCharsRead = 0;
+                int charsRead = stream.read(charBuffer, 0, blockSize);
+                while (charsRead > -1 && totalCharsRead < length) {
+                    buf.append(charBuffer, 0, charsRead);
+                    totalCharsRead += charsRead;
+                    int charsRemaining = length - totalCharsRead;
+                    if (charsRemaining < blockSize) {
+                        blockSize = charsRemaining;
+                    }
+                    charsRead = stream.read(charBuffer, 0, blockSize);
+                }
+                value = buf.toString();
+
+                if (value.length() < length) {
+                    // a length longer than the stream was specified
+                    JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
+                }
+            } catch (IOException ie) {
+                JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
+            }
+        } else if (length == ALL_READER_BYTES) //@readerlen new else-if block (read all data)
+        {
+            try {
+                int blockSize = AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
+                StringBuffer buf = new StringBuffer();
+                char[] charBuffer = new char[blockSize];
+                // int totalCharsRead = 0;
+                int charsRead = stream.read(charBuffer, 0, blockSize);
+                while (charsRead > -1) {
+                    buf.append(charBuffer, 0, charsRead);
+                    // totalCharsRead += charsRead;
+                    // int charsRemaining = length_ - totalCharsRead;
+
+                    charsRead = stream.read(charBuffer, 0, blockSize);
+                }
+                value = buf.toString();
+
+            } catch (IOException ie) {
+                JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
+            }
+
+        } else {
+            JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
+        }
+
+        return value;
+
+    }
 
     //---------------------------------------------------------//
     //                                                         //
@@ -78,45 +130,143 @@ public abstract class SQLDataBase implements SQLData
     //                                                         //
     //---------------------------------------------------------//
 
-    /**
-    Loads the contents of the data from raw bytes, as returned
-    in a reply from the system.
-    @param  rawBytes    raw bytes from the system.
-    @param  offset      offset.
-    @param  converter   the converter.
-    @exception  SQLException    If the raw bytes are not in
-                                the expected format.
-    **/
-    public void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter) throws SQLException {
-        convertFromRawBytes(rawBytes, offset, converter, false);        
+    static byte[] getBytesFromInputStream(InputStream object, int length, Object exceptionObject) throws SQLException {
+        byte[] value = null;
+        if (length >= 0) {
+            InputStream stream = (InputStream) object;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int blockSize = length < AS400JDBCPreparedStatement.LOB_BLOCK_SIZE ? length : AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
+            byte[] byteBuffer = new byte[blockSize];
+            try {
+                int totalBytesRead = 0;
+                int bytesRead = stream.read(byteBuffer, 0, blockSize);
+                while (bytesRead > -1 && totalBytesRead < length) {
+                    baos.write(byteBuffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
+                    int bytesRemaining = length - totalBytesRead;
+                    if (bytesRemaining < blockSize) {
+                        blockSize = bytesRemaining;
+                    }
+                    bytesRead = stream.read(byteBuffer, 0, blockSize);
+                }
+            } catch (IOException ie) {
+                JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
+            }
+            value = baos.toByteArray();
+            if (value.length < length) {
+                // a length longer than the stream was specified
+                JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
+            }
+        } else if (length == ALL_READER_BYTES) //@readerlen new else-if block (read all data)
+        {
+            InputStream stream = (InputStream) object;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            int blockSize = AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
+            byte[] byteBuffer = new byte[blockSize];
+            try {
+                int totalBytesRead = 0;
+                int bytesRead = stream.read(byteBuffer, 0, blockSize);
+                while (bytesRead > -1) {
+                    baos.write(byteBuffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
+
+                    bytesRead = stream.read(byteBuffer, 0, blockSize);
+                }
+            } catch (IOException ie) {
+                JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
+            }
+            value = baos.toByteArray();
+        } else {
+            JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
+        }
+        return value;
     }
 
-    public abstract void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter, boolean ignoreConversionErrors)
-    throws SQLException;
+    static byte[] getBytesFromReader(Reader object, int length, Object exceptionObject) throws SQLException {
+        byte[] value = null;
+        if (length >= 0) {
+            try {
+                int blockSize = length < AS400JDBCPreparedStatement.LOB_BLOCK_SIZE ? length : AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                HexReaderInputStream stream = new HexReaderInputStream(object);
+                byte[] byteBuffer = new byte[blockSize];
+                int totalBytesRead = 0;
+                int bytesRead = stream.read(byteBuffer, 0, blockSize);
+                while (bytesRead > -1 && totalBytesRead < length) {
+                    baos.write(byteBuffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
+                    int bytesRemaining = length - totalBytesRead;
+                    if (bytesRemaining < blockSize) {
+                        blockSize = bytesRemaining;
+                    }
+                    bytesRead = stream.read(byteBuffer, 0, blockSize);
+                }
+                value = baos.toByteArray();
+                if (value.length < length) {
+                    // a length longer than the stream was specified
+                    JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
+                }
+                stream.close(); //@scan1
+            } catch (ExtendedIOException eie) {
+                // the Reader contains non-hex characters
+                JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH, eie);
+            } catch (IOException ie) {
+                JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
+            }
+        } else if ((length == ALL_READER_BYTES) || (length == -1)) //@readerlen new else-if block (read all data)
+        {
+            try {
+                int blockSize = AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                HexReaderInputStream stream = new HexReaderInputStream((Reader) object);
+                byte[] byteBuffer = new byte[blockSize];
+                int totalBytesRead = 0;
+                int bytesRead = stream.read(byteBuffer, 0, blockSize);
+                while (bytesRead > -1) {
+                    baos.write(byteBuffer, 0, bytesRead);
+                    totalBytesRead += bytesRead;
 
-    /**
-    Converts the contents of the data in raw bytes, as needed
-    in a request to the system.
-    @param  rawBytes         the raw bytes for the system.
-    @param  offset           the offset into the byte array.
-    @param  ccsidConverter   the converter.
-    **/
-    public abstract void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter)
-    throws SQLException;
+                    bytesRead = stream.read(byteBuffer, 0, blockSize);
+                }
+                value = baos.toByteArray();
 
-    
-    /**
-    validates that raw truncated data is correct.  The data is corrected if is not correct. 
-    This is only used when converting to MIXED CCSID and UTF-8. 
-    @param  rawBytes         the raw bytes for the system.
-    @param  offset           the offset into the byte array.
-    @param  ccsidConverter   the converter.
-    **/ 
-    public void validateRawTruncatedData(byte[] rawBytes, int offset, ConvTable ccsidConverter) {
-      // Most data type do not need to validate truncated data.  Just return. 
-      
+                stream.close(); //@scan1
+            } catch (ExtendedIOException eie) {
+                // the Reader contains non-hex characters
+                JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH, eie);
+            } catch (IOException ie) {
+                JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
+            }
+        } else {
+            JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
+        }
+        return value;
     }
-   
+
+    /* Returns true if the sqlType is a character type */
+    /* @V8A */
+    public static boolean isCharacterType(int sqlType) {
+        switch (sqlType) {
+            case Types.CHAR:
+            case Types.CLOB:
+            case Types.LONGVARCHAR:
+            case Types.VARCHAR:
+
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+    /**
+     * Returns a clone of the SQLData object.  Use this sparingly
+     * so that we minimize the number of copies.
+     *
+     * @return The clone.
+     **/
+    public abstract Object clone();
+
     //---------------------------------------------------------//
     //                                                         //
     // SET METHODS                                             //
@@ -129,17 +279,18 @@ public abstract class SQLDataBase implements SQLData
     //---------------------------------------------------------//
 
     /**
-    Sets the contents of the data based on a Java object.
-    This performs all conversions described in Table 6
-    of the JDBC specification.
-    @param  object      a Java object.
-    @param  calendar    The calendar.
-    @param  scale       The scale.
-    @exception  SQLException    If the Java object is not an
-                                appropriate type.
-    **/
-    public abstract void set(Object object, Calendar calendar, int scale)
-    throws SQLException;
+     * Loads the contents of the data from raw bytes, as returned
+     * in a reply from the system.
+     *
+     * @param rawBytes  raw bytes from the system.
+     * @param offset    offset.
+     * @param converter the converter.
+     * @throws SQLException If the raw bytes are not in
+     *                      the expected format.
+     **/
+    public void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter) throws SQLException {
+        convertFromRawBytes(rawBytes, offset, converter, false);
+    }
 
     //---------------------------------------------------------//
     //                                                         //
@@ -150,159 +301,197 @@ public abstract class SQLDataBase implements SQLData
     //                                                         //
     /*---------------------------------------------------------*/
 
+    public abstract void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter, boolean ignoreConversionErrors)
+            throws SQLException;
+
     /**
-    Returns the SQL type constant for the implementing class.
-    @return     the SQL type constant.
-    **/
+     * Converts the contents of the data in raw bytes, as needed
+     * in a request to the system.
+     *
+     * @param rawBytes       the raw bytes for the system.
+     * @param offset         the offset into the byte array.
+     * @param ccsidConverter the converter.
+     **/
+    public abstract void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter)
+            throws SQLException;
+
+    /**
+     * validates that raw truncated data is correct.  The data is corrected if is not correct.
+     * This is only used when converting to MIXED CCSID and UTF-8.
+     *
+     * @param rawBytes       the raw bytes for the system.
+     * @param offset         the offset into the byte array.
+     * @param ccsidConverter the converter.
+     **/
+    public void validateRawTruncatedData(byte[] rawBytes, int offset, ConvTable ccsidConverter) {
+        // Most data type do not need to validate truncated data.  Just return.
+
+    }
+
+    //@F1A JDBC 3.0
+
+    /**
+     * Sets the contents of the data based on a Java object.
+     * This performs all conversions described in Table 6
+     * of the JDBC specification.
+     *
+     * @param object   a Java object.
+     * @param calendar The calendar.
+     * @param scale    The scale.
+     * @throws SQLException If the Java object is not an
+     *                      appropriate type.
+     **/
+    public abstract void set(Object object, Calendar calendar, int scale)
+            throws SQLException;
+
+    /**
+     * Returns the SQL type constant for the implementing class.
+     *
+     * @return the SQL type constant.
+     **/
     public abstract int getSQLType();
 
     /**
-    Returns the parameters used in creating the
-    type.
-    @return     the parameters, separated by commas,
-                or null if none.
-    **/
+     * Returns the parameters used in creating the
+     * type.
+     *
+     * @return the parameters, separated by commas,
+     * or null if none.
+     **/
     public abstract String getCreateParameters();
 
     /**
-    Returns the display size.  This is defined in Appendix
-    D of the ODBC 2.0 Programmer's Reference.
-    @return                 the display size (in characters).
-    **/
+     * Returns the display size.  This is defined in Appendix
+     * D of the ODBC 2.0 Programmer's Reference.
+     *
+     * @return the display size (in characters).
+     **/
     public abstract int getDisplaySize();
 
-    //@F1A JDBC 3.0
     /**
-    Returns the Java class name for ParameterMetaData.getParameterClassName().
-    @return                 the Java class name.
-    **/
+     * Returns the Java class name for ParameterMetaData.getParameterClassName().
+     *
+     * @return the Java class name.
+     **/
     public abstract String getJavaClassName();
 
     /**
-    Returns the prefix used to quote a literal.
-    @return     the prefix, or null if none.
-    **/
+     * Returns the prefix used to quote a literal.
+     *
+     * @return the prefix, or null if none.
+     **/
     public abstract String getLiteralPrefix();
 
     /**
-    Returns the suffix used to quote a literal.
-    @return     the suffix, or null if none.
-    **/
+     * Returns the suffix used to quote a literal.
+     *
+     * @return the suffix, or null if none.
+     **/
     public abstract String getLiteralSuffix();
 
     /**
-    Returns the localized version of the name of the
-    data type.
-    @return     the name, or null.
-    **/
+     * Returns the localized version of the name of the
+     * data type.
+     *
+     * @return the name, or null.
+     **/
     public abstract String getLocalName();
 
     /**
-    Returns the maximum precision of the type. This is
-    defined in Appendix D of the ODBC 2.0 Programmer's
-    Reference.
-    @return     the maximum precision.
-    **/
+     * Returns the maximum precision of the type. This is
+     * defined in Appendix D of the ODBC 2.0 Programmer's
+     * Reference.
+     *
+     * @return the maximum precision.
+     **/
     public abstract int getMaximumPrecision();
 
     /**
-    Returns the maximum scale of the type.  This is
-    defined in Appendix D of the ODBC 2.0 Programmer's
-    Reference.
-    @return     the maximum scale.
-    **/
+     * Returns the maximum scale of the type.  This is
+     * defined in Appendix D of the ODBC 2.0 Programmer's
+     * Reference.
+     *
+     * @return the maximum scale.
+     **/
     public abstract int getMaximumScale();
 
     /**
-    Returns the minimum scale of the type.  This is
-    defined in Appendix D of the ODBC 2.0 Programmer's
-    Reference.
-    @return     the minimum scale.
-    **/
+     * Returns the minimum scale of the type.  This is
+     * defined in Appendix D of the ODBC 2.0 Programmer's
+     * Reference.
+     *
+     * @return the minimum scale.
+     **/
     public abstract int getMinimumScale();
 
     /**
-    Returns the native IBM i identifier for the type.
-    @return     the native type.
-    **/
+     * Returns the native IBM i identifier for the type.
+     *
+     * @return the native type.
+     **/
     public abstract int getNativeType();
 
     /**
-    Returns the precision of the type. This is
-    defined in Appendix D of the ODBC 2.0 Programmer's
-    Reference.
-    @return     the precision.
-    **/
+     * Returns the precision of the type. This is
+     * defined in Appendix D of the ODBC 2.0 Programmer's
+     * Reference.
+     *
+     * @return the precision.
+     **/
     public abstract int getPrecision();
 
     /**
-    Returns the radix for the type.
-    @return     the radix.
-    **/
+     * Returns the radix for the type.
+     *
+     * @return the radix.
+     **/
     public abstract int getRadix();
 
     /**
-    Returns the scale of the type. This is
-    defined in Appendix D of the ODBC 2.0 Programmer's
-    Reference.
-    @return     the scale.
-    **/
+     * Returns the scale of the type. This is
+     * defined in Appendix D of the ODBC 2.0 Programmer's
+     * Reference.
+     *
+     * @return the scale.
+     **/
     public abstract int getScale();
 
     /**
-    Returns the type constant associated with the type.
-    @return     SQL type code defined in java.sql.Types.
-    **/
+     * Returns the type constant associated with the type.
+     *
+     * @return SQL type code defined in java.sql.Types.
+     **/
     public abstract int getType();
 
     /**
-    Returns the name of the data type.
-    @return     the name.
-    **/
+     * Returns the name of the data type.
+     *
+     * @return the name.
+     **/
     public abstract String getTypeName();
 
     /**
-    Indicates whether the type is signed.
-    @return     true or false
-    **/
+     * Indicates whether the type is signed.
+     *
+     * @return true or false
+     **/
     public abstract boolean isSigned();
 
     /**
-    Indicates whether the type is text.  This also
-    indicates that the associated data needs to be
-    converted.
-    @return     true or false
-    **/
+     * Indicates whether the type is text.  This also
+     * indicates that the associated data needs to be
+     * converted.
+     *
+     * @return true or false
+     **/
     public abstract boolean isText();
 
     /**
-    Returns the actual size of this piece of data in bytes.
-    @return the actual size of this piece of data in bytes.
-    **/
+     * Returns the actual size of this piece of data in bytes.
+     *
+     * @return the actual size of this piece of data in bytes.
+     **/
     public abstract int getActualSize();
-
-    /**
-    Returns the number of bytes truncated by the last conversion
-    of this piece of data.
-    @return the number of bytes truncated by the last conversion
-    **/
-    public abstract int getTruncated();
-    
-    public void clearTruncated() {
-      truncated_ = 0; 
-    }
-    
-    /**
-     * Returns true if the last conversion of this piece of
-     * data was out of bounds of the range of the requested
-     * datatype.  This will only happen when requesting
-     * conversion to a numeric type.  
-     */
-    public abstract boolean getOutOfBounds(); 
-
-    public void clearOutOfBounds() {
-      outOfBounds_ = false; 
-    }
     //---------------------------------------------------------//
     //                                                         //
     // CONVERSIONS TO JAVA TYPES                               //
@@ -318,454 +507,375 @@ public abstract class SQLDataBase implements SQLData
     /*---------------------------------------------------------*/
 
     /**
-    Converts the data to a stream of ASCII characters.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-   
+     * Returns the number of bytes truncated by the last conversion
+     * of this piece of data.
+     *
+     * @return the number of bytes truncated by the last conversion
+     **/
+    public abstract int getTruncated();
+
+    public void clearTruncated() {
+        truncated_ = 0;
+    }
+
+    /**
+     * Returns true if the last conversion of this piece of
+     * data was out of bounds of the range of the requested
+     * datatype.  This will only happen when requesting
+     * conversion to a numeric type.
+     */
+    public abstract boolean getOutOfBounds();
+
+    public void clearOutOfBounds() {
+        outOfBounds_ = false;
+    }
+
+    /**
+     * Converts the data to a stream of ASCII characters.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+
     public InputStream getAsciiStream()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        try
-        {
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        try {
             return new ByteArrayInputStream(ConvTable.getTable(819, null).stringToByteArray(getString()));
-        }
-        catch(UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             JDError.throwSQLException(this, JDError.EXC_INTERNAL, e);
             return null;
         }
     }
 
     /**
-    Converts the data to a Java BigDecimal object.
-    @param      scale   scale, or -1 to use full scale.
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-    
+     * Converts the data to a Java BigDecimal object.
+     *
+     * @param scale scale, or -1 to use full scale.
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+
     public BigDecimal getBigDecimal(int scale)
-    throws SQLException
-    {
-        try
-        {
+            throws SQLException {
+        try {
             BigDecimal bigDecimal = new BigDecimal(SQLDataFactory.convertScientificNotation(getString().trim(), settings_)); // @F5C
-            if(scale >= 0)
-            {
-                if(scale >= bigDecimal.scale())
-                {
-                    truncated_ = 0; outOfBounds_ = false; 
+            if (scale >= 0) {
+                if (scale >= bigDecimal.scale()) {
+                    truncated_ = 0;
+                    outOfBounds_ = false;
                     return bigDecimal.setScale(scale);
-                }
-                else
-                {
-                    truncated_ = bigDecimal.scale() - scale; outOfBounds_ = false; 
+                } else {
+                    truncated_ = bigDecimal.scale() - scale;
+                    outOfBounds_ = false;
                     return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
                 }
-            }
-            else
+            } else
                 return bigDecimal;
-        }
-        catch(NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return null;
         }
     }
 
-
     /**
-    Converts the data to a stream of uninterpreted bytes.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a stream of uninterpreted bytes.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public abstract InputStream getBinaryStream()
-    throws SQLException;
+            throws SQLException;
 
     /**
-    Converts the data to a java.sql.Blob object.
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a java.sql.Blob object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public abstract Blob getBlob()
-    throws SQLException;
+            throws SQLException;
 
     /**
-    Converts the data to a Java boolean.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-   
+     * Converts the data to a Java boolean.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+
     public boolean getBoolean()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
         // If value equals "true", "false", "1", or "0", then return the
         // corresponding boolean, otherwise an empty string is
         // false, a non-empty string is true.
-        String trimmedValue = getString().trim();        
-        return((trimmedValue.length() > 0) 
-               && (! trimmedValue.equalsIgnoreCase("false"))
-               && (! trimmedValue.equals("0")));
+        String trimmedValue = getString().trim();
+        return ((trimmedValue.length() > 0)
+                && (!trimmedValue.equalsIgnoreCase("false"))
+                && (!trimmedValue.equals("0")));
     }
 
     /**
-    Converts the data to a Java byte.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a Java byte.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
 
     public byte getByte()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        try
-        {
+        try {
             //return(new Double(value_.trim())).byteValue();  //@trunc
-            Double doubleValue  = new Double (getString().trim ());              //@trunc
+            Double doubleValue = new Double(getString().trim());              //@trunc
             double d = doubleValue.doubleValue();                           //@trunc
-            if(d > Byte.MAX_VALUE || d < Byte.MIN_VALUE) {                  //@trunc
+            if (d > Byte.MAX_VALUE || d < Byte.MIN_VALUE) {                  //@trunc
                 truncated_ = 1;                                             //@trunc
-                outOfBounds_ = true; 
+                outOfBounds_ = true;
             }
-            
-            return doubleValue.byteValue ();                                //@trunc
-        }
-        catch(NumberFormatException e)
-        {
+
+            return doubleValue.byteValue();                                //@trunc
+        } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return -1;
         }
     }
 
-
     /**
-    Converts the data to a Java byte array containing
-    uninterpreted bytes.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a Java byte array containing
+     * uninterpreted bytes.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public abstract byte[] getBytes()
-    throws SQLException;
+            throws SQLException;
 
     /**
-    Converts the data to a java.io.Reader object.
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
- 
+     * Converts the data to a java.io.Reader object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+
     public Reader getCharacterStream()
-    throws SQLException
-    {
+            throws SQLException {
         return new StringReader(getString());
     }
 
     /**
-    Converts the data to a java.sql.Clob object.
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a java.sql.Clob object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public Clob getClob()
-    throws SQLException
-    {
-        String string = getString(); 
+            throws SQLException {
+        String string = getString();
         // Use the default maximum length for the obtained clob
         return new AS400JDBCClob(string);
     }
-  
+
     /**
-    Converts the data to a java.sql.Date object.
-    @param  calendar    The calendar.
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a java.sql.Date object.
+     *
+     * @param calendar The calendar.
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public Date getDate(Calendar calendar)
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(calendar == null) //@dat1
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (calendar == null) //@dat1
         {
             //getter methods do not enforce strict conversion
             calendar = AS400Calendar.getGregorianInstance(); //@dat1
-        }
-        else {
-          calendar = AS400Calendar.getConversionCalendar(calendar); 
+        } else {
+            calendar = AS400Calendar.getConversionCalendar(calendar);
         }
         return SQLDate.stringToDate(getString(), settings_, calendar);
     }
 
-
     /**
-    Converts the data to a Java double.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a Java double.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public double getDouble()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        try
-        {
-            return(new Double(getString().trim())).doubleValue();
-        }
-        catch(NumberFormatException e)
-        {
+        try {
+            return (new Double(getString().trim())).doubleValue();
+        } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return -1;
         }
     }
 
-
     /**
-    Converts the data to a Java float.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a Java float.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public float getFloat()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        try
-        {
-            return(new Double(getString().trim())).floatValue();
-        }
-        catch(NumberFormatException e)
-        {
+        try {
+            return (new Double(getString().trim())).floatValue();
+        } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return -1;
         }
     }
 
     /**
-    Converts the data to a Java int.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a Java int.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public int getInt()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        try
-        {
+        try {
             //return(new Double(getString().trim())).intValue();   //@trunc
-            Double doubleValue  = new Double (getString().trim ());     //@trunc
-            double d = doubleValue.doubleValue();                  //@trunc 
+            Double doubleValue = new Double(getString().trim());     //@trunc
+            double d = doubleValue.doubleValue();                  //@trunc
 
-            if( d > Integer.MAX_VALUE || d < Integer.MIN_VALUE) {   //@trunc    
+            if (d > Integer.MAX_VALUE || d < Integer.MIN_VALUE) {   //@trunc
                 truncated_ = 1;                                    //@trunc
-                outOfBounds_ = true; 
+                outOfBounds_ = true;
             }
-                 
-            return doubleValue.intValue ();                        //@trunc
-        }
-        catch(NumberFormatException e)
-        {
+
+            return doubleValue.intValue();                        //@trunc
+        } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return -1;
         }
     }
 
     /**
-    Converts the data to a Java long.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a Java long.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public long getLong()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        try
-        {
+        try {
             //return(new Double(getString().trim())).longValue();  //@trunc
-            Double doubleValue  = new Double (getString().trim ()); //@trunc
+            Double doubleValue = new Double(getString().trim()); //@trunc
             double d = doubleValue.doubleValue();              //@trunc
 
-            if( d > Long.MAX_VALUE || d < Long.MIN_VALUE) {     //@trunc
+            if (d > Long.MAX_VALUE || d < Long.MIN_VALUE) {     //@trunc
                 truncated_ = 1;                                //@trunc
-                outOfBounds_ = true; 
+                outOfBounds_ = true;
             }
 
-            return doubleValue.longValue ();                   //@trunc
-        }
-        catch(NumberFormatException e)
-        {
+            return doubleValue.longValue();                   //@trunc
+        } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return -1;
         }
     }
 
-
-
-
-
     /**
-    Converts the data to a Java object.  The actual type
-    of the Java object is dictated per section 8,
-    table 2 ("Standard mapping from SQL types to Java types")
-    of the JDBC 1.10 specification
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     * Converts the data to a Java object.  The actual type
+     * of the Java object is dictated per section 8,
+     * table 2 ("Standard mapping from SQL types to Java types")
+     * of the JDBC 1.10 specification
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
     public abstract Object getObject()
-    throws SQLException;
+            throws SQLException;
 
     public Object getBatchableObject() throws SQLException {
-      return getObject(); 
+        return getObject();
     }
-    /**
-    Converts the data to a Java short.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-    
-    public short getShort()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
 
-        try
-        {
+    /**
+     * Converts the data to a Java short.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+
+    public short getShort()
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+
+        try {
             //return(new Double(getString().trim())).shortValue();           //@trunc
-            Double doubleValue  = new Double (getString().trim ());               //@trunc
+            Double doubleValue = new Double(getString().trim());               //@trunc
             double d = doubleValue.doubleValue();                            //@trunc
 
-            if( d > Short.MAX_VALUE || d < Short.MIN_VALUE)  {                //@trunc      
+            if (d > Short.MAX_VALUE || d < Short.MIN_VALUE) {                //@trunc
                 truncated_ = 1;                                              //@trunc
-                outOfBounds_ = true; 
+                outOfBounds_ = true;
             }
 
-            return doubleValue.shortValue ();                                //@trunc
-        }
-        catch(NumberFormatException e)
-        {
+            return doubleValue.shortValue();                                //@trunc
+        } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return -1;
         }
     }
 
 
+    //@PDA jdbc40
+
     /**
-    Converts the data to a Java String object.  This
-    conversion must be provided by the implementation.
-    @return             the result of the conversion.
-    **/
+     * Converts the data to a Java String object.  This
+     * conversion must be provided by the implementation.
+     *
+     * @return the result of the conversion.
+     **/
     public abstract String getString()
-    throws SQLException;
+            throws SQLException;
 
-    /**
-    Converts the data to a java.sql.Time object.
-    @param  calendar    The calendar.
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-     public Time getTime(Calendar calendar)
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(calendar == null) //@dat1
-        {
-            //getter methods do not enforce strict conversion
-            calendar = AS400Calendar.getGregorianInstance(); //@dat1
-        }
-        else {
-          calendar = AS400Calendar.getConversionCalendar(calendar); 
-        }
-       return SQLTime.stringToTime(getString(), settings_, calendar);
-    }
-
-    
-    /**
-    Converts the data to a java.sql.Timestamp object.
-    @param  calendar    The calendar.
-    @return             the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-     public Timestamp getTimestamp(Calendar calendar)
-     throws SQLException
-     {
-         truncated_ = 0; outOfBounds_ = false; 
-         if(calendar == null) //@dat1
-         {
-             //getter methods do not enforce strict conversion
-             calendar = AS400Calendar.getGregorianInstance(); //@dat1
-         }
-         else {
-           calendar = AS400Calendar.getConversionCalendar(calendar); 
-         }
-         return SQLTimestamp.stringToTimestamp(getString(), calendar);
-     }
-
-    /**
-    Converts the data to a stream of Unicdoe characters.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-     public InputStream getUnicodeStream()
-     throws SQLException
-     {
-         truncated_ = 0; outOfBounds_ = false; 
-
-         try
-         {
-             return new ReaderInputStream(new StringReader(getString()), 13488);
-         }
-         catch(UnsupportedEncodingException e)
-         {
-             JDError.throwSQLException(this, JDError.EXC_INTERNAL, e);
-             return null;
-         }
-     }
-
-    
     //@PDA jdbc40
     /**
-    Converts the data to a java.io.Reader object.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-     public Reader getNCharacterStream() throws SQLException
-     {
-         truncated_ = 0; outOfBounds_ = false; 
-
-         // This is written in terms of getNString(), since it will
-         // handle truncating to the max field size if needed.
-         return new StringReader(getNString());
-     }
-    
-    //@PDA jdbc40
-    /**
-    Converts the data to a java.sql.NClob object
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     Converts the data to a java.sql.NClob object
+     @return the result of the conversion.
+     @exception SQLException    If the conversion is not
+     required or not possible.
+     **/
     /* ifdef JDBC40  
     public NClob getNClob() throws SQLException
     {
@@ -776,294 +886,145 @@ public abstract class SQLDataBase implements SQLData
         String string = getNString();
         return new AS400JDBCNClob(string, string.length());
     }
-     endif */ 
+     endif */
     //@PDA jdbc40
+
     /**
-    Converts the data to String object.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-    public String getNString() throws SQLException {
-      return getString(); 
+     * Converts the data to a java.sql.Time object.
+     *
+     * @param calendar The calendar.
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+    public Time getTime(Calendar calendar)
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (calendar == null) //@dat1
+        {
+            //getter methods do not enforce strict conversion
+            calendar = AS400Calendar.getGregorianInstance(); //@dat1
+        } else {
+            calendar = AS400Calendar.getConversionCalendar(calendar);
+        }
+        return SQLTime.stringToTime(getString(), settings_, calendar);
     }
-    
+
     //@PDA jdbc40
     /**
-    Converts the data to a java.sql.SQLXML object.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     Converts the data to a java.sql.SQLXML object.
+     @return the result of the conversion.
+     @exception SQLException    If the conversion is not
+     required or not possible.
+     **/
     /* ifdef JDBC40  
     public abstract SQLXML getSQLXML()
     throws SQLException;
-    endif */     
-    
+    endif */
+
     //@PDA jdbc40
     /**
-    Converts the data to a java.sql.RowId object.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
+     Converts the data to a java.sql.RowId object.
+     @return the result of the conversion.
+     @exception SQLException    If the conversion is not
+     required or not possible.
+     **/
     /* ifdef JDBC40 
     
     public abstract RowId getRowId()
     throws SQLException;
-     endif */ 
-    
+     endif */
+
     //@array
+
     /**
-    Converts (returns) the data to a java.sql.Array object.
-    @return     the result of the conversion.
-    @exception  SQLException    If the conversion is not
-                                required or not possible.
-    **/
-    
-    public Array getArray() throws SQLException
-    {
+     * Converts the data to a java.sql.Timestamp object.
+     *
+     * @param calendar The calendar.
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+    public Timestamp getTimestamp(Calendar calendar)
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (calendar == null) //@dat1
+        {
+            //getter methods do not enforce strict conversion
+            calendar = AS400Calendar.getGregorianInstance(); //@dat1
+        } else {
+            calendar = AS400Calendar.getConversionCalendar(calendar);
+        }
+        return SQLTimestamp.stringToTimestamp(getString(), calendar);
+    }
+
+    /**
+     * Converts the data to a stream of Unicdoe characters.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+    public InputStream getUnicodeStream()
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+
+        try {
+            return new ReaderInputStream(new StringReader(getString()), 13488);
+        } catch (UnsupportedEncodingException e) {
+            JDError.throwSQLException(this, JDError.EXC_INTERNAL, e);
+            return null;
+        }
+    }
+
+    /**
+     * Converts the data to a java.io.Reader object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+    public Reader getNCharacterStream() throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+
+        // This is written in terms of getNString(), since it will
+        // handle truncating to the max field size if needed.
+        return new StringReader(getNString());
+    }
+
+    /**
+     * Converts the data to String object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+    public String getNString() throws SQLException {
+        return getString();
+    }
+
+    /**
+     * Converts (returns) the data to a java.sql.Array object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
+     **/
+
+    public Array getArray() throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
-   public void updateSettings(SQLConversionSettings settings) {
-     settings_ = settings; 
-   }
-
- 
-   static String getStringFromReader(Reader stream, int length, Object exceptionObject) throws SQLException {
-     String value = null; 
-     if(length >= 0)
-     {
-         try
-         {
-             int blockSize = length < AS400JDBCPreparedStatement.LOB_BLOCK_SIZE ? length : AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
-            
-             StringBuffer buf = new StringBuffer();
-             char[] charBuffer = new char[blockSize];
-             int totalCharsRead = 0;
-             int charsRead = stream.read(charBuffer, 0, blockSize);
-             while(charsRead > -1 && totalCharsRead < length)
-             {
-                 buf.append(charBuffer, 0, charsRead);
-                 totalCharsRead += charsRead;
-                 int charsRemaining = length - totalCharsRead;
-                 if(charsRemaining < blockSize)
-                 {
-                     blockSize = charsRemaining;
-                 }
-                 charsRead = stream.read(charBuffer, 0, blockSize);
-             }
-             value = buf.toString();
-
-             if(value.length() < length)
-             {
-                 // a length longer than the stream was specified
-                 JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
-             }
-         }
-         catch(IOException ie)
-         {
-             JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
-         }
-     }
-     else if(length == ALL_READER_BYTES) //@readerlen new else-if block (read all data)
-     {
-         try
-         {
-             int blockSize = AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
-             StringBuffer buf = new StringBuffer();
-             char[] charBuffer = new char[blockSize];
-             // int totalCharsRead = 0;
-             int charsRead = stream.read(charBuffer, 0, blockSize);
-             while(charsRead > -1)
-             {
-                 buf.append(charBuffer, 0, charsRead);
-                 // totalCharsRead += charsRead;
-                 // int charsRemaining = length_ - totalCharsRead;
-               
-                 charsRead = stream.read(charBuffer, 0, blockSize);
-             }
-             value = buf.toString();
-
-         }
-         catch(IOException ie)
-         {
-             JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
-         }
-
-     }
-     else
-     {
-         JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
-     }
-
-         return value; 
-         
-   }
-
-   static byte[] getBytesFromInputStream(InputStream object, int length, Object exceptionObject) throws SQLException {
-     byte[] value = null; 
-     if(length >= 0)
-     {
-         InputStream stream = (InputStream)object;
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         int blockSize = length < AS400JDBCPreparedStatement.LOB_BLOCK_SIZE ? length : AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
-         byte[] byteBuffer = new byte[blockSize];
-         try
-         {
-             int totalBytesRead = 0;
-             int bytesRead = stream.read(byteBuffer, 0, blockSize);
-             while(bytesRead > -1 && totalBytesRead < length)
-             {
-                 baos.write(byteBuffer, 0, bytesRead);
-                 totalBytesRead += bytesRead;
-                 int bytesRemaining = length - totalBytesRead;
-                 if(bytesRemaining < blockSize)
-                 {
-                     blockSize = bytesRemaining;
-                 }
-                 bytesRead = stream.read(byteBuffer, 0, blockSize);
-             }
-         }
-         catch(IOException ie)
-         {
-             JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
-         }
-         value = baos.toByteArray();
-         if(value.length < length)
-         {
-             // a length longer than the stream was specified
-             JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
-         }
-     }
-     else if(length == ALL_READER_BYTES ) //@readerlen new else-if block (read all data)
-     {
-         InputStream stream = (InputStream)object;
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         int blockSize =   AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
-         byte[] byteBuffer = new byte[blockSize];
-         try
-         {
-             int totalBytesRead = 0;
-             int bytesRead = stream.read(byteBuffer, 0, blockSize);
-             while(bytesRead > -1)
-             {
-                 baos.write(byteBuffer, 0, bytesRead);
-                 totalBytesRead += bytesRead;
-               
-                 bytesRead = stream.read(byteBuffer, 0, blockSize);
-             }
-         }
-         catch(IOException ie)
-         {
-             JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
-         }
-         value = baos.toByteArray();
-     }
-     else
-     {
-         JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
-     }
-     return value; 
-   }
-   
-   static byte[] getBytesFromReader(Reader object, int length, Object exceptionObject) throws SQLException {
-     byte[] value = null; 
-   if(length >= 0)
-   {
-       try
-       {
-           int blockSize = length < AS400JDBCPreparedStatement.LOB_BLOCK_SIZE ? length : AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
-           ByteArrayOutputStream baos = new ByteArrayOutputStream();
-           HexReaderInputStream stream = new HexReaderInputStream(object);
-           byte[] byteBuffer = new byte[blockSize];
-           int totalBytesRead = 0;
-           int bytesRead = stream.read(byteBuffer, 0, blockSize);
-           while(bytesRead > -1 && totalBytesRead < length)
-           {
-               baos.write(byteBuffer, 0, bytesRead);
-               totalBytesRead += bytesRead;
-               int bytesRemaining = length - totalBytesRead;
-               if(bytesRemaining < blockSize)
-               {
-                   blockSize = bytesRemaining;
-               }
-               bytesRead = stream.read(byteBuffer, 0, blockSize);
-           }
-           value = baos.toByteArray();
-           if(value.length < length)
-           {
-               // a length longer than the stream was specified
-               JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
-           }
-           stream.close(); //@scan1
-       }
-       catch(ExtendedIOException eie)
-       {
-           // the Reader contains non-hex characters
-           JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH, eie);
-       }
-       catch(IOException ie)
-       {
-           JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
-       }
-   }
-   else if((length == ALL_READER_BYTES) || (length == -1)) //@readerlen new else-if block (read all data)
-   {
-       try
-       {
-           int blockSize = AS400JDBCPreparedStatement.LOB_BLOCK_SIZE;
-           ByteArrayOutputStream baos = new ByteArrayOutputStream();
-           HexReaderInputStream stream = new HexReaderInputStream((Reader)object);
-           byte[] byteBuffer = new byte[blockSize];
-           int totalBytesRead = 0;
-           int bytesRead = stream.read(byteBuffer, 0, blockSize);
-           while(bytesRead > -1)
-           {
-               baos.write(byteBuffer, 0, bytesRead);
-               totalBytesRead += bytesRead;
-              
-               bytesRead = stream.read(byteBuffer, 0, blockSize);
-           }
-           value = baos.toByteArray();
-         
-           stream.close(); //@scan1
-       }
-       catch(ExtendedIOException eie)
-       {
-           // the Reader contains non-hex characters
-           JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH, eie);
-       }
-       catch(IOException ie)
-       {
-           JDError.throwSQLException(exceptionObject, JDError.EXC_INTERNAL, ie);
-       }
-   }
-   else
-   {
-       JDError.throwSQLException(exceptionObject, JDError.EXC_DATA_TYPE_MISMATCH);
-   }
-   return value; 
-   }
-   /* Returns true if the sqlType is a character type */ 
-   /* @V8A */ 
-  public static boolean isCharacterType(int sqlType) {
-    switch (sqlType) { 
-    case Types.CHAR:
-    case Types.CLOB:
-    case Types.LONGVARCHAR:
-    case Types.VARCHAR:
-    
-      return true; 
-    default:
-        return false; 
+    public void updateSettings(SQLConversionSettings settings) {
+        settings_ = settings;
     }
-    
-  }
-  
-  public Object getSavedValue() {
-    return savedValue_; 
-  }
+
+    public Object getSavedValue() {
+        return savedValue_;
+    }
 }

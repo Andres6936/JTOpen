@@ -15,25 +15,21 @@ package com.ibm.as400.access;
 
 
 /**
-The PxReturnRepSV class represents the
-server view of an return reply.
-**/
+ * The PxReturnRepSV class represents the
+ * server view of an return reply.
+ **/
 class PxReturnRepSV
-extends PxRepSV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
-    
+        extends PxRepSV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     public PxReturnRepSV(PxTable pxTable,
                          Object returnValue,
                          Object[] arguments,
-                         boolean[] returnArguments)
-    {
-        super (ProxyConstants.DS_RETURN_REP);
-        addObjectParm (pxTable, returnValue);
-        addParm (new PxIntParm (arguments.length));
+                         boolean[] returnArguments) {
+        super(ProxyConstants.DS_RETURN_REP);
+        addObjectParm(pxTable, returnValue);
+        addParm(new PxIntParm(arguments.length));
         for (int i = 0; i < arguments.length; ++i) {
             if (returnArguments[i])
                 addObjectParm(pxTable, arguments[i]);
@@ -41,7 +37,6 @@ extends PxRepSV
                 addParm(new PxNullParm());
         }
     }
-
 
 
 }

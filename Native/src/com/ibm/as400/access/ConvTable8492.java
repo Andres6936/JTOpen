@@ -14,12 +14,10 @@
 package com.ibm.as400.access;
 
 // This is a Japanese character set.
-class ConvTable8492 extends ConvTable16684
-{
+class ConvTable8492 extends ConvTable16684 {
     private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-    ConvTable8492()
-    {
+    ConvTable8492() {
         super(8492);
     }
 }

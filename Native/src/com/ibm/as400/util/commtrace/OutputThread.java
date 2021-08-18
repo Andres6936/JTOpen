@@ -20,43 +20,46 @@ import com.ibm.as400.access.JavaApplicationCall;
  * The thread where remote standard out is sent when running JavaApplication call
  */
 class OutputThread implements Runnable {
-	private JavaApplicationCall jaCall_;
-	private Thread outThread_;
+    private JavaApplicationCall jaCall_;
+    private Thread outThread_;
 
-	public OutputThread(JavaApplicationCall jaCall) {
-		jaCall_= jaCall;
-	}
-	/**
-	 * Returns the currently running format Thread
-	 * @return The Thread 
-	 */
-	public Thread getThread() {
-		return outThread_;
-	}
+    public OutputThread(JavaApplicationCall jaCall) {
+        jaCall_ = jaCall;
+    }
 
-	/**
-	 * Sets the thread. 
-	 * @param tr The thread this object is running under.
-	 */
-	public void setThread(Thread tr) {
-		outThread_= tr;
-	}
+    /**
+     * Returns the currently running format Thread
+     *
+     * @return The Thread
+     */
+    public Thread getThread() {
+        return outThread_;
+    }
 
-	/**
-	 * Starts the Output Thread to recieve debug info from the remotely running Java program.
-	 */
-	public void run() {
-		Thread myThread= Thread.currentThread();
-		while (outThread_ == myThread) {
-			String s= jaCall_.getStandardOutString();
-			if (s != null)
-				Trace.log(Trace.INFORMATION, s);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// the VM doesn't want us to sleep anymore,
-				// so get back to work
-			}
-		}
-	}
+    /**
+     * Sets the thread.
+     *
+     * @param tr The thread this object is running under.
+     */
+    public void setThread(Thread tr) {
+        outThread_ = tr;
+    }
+
+    /**
+     * Starts the Output Thread to recieve debug info from the remotely running Java program.
+     */
+    public void run() {
+        Thread myThread = Thread.currentThread();
+        while (outThread_ == myThread) {
+            String s = jaCall_.getStandardOutString();
+            if (s != null)
+                Trace.log(Trace.INFORMATION, s);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                // the VM doesn't want us to sleep anymore,
+                // so get back to work
+            }
+        }
+    }
 }

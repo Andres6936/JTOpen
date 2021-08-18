@@ -14,13 +14,13 @@ package com.ibm.as400.access;
 
 /**
  * An empty English MRI resource bundle.
- * <P>
+ * <p>
  * Normally we do not need _en or _en_US bundles
  * since the default bundle contains English.
  * However, in the case of SVMRI, since the SystemValue
  * classes let you specify a Locale used to load their MRI,
  * the following scenario exists:
- * <P>
+ * <p>
  * The default Locale of the JVM is (for example) Korean.
  * The requested Locale passed into SystemValue is English.
  * Java will attempt to load the English MRI bundle. If that
@@ -31,7 +31,7 @@ package com.ibm.as400.access;
  * is available. So in this case, we provide an English bundle.
  * We just provide an empty bundle, so we don't need to instantiate
  * the base English Strings twice.
- * <P>
+ * <p>
  * We do not need _en bundles for our other MRI because there
  * is currently not a way for a user to override the Locale
  * we are using to load the MRI, unless they change the default
@@ -39,16 +39,14 @@ package com.ibm.as400.access;
  * touched, since it loads our MRI statically). That is, for
  * our other MRI bundles, if the user wants English MRI, they
  * will have to switch the JVM's default Locale to be English.
-**/
-public class SVMRI_en extends java.util.ListResourceBundle
-{
-  private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
+ **/
+public class SVMRI_en extends java.util.ListResourceBundle {
+    private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
-  private static final Object[][] empty_ = {};
+    private static final Object[][] empty_ = {};
 
-  public Object[][] getContents()
-  {
-    return empty_;
-  }
+    public Object[][] getContents() {
+        return empty_;
+    }
 }
 

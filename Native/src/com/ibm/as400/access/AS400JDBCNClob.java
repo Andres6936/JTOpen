@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 /* ifdef JDBC40 
 import java.sql.NClob;
-endif */ 
+endif */
 
 /**
  * The AS400JDBCNClob class provides access to character large objects. The data
@@ -30,35 +30,29 @@ public class AS400JDBCNClob extends AS400JDBCClob
 /* ifdef JDBC40 
    implements NClob, Serializable
    endif */
-/* ifndef JDBC40 */
-   implements Serializable
-/* endif */ 
-{
-  
+        /* ifndef JDBC40 */
+        implements Serializable
+        /* endif */ {
+
 
     /**
      * Constructs an AS400JDBCNClob object. The data is contained in the String.
      * No further communication with the IBM i system is necessary.
-     * 
-     * @param data
-     *            The NClob data.
-     * @param maxLength 
-     *            The max length
+     *
+     * @param data      The NClob data.
+     * @param maxLength The max length
      */
-    AS400JDBCNClob(String data, int maxLength)
-    {
+    AS400JDBCNClob(String data, int maxLength) {
         super(data, maxLength);
     }
 
     /**
      * Constructs an AS400JDBCNClob object. The data is contained in the char array.
      * No further communication with the IBM i system is necessary.
-     * 
-     * @param data
-     *            The NClob data.
+     *
+     * @param data The NClob data.
      */
-    AS400JDBCNClob(char[] data)
-    {
+    AS400JDBCNClob(char[] data) {
         super(data);
     }
 

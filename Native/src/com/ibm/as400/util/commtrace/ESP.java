@@ -19,12 +19,13 @@ package com.ibm.as400.util.commtrace;
  */
 public class ESP extends ExtHeader {
 
-	/**
-	* Creates and parses the data of this header.  
-	* @param data  The raw data of this header. 
-	*/
-	ESP(BitBuf data) {
-		super(data);
-		type= Header.EXTESP;
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    ESP(BitBuf data) {
+        super(data);
+        type = Header.EXTESP;
+    }
 }

@@ -18,45 +18,48 @@ package com.ibm.as400.util.commtrace;
  * Extends NDOption's methods to parse, print, and allow easy access to the TargetLLA Header.
  */
 public class TargetLLA extends NDOption {
-	private Field address= new Hex(rawheader.slice(16));
+    private Field address = new Hex(rawheader.slice(16));
 
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data	The raw data of this header. 
-	 */
-	TargetLLA(BitBuf data) {
-		super(data);
-		super.type= TARGETLLA;
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    TargetLLA(BitBuf data) {
+        super(data);
+        super.type = TARGETLLA;
+    }
 
     /**
      * Returns a printable representation of this header.
-     * @param filter	    FormatProperties object for filtering this header.
-     * @return	    Returns a string representation of this header.
+     *
+     * @param filter FormatProperties object for filtering this header.
+     * @return Returns a string representation of this header.
      */
-	public String toString(FormatProperties filter) {
-		Object[] args= { ndtype, length, address };
-		return Formatter.jsprintf(
-			"\t    "
-				+ OPTDATA
-				+ ":   "
-				+ TYPE
-				+ ": {0,3,R}     "
-				+ LEN
-				+ ": {1,3,R}     "
-				+ ADDR
-				+ ": {2}\n",
-			args)
-			+ printHexHeader()
-			+ printnext(filter);
-	}
+    public String toString(FormatProperties filter) {
+        Object[] args = {ndtype, length, address};
+        return Formatter.jsprintf(
+                "\t    "
+                        + OPTDATA
+                        + ":   "
+                        + TYPE
+                        + ": {0,3,R}     "
+                        + LEN
+                        + ": {1,3,R}     "
+                        + ADDR
+                        + ": {2}\n",
+                args)
+                + printHexHeader()
+                + printnext(filter);
+    }
 
-	/**
-	 * Returns the address of this TargetLLA header. 
-	 * @return A String containing a decimal representation of the address.
-	 */
-	public String getAddress() {
-		return (new Dec(address.getData())).toString();
-	}
+    /**
+     * Returns the address of this TargetLLA header.
+     *
+     * @return A String containing a decimal representation of the address.
+     */
+    public String getAddress() {
+        return (new Dec(address.getData())).toString();
+    }
 
 }

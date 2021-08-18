@@ -22,95 +22,74 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLXML;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
-endif */ 
+endif */
 import java.sql.SQLException;
-
-
 
 
 //@PDA jdbc40 new class
 
 /**
- The JDSQLXMLProxy class provides access to character XML
- objects.  
+ * The JDSQLXMLProxy class provides access to character XML
+ * objects.
  **/
 class JDSQLXMLProxy
-extends AbstractProxyImpl
+        extends AbstractProxyImpl
 /* ifdef JDBC40 
 implements SQLXML
-endif */ 
-{
-    
-    
+endif */ {
+
+
     // Copied from JDError:
-    static final String EXC_FUNCTION_NOT_SUPPORTED       = "IM001";
-    
-    public Reader getCharacterStream ()
-    throws SQLException
-    {
+    static final String EXC_FUNCTION_NOT_SUPPORTED = "IM001";
+
+    public Reader getCharacterStream()
+            throws SQLException {
         try {
-            JDReaderProxy newReader = new JDReaderProxy ();
-            return (JDReaderProxy) connection_.callFactoryMethod (
+            JDReaderProxy newReader = new JDReaderProxy();
+            return (JDReaderProxy) connection_.callFactoryMethod(
                     pxId_, "getCharacterStream",
                     newReader);
-        }
-        catch (InvocationTargetException e) {
-            throw JDConnectionProxy.rethrow1 (e);
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
         }
     }
-    
-    public Writer setCharacterStream ()
-    throws SQLException
-    {
+
+    public Writer setCharacterStream()
+            throws SQLException {
         try {
-            JDReaderProxy newReader = new JDReaderProxy ();
-            return (JDWriterProxy) connection_.callFactoryMethod (
+            JDReaderProxy newReader = new JDReaderProxy();
+            return (JDWriterProxy) connection_.callFactoryMethod(
                     pxId_, "setCharacterStream",
                     newReader);
-        }
-        catch (InvocationTargetException e) {
-            throw JDConnectionProxy.rethrow1 (e);
-        }
-    }
-    
-    
-    public void setString (String str)
-    throws SQLException
-    {
-        try {
-            connection_.callMethod (pxId_, "setString",
-                    new Class[] { String.class},
-                    new Object[] { str});
-        }
-        catch (InvocationTargetException e) {
-            throw JDConnectionProxy.rethrow1 (e);
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
         }
     }
-    
-    
-    public void free() throws SQLException
-    {
+
+    public void free() throws SQLException {
         try {
-            connection_.callMethod (pxId_, "free");
-        }
-        catch (InvocationTargetException e) {
-            throw JDConnectionProxy.rethrow1 (e);
+            connection_.callMethod(pxId_, "free");
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
         }
     }
-    
-    
-    
-    
-    public InputStream getBinaryStream() throws SQLException
-    {
+
+    public InputStream getBinaryStream() throws SQLException {
         try {
-            JDInputStreamProxy newStream = new JDInputStreamProxy ();
-            return (JDInputStreamProxy) connection_.callFactoryMethod (
+            JDInputStreamProxy newStream = new JDInputStreamProxy();
+            return (JDInputStreamProxy) connection_.callFactoryMethod(
                     pxId_, "getBinaryStream",
                     newStream);
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
         }
-        catch (InvocationTargetException e) {
-            throw JDConnectionProxy.rethrow1 (e);
+    }
+
+    public String getString() throws SQLException {
+        try {
+            return (String) connection_.callMethod(pxId_, "getString").getReturnValue();
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
         }
     }
     
@@ -130,29 +109,27 @@ endif */
             throw JDConnectionProxy.rethrow1 (e);
         }
     }
-    endif */ 
-    
-    public String getString() throws SQLException
-    {
+    endif */
+
+    public void setString(String str)
+            throws SQLException {
         try {
-            return (String) connection_.callMethod (pxId_, "getString").getReturnValue();
-        }
-        catch (InvocationTargetException e) {
-            throw JDConnectionProxy.rethrow1 (e);
+            connection_.callMethod(pxId_, "setString",
+                    new Class[]{String.class},
+                    new Object[]{str});
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
         }
     }
-    
-    
-    public OutputStream setBinaryStream() throws SQLException
-    {
+
+    public OutputStream setBinaryStream() throws SQLException {
         try {
-            JDOutputStreamProxy newStream = new JDOutputStreamProxy ();
-            return (JDOutputStreamProxy) connection_.callFactoryMethod (
+            JDOutputStreamProxy newStream = new JDOutputStreamProxy();
+            return (JDOutputStreamProxy) connection_.callFactoryMethod(
                     pxId_, "setBinaryStream",
                     newStream);
-        }
-        catch (InvocationTargetException e) {
-            throw JDConnectionProxy.rethrow1 (e);
+        } catch (InvocationTargetException e) {
+            throw JDConnectionProxy.rethrow1(e);
         }
     }
     
@@ -174,6 +151,6 @@ endif */
         }
     }
     
-    endif */ 
-    
+    endif */
+
 }

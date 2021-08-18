@@ -23,11 +23,10 @@ import java.beans.BeanInfo;
 
 
 /**
-*  The HTMLHeadBeanInfo class provides bean information for the HTMLHead class.
-**/
-public class HTMLHeadBeanInfo extends SimpleBeanInfo
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+ * The HTMLHeadBeanInfo class provides bean information for the HTMLHead class.
+ **/
+public class HTMLHeadBeanInfo extends SimpleBeanInfo {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Class this bean info represents.
@@ -40,55 +39,51 @@ public class HTMLHeadBeanInfo extends SimpleBeanInfo
     private static PropertyDescriptor[] properties_;
 
 
-    static
-    {
-      
-      try
-      {
-        EventSetDescriptor changed = new EventSetDescriptor(beanClass,
-                         "propertyChange",
-                         java.beans.PropertyChangeListener.class,
-                         "propertyChange");
-        changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
-        changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
+    static {
 
-        EventSetDescriptor[] events = {changed};
+        try {
+            EventSetDescriptor changed = new EventSetDescriptor(beanClass,
+                    "propertyChange",
+                    java.beans.PropertyChangeListener.class,
+                    "propertyChange");
+            changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
+            changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
 
-        events_ = events;
+            EventSetDescriptor[] events = {changed};
 
-        // ***** PROPERTIES
-        PropertyDescriptor title = new PropertyDescriptor("title", beanClass,
-                                        "getTitle", "setTitle");
-        title.setBound(true);
-        title.setConstrained(false);
-        title.setDisplayName(loader_.getText("PROP_NAME_TITLE"));
-        title.setShortDescription(loader_.getText("PROP_HH_DESC_TITLE"));
+            events_ = events;
 
-        PropertyDescriptor lang = new PropertyDescriptor("lang", beanClass, "getLanguage", "setLanguage");   
-        lang.setBound(true);                                                                                 
-        lang.setConstrained(false);                                                                           
-        lang.setDisplayName(loader_.getText("PROP_NAME_LANGUAGE"));                                          
-        lang.setShortDescription(loader_.getText("PROP_DESC_LANGUAGE"));                                     
+            // ***** PROPERTIES
+            PropertyDescriptor title = new PropertyDescriptor("title", beanClass,
+                    "getTitle", "setTitle");
+            title.setBound(true);
+            title.setConstrained(false);
+            title.setDisplayName(loader_.getText("PROP_NAME_TITLE"));
+            title.setShortDescription(loader_.getText("PROP_HH_DESC_TITLE"));
 
-        PropertyDescriptor dir = new PropertyDescriptor("dir", beanClass, "getDirection", "setDirection");   
-        dir.setBound(true);                                                                                  
-        dir.setConstrained(false);                                                                            
-        dir.setDisplayName(loader_.getText("PROP_NAME_DIRECTION"));                                          
-        dir.setShortDescription(loader_.getText("PROP_DESC_DIRECTION"));   
+            PropertyDescriptor lang = new PropertyDescriptor("lang", beanClass, "getLanguage", "setLanguage");
+            lang.setBound(true);
+            lang.setConstrained(false);
+            lang.setDisplayName(loader_.getText("PROP_NAME_LANGUAGE"));
+            lang.setShortDescription(loader_.getText("PROP_DESC_LANGUAGE"));
 
-        PropertyDescriptor useFO = new PropertyDescriptor("useFO", beanClass, "isUseFO", "setUseFO");           //@B1A
-        useFO.setBound(true);                                                                                   //@B1A
-        useFO.setConstrained(false);                                                                            //@B1A
-        useFO.setDisplayName(loader_.getText("PROP_NAME_FORMATTING_OBJECT"));                                   //@B1A
-        useFO.setShortDescription(loader_.getText("PROP_DESC_FORMATTING_OBJECT"));                              //@B1A
+            PropertyDescriptor dir = new PropertyDescriptor("dir", beanClass, "getDirection", "setDirection");
+            dir.setBound(true);
+            dir.setConstrained(false);
+            dir.setDisplayName(loader_.getText("PROP_NAME_DIRECTION"));
+            dir.setShortDescription(loader_.getText("PROP_DESC_DIRECTION"));
 
-                                                                                                             
-        properties_ = new PropertyDescriptor[] {title, lang, dir, useFO};                                       //@B1C
-      }
-      catch (Exception e)
-      {
-        throw new Error(e.toString());
-      }
+            PropertyDescriptor useFO = new PropertyDescriptor("useFO", beanClass, "isUseFO", "setUseFO");           //@B1A
+            useFO.setBound(true);                                                                                   //@B1A
+            useFO.setConstrained(false);                                                                            //@B1A
+            useFO.setDisplayName(loader_.getText("PROP_NAME_FORMATTING_OBJECT"));                                   //@B1A
+            useFO.setShortDescription(loader_.getText("PROP_DESC_FORMATTING_OBJECT"));                              //@B1A
+
+
+            properties_ = new PropertyDescriptor[]{title, lang, dir, useFO};                                       //@B1C
+        } catch (Exception e) {
+            throw new Error(e.toString());
+        }
     }
 
 
@@ -101,76 +96,75 @@ public class HTMLHeadBeanInfo extends SimpleBeanInfo
      **/
     public BeanInfo[] getAdditionalBeanInfo()                            // @Z1A
     {
-       return new BeanInfo[] { new HTMLTagAttributesBeanInfo() };
+        return new BeanInfo[]{new HTMLTagAttributesBeanInfo()};
     }
 
 
     /**
-    Returns the bean descriptor.
-      @return The bean descriptor.
-    **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
+     **/
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(beanClass);
     }
 
-    
+
     /**
-    Returns the index of the default event.
-      @return The index to the default event.
-    **/
-    public int getDefaultEventIndex()
-    {
+     * Returns the index of the default event.
+     *
+     * @return The index to the default event.
+     **/
+    public int getDefaultEventIndex() {
         return 0;
     }
 
     /**
-      Returns the index of the default property.
-      @return The index to the default property.
-    **/
-    public int getDefaultPropertyIndex()
-    {
+     * Returns the index of the default property.
+     *
+     * @return The index to the default property.
+     **/
+    public int getDefaultPropertyIndex() {
         return 0;
     }
 
     /**
-      Returns the descriptors for all events.
-      @return The descriptors for all events.
-    **/
-    public EventSetDescriptor[] getEventSetDescriptors()
-    {
+     * Returns the descriptors for all events.
+     *
+     * @return The descriptors for all events.
+     **/
+    public EventSetDescriptor[] getEventSetDescriptors() {
         return events_;
     }
 
     /**
-      Returns an image for the icon.
-
-      @param icon    The icon size and color.
-      @return        The image.
-    **/
-    public Image getIcon (int icon)
-    {
+     * Returns an image for the icon.
+     *
+     * @param icon The icon size and color.
+     * @return The image.
+     **/
+    public Image getIcon(int icon) {
         Image image = null;
         switch (icon) {
             case BeanInfo.ICON_MONO_16x16:
             case BeanInfo.ICON_COLOR_16x16:
-                image = loadImage ("HTMLHead16.gif");
+                image = loadImage("HTMLHead16.gif");
                 break;
             case BeanInfo.ICON_MONO_32x32:
             case BeanInfo.ICON_COLOR_32x32:
-                image = loadImage ("HTMLHead32.gif");
+                image = loadImage("HTMLHead32.gif");
                 break;
         }
         return image;
     }
 
- 
+
     /**
-    *  Returns the descriptors for all properties.
-    *  @return The descriptors for all properties.
-    **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
+     **/
+    public PropertyDescriptor[] getPropertyDescriptors() {
         return properties_;
     }
 

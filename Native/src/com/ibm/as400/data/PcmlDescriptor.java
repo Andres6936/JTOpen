@@ -14,33 +14,29 @@
 package com.ibm.as400.data;
 
 /**
-  *  The PcmlDescriptor class implements the methods of the Descriptor interface
-  *  that are unique to the <pcml> tag.
-  *
-  **/
+ * The PcmlDescriptor class implements the methods of the Descriptor interface
+ * that are unique to the <pcml> tag.
+ **/
 
-class PcmlDescriptor extends DocNodeDescriptor
-{
+class PcmlDescriptor extends DocNodeDescriptor {
     /* Constructor */
-    public PcmlDescriptor(PcmlDocNode node)
-    {
+    public PcmlDescriptor(PcmlDocNode node) {
         super(node);
     }
-   /**
-    * Return list of valid attributes for the <pcml> tag. 
-    **/
-    public String[] getAttributeList()
-    {
-        return ((PcmlDocument)getDocNode()).getAttributeList();
+
+    /**
+     * Return list of valid attributes for the <pcml> tag.
+     **/
+    public String[] getAttributeList() {
+        return ((PcmlDocument) getDocNode()).getAttributeList();
     }
 
-   /**
-    * Return a String containing the current value for the requested attribute.
-    **/
-    public String getAttributeValue(String attr)
-    {
+    /**
+     * Return a String containing the current value for the requested attribute.
+     **/
+    public String getAttributeValue(String attr) {
         if (attr != null && attr.equals("version"))
-            return ((PcmlDocument)getDocNode()).getVersion();
+            return ((PcmlDocument) getDocNode()).getVersion();
         else
             return null;
     }

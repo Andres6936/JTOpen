@@ -17,26 +17,21 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-
 /**
-The PxDSWV interface represents the set of
-methods that are needed by the writer of a datastream.
-**/
-interface PxDSWV 
-{
+ * The PxDSWV interface represents the set of
+ * methods that are needed by the writer of a datastream.
+ **/
+interface PxDSWV {
 
 
-
-/**
-Writes the contents of the datastream to an output stream.
-
-
-@param output   The output stream.
-
-@exception IOException  If an error occurs.                
-**/
-    public abstract void writeTo (OutputStream output)
-        throws IOException;
+    /**
+     * Writes the contents of the datastream to an output stream.
+     *
+     * @param output The output stream.
+     * @throws IOException If an error occurs.
+     **/
+    public abstract void writeTo(OutputStream output)
+            throws IOException;
 
 
 }

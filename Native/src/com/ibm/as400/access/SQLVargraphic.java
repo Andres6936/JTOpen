@@ -14,24 +14,23 @@
 package com.ibm.as400.access;
 
 final class SQLVargraphic
-extends SQLVarcharBase implements SQLVariableCompressible
-{
+        extends SQLVarcharBase implements SQLVariableCompressible {
     static final String copyright2 = "Copyright (C) 1997-2013 International Business Machines Corporation and others.";
 
     // Private data.
-    private int                     ccsid_; //@cca1
+    private int ccsid_; //@cca1
 
     // Note: maxLength is in bytes not counting 2 for LL.
     //
     SQLVargraphic(int maxLength, SQLConversionSettings settings, int ccsid)  //@cca1
     {
         super(settings, 0, maxLength, "", 2);
-        truncated_ = 0; outOfBounds_ = false;
-        ccsid_          = ccsid;  //@cca1
+        truncated_ = 0;
+        outOfBounds_ = false;
+        ccsid_ = ccsid;  //@cca1
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLVargraphic(maxLength_, settings_, ccsid_); //@cca1
     }
 
@@ -42,59 +41,48 @@ extends SQLVarcharBase implements SQLVariableCompressible
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.VARGRAPHIC;
     }
 
 
-    public int getDisplaySize()
-    {
-        if(ccsid_ == 65535)    //@bingra
+    public int getDisplaySize() {
+        if (ccsid_ == 65535)    //@bingra
             return maxLength_; //@bingra
         else
             return maxLength_ / 2;
     }
 
-    public String getLocalName()
-    {
+    public String getLocalName() {
         return "VARGRAPHIC";
     }
 
-    public int getMaximumPrecision()
-    {
+    public int getMaximumPrecision() {
         return 16369;
     }
 
 
-    public int getNativeType()
-    {
+    public int getNativeType() {
         return 464;
     }
 
 
-    public int getType()
-    {
+    public int getType() {
  /* ifdef JDBC40
         if (ccsid_ == 1200) {
           return java.sql.Types.NVARCHAR;
         }
- endif */    	
+ endif */
         return java.sql.Types.VARCHAR;  //@P3C
     }
 
 
-    public String getTypeName()
-    {
-        if(  ccsid_ == 1200)  //@cca1
-        	return "NVARCHAR";  //@cca1 same as native
+    public String getTypeName() {
+        if (ccsid_ == 1200)  //@cca1
+            return "NVARCHAR";  //@cca1 same as native
 
-    	return "VARGRAPHIC";
+        return "VARGRAPHIC";
     }
-
-
-
-
 
 
 }

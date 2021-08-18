@@ -13,22 +13,18 @@
 
 package com.ibm.as400.access;
 
-class IFSIoctlRep extends IFSDataStream
-{
-    public Object getNewDataStream()
-    {
+class IFSIoctlRep extends IFSDataStream {
+    public Object getNewDataStream() {
         return new IFSIoctlRep();
     }
 
-    byte[] getReplyData()
-    {
+    byte[] getReplyData() {
         byte[] replyData = new byte[data_.length - 22];
         System.arraycopy(data_, 22, replyData, 0, replyData.length);
         return replyData;
     }
 
-    public int hashCode()
-    {
+    public int hashCode() {
         return 0x8015;
     }
 }

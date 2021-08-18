@@ -19,22 +19,17 @@ import org.ietf.jgss.GSSManager;
 import org.ietf.jgss.GSSName;
 import org.ietf.jgss.Oid;
 
-class TokenManager
-{
+class TokenManager {
     private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
-    static byte[] getGSSToken(String systemName, String gssName) throws Exception
-    {
-        GSSManager manager = (GSSManager)AS400.getGSSManager();
-        if(manager == null)
-        {
+
+    static byte[] getGSSToken(String systemName, String gssName) throws Exception {
+        GSSManager manager = (GSSManager) AS400.getGSSManager();
+        if (manager == null) {
             manager = GSSManager.getInstance();
-        }
-        else
-        {
+        } else {
             if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Using custom GSS manager: '" + manager + "'");
         }
-        if (Trace.isTraceOn())
-        {
+        if (Trace.isTraceOn()) {
             Oid[] mechs = manager.getMechs();
             Trace.log(Trace.DIAGNOSTIC, "GSS number of mechs available: ", mechs.length);
             for (int i = 0; i < mechs.length; ++i) Trace.log(Trace.DIAGNOSTIC, mechs[i].toString());
@@ -43,12 +38,9 @@ class TokenManager
         GSSName serverName = manager.createName("krbsvr400@" + systemName, GSSName.NT_HOSTBASED_SERVICE, krb5Mech);
 
         GSSCredential credential;
-        if (gssName.length() == 0)
-        {
+        if (gssName.length() == 0) {
             credential = manager.createCredential(GSSCredential.INITIATE_ONLY);
-        }
-        else
-        {
+        } else {
             GSSName userName = manager.createName(gssName, GSSName.NT_USER_NAME);
             credential = manager.createCredential(userName, GSSCredential.DEFAULT_LIFETIME, krb5Mech, GSSCredential.INITIATE_ONLY);
         }

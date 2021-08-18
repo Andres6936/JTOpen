@@ -15,33 +15,36 @@ package com.ibm.as400.util.commtrace;
 
 /**
  * A Router Solicitation Header.<br>
- * Extends Message's methods to parse, print, and allow easy access to the 
+ * Extends Message's methods to parse, print, and allow easy access to the
  * Router Solicitation Header.
  */
 public class RouterSolicitation extends Message {
 
-	/**
-	* Creates and parses the data of this header.  
-	* @param data	The raw data of this header. 
-	*/
-	RouterSolicitation(BitBuf data) {
-		super(data);
-		super.type= RTRSOL;
-	}
-	
-	/**
-	 * Returns the next header in the packet.
-	 * @return Will always return a NDOption header.
-	 */
-	public Header getNextHeader() {
-		return NDOption.createNDOption(rawpayload);
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    RouterSolicitation(BitBuf data) {
+        super(data);
+        super.type = RTRSOL;
+    }
 
-	/**
-	 * Returns the length of this header.
-	 * @return	    Will always return 32.
-	 */
-	public int getHeaderLen() {
-		return 32;
-	}
+    /**
+     * Returns the next header in the packet.
+     *
+     * @return Will always return a NDOption header.
+     */
+    public Header getNextHeader() {
+        return NDOption.createNDOption(rawpayload);
+    }
+
+    /**
+     * Returns the length of this header.
+     *
+     * @return Will always return 32.
+     */
+    public int getHeaderLen() {
+        return 32;
+    }
 }

@@ -20,7 +20,7 @@ import java.util.Hashtable;
 
 
 abstract class PcmlNode implements Serializable, Cloneable {        // @C2A
-    static final long serialVersionUID = -2955209136470053178L;	    // @C1A
+    static final long serialVersionUID = -2955209136470053178L;        // @C1A
     private static Hashtable separatorsMap_;
 
     private PcmlNode parent;
@@ -30,8 +30,7 @@ abstract class PcmlNode implements Serializable, Cloneable {        // @C2A
     private PcmlNode lastChild;
     private int nbrChildren;
 
-    PcmlNode() 
-    {
+    PcmlNode() {
         parent = null;
         prevSibling = null;
         nextSibling = null;
@@ -39,10 +38,45 @@ abstract class PcmlNode implements Serializable, Cloneable {        // @C2A
         lastChild = null;
         nbrChildren = 0;
     }
-    
+
+    private static Hashtable getSeparatorsMap() {
+        if (separatorsMap_ == null) {
+            synchronized (PcmlNode.class) {
+                if (separatorsMap_ == null) {
+                    separatorsMap_ = new Hashtable(12);
+                    separatorsMap_.put("ampersand", AMPERSAND);
+                    separatorsMap_.put("blank", BLANK);
+                    separatorsMap_.put("colon", COLON);
+                    separatorsMap_.put("comma", COMMA);
+                    separatorsMap_.put("hyphen", HYPHEN);
+                    separatorsMap_.put("period", PERIOD);
+                    separatorsMap_.put("slash", SLASH);
+                }
+            }
+        }
+        return separatorsMap_;
+    }
+
+    static boolean isValidSeparatorName(String separatorName) {
+        boolean found = getSeparatorsMap().containsKey(separatorName);
+        if (found) return true;
+        else return (separatorName.equals("none"));  // special value indicating "no separator"
+    }
+
+    public abstract String getName();
+
+    public abstract String getQualifiedName();
+
+    // Returns the char value associated with a given separator name.
+    // Returns null if separatorName is "none" or if the name is not recognized.
+    // For that reason, caller should first validate the separatorName by calling isValidSeparatorName().
+    static Character separatorAsChar(String separatorName) {
+        return (Character) getSeparatorsMap().get(separatorName);
+    }
+
     // All pcml document nodes support clone.
-    // This is a deep clone in that the result is to 
-    // clone an entire subtree. This method recursively 
+    // This is a deep clone in that the result is to
+    // clone an entire subtree. This method recursively
     // clones its children.
     public Object clone()                                           // @C2A
     {                                                               // @C2A
@@ -58,15 +92,16 @@ abstract class PcmlNode implements Serializable, Cloneable {        // @C2A
             node.nbrChildren = 0;                                   // @C2A
         }                                                           // @C2A
         catch (CloneNotSupportedException e)                        // @C2A
-        {}                                                          // @C2A
+        {
+        }                                                          // @C2A
 
         return node;                                                // @C2A
     }                                                               // @C2A
 
-	// Custom deserialization post-processing
-	// This processing cannot be done during readObject() because
-	// references to parent objects in the document are not yet set
-	// due to the recursive nature of deserialization.
+    // Custom deserialization post-processing
+    // This processing cannot be done during readObject() because
+    // references to parent objects in the document are not yet set
+    // due to the recursive nature of deserialization.
     void readObjectPostprocessing()                                 // @C1A
     {                                                               // @C1A
         Enumeration items;                                          // @C1A
@@ -76,140 +111,63 @@ abstract class PcmlNode implements Serializable, Cloneable {        // @C2A
             return;                                                 // @C1A
 
         items = getChildren();                                      // @C1A
-        while (items.hasMoreElements() )                            // @C1A
+        while (items.hasMoreElements())                            // @C1A
         {                                                           // @C1A
             child = (PcmlNode) items.nextElement();                 // @C1A
             child.readObjectPostprocessing();                       // @C1A
         }                                                           // @C1A
     }                                                               // @C1A
 
-    public abstract String getName();
-
-    public abstract String getQualifiedName();
-    
-    protected final PcmlNode getParent() 
-    {
+    protected final PcmlNode getParent() {
         return parent;
     }
 
-    private final void setParent(PcmlNode node) 
-    {
+    private final void setParent(PcmlNode node) {
         parent = node;
     }
 
-    protected final PcmlNode getNextSibling() 
-    {
+    protected final PcmlNode getNextSibling() {
         return nextSibling;
     }
 
-    private final void setNextSibling(PcmlNode node) 
-    {
+    private final void setNextSibling(PcmlNode node) {
         nextSibling = node;
     }
 
-    protected final PcmlNode getPrevSibling() 
-    {
+    protected final PcmlNode getPrevSibling() {
         return prevSibling;
     }
 
-    private final void setPrevSibling(PcmlNode node) 
-    {
+    private final void setPrevSibling(PcmlNode node) {
         prevSibling = node;
     }
 
-    protected Enumeration getChildren() 
-    {
+    protected Enumeration getChildren() {
         Vector v = new Vector(nbrChildren);
         PcmlNode child = firstChild;
-        while (child != null) 
-        {
+        while (child != null) {
             v.addElement(child);
             child = child.getNextSibling();
         }
         return v.elements();
     }
 
-    protected final int getNbrChildren() 
-    {
+    protected final int getNbrChildren() {
         return nbrChildren;
     }
 
-    protected final int getChildNbr() 
-    {
-    	  int birthOrder = 0;
-    	  PcmlNode p = this;
-    	  while (p.getPrevSibling() != null) 
-    	  {
-    	  	  birthOrder++;
-    	  	  p = p.getPrevSibling();
-    	  }
+    protected final int getChildNbr() {
+        int birthOrder = 0;
+        PcmlNode p = this;
+        while (p.getPrevSibling() != null) {
+            birthOrder++;
+            p = p.getPrevSibling();
+        }
         return birthOrder;
     }
 
-    protected final boolean  hasChildren() 
-    {
+    protected final boolean hasChildren() {
         return nbrChildren > 0;
-    }
-
-    protected void addChild(PcmlNode node) 
-    {
-        if (!hasChildren()) 
-        {
-            firstChild = node;
-        }
-        else
-        {
-            lastChild.setNextSibling(node);
-            node.setPrevSibling(lastChild);
-        }
-        lastChild = node;
-        node.setParent(this);
-        nbrChildren++;
-    }
-
-    // Return the root node of this node
-    protected PcmlDocRoot getRootNode()
-    {
-        PcmlNode p = this;
-        PcmlNode q = parent;                    // @C4A
-
-        while ( q != null )                     // @C4C
-        {
-            p = q;                              // @C4A
-            q = p.getParent();                  // @C4C
-        }
-        
-        if (p instanceof PcmlDocRoot) 
-        {
-            return (PcmlDocRoot) p;
-        }
-        else 
-        {
-            return null;
-        }
-    }
-
-    // Print the PcmlDescNode tree
-    protected void printTree(PcmlNode p, int level)
-    {
-        Enumeration items;
-        PcmlNode child;
-
-        for (int i = 0; i<level; i++) 
-        {
-            System.out.print("  ");
-        }
-        System.out.println(p.toString());
-        items = p.getChildren();
-
-        if (items == null)
-            return;
-
-        while (items.hasMoreElements() ) 
-        {
-            child = (PcmlNode) items.nextElement();
-            printTree(child, level+1);
-        }
     }
 
     // Separator characters.
@@ -221,43 +179,54 @@ abstract class PcmlNode implements Serializable, Cloneable {        // @C2A
     static final Character PERIOD = new Character('.');
     static final Character SLASH = new Character('/');
 
-
-    private static Hashtable getSeparatorsMap()
-    {
-      if (separatorsMap_ == null)
-      {
-        synchronized (PcmlNode.class)
-        {
-          if (separatorsMap_ == null)
-          {
-            separatorsMap_ = new Hashtable(12);
-            separatorsMap_.put("ampersand", AMPERSAND);
-            separatorsMap_.put("blank", BLANK);
-            separatorsMap_.put("colon", COLON);
-            separatorsMap_.put("comma", COMMA);
-            separatorsMap_.put("hyphen", HYPHEN);
-            separatorsMap_.put("period", PERIOD);
-            separatorsMap_.put("slash", SLASH);
-          }
+    protected void addChild(PcmlNode node) {
+        if (!hasChildren()) {
+            firstChild = node;
+        } else {
+            lastChild.setNextSibling(node);
+            node.setPrevSibling(lastChild);
         }
-      }
-      return separatorsMap_;
+        lastChild = node;
+        node.setParent(this);
+        nbrChildren++;
     }
 
-    static boolean isValidSeparatorName(String separatorName)
-    {
-      boolean found = getSeparatorsMap().containsKey(separatorName);
-      if (found) return true;
-      else return (separatorName.equals("none"));  // special value indicating "no separator"
+    // Return the root node of this node
+    protected PcmlDocRoot getRootNode() {
+        PcmlNode p = this;
+        PcmlNode q = parent;                    // @C4A
+
+        while (q != null)                     // @C4C
+        {
+            p = q;                              // @C4A
+            q = p.getParent();                  // @C4C
+        }
+
+        if (p instanceof PcmlDocRoot) {
+            return (PcmlDocRoot) p;
+        } else {
+            return null;
+        }
     }
 
+    // Print the PcmlDescNode tree
+    protected void printTree(PcmlNode p, int level) {
+        Enumeration items;
+        PcmlNode child;
 
-    // Returns the char value associated with a given separator name.
-    // Returns null if separatorName is "none" or if the name is not recognized.
-    // For that reason, caller should first validate the separatorName by calling isValidSeparatorName().
-    static Character separatorAsChar(String separatorName)
-    {
-      return (Character)getSeparatorsMap().get(separatorName);
+        for (int i = 0; i < level; i++) {
+            System.out.print("  ");
+        }
+        System.out.println(p.toString());
+        items = p.getChildren();
+
+        if (items == null)
+            return;
+
+        while (items.hasMoreElements()) {
+            child = (PcmlNode) items.nextElement();
+            printTree(child, level + 1);
+        }
     }
 
 }

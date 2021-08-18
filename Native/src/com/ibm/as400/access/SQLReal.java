@@ -20,31 +20,28 @@ import java.sql.Date;
 /*ifdef JDBC40 
 import java.sql.NClob;
 import java.sql.RowId;
-endif */ 
+endif */
 import java.sql.SQLException;
 /*ifdef JDBC40 
 import java.sql.SQLXML;
-endif */ 
+endif */
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 final class SQLReal
-extends SQLDataBase
-{
+        extends SQLDataBase {
     static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
     // Private data.
-    private float                  value_;
+    private float value_;
 
-    SQLReal(SQLConversionSettings settings)
-    {
+    SQLReal(SQLConversionSettings settings) {
         super(settings);
-        value_      = 0.0f;
+        value_ = 0.0f;
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLReal(settings_);
     }
 
@@ -55,14 +52,12 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter, boolean ignoreConversionErrors) //@P0C
-    throws SQLException
-    {
+            throws SQLException {
         value_ = BinaryConverter.byteArrayToFloat(rawBytes, offset);                    // @D0C
     }
 
     public void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter) //@P0C
-    throws SQLException
-    {
+            throws SQLException {
         BinaryConverter.floatToByteArray(value_, rawBytes, offset);                     // @D0C
     }
 
@@ -73,30 +68,26 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void set(Object object, Calendar calendar, int scale)
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        boolean validInfinity = false; 
-        double doubleValue = 0; 
-        if(object instanceof String)
-        {
-            if (settings_.getDecimalSeparator().equals(",")){
-               object = ((String) object).replace(',','.'); 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        boolean validInfinity = false;
+        double doubleValue = 0;
+        if (object instanceof String) {
+            if (settings_.getDecimalSeparator().equals(",")) {
+                object = ((String) object).replace(',', '.');
             }
-            try
-            {
-                String string = (String) object; 
+            try {
+                String string = (String) object;
                 doubleValue = Double.valueOf(string).doubleValue();
                 if (doubleValue == Double.POSITIVE_INFINITY ||
-                    doubleValue == Double.NEGATIVE_INFINITY) {
-                  if (string.toUpperCase().indexOf("inf")>=0) {
-                    validInfinity = true; 
-                  }
+                        doubleValue == Double.NEGATIVE_INFINITY) {
+                    if (string.toUpperCase().indexOf("inf") >= 0) {
+                        validInfinity = true;
+                    }
                 }
-            }
-            catch(NumberFormatException e)
-            {
-              
+            } catch (NumberFormatException e) {
+
                 JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
             }
         }
@@ -122,44 +113,46 @@ extends SQLDataBase
         //        truncated_ = objectLength - valueLength;
         //}
 
-    else if (object instanceof Number) {
-      // Set the value to the right type.
-      Number number = (Number) object;
-      doubleValue = number.doubleValue(); // @D9c
-      if (doubleValue == Double.POSITIVE_INFINITY
-          || doubleValue == Double.NEGATIVE_INFINITY) {
-        String stringValue = number.toString().toLowerCase();
-        if (stringValue.indexOf("inf") >= 0) {
-          validInfinity = true;
-        }
-      }
-    } else if (object instanceof Boolean) {
-      doubleValue = (((Boolean) object).booleanValue() == true) ? 1f : 0f;
-
-    } else {
-      if (JDTrace.isTraceOn()) {
-          if (object == null) { 
-              JDTrace.logInformation(this, "Unable to assign null object");
-            } else { 
-                JDTrace.logInformation(this, "Unable to assign object("+object+") of class("+object.getClass().toString()+")");
+        else if (object instanceof Number) {
+            // Set the value to the right type.
+            Number number = (Number) object;
+            doubleValue = number.doubleValue(); // @D9c
+            if (doubleValue == Double.POSITIVE_INFINITY
+                    || doubleValue == Double.NEGATIVE_INFINITY) {
+                String stringValue = number.toString().toLowerCase();
+                if (stringValue.indexOf("inf") >= 0) {
+                    validInfinity = true;
+                }
             }
-      }
+        } else if (object instanceof Boolean) {
+            doubleValue = (((Boolean) object).booleanValue() == true) ? 1f : 0f;
 
-      JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
-    }
-        
+        } else {
+            if (JDTrace.isTraceOn()) {
+                if (object == null) {
+                    JDTrace.logInformation(this, "Unable to assign null object");
+                } else {
+                    JDTrace.logInformation(this, "Unable to assign object(" + object + ") of class(" + object.getClass().toString() + ")");
+                }
+            }
+
+            JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
+        }
+
         if (doubleValue > Float.MAX_VALUE) {
-          if (!validInfinity) { 
-          truncated_ = 1; outOfBounds_ = true; 
-          value_ = Float.MAX_VALUE;
-          }
-        } else if (doubleValue < (- Float.MAX_VALUE)) {
-          if (!validInfinity) { 
-          truncated_ = 1; outOfBounds_ = true; 
-          value_ = - Float.MAX_VALUE; 
-          }
-        } else { 
-           value_ = (float) doubleValue;
+            if (!validInfinity) {
+                truncated_ = 1;
+                outOfBounds_ = true;
+                value_ = Float.MAX_VALUE;
+            }
+        } else if (doubleValue < (-Float.MAX_VALUE)) {
+            if (!validInfinity) {
+                truncated_ = 1;
+                outOfBounds_ = true;
+                value_ = -Float.MAX_VALUE;
+            }
+        } else {
+            value_ = (float) doubleValue;
         }
 
     }
@@ -170,109 +163,90 @@ extends SQLDataBase
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.REAL;
     }
 
-    public String getCreateParameters()
-    {
+    public String getCreateParameters() {
         return null;
     }
 
 
-    public int getDisplaySize()
-    {
+    public int getDisplaySize() {
         return 13;
     }
 
     //@F1A JDBC 3.0
-    public String getJavaClassName()
-    {
+    public String getJavaClassName() {
         return "java.lang.Float";
     }
 
-    public String getLiteralPrefix()
-    {
+    public String getLiteralPrefix() {
         return null;
     }
 
-    public String getLiteralSuffix()
-    {
+    public String getLiteralSuffix() {
         return null;
     }
 
-    public String getLocalName()
-    {
+    public String getLocalName() {
         return "REAL";
     }
 
-    public int getMaximumPrecision()
-    {
+    public int getMaximumPrecision() {
         return 24;
     }
 
-    public int getMaximumScale()
-    {
+    public int getMaximumScale() {
         return 0;
     }
 
-    public int getMinimumScale()
-    {
+    public int getMinimumScale() {
         return 0;
     }
 
-    public int getNativeType()
-    {
+    public int getNativeType() {
         return 480;
     }
 
-    public int getPrecision()
-    {
+    public int getPrecision() {
         return 24;
     }
 
-    public int getRadix()
-    {
+    public int getRadix() {
         return 2;               //@K1C Changed from 10
     }
 
-    public int getScale()
-    {
+    public int getScale() {
         return 0;
     }
 
-    public int getType()
-    {
+    public int getType() {
         return java.sql.Types.REAL;
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return "REAL";
     }
 
-    public boolean isSigned()
-    {
+    public boolean isSigned() {
         return true;
     }
 
-    public boolean isText()
-    {
+    public boolean isText() {
         return false;
     }
 
-    public int getActualSize()
-    {
+    public int getActualSize() {
         return SQLDataFactory.getPrecision(Float.toString(value_));
     }
 
-    public int getTruncated()
-    {
+    public int getTruncated() {
         return truncated_;
     }
+
     public boolean getOutOfBounds() {
-      return outOfBounds_; 
+        return outOfBounds_;
     }
 
     //---------------------------------------------------------//
@@ -283,9 +257,9 @@ extends SQLDataBase
 
 
     public BigDecimal getBigDecimal(int scale)
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         // Convert the value to a String before creating the
         // BigDecimal.  This will create the exact BigDecimal
         // that we want.  If you pass the value directly to
@@ -306,64 +280,56 @@ extends SQLDataBase
 
         String numString = Float.toString(value_);                              // @A0A
         int eIndex = numString.indexOf("E");                                    // @A0A
-        if(eIndex == -1)
-        {                                                     // @A0A
+        if (eIndex == -1) {                                                     // @A0A
             bigDecimal = new BigDecimal(numString);                             // @A0A
         }                                                                       // @A0A
-        else
-        {                                                                  // @A0A
+        else {                                                                  // @A0A
             String base = numString.substring(0, eIndex);                       // @A0A
-            int exponent = Integer.parseInt(numString.substring(eIndex+1));     // @A0A
+            int exponent = Integer.parseInt(numString.substring(eIndex + 1));     // @A0A
             bigDecimal = new BigDecimal(base);                                  // @A0A
             bigDecimal = bigDecimal.movePointRight(exponent);                   // @A0A
         }                                                                       // @A0A
 
-        if(scale >= 0)
-        {
-            if(scale >= bigDecimal.scale())
-            {
-                truncated_ = 0; outOfBounds_ = false; 
+        if (scale >= 0) {
+            if (scale >= bigDecimal.scale()) {
+                truncated_ = 0;
+                outOfBounds_ = false;
                 return bigDecimal.setScale(scale);
-            }
-            else
-            {
+            } else {
                 truncated_ = bigDecimal.scale() - scale;
                 outOfBounds_ = false;
                 return bigDecimal.setScale(scale, BigDecimal.ROUND_HALF_UP);
             }
-        }
-        else
+        } else
             return bigDecimal;
     }
 
     public InputStream getBinaryStream()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public Blob getBlob()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public boolean getBoolean()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        return(value_ != 0.0f);
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        return (value_ != 0.0f);
     }
 
     public byte getByte()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_ > Byte.MAX_VALUE || value_ < Byte.MIN_VALUE)      //@trunc
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_ > Byte.MAX_VALUE || value_ < Byte.MIN_VALUE)      //@trunc
         {                                                           //@trunc
-            if(value_ > Short.MAX_VALUE || value_ < Short.MIN_VALUE)//@trunc
+            if (value_ > Short.MAX_VALUE || value_ < Short.MIN_VALUE)//@trunc
             {                                                       //@trunc
                 truncated_ = 3;                                     //@trunc
                 outOfBounds_ = true;
@@ -374,125 +340,120 @@ extends SQLDataBase
                 outOfBounds_ = true;
             }                                                       //@trunc
         }                                                           //@trunc
-        return(byte) value_;
+        return (byte) value_;
     }
 
     public byte[] getBytes()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
 
     public Date getDate(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public double getDouble()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        return(double) value_;
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        return (double) value_;
     }
 
     public float getFloat()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        return(float) value_;
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        return (float) value_;
     }
 
     public int getInt()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        if(value_ > Integer.MAX_VALUE || value_ < Integer.MIN_VALUE)              //@trunc
+        if (value_ > Integer.MAX_VALUE || value_ < Integer.MIN_VALUE)              //@trunc
         {                                                                         //@trunc
             truncated_ = 4;                                                       //@trunc
             outOfBounds_ = true;
         }                                                                         //@trunc
-               
-        return(int) value_;
+
+        return (int) value_;
     }
 
     public long getLong()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_ > Long.MAX_VALUE || value_ < Long.MIN_VALUE)                    //@trunc
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_ > Long.MAX_VALUE || value_ < Long.MIN_VALUE)                    //@trunc
         {                                                                         //@trunc
             truncated_ = 8;                                                       //@trunc
             outOfBounds_ = true;
         }                                                                         //@trunc  
-        return(long) value_;
+        return (long) value_;
     }
 
     public Object getObject()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         return new Float(value_);
     }
 
     public short getShort()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_ > Short.MAX_VALUE || value_ < Short.MIN_VALUE)    //@trunc
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_ > Short.MAX_VALUE || value_ < Short.MIN_VALUE)    //@trunc
         {                                                           //@trunc
             truncated_ = 2;                                         //@trunc
             outOfBounds_ = true;
         }                                                           //@trunc
-        return(short) value_;
+        return (short) value_;
     }
 
     public String getString()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         String stringRep = Float.toString(value_);
         int decimal = stringRep.indexOf('.');
-        if(decimal == -1)
+        if (decimal == -1)
             return stringRep;
         else
             return stringRep.substring(0, decimal)
-            + settings_.getDecimalSeparator()
-            + stringRep.substring(decimal+1);
+                    + settings_.getDecimalSeparator()
+                    + stringRep.substring(decimal + 1);
     }
 
     public Time getTime(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public Timestamp getTimestamp(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
 
-    
     //@pda jdbc40
-    public String getNString() throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+    public String getNString() throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         String stringRep = Float.toString(value_);
         int decimal = stringRep.indexOf('.');
-        if(decimal == -1)
+        if (decimal == -1)
             return stringRep;
         else
             return stringRep.substring(0, decimal)
-            + settings_.getDecimalSeparator()
-            + stringRep.substring(decimal+1);
+                    + settings_.getDecimalSeparator()
+                    + stringRep.substring(decimal + 1);
     }
 
     /* ifdef JDBC40 
@@ -510,11 +471,11 @@ extends SQLDataBase
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-    endif */ 
-    
-    
+    endif */
+
+
     public void saveValue() {
-      savedValue_ = new Float(value_); 
-   }
+        savedValue_ = new Float(value_);
+    }
 
 }

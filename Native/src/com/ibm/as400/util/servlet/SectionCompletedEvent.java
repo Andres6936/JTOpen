@@ -14,52 +14,51 @@
 package com.ibm.as400.util.servlet;
 
 /**
-   The SectionCompletedEvent class represents a SectionCompleted event.
-**/
-public class SectionCompletedEvent extends java.util.EventObject
-{
-  static final long serialVersionUID = 5950825305973561860L;
+ * The SectionCompletedEvent class represents a SectionCompleted event.
+ **/
+public class SectionCompletedEvent extends java.util.EventObject {
+    static final long serialVersionUID = 5950825305973561860L;
 
-   private String section_;		// The completed section of data.
+    private String section_;        // The completed section of data.
 
-   /**
-   * Constructs a SectionCompletedEvent object.
-   * It uses the specified <i>source</i> object that completed the section.
-   * @param source The object where the event originated.
-   **/
-   public SectionCompletedEvent(Object source)
-   {
-      super(source);
-   }
+    /**
+     * Constructs a SectionCompletedEvent object.
+     * It uses the specified <i>source</i> object that completed the section.
+     *
+     * @param source The object where the event originated.
+     **/
+    public SectionCompletedEvent(Object source) {
+        super(source);
+    }
 
-   /**
-   *  Constructs a SectionCompletedEvent object with the specified data <i>section</i>.
-   *  It uses the specified <i>source</i> object that completed the section.
-   *  @param source The object where the event originated.
-   *  @param section The completed section of data.
-   **/
-   public SectionCompletedEvent(Object source, String section)
-   {
-      this(source);
-      section_ = section;
-   }
+    /**
+     * Constructs a SectionCompletedEvent object with the specified data <i>section</i>.
+     * It uses the specified <i>source</i> object that completed the section.
+     *
+     * @param source  The object where the event originated.
+     * @param section The completed section of data.
+     **/
+    public SectionCompletedEvent(Object source, String section) {
+        this(source);
+        section_ = section;
+    }
 
-   /**
-   *  Returns the completed section of data.
-   *  @return The section of data.
-   **/
-   public String getSection()
-   {
-      return section_;   
-   }
+    /**
+     * Returns the completed section of data.
+     *
+     * @return The section of data.
+     **/
+    public String getSection() {
+        return section_;
+    }
 
-   /**
-   *  Sets the completed section of data.
-   *  @param section The section of data.
-   **/
-   public void setSection(String section)
-   {
-      section_ = section;
-   }
+    /**
+     * Sets the completed section of data.
+     *
+     * @param section The section of data.
+     **/
+    public void setSection(String section) {
+        section_ = section;
+    }
 }
 

@@ -14,27 +14,29 @@
 package com.ibm.as400.util.servlet;
 
 /**
-  The RowDataListener interface provides a listener
-  interface for receiving row data events.
-**/
-public interface RowDataListener extends java.util.EventListener
-{
-    
-   /**
-     Invoked when a row of data has been added.
-     @param event The event. 
-   **/
-   public abstract void rowAdded(RowDataEvent event);
-   
-   /**
-     Invoked when a row of data has been changed.
-     @param event The event. 
-   **/
-   public abstract void rowChanged(RowDataEvent event);
-   
-   /**
-     Invoked when a row of data has been removed.
-     @param event The event. 
-   **/
-   public abstract void rowRemoved(RowDataEvent event);
+ * The RowDataListener interface provides a listener
+ * interface for receiving row data events.
+ **/
+public interface RowDataListener extends java.util.EventListener {
+
+    /**
+     * Invoked when a row of data has been added.
+     *
+     * @param event The event.
+     **/
+    public abstract void rowAdded(RowDataEvent event);
+
+    /**
+     * Invoked when a row of data has been changed.
+     *
+     * @param event The event.
+     **/
+    public abstract void rowChanged(RowDataEvent event);
+
+    /**
+     * Invoked when a row of data has been removed.
+     *
+     * @param event The event.
+     **/
+    public abstract void rowRemoved(RowDataEvent event);
 }

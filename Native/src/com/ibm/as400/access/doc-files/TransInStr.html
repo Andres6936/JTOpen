@@ -1,23 +1,24 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
 <HTML>
 <HEAD>
-<META CONTENT="text/html; charset=iso-8859-1" HTTP-EQUIV="Content-Type">
-<TITLE>IBM Toolbox for Java Example: Reading and Transforming Spooled File Data</TITLE>
-</head><body>
+    <META CONTENT="text/html; charset=iso-8859-1" HTTP-EQUIV="Content-Type">
+    <TITLE>IBM Toolbox for Java Example: Reading and Transforming Spooled File Data</TITLE>
+</head>
+<body>
 
 <h2>Examples using PrintObjectPageInputStream and PrintObjectTransformedInputStream</h2>
 <p>
-The following examples demonstrate how to set up a PrintParameterList to obtain
-different transformations when reading spooled file data.  In the code
-segments that follow, assume a spooled file already exists on a system, 
-and the <i> createSpooledFile()</i> method creates
-an instance of the SpooledFile class representing the spooled file.
+    The following examples demonstrate how to set up a PrintParameterList to obtain
+    different transformations when reading spooled file data. In the code
+    segments that follow, assume a spooled file already exists on a system,
+    and the <i> createSpooledFile()</i> method creates
+    an instance of the SpooledFile class representing the spooled file.
 <p>
 <h3>Example of PrintObjectPageInputStream</h3>
 The following example shows how to create a PrintObjectPageInputStream object for
 reading pages of data formatted as GIF images.
 In this case, each page from the spooled file will be transformed into
-a GIF image.  A GIF workstation customization object is used to
+a GIF image. A GIF workstation customization object is used to
 specify the data transform.
 <pre>
 // Create a spooled file

@@ -14,12 +14,10 @@
 package com.ibm.as400.access;
 
 // Base class for common data queue data stream requests.
-class DQDataStream extends ClientAccessDataStream
-{
+class DQDataStream extends ClientAccessDataStream {
     private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
-    protected DQDataStream(int size)
-    {
+    protected DQDataStream(int size) {
         super(new byte[size]);
         setLength(size);
         // setHeaderID(0x0000);
@@ -31,8 +29,7 @@ class DQDataStream extends ClientAccessDataStream
         // Need to setReqRepID(id) in subclass.
     }
 
-    protected void setQueueAndLibrary(byte[] name, byte[] library)
-    {
+    protected void setQueueAndLibrary(byte[] name, byte[] library) {
         // Fill in data queue name.
         System.arraycopy(name, 0, data_, 20, 10);
         // Fill in library.

@@ -15,26 +15,21 @@ package com.ibm.as400.access;
 
 
 /**
-The PxLoadReqCV class represents the
-client view of a load request.
-**/
+ * The PxLoadReqCV class represents the
+ * client view of a load request.
+ **/
 class PxLoadReqCV
-extends PxReqCV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+        extends PxReqCV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
+    /**
+     * Constructs a PxLoadReqCV object.
+     **/
+    public PxLoadReqCV() {
+        super(ProxyConstants.DS_LOAD_REQ);
 
-
-/**
-Constructs a PxLoadReqCV object.
-**/
-    public PxLoadReqCV ()
-    {
-        super (ProxyConstants.DS_LOAD_REQ);
-       
     }
-
 
 
 }

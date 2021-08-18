@@ -14,14 +14,14 @@
 package com.ibm.as400.util.servlet;
 
 /**
-  The SectionCompletedListener interface provides a listener
-  interface for receiving SectionCompleted events.
-**/
-public interface SectionCompletedListener extends java.util.EventListener
-{
-   /**
-     Invoked when a section of data has been converted.
-     @param event The event.			
-   **/
-   public abstract void sectionCompleted(SectionCompletedEvent event);	// @C1
+ * The SectionCompletedListener interface provides a listener
+ * interface for receiving SectionCompleted events.
+ **/
+public interface SectionCompletedListener extends java.util.EventListener {
+    /**
+     * Invoked when a section of data has been converted.
+     *
+     * @param event The event.
+     **/
+    public abstract void sectionCompleted(SectionCompletedEvent event);    // @C1
 }

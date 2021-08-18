@@ -16,8 +16,7 @@ package com.ibm.as400.access;
 import java.io.IOException;
 
 // UserSpaceImpl defines the implementation interface for the UserSpace object.
-interface UserSpaceImpl
-{
+interface UserSpaceImpl {
     public void close() throws IOException;
 
     public void create(byte[] domainBytes, int length, boolean replace, String extendedAttribute, byte initialValue, String textDescription, String authority) throws AS400SecurityException, ErrorCompletingRequestException, InterruptedException, IOException, ObjectDoesNotExistException;

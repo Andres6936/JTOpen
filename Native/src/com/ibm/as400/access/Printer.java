@@ -20,28 +20,24 @@ import java.io.IOException;
  * The  Printer class represents a printer.
  * An instance of this class can be used to manipulate an individual
  * printer.
- *
+ * <p>
  * See <a href="doc-files/PrinterAttrs.html">Printer Attributes</a> for
  * valid attributes.
- *
  **/
 
 public class Printer extends PrintObject
-implements java.io.Serializable
-{
+        implements java.io.Serializable {
     static final long serialVersionUID = 4L;
 
-    private static boolean      fAttrIDsToRtvBuilt_ = false;
+    private static boolean fAttrIDsToRtvBuilt_ = false;
     private static final String NAME = "name";
 
 
     // constructor used internally (not externalized since it takes
     // an ID code point
-    Printer(AS400 system, NPCPIDPrinter id, NPCPAttribute attrs)
-    {
+    Printer(AS400 system, NPCPIDPrinter id, NPCPAttribute attrs) {
         super(system, id, attrs, NPConstants.PRINTER_DEVICE);
     }
-
 
 
     /**
@@ -54,8 +50,7 @@ implements java.io.Serializable
      * @see PrintObject#setSystem
      * @see #setName
      **/
-    public Printer()
-    {
+    public Printer() {
         super(null, null, NPConstants.PRINTER_DEVICE);
 
         // Because of this constructor we will need to check the
@@ -63,20 +58,17 @@ implements java.io.Serializable
     }
 
 
-
     /**
      * Constructs a Printer object. It uses the specified system name and
      * the printer name that identifies it on that system.
      *
-     * @param system The system on which this printer device exists.
+     * @param system      The system on which this printer device exists.
      * @param printerName The name of the printer.  It cannot be greater
      *                    than 10 characters or less than 1 character
      *                    in length.
-     *
      **/
     public Printer(AS400 system,
-                   String printerName)
-    {
+                   String printerName) {
         super(system, new NPCPIDPrinter(printerName), null, NPConstants.PRINTER_DEVICE);
 
         // base class constructor checks for a null system.
@@ -84,10 +76,8 @@ implements java.io.Serializable
     }
 
 
-
     // check the printer name to see if valid
-    void checkPrinterName( String printerName )
-    {
+    void checkPrinterName(String printerName) {
         if (printerName == null) {
             Trace.log(Trace.ERROR, "Parameter 'printerName' is null.");
             throw new NullPointerException("printerName");
@@ -96,49 +86,45 @@ implements java.io.Serializable
         if ((printerName.length() > 10) || (printerName.length() < 1)) {
             Trace.log(Trace.ERROR, "Parameter 'printerName' is greater than 10 or less than 1 characters in length " + printerName);
             throw new ExtendedIllegalArgumentException(
-              "printerName("+printerName+")",
-              ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
+                    "printerName(" + printerName + ")",
+                    ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
         }
     }
 
 
     // Check the run time state
-    void checkRunTimeState()
-    {
+    void checkRunTimeState() {
         // check whatever the base class needs to check
         super.checkRunTimeState();
 
         // Printers need to additionally check the printer name.
         // In this context, getIDCodePoint() returns the printer name. 
-        if( getIDCodePoint() == null )
-        {
+        if (getIDCodePoint() == null) {
             Trace.log(Trace.ERROR, "Printer name has not been set.");
             throw new ExtendedIllegalStateException(
-              "name", ExtendedIllegalStateException.PROPERTY_NOT_SET);
+                    "name", ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
     }
 
 
-
     // A4A - Added chooseImpl() method
+
     /**
      * Chooses the implementation
      **/
     void chooseImpl()
-    throws IOException, AS400SecurityException
-    {
+            throws IOException, AS400SecurityException {
         AS400 system = getSystem();
         if (system == null) {
-            Trace.log( Trace.ERROR, "Attempt to use Printer before setting system." );
+            Trace.log(Trace.ERROR, "Attempt to use Printer before setting system.");
             throw new ExtendedIllegalStateException("system",
-                                    ExtendedIllegalStateException.PROPERTY_NOT_SET);
+                    ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
 
         impl_ = (PrinterImpl) system.loadImpl2("com.ibm.as400.access.PrinterImplRemote",
-                                               "com.ibm.as400.access.PrinterImplProxy");
+                "com.ibm.as400.access.PrinterImplProxy");
         super.setImpl();
     }
-
 
 
     /**
@@ -146,17 +132,40 @@ implements java.io.Serializable
      *
      * @return The name of the printer.  If name is not set, "" is returned.
      **/
-    public String getName()
-    {
+    public String getName() {
         NPCPID IDCodePoint = getIDCodePoint();
 
-        if( IDCodePoint == null ) {
+        if (IDCodePoint == null) {
             return EMPTY_STRING; // ""
         } else {
             return IDCodePoint.getStringValue(ATTR_PRINTER);
         }
     }
 
+    /**
+     * Sets the name of the printer.
+     *
+     * @param name The name of the printer. It cannot be greater
+     *             than 10 characters.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setName(String name)
+            throws PropertyVetoException {
+        checkPrinterName(name);
+
+        String oldName = getName();
+
+        // Tell any vetoers about the change. If anyone objects
+        // we let the PropertyVetoException propagate back to
+        // our caller.
+        vetos.fireVetoableChange(NAME, oldName, name);
+
+        // No one vetoed, make the change.
+        setIDCodePoint(new NPCPIDPrinter(name));
+
+        // Notify any property change listeners.
+        changes.firePropertyChange(NAME, oldName, name);
+    }
 
     /**
      * Sets one or more attributes of the object.  See
@@ -174,64 +183,32 @@ implements java.io.Serializable
      * Any other attributes will be ignored by this method.
      *
      * @param attributes A print parameter list that contains the
-     *  attributes to be changed.
-     *
-     * @exception AS400Exception If the system returns an error message.
-     * @exception AS400SecurityException If a security or authority error occurs.
-     * @exception ErrorCompletingRequestException If an error occurs before the request is completed.
-     * @exception IOException If an error occurs while communicating with the system.
-     * @exception InterruptedException If this thread is interrupted.
+     *                   attributes to be changed.
+     * @throws AS400Exception                  If the system returns an error message.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws InterruptedException            If this thread is interrupted.
      **/
     public void setAttributes(PrintParameterList attributes)
-      throws AS400Exception,
-             AS400SecurityException,
-             ErrorCompletingRequestException,
-             IOException,
-             InterruptedException
-    {
+            throws AS400Exception,
+            AS400SecurityException,
+            ErrorCompletingRequestException,
+            IOException,
+            InterruptedException {
         if (attributes == null) {
-	        Trace.log(Trace.ERROR, "Parameter 'attributes' is null.");
-	        throw new NullPointerException("attributes");
-	    }
+            Trace.log(Trace.ERROR, "Parameter 'attributes' is null.");
+            throw new NullPointerException("attributes");
+        }
 
         checkRunTimeState();
 
         if (impl_ == null) chooseImpl();
 
         ((PrinterImpl) impl_).setAttributes(attributes);
-   
+
         // propagate any changes to attrs
         attrs = impl_.getAttrValue();
-    }
-
-
-
-    /**
-     * Sets the name of the printer.
-     *
-     * @param name The name of the printer. It cannot be greater
-     * than 10 characters.
-     *
-     * @exception PropertyVetoException If the change is vetoed.
-     *
-     **/
-    public void setName(String name)
-      throws PropertyVetoException
-    {
-        checkPrinterName(name);
-
-        String oldName = getName();
-
-        // Tell any vetoers about the change. If anyone objects
-        // we let the PropertyVetoException propagate back to
-        // our caller.
-        vetos.fireVetoableChange(NAME, oldName, name );
-
-        // No one vetoed, make the change.
-        setIDCodePoint(new NPCPIDPrinter(name));
-
-        // Notify any property change listeners.
-        changes.firePropertyChange( NAME, oldName, name );
     }
 
 } // end Printer class

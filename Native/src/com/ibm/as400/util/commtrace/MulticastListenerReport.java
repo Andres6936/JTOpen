@@ -19,12 +19,13 @@ package com.ibm.as400.util.commtrace;
  * Multicast Listener Report Header.
  */
 public class MulticastListenerReport extends MLMessage {
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data	The raw data of this header 
-	 */
-	MulticastListenerReport(BitBuf data) {
-		super(data);
-		super.type= MLTLSTRPT;
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header
+     */
+    MulticastListenerReport(BitBuf data) {
+        super(data);
+        super.type = MLTLSTRPT;
+    }
 }

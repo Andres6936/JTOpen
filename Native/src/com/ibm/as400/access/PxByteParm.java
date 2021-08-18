@@ -20,131 +20,108 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-
 /**
-The PxByteParm class represents a byte
-parameter in a proxy datastream.
-**/
-class PxByteParm 
-extends PxDS
-implements PxParm 
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
-
+ * The PxByteParm class represents a byte
+ * parameter in a proxy datastream.
+ **/
+class PxByteParm
+        extends PxDS
+        implements PxParm {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
-    private byte             value_;
+    private byte value_;
 
 
-         
-/**
-Constructs a PxByteParm object.
-**/
-    public PxByteParm ()
-    { 
-        super (ProxyConstants.DS_BYTE_PARM);
+    /**
+     * Constructs a PxByteParm object.
+     **/
+    public PxByteParm() {
+        super(ProxyConstants.DS_BYTE_PARM);
     }
 
 
-
-/**
-Constructs a PxByteParm object.
-
-@param value    The byte value.
-**/
-    public PxByteParm (byte value)
-    {
-        super (ProxyConstants.DS_BYTE_PARM);
+    /**
+     * Constructs a PxByteParm object.
+     *
+     * @param value The byte value.
+     **/
+    public PxByteParm(byte value) {
+        super(ProxyConstants.DS_BYTE_PARM);
         value_ = value;
     }
 
 
-
-/**
-Constructs a PxByteParm object.
-
-@param value    The byte value.
-**/
-    public PxByteParm (Byte value)
-    {
-        this (value.byteValue ());
+    /**
+     * Constructs a PxByteParm object.
+     *
+     * @param value The byte value.
+     **/
+    public PxByteParm(Byte value) {
+        this(value.byteValue());
     }
 
 
-
-/**
-Returns the byte value.
-
-@return The byte value.
-**/
-    public byte getByteValue ()
-    {
+    /**
+     * Returns the byte value.
+     *
+     * @return The byte value.
+     **/
+    public byte getByteValue() {
         return value_;
     }
 
 
-
-/**
-Returns the Object value.
-
-@return The Object value.
-**/
-    public Object getObjectValue ()
-    {
-        return new Byte (value_);
+    /**
+     * Returns the Object value.
+     *
+     * @return The Object value.
+     **/
+    public Object getObjectValue() {
+        return new Byte(value_);
     }
 
 
-
-/**
-Loads this datastream by reading from an input stream.
-
-@param input    The input stream.
-@param factory  The datastream factory.  This is sometimes
-                needed when datastreams are nested.
-
-@exception IOException  If an error occurs.                
-**/
-    public void readFrom (InputStream input, PxDSFactory factory)
-        throws IOException
-    {
-        super.readFrom (input, factory);
-        DataInputStream dataInput = new DataInputStream (input);
-        value_ = dataInput.readByte ();
+    /**
+     * Loads this datastream by reading from an input stream.
+     *
+     * @param input   The input stream.
+     * @param factory The datastream factory.  This is sometimes
+     *                needed when datastreams are nested.
+     * @throws IOException If an error occurs.
+     **/
+    public void readFrom(InputStream input, PxDSFactory factory)
+            throws IOException {
+        super.readFrom(input, factory);
+        DataInputStream dataInput = new DataInputStream(input);
+        value_ = dataInput.readByte();
     }
 
 
+    /**
+     * Returns the String representation of the datastream.
+     *
+     * @return The String representation of the datastream.
+     **/
+    public String toString() {
 
-/**
-Returns the String representation of the datastream.
-
-@return The String representation of the datastream. 
-**/
-    public String toString ()
-    {
-        
-        return super.toString () + " (" + value_ + ")";
+        return super.toString() + " (" + value_ + ")";
     }
 
 
-
-/**
-Writes the contents of the datastream to an output stream.
-
-@param output   The output stream.
-
-@exception IOException  If an error occurs.                
-**/
-    public void writeTo (OutputStream output)
-        throws IOException
-    {
-        super.writeTo (output);
-        DataOutputStream dataOutput = new DataOutputStream (output);
-        dataOutput.writeByte (value_);
-     }
-
+    /**
+     * Writes the contents of the datastream to an output stream.
+     *
+     * @param output The output stream.
+     * @throws IOException If an error occurs.
+     **/
+    public void writeTo(OutputStream output)
+            throws IOException {
+        super.writeTo(output);
+        DataOutputStream dataOutput = new DataOutputStream(output);
+        dataOutput.writeByte(value_);
+    }
 
 
 }

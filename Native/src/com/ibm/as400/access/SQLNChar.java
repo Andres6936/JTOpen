@@ -22,11 +22,11 @@ import java.sql.Clob;
 /*ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
-endif */ 
+endif */
 import java.sql.SQLException;
 /* ifdef JDBC40 
 import java.sql.SQLXML;
-endif */ 
+endif */
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -34,28 +34,26 @@ import java.net.URL;
 
 //@PDA jdbc40 new class
 final class SQLNChar
-extends SQLDataBase
-{
-   
-    // Private data.
-    private int                     maxLength_;
-    private String                  value_;
-    private String                  originalValue_;
-    private int                     ccsid_; //@cca1
+        extends SQLDataBase {
 
-    SQLNChar(int maxLength, SQLConversionSettings settings)
-    {
-      super(settings); 
-        maxLength_      = maxLength;
-        truncated_ = 0; outOfBounds_ = false; 
-        value_          = "";  
-        originalValue_  = "";
-        ccsid_          = 1200; 
+    // Private data.
+    private int maxLength_;
+    private String value_;
+    private String originalValue_;
+    private int ccsid_; //@cca1
+
+    SQLNChar(int maxLength, SQLConversionSettings settings) {
+        super(settings);
+        maxLength_ = maxLength;
+        truncated_ = 0;
+        outOfBounds_ = false;
+        value_ = "";
+        originalValue_ = "";
+        ccsid_ = 1200;
     }
 
-    public Object clone()
-    {
-        return new SQLNChar(maxLength_,settings_);
+    public Object clone() {
+        return new SQLNChar(maxLength_, settings_);
     }
 
     //---------------------------------------------------------//
@@ -65,43 +63,38 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter, boolean ignoreConversionErrors)
-    throws SQLException
-    {
+            throws SQLException {
         int bidiStringType = settings_.getBidiStringType();
 
         // if bidiStringType is not set by user, use ccsid to get value
-        if(bidiStringType == -1)
+        if (bidiStringType == -1)
             bidiStringType = ccsidConverter.bidiStringType_;
 
         BidiConversionProperties bidiConversionProperties = new BidiConversionProperties(bidiStringType);
-        bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());          
-        bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());     
+        bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());
+        bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());
 
-        value_ = ccsidConverter.byteArrayToString(rawBytes, offset, maxLength_, bidiConversionProperties);   
-        originalValue_ = value_; 
+        value_ = ccsidConverter.byteArrayToString(rawBytes, offset, maxLength_, bidiConversionProperties);
+        originalValue_ = value_;
     }
 
     public void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter)
-    throws SQLException
-    {
+            throws SQLException {
         int bidiStringType = settings_.getBidiStringType();
 
         // if bidiStringType is not set by user, use ccsid to get value
-        if(bidiStringType == -1)
+        if (bidiStringType == -1)
             bidiStringType = ccsidConverter.bidiStringType_;
 
-        BidiConversionProperties bidiConversionProperties = new BidiConversionProperties(bidiStringType);  
-        bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());         
-        bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());     
+        BidiConversionProperties bidiConversionProperties = new BidiConversionProperties(bidiStringType);
+        bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());
+        bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());
 
-        try
-        {
-          // check for truncation after conversion @H2C
-          truncated_ = ccsidConverter.stringToByteArray(value_, rawBytes, offset, maxLength_, bidiConversionProperties);  
-        }
-        catch(CharConversionException e)
-        {
-            maxLength_ = ccsidConverter.stringToByteArray(value_, bidiConversionProperties).length;    
+        try {
+            // check for truncation after conversion @H2C
+            truncated_ = ccsidConverter.stringToByteArray(value_, rawBytes, offset, maxLength_, bidiConversionProperties);
+        } catch (CharConversionException e) {
+            maxLength_ = ccsidConverter.stringToByteArray(value_, bidiConversionProperties).length;
             JDError.throwSQLException(this, JDError.EXC_INTERNAL, e);
         }
     }
@@ -113,47 +106,41 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void set(Object object, Calendar calendar, int scale)
-    throws SQLException
-    {
-        String value = null;                                                         
+            throws SQLException {
+        String value = null;
 
-        if(object instanceof String)
-            value = (String)object;                                                 
+        if (object instanceof String)
+            value = (String) object;
 
-        else if(object instanceof Character)
+        else if (object instanceof Character)
             value = object.toString();
 
-        else if(object instanceof Number)
-            value = object.toString();                                              
+        else if (object instanceof Number)
+            value = object.toString();
 
-        else if(object instanceof Boolean)
-        { 
+        else if (object instanceof Boolean) {
             // if "translate boolean" == false, then use "0" and "1" values to match native driver
-            if(settings_.getTranslateBoolean() == true)
+            if (settings_.getTranslateBoolean() == true)
                 value = object.toString();  //"true" or "false"     
             else
-                value = ((Boolean)object).booleanValue() == true ? "1" : "0";
-        }
-        else if(object instanceof Time)
-            value = SQLTime.timeToString((Time)object, settings_, calendar);        
+                value = ((Boolean) object).booleanValue() == true ? "1" : "0";
+        } else if (object instanceof Time)
+            value = SQLTime.timeToString((Time) object, settings_, calendar);
 
-        else if(object instanceof Timestamp)
-            value = SQLTimestamp.timestampToStringTrimTrailingZeros((Timestamp)object, calendar, settings_);
+        else if (object instanceof Timestamp)
+            value = SQLTimestamp.timestampToStringTrimTrailingZeros((Timestamp) object, calendar, settings_);
 
-        else if(object instanceof java.util.Date)                                    
-            value = SQLDate.dateToString((java.util.Date)object, settings_, calendar);  
+        else if (object instanceof java.util.Date)
+            value = SQLDate.dateToString((java.util.Date) object, settings_, calendar);
 
-        else if(object instanceof URL)
+        else if (object instanceof URL)
             value = object.toString();
 
-        else if( object instanceof Clob)
-        {
-            Clob clob = (Clob)object;
-            value = clob.getSubString(1, (int)clob.length());
-        }                                                                           
-        else if(object instanceof Reader)
-        {
-          value = getStringFromReader((Reader) object, ALL_READER_BYTES, this);
+        else if (object instanceof Clob) {
+            Clob clob = (Clob) object;
+            value = clob.getSubString(1, (int) clob.length());
+        } else if (object instanceof Reader) {
+            value = getStringFromReader((Reader) object, ALL_READER_BYTES, this);
         }
 
         /* ifdef JDBC40
@@ -164,42 +151,40 @@ extends SQLDataBase
         }
         endif */
 
-        if(value == null)           {                                                
-          if (JDTrace.isTraceOn()) {
-              if (object == null) { 
-                  JDTrace.logInformation(this, "Unable to assign null object");
-                } else { 
-                    JDTrace.logInformation(this, "Unable to assign object("+object+") of class("+object.getClass().toString()+")");
+        if (value == null) {
+            if (JDTrace.isTraceOn()) {
+                if (object == null) {
+                    JDTrace.logInformation(this, "Unable to assign null object");
+                } else {
+                    JDTrace.logInformation(this, "Unable to assign object(" + object + ") of class(" + object.getClass().toString() + ")");
                 }
-          }
-          JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
+            }
+            JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         }
 
-        value_ = value;                                                            
+        value_ = value;
         originalValue_ = value;
 
 
         // Set to the exact length.
         int valueLength = value_.length();
-        int exactLength = getDisplaySize();                        
-        if(valueLength < exactLength)                                
-        {
+        int exactLength = getDisplaySize();
+        if (valueLength < exactLength) {
             StringBuffer buffer = new StringBuffer(value_);
-            char c = '\u0020';                                     
-            for(int i = valueLength; i < exactLength; ++i)           
-                buffer.append(c);                                   
+            char c = '\u0020';
+            for (int i = valueLength; i < exactLength; ++i)
+                buffer.append(c);
             value_ = buffer.toString();
-            truncated_ = 0; outOfBounds_ = false; 
-        }
-        else if(valueLength > exactLength)
-        {                                                           
-            value_ = value_.substring(0, exactLength);             
-            originalValue_ = value_; 
-            truncated_ = valueLength - exactLength; 
+            truncated_ = 0;
             outOfBounds_ = false;
-        }
-        else
-            truncated_ = 0; outOfBounds_ = false; 
+        } else if (valueLength > exactLength) {
+            value_ = value_.substring(0, exactLength);
+            originalValue_ = value_;
+            truncated_ = valueLength - exactLength;
+            outOfBounds_ = false;
+        } else
+            truncated_ = 0;
+        outOfBounds_ = false;
     }
 
     //---------------------------------------------------------//
@@ -208,119 +193,99 @@ extends SQLDataBase
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.NCHAR;
     }
 
-    public String getCreateParameters()
-    {
-        return AS400JDBCDriver.getResource("MAXLENGTH",null);
+    public String getCreateParameters() {
+        return AS400JDBCDriver.getResource("MAXLENGTH", null);
     }
 
-    public int getDisplaySize()
-    {
+    public int getDisplaySize() {
         return maxLength_ / 2;
     }
 
     // JDBC 3.0
-    public String getJavaClassName()
-    {
+    public String getJavaClassName() {
         return "java.lang.String";
     }
 
-    public String getLiteralPrefix()
-    {
+    public String getLiteralPrefix() {
         return "\'";
     }
 
-    public String getLiteralSuffix()
-    {
+    public String getLiteralSuffix() {
         return "\'";
     }
 
-    public String getLocalName()
-    {
+    public String getLocalName() {
         return "NCHAR";
     }
 
-    public int getMaximumPrecision()
-    {
+    public int getMaximumPrecision() {
         return 16382;
     }
 
-    public int getMaximumScale()
-    {
+    public int getMaximumScale() {
         return 0;
     }
 
-    public int getMinimumScale()
-    {
+    public int getMinimumScale() {
         return 0;
     }
 
-    public int getNativeType()
-    {
+    public int getNativeType() {
         return 468;
     }
 
-    public int getPrecision()
-    {
+    public int getPrecision() {
         return maxLength_ / 2;
     }
 
-    public int getRadix()
-    {
+    public int getRadix() {
         return 0;
     }
 
-    public int getScale()
-    {
+    public int getScale() {
         return 0;
     }
 
-    public int getType()
-    {
+    public int getType() {
     	/* ifdef JDBC40 
         return java.sql.Types.NCHAR;
-        endif */ 
-    	/* ifndef JDBC40 */ 
-    	return java.sql.Types.CHAR; 
-    	/* endif */ 
+        endif */
+        /* ifndef JDBC40 */
+        return java.sql.Types.CHAR;
+        /* endif */
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
     	/* ifdef JDBC40 
         return "NCHAR";
-        endif */ 
-    	/* ifndef JDBC40 */ 
-    	return "CHAR"; 
-    	/* endif */ 
+        endif */
+        /* ifndef JDBC40 */
+        return "CHAR";
+        /* endif */
     }
 
-    public boolean isSigned()
-    {
+    public boolean isSigned() {
         return false;
     }
 
-    public boolean isText()
-    {
+    public boolean isText() {
         return true;
     }
 
-    public int getActualSize()
-    {
+    public int getActualSize() {
         return value_.length();
     }
 
-    public int getTruncated()
-    {
+    public int getTruncated() {
         return truncated_;
     }
 
     public boolean getOutOfBounds() {
-      return outOfBounds_; 
+        return outOfBounds_;
     }
 
     //---------------------------------------------------------//
@@ -331,23 +296,20 @@ extends SQLDataBase
 
 
     public InputStream getBinaryStream()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         return new HexReaderInputStream(new StringReader(getString()));
     }
 
     public Blob getBlob()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        try
-        {
+        try {
             return new AS400JDBCBlob(BinaryConverter.stringToBytes(getString()), maxLength_);
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             // this field contains non-hex characters
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, nfe);
             return null;
@@ -356,16 +318,13 @@ extends SQLDataBase
 
 
     public byte[] getBytes()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
 
-        try
-        {
+        try {
             return BinaryConverter.stringToBytes(getString());
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             // this field contains non-hex characters
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, nfe);
             return null;
@@ -373,15 +332,15 @@ extends SQLDataBase
     }
 
     public Object getBatchableObject() throws SQLException {
-      // Return the object that has not yet been padded
-      return originalValue_; 
+        // Return the object that has not yet been padded
+        return originalValue_;
     }
 
 
     public Object getObject()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false;
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         // This is written in terms of getString(), since it will
         // handle truncating to the max field size if needed.
         return getString();
@@ -389,47 +348,36 @@ extends SQLDataBase
 
 
     public String getString()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false;
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         // Truncate to the max field size if needed.
         // Do not signal a DataTruncation per the spec. 
         int maxFieldSize = settings_.getMaxFieldSize();
-        if((value_.length() > maxFieldSize) && (maxFieldSize > 0))
-        {
+        if ((value_.length() > maxFieldSize) && (maxFieldSize > 0)) {
             return value_.substring(0, maxFieldSize);
-        }
-        else
-        {
+        } else {
             return value_;
         }
     }
 
 
-    
     // Added method trim() to trim the string.
-    public void trim()                                
-    {                                                
-        value_ = value_.trim();                      
-        originalValue_ = value_; 
-    }                                                 
-    
+    public void trim() {
+        value_ = value_.trim();
+        originalValue_ = value_;
+    }
 
 
-
-    public String getNString() throws SQLException
-    {
+    public String getNString() throws SQLException {
         // Truncate to the max field size if needed.
         // Do not signal a DataTruncation per the spec.
         int maxFieldSize = settings_.getMaxFieldSize();
-        if((value_.length() > maxFieldSize) && (maxFieldSize > 0))
-        {
+        if ((value_.length() > maxFieldSize) && (maxFieldSize > 0)) {
             return value_.substring(0, maxFieldSize);
-        }
-        else
-        {
+        } else {
             return value_;
-        } 
+        }
     }
 
 /* ifdef JDBC40 
@@ -462,10 +410,10 @@ extends SQLDataBase
         truncated_ = 0; outOfBounds_ = false; 
         return new AS400JDBCSQLXML(getString());     
     }
-endif */ 
+endif */
 
     public void saveValue() {
-      savedValue_ = originalValue_; 
-   }
+        savedValue_ = originalValue_;
+    }
 }
 

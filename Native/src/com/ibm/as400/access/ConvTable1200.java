@@ -13,10 +13,8 @@
 
 package com.ibm.as400.access;
 
-class ConvTable1200 extends ConvTableUnicodeBigMap
-{
-    ConvTable1200()
-    {
+class ConvTable1200 extends ConvTableUnicodeBigMap {
+    ConvTable1200() {
         super(1200);
     }
 }

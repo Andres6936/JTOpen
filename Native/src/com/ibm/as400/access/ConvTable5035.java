@@ -16,10 +16,10 @@ package com.ibm.as400.access;
 import java.io.UnsupportedEncodingException;
 
 public class ConvTable5035 extends ConvTableMixedMap {
-  public ConvTable5035() throws UnsupportedEncodingException {
-    super(5035, 5123, 2000930);  // Generated 2005035 same as 2000930
-    // Used to inherit from ConvTable1399 and makeAlternateMap.
-    // 
+    public ConvTable5035() throws UnsupportedEncodingException {
+        super(5035, 5123, 2000930);  // Generated 2005035 same as 2000930
+        // Used to inherit from ConvTable1399 and makeAlternateMap.
+        //
 
-  }
+    }
 }

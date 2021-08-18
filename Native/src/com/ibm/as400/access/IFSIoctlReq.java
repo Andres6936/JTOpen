@@ -13,10 +13,8 @@
 
 package com.ibm.as400.access;
 
-class IFSIoctlReq extends IFSDataStreamReq
-{
-    IFSIoctlReq(int id, byte[] pathName)
-    {
+class IFSIoctlReq extends IFSDataStreamReq {
+    IFSIoctlReq(int id, byte[] pathName) {
         super(26 + pathName.length);
         setLength(data_.length);
         setTemplateLen(6);

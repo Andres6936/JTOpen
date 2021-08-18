@@ -16,55 +16,47 @@ package com.ibm.as400.util.html;
 import com.ibm.as400.access.ExtendedIllegalArgumentException;
 
 /**
-   The ElementEvent class represents an element event.
-**/
+ * The ElementEvent class represents an element event.
+ **/
 
-public class ElementEvent extends java.util.EventObject
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+public class ElementEvent extends java.util.EventObject {
+    /**
+     * Event ID indicating that an element has been added.
+     **/
+    public static final int ELEMENT_ADDED = 0;
+    /**
+     * Event ID indicating that an element has been changed.
+     **/
+    public static final int ELEMENT_CHANGED = 1;
+    /**
+     * Event ID indicating that an element has been removed.
+     **/
+    public static final int ELEMENT_REMOVED = 2;
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+    private int id_; // event identifier
 
-  
-   
-  /**
-   Event ID indicating that an element has been added.
-   **/
-  public static final int ELEMENT_ADDED = 0;
+    /**
+     * Constructs an ElementEvent object. It uses the specified source and ID.
+     *
+     * @param source The object where the event originated.
+     * @param id     The event identifier.
+     **/
+    public ElementEvent(Object source, int id) {
+        super(source);
 
-  /**
-   Event ID indicating that an element has been changed.
-   **/
-  public static final int ELEMENT_CHANGED = 1;
+        if (id < ELEMENT_ADDED || id > ELEMENT_REMOVED) {
+            throw new ExtendedIllegalArgumentException("id", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
+        }
 
-  /**
-   Event ID indicating that an element has been removed.
-   **/
-  public static final int ELEMENT_REMOVED = 2;
-
-  private int id_; // event identifier
-
-  /**
-   Constructs an ElementEvent object. It uses the specified source and ID.
-   @param source The object where the event originated.
-   @param id The event identifier.
-   **/
-  public ElementEvent(Object source, int id)
-  {
-    super(source);
-
-    if (id < ELEMENT_ADDED || id > ELEMENT_REMOVED)
-    {
-      throw new ExtendedIllegalArgumentException("id", ExtendedIllegalArgumentException.RANGE_NOT_VALID);
+        id_ = id;
     }
 
-    id_ = id;
-  }
-
-  /**
-   Returns the identifier for this event.
-   @return The identifier for this event.
-   **/
-  public int getID()
-  {
-    return id_;
-  }
+    /**
+     * Returns the identifier for this event.
+     *
+     * @return The identifier for this event.
+     **/
+    public int getID() {
+        return id_;
+    }
 }

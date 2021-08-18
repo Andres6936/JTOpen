@@ -19,11 +19,10 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
-/** A character set converter between Java String objects 
- * 
+/**
+ * A character set converter between Java String objects
  */
-public class Converter implements Serializable
-{
+public class Converter implements Serializable {
     static final long serialVersionUID = 4L;
     private static final String BUFFER_OVERFLOWED = "Converted field overflows destination array.";
 
@@ -33,15 +32,11 @@ public class Converter implements Serializable
     private AS400 system_ = null;
 
     // Gets a Converter object from the pool using a "best guess" based on the default Locale.
-    public Converter()
-    {
+    public Converter() {
         ccsid_ = ExecutionEnvironment.getBestGuessAS400Ccsid();
-        try
-        {
+        try {
             chooseImpl();
-        }
-        catch (UnsupportedEncodingException e)
-        {
+        } catch (UnsupportedEncodingException e) {
             Trace.log(Trace.ERROR, "Unexpected CCSID returned from getBestGuessAS400Ccsid: " + ccsid_, e);
             throw new InternalErrorException(InternalErrorException.UNEXPECTED_EXCEPTION, e);
         }
@@ -50,8 +45,7 @@ public class Converter implements Serializable
     // Constructs a character set conversion object using the specified character encoding.
     // @param  encoding  The name of a character encoding.
     // @exception  UnsupportedEncodingException  If the encoding is not supported.
-    public Converter(String encoding) throws UnsupportedEncodingException
-    {
+    public Converter(String encoding) throws UnsupportedEncodingException {
         encoding_ = encoding;
         chooseImpl();
     }
@@ -60,8 +54,7 @@ public class Converter implements Serializable
     // @param  ccsid  The CCSID of the server text.
     // @param  system  The system object representing the server with which to connect.
     // @exception  UnsupportedEncodingException  If the <i>ccsid</i> is not supported.
-    public Converter(int ccsid) throws UnsupportedEncodingException
-    {
+    public Converter(int ccsid) throws UnsupportedEncodingException {
         ccsid_ = ccsid;
         chooseImpl();
     }
@@ -70,55 +63,40 @@ public class Converter implements Serializable
     // @param  ccsid  The CCSID of the server text.
     // @param  system  The system object representing the server with which to connect.
     // @exception  UnsupportedEncodingException  If the <i>ccsid</i> is not supported.
-    public Converter(int ccsid, AS400 system) throws UnsupportedEncodingException
-    {
+    public Converter(int ccsid, AS400 system) throws UnsupportedEncodingException {
         ccsid_ = ccsid;
         system_ = system;
         chooseImpl();
     }
 
     // Deserializes and initializes transient data.
-    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException
-    {
+    private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
         in.defaultReadObject();
         chooseImpl();
     }
 
     // Get the proper implementation object.
-    private void chooseImpl() throws UnsupportedEncodingException
-    {
-        if (system_ == null)
-        {
+    private void chooseImpl() throws UnsupportedEncodingException {
+        if (system_ == null) {
             // Only alternative is to try to load remote impl.
-            impl = (ConverterImpl)AS400.loadImpl("com.ibm.as400.access.ConverterImplRemote");
+            impl = (ConverterImpl) AS400.loadImpl("com.ibm.as400.access.ConverterImplRemote");
             if (impl == null) throw new UnsupportedEncodingException();
-            if (encoding_ != null)
-            {
+            if (encoding_ != null) {
                 impl.setEncoding(encoding_);
-            }
-            else
-            {
+            } else {
                 impl.setCcsid(ccsid_, null);
             }
-        }
-        else
-        {
+        } else {
             // Load proxy or remote impl.
-            impl = (ConverterImpl)system_.loadImpl2("com.ibm.as400.access.ConverterImplRemote", "com.ibm.as400.access.ConverterImplProxy");
+            impl = (ConverterImpl) system_.loadImpl2("com.ibm.as400.access.ConverterImplRemote", "com.ibm.as400.access.ConverterImplProxy");
             AS400Impl systemImpl = system_.getImpl();
-            try
-            {
+            try {
                 impl.setCcsid(ccsid_, systemImpl);
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                try
-                {
+            } catch (UnsupportedEncodingException e) {
+                try {
                     system_.connectService(AS400.CENTRAL);
                     impl.setCcsid(ccsid_, systemImpl);
-                }
-                catch (Exception ee)
-                {
+                } catch (Exception ee) {
                     throw e;
                 }
             }
@@ -128,8 +106,7 @@ public class Converter implements Serializable
     // Converts the specified bytes into a String.
     // @param  source  The bytes to convert.
     // @return  The resultant String.
-    public String byteArrayToString(byte[] source)
-    {
+    public String byteArrayToString(byte[] source) {
         return impl.byteArrayToString(source, 0, source.length);
     }
 
@@ -137,8 +114,7 @@ public class Converter implements Serializable
     // @param  source  The bytes to convert.
     // @param  offset  The offset into the source array for the start of the data.
     // @return  The resultant String.
-    public String byteArrayToString(byte[] source, int offset)
-    {
+    public String byteArrayToString(byte[] source, int offset) {
         return impl.byteArrayToString(source, offset, source.length - offset);
     }
 
@@ -147,8 +123,7 @@ public class Converter implements Serializable
     // @param  offset  The offset into the source array for the start of the data.
     // @param  length  The number of bytes of data to read from the array.
     // @return  The resultant String.
-    public String byteArrayToString(byte[] source, int offset, int length)
-    {
+    public String byteArrayToString(byte[] source, int offset, int length) {
         return impl.byteArrayToString(source, offset, length);
     }
 
@@ -158,8 +133,7 @@ public class Converter implements Serializable
     // @param  length  The number of bytes of data to read from the array.
     // @param  type  The output string type as defined by the CDRA (Character Data Respresentation Architecture).  One of the following constants defined in BidiStringType: ST5 (LTR), ST6 (RTL), ST10 (Contextual LTR), or ST11 (Contextual RTL).
     // @return  The resultant String.
-    String byteArrayToString(byte[] source, int offset, int length, int type)
-    {
+    String byteArrayToString(byte[] source, int offset, int length, int type) {
         return byteArrayToString(source, offset, length, new BidiConversionProperties(type));
     }
 
@@ -169,30 +143,26 @@ public class Converter implements Serializable
     // @param  length  The number of bytes of data to read from the array.
     // @param  properties  The bidi conversion properties.
     // @return  The resultant String.
-    String byteArrayToString(byte[] source, int offset, int length, BidiConversionProperties properties)
-    {
+    String byteArrayToString(byte[] source, int offset, int length, BidiConversionProperties properties) {
         return impl.byteArrayToString(source, offset, length, properties);
     }
 
     // Returns the ccsid of this conversion object.
     // @return  The ccsid.
-    public int getCcsid()
-    {
+    public int getCcsid() {
         return impl.getCcsid();
     }
 
     // Returns the encoding of this conversion object.
     // @return  The encoding.
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return impl.getEncoding();
     }
 
     // Converts the specified String into bytes.
     // @param  source  The String to convert.
     // @return  The resultant byte array.
-    public byte[] stringToByteArray(String source)
-    {
+    public byte[] stringToByteArray(String source) {
         return impl.stringToByteArray(source);
     }
 
@@ -200,8 +170,7 @@ public class Converter implements Serializable
     // @param  source  The String to convert.
     // @param  type  The output string type as defined by the CDRA (Character Data Respresentation Architecture).  One of the following constants defined in BidiStringType: ST5 (LTR), ST6 (RTL), ST10 (Contextual LTR), or ST11 (Contextual RTL).
     // @return  The resultant byte array.
-    byte[] stringToByteArray(String source, int type)
-    {
+    byte[] stringToByteArray(String source, int type) {
         return stringToByteArray(source, new BidiConversionProperties(type));
     }
 
@@ -209,8 +178,7 @@ public class Converter implements Serializable
     // @param  source  The String to convert.
     // @param  properties  The bidi conversion properties.
     // @return  The resultant byte array.
-    byte[] stringToByteArray(String source, BidiConversionProperties properties)
-    {
+    byte[] stringToByteArray(String source, BidiConversionProperties properties) {
         return impl.stringToByteArray(source, properties);
     }
 
@@ -218,11 +186,9 @@ public class Converter implements Serializable
     // @param  source  The String to convert.
     // @param  destination  The destination byte array.
     // @exception  CharConversionException  If destination is not large enough to hold the converted string.
-    public void stringToByteArray(String source, byte[] destination) throws CharConversionException
-    {
+    public void stringToByteArray(String source, byte[] destination) throws CharConversionException {
         byte[] convertedBytes = impl.stringToByteArray(source);
-        if (convertedBytes.length > destination.length)
-        {
+        if (convertedBytes.length > destination.length) {
             // Copy as much as will fit.
             System.arraycopy(convertedBytes, 0, destination, 0, destination.length);
             Trace.log(Trace.ERROR, BUFFER_OVERFLOWED);
@@ -236,11 +202,9 @@ public class Converter implements Serializable
     // @param  destination  The destination byte array.
     // @param  offset  The offset into the destination array for the start of the data.
     // @exception  CharConversionException  If destination is not large enough to hold the converted string.
-    public void stringToByteArray(String source, byte[] destination, int offset) throws CharConversionException
-    {
+    public void stringToByteArray(String source, byte[] destination, int offset) throws CharConversionException {
         byte[] convertedBytes = impl.stringToByteArray(source);
-        if (convertedBytes.length > destination.length - offset)
-        {
+        if (convertedBytes.length > destination.length - offset) {
             // Copy as much as will fit.
             System.arraycopy(convertedBytes, 0, destination, offset, destination.length - offset);
             Trace.log(Trace.ERROR, BUFFER_OVERFLOWED);
@@ -255,11 +219,9 @@ public class Converter implements Serializable
     // @param  offset  The offset into the destination array for the start of the data.
     // @param  length  The number of bytes of data to write into the array.
     // @exception  CharConversionException  If destination is not large enough to hold the converted string.
-    public void stringToByteArray(String source, byte[] destination, int offset, int length) throws CharConversionException
-    {
+    public void stringToByteArray(String source, byte[] destination, int offset, int length) throws CharConversionException {
         byte[] convertedBytes = impl.stringToByteArray(source);
-        if (convertedBytes.length > length)
-        {
+        if (convertedBytes.length > length) {
             // Copy as much as will fit.
             System.arraycopy(convertedBytes, 0, destination, offset, length);
             Trace.log(Trace.ERROR, BUFFER_OVERFLOWED);
@@ -275,8 +237,7 @@ public class Converter implements Serializable
     // @param  length  The number of bytes of data to write into the array.
     // @param  type  The output string type as defined by the CDRA (Character Data Respresentation Architecture).  One of the following constants defined in BidiStringType: ST5 (LTR), ST6 (RTL), ST10 (Contextual LTR), or ST11 (Contextual RTL).
     // @exception  CharConversionException  If destination is not large enough to hold the converted string.
-    void stringToByteArray(String source, byte[] destination, int offset, int length, int type) throws CharConversionException
-    {
+    void stringToByteArray(String source, byte[] destination, int offset, int length, int type) throws CharConversionException {
         stringToByteArray(source, destination, offset, length, new BidiConversionProperties(type));
     }
 
@@ -287,11 +248,9 @@ public class Converter implements Serializable
     // @param  length  The number of bytes of data to write into the array.
     // @param  properties  The bidi conversion properties.
     // @exception  CharConversionException  If destination is not large enough to hold the converted string.
-    void stringToByteArray(String source, byte[] destination, int offset, int length, BidiConversionProperties properties) throws CharConversionException
-    {
+    void stringToByteArray(String source, byte[] destination, int offset, int length, BidiConversionProperties properties) throws CharConversionException {
         byte[] convertedBytes = impl.stringToByteArray(source, properties);
-        if (convertedBytes.length > length)
-        {
+        if (convertedBytes.length > length) {
             // Copy as much as will fit.
             System.arraycopy(convertedBytes, 0, destination, offset, length);
             Trace.log(Trace.ERROR, BUFFER_OVERFLOWED);

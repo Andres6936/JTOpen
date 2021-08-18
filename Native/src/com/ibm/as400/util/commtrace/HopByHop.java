@@ -15,24 +15,26 @@ package com.ibm.as400.util.commtrace;
 
 /**
  * A HopByHop Header.<br>
- * Extends ExtHeader's methods to parse, print, and allow easy access to the HopByHop Header. 
+ * Extends ExtHeader's methods to parse, print, and allow easy access to the HopByHop Header.
  */
 public class HopByHop extends ExtHeader {
 
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data  The raw data of this header. 
-	 */
-	HopByHop(BitBuf data) {
-		super(data);
-		type= Header.EXTHOPBYHOP;
-	}
-	
-	/**
-	 * Returns the length of this header.
-	 * @return The length of this header.
-	 */	
-	public int getHeaderLen() {
-		return 64 + ((rawheader.getOctet(8) & 0xFF) * 64);
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    HopByHop(BitBuf data) {
+        super(data);
+        type = Header.EXTHOPBYHOP;
+    }
+
+    /**
+     * Returns the length of this header.
+     *
+     * @return The length of this header.
+     */
+    public int getHeaderLen() {
+        return 64 + ((rawheader.getOctet(8) & 0xFF) * 64);
+    }
 }

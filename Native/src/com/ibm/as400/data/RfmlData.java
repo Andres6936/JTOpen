@@ -16,35 +16,35 @@ package com.ibm.as400.data;
 class RfmlData extends PcmlData {
     // New attributes should be added to the end of this array
     private static final String DATAATTRIBUTES[] = {
-        "name",
-        "count",
-        "type",
-        "length",
-        "precision",
-        "ccsid",
-        "init",
-        "struct",
-        "bidistringtype",
-        "keyfield",
-        "dateformat",
-        "dateseparator",
-        "timeformat",
-        "timeseparator"
+            "name",
+            "count",
+            "type",
+            "length",
+            "precision",
+            "ccsid",
+            "init",
+            "struct",
+            "bidistringtype",
+            "keyfield",
+            "dateformat",
+            "dateseparator",
+            "timeformat",
+            "timeseparator"
     };
     // Note: The following PcmlData attributes are irrelevant to this class:
     // usage, minvrm, maxvrm, offset, offsetfrom, outputsize, passby, trim, chartype.
 
-    /** Constructor with description. **/
-    RfmlData(PcmlAttributeList attrs)
-    {
+    /**
+     * Constructor with description.
+     **/
+    RfmlData(PcmlAttributeList attrs) {
         super(attrs, true);
     }
 
-   /**
-    Returns the list of valid attributes for the data element.
-    **/
-    String[] getAttributeList()
-    {
-      return DATAATTRIBUTES;
+    /**
+     * Returns the list of valid attributes for the data element.
+     **/
+    String[] getAttributeList() {
+        return DATAATTRIBUTES;
     }
 }

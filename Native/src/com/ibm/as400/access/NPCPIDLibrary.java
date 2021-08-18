@@ -16,67 +16,59 @@ package com.ibm.as400.access;
 /**
  * NPCPIDLibrary is used to contain a library ID code point.
  * This code point has 1 value in it:
- *     NP_ATTR_LIBRARY  - library name
+ * NP_ATTR_LIBRARY  - library name
  **/
 
-class NPCPIDLibrary extends NPCPID implements Cloneable
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class NPCPIDLibrary extends NPCPID implements Cloneable {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     static final long serialVersionUID = 4L;
 
 
-   /**
-    * copy constructor
-    **/
-    NPCPIDLibrary(NPCPIDLibrary cp)
-    {
-       super(cp);
+    /**
+     * copy constructor
+     **/
+    NPCPIDLibrary(NPCPIDLibrary cp) {
+        super(cp);
     }
 
-   /**
-    * basic constructor that takes the ID and no data - child class passes in correct ID
-    **/
-    NPCPIDLibrary()
-    {
-       super(NPCodePoint.LIBRARY_ID);
+    /**
+     * basic constructor that takes the ID and no data - child class passes in correct ID
+     **/
+    NPCPIDLibrary() {
+        super(NPCodePoint.LIBRARY_ID);
     }
 
-   /**
-    * constructor that takes the ID and data - child class passes in correct ID
-    * data should have the form described at the top of the class (nn len ID1...)
-    **/
-    NPCPIDLibrary( byte[] data )
-    {
-       super(NPCodePoint.LIBRARY_ID, data);
+    /**
+     * constructor that takes the ID and data - child class passes in correct ID
+     * data should have the form described at the top of the class (nn len ID1...)
+     **/
+    NPCPIDLibrary(byte[] data) {
+        super(NPCodePoint.LIBRARY_ID, data);
     }
 
-   /**
-    * constructor that takes the ID as seperate items
-    **/
-    NPCPIDLibrary(String library)
-    {
-       super(NPCodePoint.LIBRARY_ID);
-       setAttrValue(PrintObject.ATTR_LIBRARY, library);
+    /**
+     * constructor that takes the ID as seperate items
+     **/
+    NPCPIDLibrary(String library) {
+        super(NPCodePoint.LIBRARY_ID);
+        setAttrValue(PrintObject.ATTR_LIBRARY, library);
     }
 
 
-    protected Object clone()
-    {
-       NPCPIDLibrary cp = new NPCPIDLibrary(this);
-       return cp;
+    protected Object clone() {
+        NPCPIDLibrary cp = new NPCPIDLibrary(this);
+        return cp;
     }
 
-    
 
-  /**
-   * get the library name
-   **/
-   String name()
-   {
-      return getStringValue(PrintObject.ATTR_LIBRARY);
-   }
+    /**
+     * get the library name
+     **/
+    String name() {
+        return getStringValue(PrintObject.ATTR_LIBRARY);
+    }
 
 } // NPCPIDLibrary
 

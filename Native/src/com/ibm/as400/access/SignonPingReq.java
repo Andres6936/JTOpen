@@ -16,10 +16,8 @@ package com.ibm.as400.access;
 import java.io.IOException;
 import java.io.OutputStream;
 
-class SignonPingReq extends ClientAccessDataStream
-{
-    SignonPingReq()
-    {
+class SignonPingReq extends ClientAccessDataStream {
+    SignonPingReq() {
         super(new byte[20]);
 
         setLength(20);
@@ -27,8 +25,7 @@ class SignonPingReq extends ClientAccessDataStream
         setReqRepID(0x7FFE);
     }
 
-    void write(OutputStream out) throws IOException
-    {
+    void write(OutputStream out) throws IOException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Sending signon server ping request...");
         super.write(out);
     }

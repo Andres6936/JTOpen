@@ -15,8 +15,7 @@ package com.ibm.as400.access;
 
 import java.io.Serializable;
 
-class DQQueryRecord implements Serializable
-{
+class DQQueryRecord implements Serializable {
     private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
     static final long serialVersionUID = 4L;

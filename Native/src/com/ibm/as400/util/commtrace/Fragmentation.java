@@ -18,13 +18,14 @@ package com.ibm.as400.util.commtrace;
  * Extends ExtHeader's methods to parse, print, and allow easy access to the Fragmentation Header.
  */
 public class Fragmentation extends ExtHeader {
-	
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data	The raw data of this header. 
-	 */
-	Fragmentation(BitBuf data) {
-		super(data);
-		type= Header.EXTFRAG;
-	}
+
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    Fragmentation(BitBuf data) {
+        super(data);
+        type = Header.EXTFRAG;
+    }
 }

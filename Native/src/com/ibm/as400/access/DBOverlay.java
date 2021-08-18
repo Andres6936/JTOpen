@@ -14,38 +14,33 @@
 package com.ibm.as400.access;
 
 
-
 /**
-The DBOverlay interface describes a structure that lays on top of
-an existing byte array.  An implementation will set the bytes according
-to some structure.
-
-<p>The main point to this interface is to reduce the number of
-intermediate byte array creations and copies by allowing structures
-to set a given byte array directly.
-**/
-interface DBOverlay
-{
-
+ * The DBOverlay interface describes a structure that lays on top of
+ * an existing byte array.  An implementation will set the bytes according
+ * to some structure.
+ *
+ * <p>The main point to this interface is to reduce the number of
+ * intermediate byte array creations and copies by allowing structures
+ * to set a given byte array directly.
+ **/
+interface DBOverlay {
 
 
-/**
-Positions the overlay structure.
+    /**
+     * Positions the overlay structure.
+     *
+     * @param rawBytes The byte array to overlay.
+     * @param offset   The starting offset.
+     **/
+    public abstract void overlay(byte[] rawBytes, int offset);
 
-@param  rawBytes        The byte array to overlay.
-@param  offset          The starting offset.
-**/
-    public abstract void overlay (byte[] rawBytes, int offset);
 
-
-
-/**
-Returns the length of the overlay structure.
-
-@return The length of the overlay structure.
-**/
-    public abstract int getLength ();
-
+    /**
+     * Returns the length of the overlay structure.
+     *
+     * @return The length of the overlay structure.
+     **/
+    public abstract int getLength();
 
 
 }

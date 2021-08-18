@@ -16,33 +16,29 @@ package com.ibm.as400.access;
 import java.lang.reflect.InvocationTargetException;
 
 // The PxRejectRepCV class represents the client view of a reject reply.
-class PxRejectRepCV extends PxRepCV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class PxRejectRepCV extends PxRepCV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     // Private data.
     private ProxyClientConnection connection_;
 
     // Constructs a PxRejectRepCV object.
     // @param  connection  The connection.
-    public PxRejectRepCV(ProxyClientConnection connection)
-    { 
+    public PxRejectRepCV(ProxyClientConnection connection) {
         super(ProxyConstants.DS_REJECT_REP);
         connection_ = connection;
     }
 
     // Processes the reply.
     // @return  The returned object, or null if none.
-    public Object process() throws InvocationTargetException
-    {
-        String peer = ((PxStringParm)getParm(0)).getStringValue();
+    public Object process() throws InvocationTargetException {
+        String peer = ((PxStringParm) getParm(0)).getStringValue();
 
         connection_.close();
-        if (peer.length() > 0)
-        {
+        if (peer.length() > 0) {
             connection_.open(peer);
             connection_.connect();
-            return null; 
+            return null;
         }
         throw new ProxyException(ProxyException.CONNECTION_REJECTED);
     }

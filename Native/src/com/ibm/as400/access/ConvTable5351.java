@@ -13,12 +13,10 @@
 
 package com.ibm.as400.access;
 
-class ConvTable5351 extends ConvTable1255
-{
+class ConvTable5351 extends ConvTable1255 {
     private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-    ConvTable5351()
-    {
+    ConvTable5351() {
         super(5351);
     }
 }

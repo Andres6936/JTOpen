@@ -14,41 +14,40 @@
 package com.ibm.as400.access;
 
 /**
-Close file reply.
-**/
-class IFSCloseRep extends IFSDataStream
-{
-  private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
+ * Close file reply.
+ **/
+class IFSCloseRep extends IFSDataStream {
+    private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-  private static final int RETURN_CODE_OFFSET = 22;
+    private static final int RETURN_CODE_OFFSET = 22;
 
 
-/**
-Generate a new instance of this type.
-@return a reference to the new instance
-**/
-  public Object getNewDataStream()
-  {
-    return new IFSCloseRep();
-  }
+    /**
+     * Generate a new instance of this type.
+     *
+     * @return a reference to the new instance
+     **/
+    public Object getNewDataStream() {
+        return new IFSCloseRep();
+    }
 
-/**
-Determines the return code.
-@return the return code
-**/
-  int getReturnCode()
-  {
-    return get16bit( RETURN_CODE_OFFSET);
-  }
+    /**
+     * Determines the return code.
+     *
+     * @return the return code
+     **/
+    int getReturnCode() {
+        return get16bit(RETURN_CODE_OFFSET);
+    }
 
-/**
-Generates a hash code for this data stream.
-@return the hash code
-**/
-  public int hashCode()
-  {
-    return 0x8004;
-  }
+    /**
+     * Generates a hash code for this data stream.
+     *
+     * @return the hash code
+     **/
+    public int hashCode() {
+        return 0x8004;
+    }
 }
 
 

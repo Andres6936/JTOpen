@@ -15,45 +15,48 @@ package com.ibm.as400.util.commtrace;
 
 /**
  * Represents a user definable flag.<br>
- * True and false values are overrideable to produce specific output. 
+ * True and false values are overrideable to produce specific output.
  */
 class Flag extends Field {
-	String truevalue;
-	String falsevalue;
-	boolean usetext;
+    String truevalue;
+    String falsevalue;
+    boolean usetext;
 
-	/**
-	 * Base constructor which creates a default flag.  
-	 * @param data         BitBuf which represents this flag field.      
-	 */
-	public Flag(BitBuf data) {
-		super(data);
-	}
-	/**
-	 * Constructor which creates a default flag with the specified true and false values.  
-	 * @param bitbuf         BitBuf which represents this flag field.
-	 * @param tv		the true value of this flag.
-	 * @param fv	the false value of thie flag.
-	 */
-	public Flag(BitBuf bitbuf, String tv, String fv) {
-		super(bitbuf);
-		truevalue = tv;
-		falsevalue = fv;
-		usetext = true;
-	}
+    /**
+     * Base constructor which creates a default flag.
+     *
+     * @param data BitBuf which represents this flag field.
+     */
+    public Flag(BitBuf data) {
+        super(data);
+    }
 
-	/**
-	 * Creates a String representation of this flag.   
-	 * @return String representing this flag.
-	 */
-	public String toString() {
-		byte x = data.getBitAsByte(0);
-		if (usetext == false)
-			return Byte.toString(x);
-		else
-			if (x == 1)
-				return truevalue;
-			else
-				return falsevalue;
-	}
+    /**
+     * Constructor which creates a default flag with the specified true and false values.
+     *
+     * @param bitbuf BitBuf which represents this flag field.
+     * @param tv     the true value of this flag.
+     * @param fv     the false value of thie flag.
+     */
+    public Flag(BitBuf bitbuf, String tv, String fv) {
+        super(bitbuf);
+        truevalue = tv;
+        falsevalue = fv;
+        usetext = true;
+    }
+
+    /**
+     * Creates a String representation of this flag.
+     *
+     * @return String representing this flag.
+     */
+    public String toString() {
+        byte x = data.getBitAsByte(0);
+        if (usetext == false)
+            return Byte.toString(x);
+        else if (x == 1)
+            return truevalue;
+        else
+            return falsevalue;
+    }
 }

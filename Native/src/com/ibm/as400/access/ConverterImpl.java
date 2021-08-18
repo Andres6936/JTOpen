@@ -15,14 +15,20 @@ package com.ibm.as400.access;
 
 import java.io.UnsupportedEncodingException;
 
-interface ConverterImpl
-{
+interface ConverterImpl {
     abstract void setEncoding(String encoding) throws UnsupportedEncodingException;
+
     abstract void setCcsid(int ccsid, AS400Impl systemImpl) throws UnsupportedEncodingException;
+
     abstract String getEncoding();
+
     abstract int getCcsid();
+
     abstract String byteArrayToString(byte[] source, int offset, int length);
+
     abstract String byteArrayToString(byte[] source, int offset, int length, BidiConversionProperties properties);
+
     abstract byte[] stringToByteArray(String source);
+
     abstract byte[] stringToByteArray(String source, BidiConversionProperties properties);
 }

@@ -17,42 +17,35 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 // Native implementation of Central Server function
-class NLSImplNative extends NLSImpl
-{
-  private static final String CLASSNAME = "com.ibm.as400.access.NLSImplNative";
-  static
-  {
-    if (Trace.traceOn_) Trace.logLoadPath(CLASSNAME);
-  }
+class NLSImplNative extends NLSImpl {
+    private static final String CLASSNAME = "com.ibm.as400.access.NLSImplNative";
 
-    static
-    {
- 	   NativeMethods.loadNativeLibraryQyjspart(); 
+    static {
+        if (Trace.traceOn_) Trace.logLoadPath(CLASSNAME);
+    }
+
+    static {
+        NativeMethods.loadNativeLibraryQyjspart();
     }
 
 
     // connect to the central server of the server.
-    void connect() throws ServerStartupException, UnknownHostException, AS400SecurityException, ConnectionDroppedException, InterruptedException, IOException
-    {
+    void connect() throws ServerStartupException, UnknownHostException, AS400SecurityException, ConnectionDroppedException, InterruptedException, IOException {
     }
 
 
     // Disconnect from the central server.
-    void disconnect()
-    {
+    void disconnect() {
 
     }
 
 
     // Get the job ccsid
-    int getCcsid() throws IOException
-    {
-        try
-        {
+    int getCcsid() throws IOException {
+        try {
             // Call native method
             return ccsidNative();
-        }
-        catch(NativeException e)  // Exception detected in C code
+        } catch (NativeException e)  // Exception detected in C code
         {
             // Map to IOException
             throw new IOException();

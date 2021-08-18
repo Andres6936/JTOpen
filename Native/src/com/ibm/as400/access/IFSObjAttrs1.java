@@ -18,49 +18,43 @@ import java.io.UnsupportedEncodingException;
 
 
 /**
- Encapsulates a File Server "Object Attributes 1" structure (OA1, OA1a, or OA1b).
- OA1* structures are used in several File Server requests and replies.
+ * Encapsulates a File Server "Object Attributes 1" structure (OA1, OA1a, or OA1b).
+ * OA1* structures are used in several File Server requests and replies.
  **/
-final class IFSObjAttrs1 implements Serializable
-{
-  // Design note: The File Server team has an include file named "sysattr.h", which contains the full details for the OA1 structure, including the details of the "Flags(1)" and "Flags(2)" fields.
+final class IFSObjAttrs1 implements Serializable {
+    // Design note: The File Server team has an include file named "sysattr.h", which contains the full details for the OA1 structure, including the details of the "Flags(1)" and "Flags(2)" fields.
 
-  static final long serialVersionUID = 4L;
+    static final long serialVersionUID = 4L;
 
-  // Location of the "Owner name flag" in the "Flags(1)" field of the OA1* structure.
-  // To retrieve the Owner name, this flag must be set in the 'list attributes' request.
-  static final int OWNER_NAME_FLAG = 0x00000800;
-  
-  // Location of the "ASP flag" in the "Flags(1)" field of the OA1* structure.
-  // To retrieve the ASP, this flag must be set in the 'list attributes' request.
-  static final int ASP_FLAG = 0x00100000;//@RDA
+    // Location of the "Owner name flag" in the "Flags(1)" field of the OA1* structure.
+    // To retrieve the Owner name, this flag must be set in the 'list attributes' request.
+    static final int OWNER_NAME_FLAG = 0x00000800;
 
-  private byte[] data_;
-  static final int OWNERANAME_ASP_FLAS = 0x00100800; //@AC7 
+    // Location of the "ASP flag" in the "Flags(1)" field of the OA1* structure.
+    // To retrieve the ASP, this flag must be set in the 'list attributes' request.
+    static final int ASP_FLAG = 0x00100000;//@RDA
+    static final int OWNERANAME_ASP_FLAS = 0x00100800; //@AC7
+    private byte[] data_;
 
 
-  IFSObjAttrs1(byte[] data)
-  {
-    data_ = data;
-  }
+    IFSObjAttrs1(byte[] data) {
+        data_ = data;
+    }
 
-  // Returns the value of the "Name of the owner of the object" field (at offset 224).
-  final String getOwnerName(int systemCcsid) throws UnsupportedEncodingException
-  {
-    ConvTable conv = ConvTable.getTable(systemCcsid, null);
-    String owner = conv.byteArrayToString(data_, 224, 10).trim();
-    return owner;
-  }
+    // Returns the value of the "Name of the owner of the object" field (at offset 224).
+    final String getOwnerName(int systemCcsid) throws UnsupportedEncodingException {
+        ConvTable conv = ConvTable.getTable(systemCcsid, null);
+        String owner = conv.byteArrayToString(data_, 224, 10).trim();
+        return owner;
+    }
 
-  //@RDA Returns the value of the "ASP holding the object" field (at offset 220).
-  final int getASP() throws UnsupportedEncodingException
-  {
-    return (int) BinaryConverter.byteArrayToShort(data_, 220) & 0x0000ffff;
-  }
-  
-  final int length()
-  {
-    return data_.length;
-  }
+    //@RDA Returns the value of the "ASP holding the object" field (at offset 220).
+    final int getASP() throws UnsupportedEncodingException {
+        return (int) BinaryConverter.byteArrayToShort(data_, 220) & 0x0000ffff;
+    }
+
+    final int length() {
+        return data_.length;
+    }
 
 }

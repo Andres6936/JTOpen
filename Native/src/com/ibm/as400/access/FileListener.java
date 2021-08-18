@@ -12,42 +12,47 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 package com.ibm.as400.access;
+
 /**
-    The FileListener interface provides an interface for receiving
-    File events.
-**/
+ * The FileListener interface provides an interface for receiving
+ * File events.
+ **/
 
-public interface FileListener extends java.util.EventListener
-{
-  /**
-   Invoked when a file has been closed.
-   @param event The file event.
-   **/
-  public void fileClosed(FileEvent event);
+public interface FileListener extends java.util.EventListener {
+    /**
+     * Invoked when a file has been closed.
+     *
+     * @param event The file event.
+     **/
+    public void fileClosed(FileEvent event);
 
-  /**
-   Invoked when a file has been created.
-   @param event The file event.
-   **/
-  public void fileCreated(FileEvent event);
+    /**
+     * Invoked when a file has been created.
+     *
+     * @param event The file event.
+     **/
+    public void fileCreated(FileEvent event);
 
-  /**
-   Invoked when a file is deleted.
-   @param event The file event.
-   **/
-  public void fileDeleted(FileEvent event);
+    /**
+     * Invoked when a file is deleted.
+     *
+     * @param event The file event.
+     **/
+    public void fileDeleted(FileEvent event);
 
-  /**
-   Invoked when a file has been modified.
-   @param event The file event.
-   **/
-  public void fileModified(FileEvent event);
+    /**
+     * Invoked when a file has been modified.
+     *
+     * @param event The file event.
+     **/
+    public void fileModified(FileEvent event);
 
-  /**
-   Invoked when a file has been opened.
-   @param event The file event.
-   **/
-  public void fileOpened(FileEvent event);
+    /**
+     * Invoked when a file has been opened.
+     *
+     * @param event The file event.
+     **/
+    public void fileOpened(FileEvent event);
 }
 
 

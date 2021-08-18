@@ -17,12 +17,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 // A class representing an "end server job" request data stream.
-class AS400EndJobDS extends ClientAccessDataStream
-{
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
+class AS400EndJobDS extends ClientAccessDataStream {
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
-    AS400EndJobDS(int serverId)
-    {
+    AS400EndJobDS(int serverId) {
         super(new byte[(serverId == 0xE004) ? 40 : 20]);
 
         setLength(data_.length);
@@ -32,8 +30,7 @@ class AS400EndJobDS extends ClientAccessDataStream
         // setCorrelation(0x00000000);
         // setTemplateLen(0x0000);
 
-        switch (serverId)
-        {
+        switch (serverId) {
             case 0xE000:  // Central Server.
                 setReqRepID(0x1400);
                 break;
@@ -50,8 +47,7 @@ class AS400EndJobDS extends ClientAccessDataStream
         }
     }
 
-    void write(OutputStream out) throws IOException
-    {
+    void write(OutputStream out) throws IOException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Sending end job request..."); //@P0C
         super.write(out);
     }

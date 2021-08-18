@@ -20,23 +20,18 @@ class PcmlAttributeList extends Object {
     //private String value;
     //private boolean specified;
 
-    PcmlAttributeList(int size) 
-    {
+    PcmlAttributeList(int size) {
         v = new Vector(size);
     }
-    
-    void addAttribute(PcmlAttribute attr)
-    {
+
+    void addAttribute(PcmlAttribute attr) {
         v.addElement(attr);
     }
-    
-    String getAttributeValue(String name)
-    {
-        for (int i = 0; i < v.size(); i++)
-        {
+
+    String getAttributeValue(String name) {
+        for (int i = 0; i < v.size(); i++) {
             PcmlAttribute attr = (PcmlAttribute) v.elementAt(i);
-            if ( attr.getName().equals(name) )
-            {
+            if (attr.getName().equals(name)) {
                 return attr.getAttributeValue();
             }
         }

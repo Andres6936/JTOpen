@@ -14,45 +14,38 @@
 package com.ibm.as400.data;
 
 /**
-  *  The RecordFormatDescriptor class implements the methods of the Descriptor interface
-  *  that are unique to the &lt;recordformat&gt; tag.
-  *
-  **/
+ * The RecordFormatDescriptor class implements the methods of the Descriptor interface
+ * that are unique to the &lt;recordformat&gt; tag.
+ **/
 
-class RecordFormatDescriptor extends DocNodeDescriptor
-{
+class RecordFormatDescriptor extends DocNodeDescriptor {
     /* Constructor */
-    public RecordFormatDescriptor(PcmlDocNode node)
-    {
+    public RecordFormatDescriptor(PcmlDocNode node) {
         super(node);
     }
-   /**
-    * Return list of valid attributes for the <recordformat> tag.
-    **/
-    public String[] getAttributeList()
-    {
-        return ((RfmlRecordFormat)getDocNode()).getAttributeList();
+
+    /**
+     * Return list of valid attributes for the <recordformat> tag.
+     **/
+    public String[] getAttributeList() {
+        return ((RfmlRecordFormat) getDocNode()).getAttributeList();
     }
 
-   /**
-    * Return a String containing the current value for the requested attribute.
-    **/
-    public String getAttributeValue(String attr)
-    {
-      if (attr != null)
-      {
-        if (attr.equals("name"))
-        {
-          String name = getDocNode().getName();
-          if (name.equals(""))
-            return null;
-          else
-            return name;
+    /**
+     * Return a String containing the current value for the requested attribute.
+     **/
+    public String getAttributeValue(String attr) {
+        if (attr != null) {
+            if (attr.equals("name")) {
+                String name = getDocNode().getName();
+                if (name.equals(""))
+                    return null;
+                else
+                    return name;
+            } else if (attr.equals("description"))
+                return ((RfmlRecordFormat) getDocNode()).getDescription();
+            else return null;
         }
-        else if (attr.equals("description"))
-          return ((RfmlRecordFormat)getDocNode()).getDescription();
-        else return null;
-      }
-      return null;
+        return null;
     }
 }

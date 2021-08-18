@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 package com.ibm.as400.access;
- 
+
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -23,39 +23,36 @@ import java.sql.Date;
 /*ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
-endif */ 
+endif */
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 /* ifdef JDBC40 
 import java.sql.SQLXML;  
-endif */ 
+endif */
 
 //@PDA jdbc40 brand new class
 //This is almost the same as SQLClob, and I would have liked to extend it, but it is final, and so decided
 //to not extend.  It may come in handy for future NClob deviations also.  
 
-final class SQLNClob extends SQLDataBase
-{
-   
-    private int                     length_;                    // Length of string, in characters.
-    private int                     maxLength_;                 // Max length of field, in bytes.
-    private String                  value_;
+final class SQLNClob extends SQLDataBase {
+
+    private int length_;                    // Length of string, in characters.
+    private int maxLength_;                 // Max length of field, in bytes.
+    private String value_;
     private Object savedObject_; // This is our byte[] or InputStream or whatever that we save to convert to bytes until we really need to.
 
     // Note: maxLength is in bytes not counting 2 for LL.
     //
-    SQLNClob(int maxLength, SQLConversionSettings settings)
-    {
-      super(settings); 
-      length_         = 0;
-        maxLength_      = maxLength;
-        value_          = "";
+    SQLNClob(int maxLength, SQLConversionSettings settings) {
+        super(settings);
+        length_ = 0;
+        maxLength_ = maxLength;
+        value_ = "";
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLNClob(maxLength_, settings_);
     }
 
@@ -66,49 +63,43 @@ final class SQLNClob extends SQLDataBase
     //---------------------------------------------------------//
 
     public void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter, boolean ignoreConversionErrors)
-    throws SQLException
-    {
+            throws SQLException {
         length_ = BinaryConverter.byteArrayToInt(rawBytes, offset);
 
         int bidiStringType = settings_.getBidiStringType();
 
         // if bidiStringType is not set by user, use ccsid to get value
-        if(bidiStringType == -1) bidiStringType = ccsidConverter.bidiStringType_;
+        if (bidiStringType == -1) bidiStringType = ccsidConverter.bidiStringType_;
 
         BidiConversionProperties bidiConversionProperties = new BidiConversionProperties(bidiStringType);
-        bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());           
-        bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());       
+        bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());
+        bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());
 
-        value_ = ccsidConverter.byteArrayToString(rawBytes, offset + 4, length_, bidiConversionProperties); 
+        value_ = ccsidConverter.byteArrayToString(rawBytes, offset + 4, length_, bidiConversionProperties);
         savedObject_ = null;
     }
 
     public void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter)
-    throws SQLException
-    {
-        if(savedObject_ != null) doConversion();
+            throws SQLException {
+        if (savedObject_ != null) doConversion();
 
-        try
-        {
+        try {
             int bidiStringType = settings_.getBidiStringType();
-            if(bidiStringType == -1) bidiStringType = ccsidConverter.bidiStringType_;
+            if (bidiStringType == -1) bidiStringType = ccsidConverter.bidiStringType_;
 
-            BidiConversionProperties bidiConversionProperties = new BidiConversionProperties(bidiStringType);  
-            bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());       
-            bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());  
+            BidiConversionProperties bidiConversionProperties = new BidiConversionProperties(bidiStringType);
+            bidiConversionProperties.setBidiImplicitReordering(settings_.getBidiImplicitReordering());
+            bidiConversionProperties.setBidiNumericOrderingRoundTrip(settings_.getBidiNumericOrdering());
 
-            byte[] temp = ccsidConverter.stringToByteArray(value_, bidiConversionProperties);  
+            byte[] temp = ccsidConverter.stringToByteArray(value_, bidiConversionProperties);
             // The length in the first 4 bytes is actually the length in characters.
             BinaryConverter.intToByteArray(temp.length, rawBytes, offset);
-            if(temp.length > maxLength_)
-            {
+            if (temp.length > maxLength_) {
                 maxLength_ = temp.length;
                 JDError.throwSQLException(this, JDError.EXC_INTERNAL, "Change Descriptor");
             }
-            System.arraycopy(temp, 0, rawBytes, offset+4, temp.length);
-        }
-        catch(Exception e)
-        {
+            System.arraycopy(temp, 0, rawBytes, offset + 4, temp.length);
+        } catch (Exception e) {
             JDError.throwSQLException(this, JDError.EXC_INTERNAL, e);
         }
     }
@@ -120,60 +111,51 @@ final class SQLNClob extends SQLDataBase
     //---------------------------------------------------------//
 
     public void set(Object object, Calendar calendar, int scale)
-    throws SQLException
-    {
+            throws SQLException {
         // If it's a String we check for data truncation.
-        if(object instanceof String)
-        {
-            String s = (String)object;
-            truncated_ = (s.length() > maxLength_ ? s.length()-maxLength_ : 0);
-            outOfBounds_ = false; 
-        } 
-        else if(!(object instanceof Clob) && //@PDC NClob extends Clob
-                !(object instanceof InputStream) && 
+        if (object instanceof String) {
+            String s = (String) object;
+            truncated_ = (s.length() > maxLength_ ? s.length() - maxLength_ : 0);
+            outOfBounds_ = false;
+        } else if (!(object instanceof Clob) && //@PDC NClob extends Clob
+                !(object instanceof InputStream) &&
                 !(object instanceof Reader)  //@PDC jdbc40
 /* ifdef JDBC40                 
                 && !(object instanceof SQLXML)
-   endif */ 
-                ) //@PDC jdbc40
+   endif */
+        ) //@PDC jdbc40
         {
-          if (JDTrace.isTraceOn()) {
-              if (object == null) { 
-                  JDTrace.logInformation(this, "Unable to assign null object");
-                } else { 
-                    JDTrace.logInformation(this, "Unable to assign object("+object+") of class("+object.getClass().toString()+")");
+            if (JDTrace.isTraceOn()) {
+                if (object == null) {
+                    JDTrace.logInformation(this, "Unable to assign null object");
+                } else {
+                    JDTrace.logInformation(this, "Unable to assign object(" + object + ") of class(" + object.getClass().toString() + ")");
                 }
-          }
+            }
 
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         }
 
         savedObject_ = object;
-        if(scale != -1) { 
-          length_ = scale;
+        if (scale != -1) {
+            length_ = scale;
         } else {
-          length_ = ALL_READER_BYTES; 
+            length_ = ALL_READER_BYTES;
         }
     }
 
     private void doConversion()
-    throws SQLException
-    {
-        try
-        {
+            throws SQLException {
+        try {
             Object object = savedObject_;
-            if(savedObject_ instanceof String)
-            {
-                value_ = (String)object;
-            }
-            else if(object instanceof Reader)
-            {
+            if (savedObject_ instanceof String) {
+                value_ = (String) object;
+            } else if (object instanceof Reader) {
                 value_ = getStringFromReader((Reader) object, length_, this);
-            }
-            else if( object instanceof Clob) //@PDC jdbc40 - NClob isa Clob
+            } else if (object instanceof Clob) //@PDC jdbc40 - NClob isa Clob
             {
-                Clob clob = (Clob)object;
-                value_ = clob.getSubString(1, (int)clob.length());
+                Clob clob = (Clob) object;
+                value_ = clob.getSubString(1, (int) clob.length());
             }
             /* ifdef JDBC40 
             else if( object instanceof SQLXML ) //@PDA jdbc40 
@@ -181,29 +163,24 @@ final class SQLNClob extends SQLDataBase
                 SQLXML xml = (SQLXML)object;
                 value_ = xml.getString();
             }
-            endif */ 
-            else
-            {
+            endif */
+            else {
                 JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
             }
 
             // Truncate if necessary.
             int valueLength = value_.length();
-            if(valueLength > maxLength_)
-            {
+            if (valueLength > maxLength_) {
                 value_ = value_.substring(0, maxLength_);
                 truncated_ = valueLength - maxLength_;
                 outOfBounds_ = false;
-            }
-            else
-            {
-                truncated_ = 0; outOfBounds_ = false; 
+            } else {
+                truncated_ = 0;
+                outOfBounds_ = false;
             }
 
             length_ = value_.length();
-        }
-        finally
-        {
+        } finally {
             savedObject_ = null;
         }
     }
@@ -214,114 +191,95 @@ final class SQLNClob extends SQLDataBase
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.NCLOB;
     }
 
-    public String getCreateParameters()
-    {
-        return AS400JDBCDriver.getResource("MAXLENGTH",null); 
+    public String getCreateParameters() {
+        return AS400JDBCDriver.getResource("MAXLENGTH", null);
     }
 
-    public int getDisplaySize()
-    {
+    public int getDisplaySize() {
         return maxLength_;
     }
 
-    public String getJavaClassName()
-    {
+    public String getJavaClassName() {
         return "com.ibm.as400.access.AS400JDBCNClob";
     }
 
-    public String getLiteralPrefix()
-    {
+    public String getLiteralPrefix() {
         return null;
     }
 
-    public String getLiteralSuffix()
-    {
+    public String getLiteralSuffix() {
         return null;
     }
 
-    public String getLocalName()
-    {
-        return "NCLOB"; 
-    }
-
-    public int getMaximumPrecision()
-    {
-        return AS400JDBCDatabaseMetaData.MAX_LOB_LENGTH; //@xml3 // the DB2 SQL reference says this should be 2147483647 but we return 1 less to allow for NOT NULL columns
-    }
-
-    public int getMaximumScale()
-    {
-        return 0;
-    }
-
-    public int getMinimumScale()
-    {
-        return 0;
-    }
-
-    public int getNativeType()
-    {
-        return 408;
-    }
-
-    public int getPrecision()
-    {
-        return maxLength_;
-    }
-
-    public int getRadix()
-    {
-        return 0;
-    }
-
-    public int getScale()
-    {
-        return 0;
-    }
-
-    public int getType()
-    {
-    	/* ifdef JDBC40 
-        return java.sql.Types.NCLOB;
-        endif */ 
-    	/* ifndef JDBC40  */ 
-    	return java.sql.Types.CLOB; 
-    	/* endif */ 
-    	 
-    	 
-    }
-
-    public String getTypeName()
-    {
+    public String getLocalName() {
         return "NCLOB";
     }
 
-    public boolean isSigned()
-    {
+    public int getMaximumPrecision() {
+        return AS400JDBCDatabaseMetaData.MAX_LOB_LENGTH; //@xml3 // the DB2 SQL reference says this should be 2147483647 but we return 1 less to allow for NOT NULL columns
+    }
+
+    public int getMaximumScale() {
+        return 0;
+    }
+
+    public int getMinimumScale() {
+        return 0;
+    }
+
+    public int getNativeType() {
+        return 408;
+    }
+
+    public int getPrecision() {
+        return maxLength_;
+    }
+
+    public int getRadix() {
+        return 0;
+    }
+
+    public int getScale() {
+        return 0;
+    }
+
+    public int getType() {
+    	/* ifdef JDBC40 
+        return java.sql.Types.NCLOB;
+        endif */
+        /* ifndef JDBC40  */
+        return java.sql.Types.CLOB;
+        /* endif */
+
+
+    }
+
+    public String getTypeName() {
+        return "NCLOB";
+    }
+
+    public boolean isSigned() {
         return false;
     }
 
-    public boolean isText()
-    {
+    public boolean isText() {
         return true;
     }
 
-    public int getActualSize()
-    {
+    public int getActualSize() {
         return value_.length();
     }
 
-    public int getTruncated()
-    {
+    public int getTruncated() {
         return truncated_;
     }
+
     public boolean getOutOfBounds() {
-      return outOfBounds_; 
+        return outOfBounds_;
     }
 
 
@@ -333,31 +291,27 @@ final class SQLNClob extends SQLDataBase
 
 
     public BigDecimal getBigDecimal(int scale)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public InputStream getBinaryStream()
-    throws SQLException
-    {
-        if(savedObject_ != null) doConversion();
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        if (savedObject_ != null) doConversion();
+        truncated_ = 0;
+        outOfBounds_ = false;
         return new HexReaderInputStream(new StringReader(value_));
     }
 
     public Blob getBlob()
-    throws SQLException
-    {
-        if(savedObject_ != null) doConversion();
-        truncated_ = 0; outOfBounds_ = false; 
-        try
-        {
+            throws SQLException {
+        if (savedObject_ != null) doConversion();
+        truncated_ = 0;
+        outOfBounds_ = false;
+        try {
             return new AS400JDBCBlob(BinaryConverter.stringToBytes(value_), maxLength_);
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             // this NClob contains non-hex characters
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, nfe);
             return null;
@@ -365,30 +319,25 @@ final class SQLNClob extends SQLDataBase
     }
 
     public boolean getBoolean()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return false;
     }
 
     public byte getByte()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return 0;
     }
 
     public byte[] getBytes()
-    throws SQLException
-    {
-        if(savedObject_ != null) doConversion();
-        truncated_ = 0; outOfBounds_ = false; 
-        try
-        {
+            throws SQLException {
+        if (savedObject_ != null) doConversion();
+        truncated_ = 0;
+        outOfBounds_ = false;
+        try {
             return BinaryConverter.stringToBytes(value_);
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             // this NClob contains non-hex characters
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, nfe);
             return null;
@@ -397,88 +346,80 @@ final class SQLNClob extends SQLDataBase
 
 
     public Date getDate(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public double getDouble()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return 0;
     }
 
     public float getFloat()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return 0;
     }
 
     public int getInt()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return 0;
     }
 
     public long getLong()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return 0;
     }
 
     public Object getObject()
-    throws SQLException
-    {
-        if(savedObject_ != null) doConversion();
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        if (savedObject_ != null) doConversion();
+        truncated_ = 0;
+        outOfBounds_ = false;
         /*ifdef JDBC40 
         return new AS400JDBCNClob(value_, maxLength_);
-        endif */ 
-        /* ifndef JDBC40 */ 
+        endif */
+        /* ifndef JDBC40 */
         return new AS400JDBCClob(value_, maxLength_);
-        /* endif */ 
+        /* endif */
     }
 
     public short getShort()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return 0;
     }
 
     public String getString()
-    throws SQLException
-    {
-        if(savedObject_ != null) doConversion();
-        truncated_ = 0; outOfBounds_ = false; 
-        return value_;     
+            throws SQLException {
+        if (savedObject_ != null) doConversion();
+        truncated_ = 0;
+        outOfBounds_ = false;
+        return value_;
     }
 
     public Time getTime(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public Timestamp getTimestamp(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
 
-    public String getNString() throws SQLException
-    {
-        if(savedObject_ != null) doConversion();
-        truncated_ = 0; outOfBounds_ = false; 
-        return value_;     
+    public String getNString() throws SQLException {
+        if (savedObject_ != null) doConversion();
+        truncated_ = 0;
+        outOfBounds_ = false;
+        return value_;
     }
 
 /* ifdef JDBC40 
@@ -512,10 +453,10 @@ final class SQLNClob extends SQLDataBase
         return new AS400JDBCSQLXML(value_);     
     }
 
-    endif */ 
-    
+    endif */
+
     public void saveValue() {
-      savedValue_ = value_; 
-   }
+        savedValue_ = value_;
+    }
 }
 

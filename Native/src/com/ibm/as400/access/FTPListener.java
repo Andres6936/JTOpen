@@ -12,42 +12,47 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 package com.ibm.as400.access;
+
 /**
-   The FTPListener interface provides
-   an interface for receiving FTPEvents.
-**/
+ * The FTPListener interface provides
+ * an interface for receiving FTPEvents.
+ **/
 
-public interface FTPListener extends java.util.EventListener
-{
-  /**
-   * Invoked after a connection has been established.
-   * @param event The ftp event.
-   **/
-  public void connected( FTPEvent event );
+public interface FTPListener extends java.util.EventListener {
+    /**
+     * Invoked after a connection has been established.
+     *
+     * @param event The ftp event.
+     **/
+    public void connected(FTPEvent event);
 
-  /**
-   * Invoked after the connection has been disconnected.
-   * @param event The ftp event.
-   **/
-  public void disconnected( FTPEvent event );
+    /**
+     * Invoked after the connection has been disconnected.
+     *
+     * @param event The ftp event.
+     **/
+    public void disconnected(FTPEvent event);
 
-  /**
-   * Invoked after a file has been retrieved from the system.
-   * @param event The ftp event.
-   **/
-  public void retrieved( FTPEvent event );
+    /**
+     * Invoked after a file has been retrieved from the system.
+     *
+     * @param event The ftp event.
+     **/
+    public void retrieved(FTPEvent event);
 
-  /**
-   * Invoked after a file has been put to the system.
-   * @param event The ftp event.
-   **/
-  public void put( FTPEvent event );
+    /**
+     * Invoked after a file has been put to the system.
+     *
+     * @param event The ftp event.
+     **/
+    public void put(FTPEvent event);
 
-  /**
-   * Invoked after a list of files on the system has been retrieved.
-   * @param event The ftp event.
-   **/
-  public void listed( FTPEvent event );
+    /**
+     * Invoked after a list of files on the system has been retrieved.
+     *
+     * @param event The ftp event.
+     **/
+    public void listed(FTPEvent event);
 
 }
 

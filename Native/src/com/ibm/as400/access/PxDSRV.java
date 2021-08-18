@@ -17,49 +17,42 @@ import java.io.InputStream;
 import java.io.IOException;
 
 
-
 /**
-The PxDSRV interface represents the set of
-methods that are needed by the reader of a datastream.
-**/
-interface PxDSRV 
-extends Cloneable
-{
+ * The PxDSRV interface represents the set of
+ * methods that are needed by the reader of a datastream.
+ **/
+interface PxDSRV
+        extends Cloneable {
 
 
-
-/**
-Returns a new copy of this datastream.
-
-@return A new copy of this datastream.
-
-@exception CloneNotSupportedException   If the object cannot be cloned.
-**/
-    public abstract Object clone ()
-        throws CloneNotSupportedException;
+    /**
+     * Returns a new copy of this datastream.
+     *
+     * @return A new copy of this datastream.
+     * @throws CloneNotSupportedException If the object cannot be cloned.
+     **/
+    public abstract Object clone()
+            throws CloneNotSupportedException;
 
 
-
-/**
-Returns the datastream type.
-
-@return The datastream type.
-**/
-    public abstract short getType ();
-
+    /**
+     * Returns the datastream type.
+     *
+     * @return The datastream type.
+     **/
+    public abstract short getType();
 
 
-/**
-Loads this datastream by reading from an input stream.
-
-@param input    The input stream.
-@param factory  The datastream factory.  This is sometimes
-                needed when datastreams are nested.
-
-@exception IOException  If an error occurs.                
-**/
-    public abstract void readFrom (InputStream input, PxDSFactory factory)
-        throws IOException;
+    /**
+     * Loads this datastream by reading from an input stream.
+     *
+     * @param input   The input stream.
+     * @param factory The datastream factory.  This is sometimes
+     *                needed when datastreams are nested.
+     * @throws IOException If an error occurs.
+     **/
+    public abstract void readFrom(InputStream input, PxDSFactory factory)
+            throws IOException;
 
 
 }

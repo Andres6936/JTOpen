@@ -22,22 +22,24 @@ public class ARPPacket extends IPPacket {
 
     /**
      * Creates and parses the data of this header.
-     * @param data   The packet of data.
-     * @param frmtype   The frame type of this packet.
+     *
+     * @param data    The packet of data.
+     * @param frmtype The frame type of this packet.
      */
-    public ARPPacket(byte[] data,int frmtype) {
-		rawpacket = data;
-		this.frmtype = frmtype;
-		header = new ARPHeader(new BitBuf(rawpacket),frmtype);
+    public ARPPacket(byte[] data, int frmtype) {
+        rawpacket = data;
+        this.frmtype = frmtype;
+        header = new ARPHeader(new BitBuf(rawpacket), frmtype);
     }
 
     /**
      * Returns a printable representation of this packet.
-     * @param filter	    FormatProperties object for filtering this packet.
-     * @return	    Returns a string representation of this packet.
+     *
+     * @param filter FormatProperties object for filtering this packet.
+     * @return Returns a string representation of this packet.
      */
     public String toString(FormatProperties filter) {
-		return header.toString(filter);
+        return header.toString(filter);
     }
 }
 

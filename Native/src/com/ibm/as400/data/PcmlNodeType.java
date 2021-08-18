@@ -14,11 +14,11 @@
 package com.ibm.as400.data;
 
 final class PcmlNodeType {
-    public static final int UNSUPPORTED	= 1;
-    public static final int DOCUMENT 	= 1;
-    public static final int PROGRAM 	= 2;
-    public static final int STRUCT  	= 3;
-    public static final int DATA 		= 4;
-    public static final int RFML      = 5;                 // @A1A
-    public static final int RECORDFORMAT  = 6;             // @A1A
+    public static final int UNSUPPORTED = 1;
+    public static final int DOCUMENT = 1;
+    public static final int PROGRAM = 2;
+    public static final int STRUCT = 3;
+    public static final int DATA = 4;
+    public static final int RFML = 5;                 // @A1A
+    public static final int RECORDFORMAT = 6;             // @A1A
 }

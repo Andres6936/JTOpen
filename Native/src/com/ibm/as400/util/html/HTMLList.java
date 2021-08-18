@@ -20,24 +20,23 @@ import java.util.Vector;
 
 
 /**
-*  The HTMLList class represents a list.  The list can either be an ordered
-*  list &lt;ol&gt; or an unordered list &lt;ul&gt;.
-*
-*  <p>HTMLList objects generate the following events:
-*  <ul>
-*  <LI><A HREF="ElementEvent.html">ElementEvent</A> - The events fired are:
-*    <ul>
-*    <li>elementAdded
-*    <li>elementRemoved
-*    </ul>
-*  <li>PropertyChangeEvent
-*  </ul>
-*  
-**/
+ * The HTMLList class represents a list.  The list can either be an ordered
+ * list &lt;ol&gt; or an unordered list &lt;ul&gt;.
+ *
+ * <p>HTMLList objects generate the following events:
+ * <ul>
+ * <LI><A HREF="ElementEvent.html">ElementEvent</A> - The events fired are:
+ *   <ul>
+ *   <li>elementAdded
+ *   <li>elementRemoved
+ *   </ul>
+ * <li>PropertyChangeEvent
+ * </ul>
+ **/
 public abstract class HTMLList extends HTMLTagAttributes implements java.io.Serializable     // @Z1C
 {
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
-  static final long serialVersionUID = -3017041765887905594L;
+    static final long serialVersionUID = -3017041765887905594L;
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
     private boolean compact_ = false;
     private Vector listItems_;
@@ -51,21 +50,20 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
 
 
     /**
-    *  Constructs a default HTMLList object.
-    **/
-    public HTMLList()
-    {
+     * Constructs a default HTMLList object.
+     **/
+    public HTMLList() {
         super();
         listItems_ = new Vector();
     }
 
 
     /**
-    *  Constructs an HTMLList object with the specified <i>itemList</i>.
-    *  @param itemList The items in the HTMLList.
-    **/
-    public HTMLList(Vector itemList)
-    {
+     * Constructs an HTMLList object with the specified <i>itemList</i>.
+     *
+     * @param itemList The items in the HTMLList.
+     **/
+    public HTMLList(Vector itemList) {
         super();
 
         setItems(itemList);
@@ -73,11 +71,11 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
 
 
     /**
-     *  Adds an HTMLListItem <i>item</i> to the HTMLList.
-     *  @param item The HTMLTagElement.
+     * Adds an HTMLListItem <i>item</i> to the HTMLList.
+     *
+     * @param item The HTMLTagElement.
      **/
-    public void addListItem(HTMLListItem item)
-    {
+    public void addListItem(HTMLListItem item) {
         //@C1D
 
         if (item == null)
@@ -90,11 +88,11 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
 
 
     /**
-     *  Adds an HTML <i>list</i> to the HTMLList.
-     *  @param list The HTMLList.
+     * Adds an HTML <i>list</i> to the HTMLList.
+     *
+     * @param list The HTMLList.
      **/
-    public void addList(HTMLList list)
-    {
+    public void addList(HTMLList list) {
         //@C1D
 
         if (list == null)
@@ -107,12 +105,11 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
 
 
     /**
-    *  Adds an ElementListener.
-    *
-    *  @param listener The ElementListener.
-    **/
-    public void addListItemElementListener(ElementListener listener)
-    {
+     * Adds an ElementListener.
+     *
+     * @param listener The ElementListener.
+     **/
+    public void addListItemElementListener(ElementListener listener) {
         if (listener == null)
             throw new NullPointerException("listener");
 
@@ -121,19 +118,16 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
     }
 
 
-
     /**
-    *  Fires the element event.
-    **/
-    private void fireElementEvent(int evt)
-    {
-      if (elementListeners == null) return; //@CRS
+     * Fires the element event.
+     **/
+    private void fireElementEvent(int evt) {
+        if (elementListeners == null) return; //@CRS
         Vector targets;
         targets = (Vector) elementListeners.clone();
         ElementEvent elementEvt = new ElementEvent(this, evt);
-        for (int i = 0; i < targets.size(); i++)
-        {
-            ElementListener target = (ElementListener)targets.elementAt(i);
+        for (int i = 0; i < targets.size(); i++) {
+            ElementListener target = (ElementListener) targets.elementAt(i);
             if (evt == ElementEvent.ELEMENT_ADDED)
                 target.elementAdded(elementEvt);
             else if (evt == ElementEvent.ELEMENT_REMOVED)
@@ -143,27 +137,51 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
 
 
     /**
-    *  Returns the <i>direction</i> of the text interpretation.
-    *  @return The direction of the text.
-    **/
+     * Returns the <i>direction</i> of the text interpretation.
+     *
+     * @return The direction of the text.
+     **/
     public String getDirection()                               //$B1A
     {
         return dir_;
     }
 
+    /**
+     * Sets the <i>direction</i> of the text interpretation.
+     *
+     * @param dir The direction.  One of the following constants
+     *            defined in HTMLConstants:  LTR or RTL.
+     * @see HTMLConstants
+     **/
+    public void setDirection(String dir)                                     //$B1A
+    {
+        if (dir == null)
+            throw new NullPointerException("dir");
+
+        // If direction is not one of the valid HTMLConstants, throw an exception.
+        if (!(dir.equals(HTMLConstants.LTR)) && !(dir.equals(HTMLConstants.RTL)))
+            throw new ExtendedIllegalArgumentException("dir", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+
+        String old = dir_;
+
+        dir_ = dir;
+
+        if (changes_ != null) changes_.firePropertyChange("dir", old, dir); //@CRS
+    }
 
     /**
-    *  Returns the direction attribute tag.
-    *  @return The direction tag.
-    **/
+     * Returns the direction attribute tag.
+     *
+     * @return The direction tag.
+     **/
     String getDirectionAttributeTag()                                                 //$B1A
     {
-        
-        if(useFO_)                                                              //@D1A
+
+        if (useFO_)                                                              //@D1A
         {                                                                       //@D1A
-            if((dir_!=null) && (dir_.length()>0))                               //@D1A
+            if ((dir_ != null) && (dir_.length() > 0))                               //@D1A
             {                                                                   //@D1A
-                if(dir_.equals(HTMLConstants.RTL))                              //@D1A
+                if (dir_.equals(HTMLConstants.RTL))                              //@D1A
                     return " writing-mode='rl'";                                //@D1A
                 else                                                            //@D1A
                     return " writing-mode='lr'";                                //@D1A
@@ -175,96 +193,102 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
         {                                                                       //@D1A
             //@C1D
 
-            if ((dir_ != null) && (dir_.length() > 0))
-            {
+            if ((dir_ != null) && (dir_.length() > 0)) {
                 StringBuffer buffer = new StringBuffer(" dir=\"");
                 buffer.append(dir_);
                 buffer.append("\"");
 
                 return buffer.toString();
-            }
-            else
+            } else
                 return "";
         }                                                                       //@D1A
-        
+
     }
 
-
     /**
-    *  Returns the number of items in the HTMLList.
-    *  @return The number of items.
-    **/
-    public int getItemCount()
-    {
+     * Returns the number of items in the HTMLList.
+     *
+     * @return The number of items.
+     **/
+    public int getItemCount() {
         return listItems_.size();
     }
 
-
-
     /**
-    *  Returns the list of items.
-    *  @return The items.
-    **/
-    public Vector getItems()
-    {
+     * Returns the list of items.
+     *
+     * @return The items.
+     **/
+    public Vector getItems() {
         return listItems_;
     }
 
+    /**
+     * Sets the items in the HTMLList.
+     *
+     * @param itemList The list of items.
+     **/
+    public void setItems(Vector itemList) {
+        if (itemList == null)
+            throw new NullPointerException("items");
+
+        //@C1D
+
+        Vector old = listItems_;
+
+        listItems_ = itemList;
+
+        if (changes_ != null) changes_.firePropertyChange("items", old, itemList); //@CRS
+    }
 
     /**
-    *  Returns the item attribute tags.
-    *  @return The item tags.
-    **/
-    String getItemAttributeTag()
-    {
+     * Returns the item attribute tags.
+     *
+     * @return The item tags.
+     **/
+    String getItemAttributeTag() {
         StringBuffer s = new StringBuffer("");
-        for (int i=0; i < listItems_.size(); i++)
-        {
-            HTMLTagElement item = (HTMLTagElement)listItems_.elementAt(i);
+        for (int i = 0; i < listItems_.size(); i++) {
+            HTMLTagElement item = (HTMLTagElement) listItems_.elementAt(i);
             s.append(item.getTag());
         }
 
         return s.toString();
     }
 
-
     /**
-    *  Returns the item attribute tags.
-    *  @param type The type of numbering or bulleting used as defined in HTMLConstants
-    *  @return The item tags.
-    **/
+     * Returns the item attribute tags.
+     *
+     * @param type The type of numbering or bulleting used as defined in HTMLConstants
+     * @return The item tags.
+     **/
     String getItemAttributeFOTag(String type)               //@D1A
     {
         String itemType = null;
         int listItemCounter = 0;
         StringBuffer s = new StringBuffer("");
         int size = listItems_.size();
-        for (int i=0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             s.append("<fo:list-item>\n<fo:list-item-label>");
-            HTMLTagElement item = (HTMLTagElement)listItems_.elementAt(i);
-            if(listItems_.elementAt(i) instanceof HTMLListItem)
-            {   
+            HTMLTagElement item = (HTMLTagElement) listItems_.elementAt(i);
+            if (listItems_.elementAt(i) instanceof HTMLListItem) {
                 listItemCounter++;
-                if(listItems_.elementAt(i) instanceof OrderedListItem)
-                {
-                    OrderedListItem listItem = (OrderedListItem)listItems_.elementAt(i);
+                if (listItems_.elementAt(i) instanceof OrderedListItem) {
+                    OrderedListItem listItem = (OrderedListItem) listItems_.elementAt(i);
                     //Check to see if the user specified a starting value for the list item
                     value_ = listItem.getValue();
-                    if(value_ > 0)
+                    if (value_ > 0)
                         listItemCounter = value_;
                     //Check to see if the user specified a new type for the label
                     itemType = listItem.getType();
-                }
-                else
-                {
-                    UnorderedListItem listItem = (UnorderedListItem)listItems_.elementAt(i);
+                } else {
+                    UnorderedListItem listItem = (UnorderedListItem) listItems_.elementAt(i);
                     //Check to see if the user specified a new type for the label
                     itemType = listItem.getType();
                 }
-                if(itemType == null)                //User didn't specify a type for the specific list item, use list's type for label
+                if (itemType == null)                //User didn't specify a type for the specific list item, use list's type for label
                     itemType = type;
-                HTMLListItem listItem = (HTMLListItem)listItems_.elementAt(i);
+                HTMLListItem listItem = (HTMLListItem) listItems_.elementAt(i);
                 s.append(listItem.getTypeAttributeFO(itemType, listItemCounter));
             }
             s.append("</fo:list-item-label>\n<fo:list-item-body>");
@@ -276,187 +300,22 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
         return s.toString();
     }
 
-
     /**
-    *  Returns the <i>language</i> of the input element.
-    *  @return The language of the input element.
-    **/
+     * Returns the <i>language</i> of the input element.
+     *
+     * @return The language of the input element.
+     **/
     public String getLanguage()                                //$B1A
     {
         return lang_;
     }
 
-
     /**
-    *  Returns the language attribute tag.
-    *  @return The language tag.
-    **/
-    String getLanguageAttributeTag()                                                  //$B1A
-    {
-        //@C1D
-
-        if ((lang_ != null) && (lang_.length() > 0))
-        {
-            StringBuffer buffer = new StringBuffer(" lang=\"");
-            buffer.append(lang_);
-            buffer.append("\"");
-
-            return buffer.toString();
-        }
-        else
-            return "";
-    }
-
-
-    /**
-    *  Indicates if the list is initialized to compact.
-    *  @return true if compact; false otherwise.
-    **/
-    public boolean isCompact()
-    {
-        return compact_;
-    }
-
-
-    /**
-     *  Returns if Formatting Object tags are outputted.
-     *  The default value is false.
-     *  @return true if the output generated is an XSL formatting object, false if the output generated is HTML.
-     **/
-    public boolean isUseFO()            //@D1A
-    {
-        return useFO_;
-    }
-
-    /**
-    *  Deserializes and initializes transient data.
-    **/
-    private void readObject(java.io.ObjectInputStream in)
-    throws java.io.IOException, ClassNotFoundException
-    {
-        in.defaultReadObject();
-        //@CRS changes_ = new PropertyChangeSupport(this);
-        //@CRS elementListeners = new Vector();
-    }
-
-
-    /**
-     *  Removes an HTMLListItem <i>item</i> from the HTMLList.
-     *  @param item The HTMLTagElement.
-     **/
-    public void removeListItem(HTMLListItem item)
-    {
-        //@C1D
-
-        if (item == null)
-            throw new NullPointerException("item");
-
-        if (listItems_.removeElement(item))
-            fireElementEvent(ElementEvent.ELEMENT_REMOVED);
-    }
-
-
-    /**
-     *  Removes an HTML <i>list</i> from the HTMLList.
-     *  @param list The HTMLList.
-     **/
-    public void removeList(HTMLList list)
-    {
-        //@C1D
-
-        if (list == null)
-            throw new NullPointerException("list");
-
-        if (listItems_.removeElement(list))
-            fireElementEvent(ElementEvent.ELEMENT_REMOVED);
-    }
-
-
-    /**
-     *  Removes this ElementListener.
+     * Sets the <i>language</i> of the input tag.
      *
-     *  @param listener The ElementListener.
+     * @param lang The language.  Example language tags include:
+     *             en and en-US.
      **/
-    public void removeListItemElementListener(ElementListener listener)
-    {
-        if (listener == null)
-            throw new NullPointerException("listener");
-
-        if (elementListeners != null) elementListeners.removeElement(listener); //@CRS
-    }
-
-
-
-    /**
-    *  Sets whether the list is initialized to being compact.  The <i>compact</i> attribute
-    *  instructs the browser to reduce the space occupied by the list.
-    *  @param compact true if initialized to compact; false otherwise.  The default is false.
-    *
-    **/
-    public void setCompact(boolean compact)
-    {
-        //@C1D
-
-        boolean old = compact_;
-
-        compact_ = compact;
-
-        if (changes_ != null) changes_.firePropertyChange("compact", new Boolean(old), new Boolean(compact) ); //@CRS
-    }
-
-
-    /**
-    *  Sets the <i>direction</i> of the text interpretation.
-    *  @param dir The direction.  One of the following constants
-    *  defined in HTMLConstants:  LTR or RTL.
-    *
-    *  @see HTMLConstants
-    *
-    **/
-    public void setDirection(String dir)                                     //$B1A
-    {
-        if (dir == null)
-            throw new NullPointerException("dir");
-
-        // If direction is not one of the valid HTMLConstants, throw an exception.
-        if ( !(dir.equals(HTMLConstants.LTR))  && !(dir.equals(HTMLConstants.RTL)) )
-            throw new ExtendedIllegalArgumentException("dir", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-
-        String old = dir_;
-
-        dir_ = dir;
-
-        if (changes_ != null) changes_.firePropertyChange("dir", old, dir ); //@CRS
-    }
-
-
-
-    /**
-    *  Sets the items in the HTMLList.
-    *  @param itemList The list of items.
-    *
-    **/
-    public void setItems(Vector itemList)
-    {
-        if (itemList == null)
-            throw new NullPointerException("items");
-
-        //@C1D
-
-        Vector old = listItems_;
-
-        listItems_ = itemList;
-
-        if (changes_ != null) changes_.firePropertyChange("items", old, itemList ); //@CRS
-    }
-
-
-    /**
-    *  Sets the <i>language</i> of the input tag.
-    *  @param lang The language.  Example language tags include:
-    *  en and en-US.
-    *
-    **/
     public void setLanguage(String lang)                                      //$B1A
     {
         if (lang == null)
@@ -466,30 +325,137 @@ public abstract class HTMLList extends HTMLTagAttributes implements java.io.Seri
 
         lang_ = lang;
 
-        if (changes_ != null) changes_.firePropertyChange("lang", old, lang ); //@CRS
+        if (changes_ != null) changes_.firePropertyChange("lang", old, lang); //@CRS
     }
 
+    /**
+     * Returns the language attribute tag.
+     *
+     * @return The language tag.
+     **/
+    String getLanguageAttributeTag()                                                  //$B1A
+    {
+        //@C1D
 
-    /** 
-    * Sets if Formatting Object tags should be used. 
-    *  The default value is false.
-    * @param useFO - true if output generated is an XSL formatting object, false if the output generated is HTML. 
-    **/
+        if ((lang_ != null) && (lang_.length() > 0)) {
+            StringBuffer buffer = new StringBuffer(" lang=\"");
+            buffer.append(lang_);
+            buffer.append("\"");
+
+            return buffer.toString();
+        } else
+            return "";
+    }
+
+    /**
+     * Indicates if the list is initialized to compact.
+     *
+     * @return true if compact; false otherwise.
+     **/
+    public boolean isCompact() {
+        return compact_;
+    }
+
+    /**
+     * Sets whether the list is initialized to being compact.  The <i>compact</i> attribute
+     * instructs the browser to reduce the space occupied by the list.
+     *
+     * @param compact true if initialized to compact; false otherwise.  The default is false.
+     **/
+    public void setCompact(boolean compact) {
+        //@C1D
+
+        boolean old = compact_;
+
+        compact_ = compact;
+
+        if (changes_ != null) changes_.firePropertyChange("compact", new Boolean(old), new Boolean(compact)); //@CRS
+    }
+
+    /**
+     * Returns if Formatting Object tags are outputted.
+     * The default value is false.
+     *
+     * @return true if the output generated is an XSL formatting object, false if the output generated is HTML.
+     **/
+    public boolean isUseFO()            //@D1A
+    {
+        return useFO_;
+    }
+
+    /**
+     * Sets if Formatting Object tags should be used.
+     * The default value is false.
+     *
+     * @param useFO - true if output generated is an XSL formatting object, false if the output generated is HTML.
+     **/
     public void setUseFO(boolean useFO)                                        //@D1A
     {
         boolean old = useFO_;
 
         useFO_ = useFO;
 
-        if (changes_ != null) changes_.firePropertyChange("useFO", old, useFO );
+        if (changes_ != null) changes_.firePropertyChange("useFO", old, useFO);
     }
 
     /**
-    *  Returns a String representation for the HTMLList tag.
-    *  @return The tag.
-    **/
-    public String toString()
-    {
+     * Deserializes and initializes transient data.
+     **/
+    private void readObject(java.io.ObjectInputStream in)
+            throws java.io.IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        //@CRS changes_ = new PropertyChangeSupport(this);
+        //@CRS elementListeners = new Vector();
+    }
+
+    /**
+     * Removes an HTMLListItem <i>item</i> from the HTMLList.
+     *
+     * @param item The HTMLTagElement.
+     **/
+    public void removeListItem(HTMLListItem item) {
+        //@C1D
+
+        if (item == null)
+            throw new NullPointerException("item");
+
+        if (listItems_.removeElement(item))
+            fireElementEvent(ElementEvent.ELEMENT_REMOVED);
+    }
+
+    /**
+     * Removes an HTML <i>list</i> from the HTMLList.
+     *
+     * @param list The HTMLList.
+     **/
+    public void removeList(HTMLList list) {
+        //@C1D
+
+        if (list == null)
+            throw new NullPointerException("list");
+
+        if (listItems_.removeElement(list))
+            fireElementEvent(ElementEvent.ELEMENT_REMOVED);
+    }
+
+    /**
+     * Removes this ElementListener.
+     *
+     * @param listener The ElementListener.
+     **/
+    public void removeListItemElementListener(ElementListener listener) {
+        if (listener == null)
+            throw new NullPointerException("listener");
+
+        if (elementListeners != null) elementListeners.removeElement(listener); //@CRS
+    }
+
+    /**
+     * Returns a String representation for the HTMLList tag.
+     *
+     * @return The tag.
+     **/
+    public String toString() {
         return getTag();
     }
 }

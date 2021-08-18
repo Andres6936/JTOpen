@@ -20,20 +20,22 @@ package com.ibm.as400.util.commtrace;
  */
 public class Destination extends ExtHeader {
 
-	/**
-	 * Creates and parses the data of this header. 
-	 * @param data	The raw data of this header. 
-	 */
-	Destination(BitBuf data) {
-		super(data);
-		type=Header.EXTDEST;
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    Destination(BitBuf data) {
+        super(data);
+        type = Header.EXTDEST;
+    }
 
-	/**
-	 * Returns the length of this header.
-	 * @return The length of this header.
-	 */	
-	public int getHeaderLen() {
-		return 64 + ((rawheader.getOctet(8) & 0xFF) * 64);
-	}
+    /**
+     * Returns the length of this header.
+     *
+     * @return The length of this header.
+     */
+    public int getHeaderLen() {
+        return 64 + ((rawheader.getOctet(8) & 0xFF) * 64);
+    }
 }

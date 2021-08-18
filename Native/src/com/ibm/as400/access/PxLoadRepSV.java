@@ -15,30 +15,25 @@ package com.ibm.as400.access;
 
 
 /**
-The PxLoadRepSV class represents the
-server view of a load reply.
-**/
+ * The PxLoadRepSV class represents the
+ * server view of a load reply.
+ **/
 class PxLoadRepSV
-extends PxRepSV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+        extends PxRepSV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
-
-
-/**
-Constructs a PxLoadRepSV object.
-
-@param load The load.
-**/
-    public PxLoadRepSV (PSLoad load)
-    {
-        super (ProxyConstants.DS_LOAD_REP);
-        addParm (new PxIntParm (load.getActiveConnections ()));
-        addParm (new PxIntParm (load.getBalanceThreshold ()));
-        addParm (new PxIntParm (load.getMaxConnections ()));
+    /**
+     * Constructs a PxLoadRepSV object.
+     *
+     * @param load The load.
+     **/
+    public PxLoadRepSV(PSLoad load) {
+        super(ProxyConstants.DS_LOAD_REP);
+        addParm(new PxIntParm(load.getActiveConnections()));
+        addParm(new PxIntParm(load.getBalanceThreshold()));
+        addParm(new PxIntParm(load.getMaxConnections()));
     }
-
 
 
 }

@@ -14,45 +14,36 @@
 package com.ibm.as400.data;
 
 /**
-  *  The StructDescriptor class implements the methods of the Descriptor interface
-  *  that are unique to the <struct> tag.
-  *
-  **/
+ * The StructDescriptor class implements the methods of the Descriptor interface
+ * that are unique to the <struct> tag.
+ **/
 
-class StructDescriptor extends DocNodeDescriptor
-{
+class StructDescriptor extends DocNodeDescriptor {
     /* Constructor */
-    public StructDescriptor(PcmlDocNode node)
-    {
+    public StructDescriptor(PcmlDocNode node) {
         super(node);
     }
-   /**
-    * Return list of valid attributes for the <pcml> tag. 
-    **/
-    public String[] getAttributeList()
-    {
-        return ((PcmlStruct)getDocNode()).getAttributeList();  
+
+    /**
+     * Return list of valid attributes for the <pcml> tag.
+     **/
+    public String[] getAttributeList() {
+        return ((PcmlStruct) getDocNode()).getAttributeList();
     }
 
-   /**
-    * Return a String containing the current value for the requested attribute.
-    **/
-    public String getAttributeValue(String attr)
-    {
-        if (attr != null)
-        {
-            if (attr.equals("name"))
-            {
+    /**
+     * Return a String containing the current value for the requested attribute.
+     **/
+    public String getAttributeValue(String attr) {
+        if (attr != null) {
+            if (attr.equals("name")) {
                 String name = getDocNode().getName();
                 if (name.equals(""))
                     return null;
                 else
                     return name;
-            }
-            else if (attr.equals("usage"))
-            {
-                switch (getDocNode().getUsage()) 
-                {
+            } else if (attr.equals("usage")) {
+                switch (getDocNode().getUsage()) {
                     case PcmlDocNode.INPUT:
                         return "input";
                     case PcmlDocNode.INPUTOUTPUT:
@@ -62,68 +53,55 @@ class StructDescriptor extends DocNodeDescriptor
                     default:
                         return "inherit";
                 }
-            }
-            else if (attr.equals("count"))
-            {
-                String countId = ((PcmlStruct)getDocNode()).getUnqualifiedCountId();
+            } else if (attr.equals("count")) {
+                String countId = ((PcmlStruct) getDocNode()).getUnqualifiedCountId();
                 if (countId != null)
                     return countId;
-                else
-                {
-                    int count = ((PcmlStruct)getDocNode()).getCount();
+                else {
+                    int count = ((PcmlStruct) getDocNode()).getCount();
                     if (count < 1)
                         return null;
                     else
                         return Integer.toString(count);
                 }
-            }
-            else if (attr.equals("minvrm"))
-                return ((PcmlStruct)getDocNode()).getMinvrmString();  
+            } else if (attr.equals("minvrm"))
+                return ((PcmlStruct) getDocNode()).getMinvrmString();
             else if (attr.equals("maxvrm"))
-                return ((PcmlStruct)getDocNode()).getMaxvrmString();  
-            else if (attr.equals("offset")) 
-            {
-                String offsetId = ((PcmlStruct)getDocNode()).getUnqualifiedOffsetId();
+                return ((PcmlStruct) getDocNode()).getMaxvrmString();
+            else if (attr.equals("offset")) {
+                String offsetId = ((PcmlStruct) getDocNode()).getUnqualifiedOffsetId();
                 if (offsetId != null)
                     return offsetId;
-                else
-                {
-                    int offset = ((PcmlStruct)getDocNode()).getOffset();
+                else {
+                    int offset = ((PcmlStruct) getDocNode()).getOffset();
                     if (offset < 1)
                         return null;
                     else
                         return Integer.toString(offset);
                 }
-            }
-            else if (attr.equals("offsetfrom"))
-            {
-                String offsetfromId = ((PcmlStruct)getDocNode()).getUnqualifiedOffsetfromId();
+            } else if (attr.equals("offsetfrom")) {
+                String offsetfromId = ((PcmlStruct) getDocNode()).getUnqualifiedOffsetfromId();
                 if (offsetfromId != null)
                     return offsetfromId;
-                else
-                {
-                    int offsetfrom = ((PcmlStruct)getDocNode()).getOffsetfrom();
+                else {
+                    int offsetfrom = ((PcmlStruct) getDocNode()).getOffsetfrom();
                     if (offsetfrom < 0)
                         return null;
                     else
                         return Integer.toString(offsetfrom);
                 }
-            }
-            else if (attr.equals("outputsize"))
-            {
-                String outputsizeId = ((PcmlStruct)getDocNode()).getUnqualifiedOutputsizeId();
+            } else if (attr.equals("outputsize")) {
+                String outputsizeId = ((PcmlStruct) getDocNode()).getUnqualifiedOutputsizeId();
                 if (outputsizeId != null)
                     return outputsizeId;
-                else
-                {
-                    int outputsize = ((PcmlStruct)getDocNode()).getOutputsize();
+                else {
+                    int outputsize = ((PcmlStruct) getDocNode()).getOutputsize();
                     if (outputsize < 1)
                         return null;
                     else
                         return Integer.toString(outputsize);
                 }
-            }
-            else
+            } else
                 return null;
         }
         return null;

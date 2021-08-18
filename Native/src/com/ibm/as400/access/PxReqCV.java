@@ -19,72 +19,62 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 
-
 /**
-The PxReqCV class represents the client
-portion of a request.
-**/
-public  abstract class PxReqCV
-extends PxCompDS
-implements PxDSWV
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
-
+ * The PxReqCV class represents the client
+ * portion of a request.
+ **/
+public abstract class PxReqCV
+        extends PxCompDS
+        implements PxDSWV {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
-    private static long     nextCorrelationId_      = 0;
-    private static Object   nextCorrelationIdLock_  = new Object();
+    private static long nextCorrelationId_ = 0;
+    private static Object nextCorrelationIdLock_ = new Object();
 
-    private long    correlationId_;
+    private long correlationId_;
     private boolean asynchronous_;
 
-    private long    clientId_ = -1;    // @D1a @D2C
+    private long clientId_ = -1;    // @D1a @D2C
 
 
-
-/**
-Constructs a PxReqCV object.
-
-@param type The datastream type.  Valid values are listed in
-            the ProxyConstants class.
-**/
-    public PxReqCV (short type)
-    {
+    /**
+     * Constructs a PxReqCV object.
+     *
+     * @param type The datastream type.  Valid values are listed in
+     *             the ProxyConstants class.
+     **/
+    public PxReqCV(short type) {
         this(type, false);
     }
 
 
-
-/**
-Constructs a PxReqCV object.
-
-@param type The datastream type.  Valid values are listed in
-            the ProxyConstants class.
-@param asynchronous true if asynchronous, false otherwise.
-**/
-    public PxReqCV (short type, boolean asynchronous)
-    {
-        super (type);
+    /**
+     * Constructs a PxReqCV object.
+     *
+     * @param type         The datastream type.  Valid values are listed in
+     *                     the ProxyConstants class.
+     * @param asynchronous true if asynchronous, false otherwise.
+     **/
+    public PxReqCV(short type, boolean asynchronous) {
+        super(type);
         asynchronous_ = asynchronous;
 
-        synchronized(nextCorrelationIdLock_) {
+        synchronized (nextCorrelationIdLock_) {
             correlationId_ = ++nextCorrelationId_;
         }
     }
 
 
-
-/**
-Dumps the datastream for debugging and tracing.
-
-@param output   The print writer.
-**/
-    public void dump (PrintWriter output)
-    {
+    /**
+     * Dumps the datastream for debugging and tracing.
+     *
+     * @param output The print writer.
+     **/
+    public void dump(PrintWriter output) {
         synchronized (output) {
-            super.dump (output);
+            super.dump(output);
             output.println("   Correlation id = " + correlationId_);
             if (asynchronous_)
                 output.println("   Asynchronous");
@@ -98,32 +88,27 @@ Dumps the datastream for debugging and tracing.
     }
 
 
-
-    public long getCorrelationId()
-    {
+    public long getCorrelationId() {
         return correlationId_;
     }
 
 
-
-/**
-Writes the contents of the datastream to an output stream.
-
-@param output   The output stream.
-
-@exception IOException  If an error occurs.
-**/
-    public void writeTo (OutputStream output)
-        throws IOException
-    {
-        super.writeTo (output);
-        DataOutputStream dataOutput = new DataOutputStream (output);
+    /**
+     * Writes the contents of the datastream to an output stream.
+     *
+     * @param output The output stream.
+     * @throws IOException If an error occurs.
+     **/
+    public void writeTo(OutputStream output)
+            throws IOException {
+        super.writeTo(output);
+        DataOutputStream dataOutput = new DataOutputStream(output);
         dataOutput.writeLong(correlationId_);
         dataOutput.writeBoolean(asynchronous_);
 
         // If given a client ID, add it to the end of the stream
         // @D2D if (clientId_ != null)            // @D1a
-           dataOutput.writeLong(clientId_);   // @D1a @D2C
+        dataOutput.writeLong(clientId_);   // @D1a @D2C
     }
 
 

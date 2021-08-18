@@ -16,10 +16,9 @@ package com.ibm.as400.access;
 import java.util.EventObject;
 
 /**
- The ObjectEvent class represents an Object event.
+ * The ObjectEvent class represents an Object event.
  **/
-public class ObjectEvent extends EventObject
-{
+public class ObjectEvent extends EventObject {
     private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
     static final long serialVersionUID = 4L;
@@ -37,11 +36,11 @@ public class ObjectEvent extends EventObject
     static final int OBJECT_OPENED = 3;
 
     /**
-     Constructs an ObjectEvent object.  It uses the specified source.
-     @param  source  The object where the event originated.
+     * Constructs an ObjectEvent object.  It uses the specified source.
+     *
+     * @param source The object where the event originated.
      **/
-    public ObjectEvent(Object source)
-    {
+    public ObjectEvent(Object source) {
         super(source);
     }
 }

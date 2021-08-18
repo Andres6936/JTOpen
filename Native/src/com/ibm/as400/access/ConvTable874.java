@@ -14,12 +14,10 @@
 package com.ibm.as400.access;
 
 // This is a Thai character set.
-class ConvTable874 extends ConvTable9066
-{
+class ConvTable874 extends ConvTable9066 {
     private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-    ConvTable874()
-    {
+    ConvTable874() {
         super(874);
     }
 }

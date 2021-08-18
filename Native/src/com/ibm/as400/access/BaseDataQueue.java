@@ -24,13 +24,12 @@ import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 /**
- Represents an IBM i data queue object.
+ * Represents an IBM i data queue object.
  **/
-public abstract class BaseDataQueue implements Serializable
-{
+public abstract class BaseDataQueue implements Serializable {
     private static final String CLASSNAME = "com.ibm.as400.access.BaseDataQueue";
-    static
-    {
+
+    static {
         if (Trace.traceOn_) Trace.logLoadPath(CLASSNAME);
     }
 
@@ -78,32 +77,30 @@ public abstract class BaseDataQueue implements Serializable
     private transient VetoableChangeSupport vetoableChangeListeners_ = null;  // Set on first add.
 
     /**
-     Constructs a BaseDataQueue object.  The system and path properties must be set before using any method requiring a connection to the system.
+     * Constructs a BaseDataQueue object.  The system and path properties must be set before using any method requiring a connection to the system.
      **/
-    public BaseDataQueue()
-    {
+    public BaseDataQueue() {
         super();
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Constructing BaseDataQueue object.");
     }
 
     /**
-     Constructs a BaseDataQueue object. It uses the specified system and path.
-     @param  system  The system object representing the system on which the data queue exists.
-     @param  path  The fully qualified integrated file system path name of the data queue.
+     * Constructs a BaseDataQueue object. It uses the specified system and path.
+     *
+     * @param system The system object representing the system on which the data queue exists.
+     * @param path   The fully qualified integrated file system path name of the data queue.
      **/
-    public BaseDataQueue(AS400 system, String path)
-    {
+    public BaseDataQueue(AS400 system, String path) {
         super();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Constructing BaseDataQueue object, system: " + system + " path: " + path);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Constructing BaseDataQueue object, system: " + system + " path: " + path);
 
         // Check parameters.
-        if (system == null)
-        {
+        if (system == null) {
             Trace.log(Trace.ERROR, "Parameter 'system' is null.");
             throw new NullPointerException("system");
         }
-        if (path == null)
-        {
+        if (path == null) {
             Trace.log(Trace.ERROR, "Parameter 'path' is null.");
             throw new NullPointerException("path");
         }
@@ -117,24 +114,21 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Adds a listener to be notified when a data queue event occurs.
-     <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
-     Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
-     @param  listener  The listener object.
+     * Adds a listener to be notified when a data queue event occurs.
+     * <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
+     * Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
+     *
+     * @param listener The listener object.
      **/
-    public void addDataQueueListener(DataQueueListener listener)
-    {
+    public void addDataQueueListener(DataQueueListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Adding data queue listener.");
-        if (listener == null)
-        {
+        if (listener == null) {
             Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
             throw new NullPointerException("listener");
         }
-        synchronized (this)
-        {
+        synchronized (this) {
             // If first add.
-            if (dataQueueListeners_ == null)
-            {
+            if (dataQueueListeners_ == null) {
                 dataQueueListeners_ = new Vector();
             }
             dataQueueListeners_.addElement(listener);
@@ -142,24 +136,21 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Adds a listener to be notified when an object event occurs.
-     <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
-     Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
-     @param  listener  The listener object.
+     * Adds a listener to be notified when an object event occurs.
+     * <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
+     * Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
+     *
+     * @param listener The listener object.
      **/
-    public void addObjectListener(ObjectListener listener)
-    {
+    public void addObjectListener(ObjectListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Adding object listener.");
-        if (listener == null)
-        {
+        if (listener == null) {
             Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
             throw new NullPointerException("listener");
         }
-        synchronized (this)
-        {
+        synchronized (this) {
             // If first add.
-            if (objectListeners_ == null)
-            {
+            if (objectListeners_ == null) {
                 objectListeners_ = new Vector();
             }
             objectListeners_.addElement(listener);
@@ -167,24 +158,21 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Adds a listener to be notified when the value of any bound property changes.
-     <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
-     Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
-     @param  listener  The listener object.
+     * Adds a listener to be notified when the value of any bound property changes.
+     * <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
+     * Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
+     *
+     * @param listener The listener object.
      **/
-    public void addPropertyChangeListener(PropertyChangeListener listener)
-    {
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Adding property change listener.");
-        if (listener == null)
-        {
+        if (listener == null) {
             Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
             throw new NullPointerException("listener");
         }
-        synchronized (this)
-        {
+        synchronized (this) {
             // If first add.
-            if (propertyChangeListeners_ == null)
-            {
+            if (propertyChangeListeners_ == null) {
                 propertyChangeListeners_ = new PropertyChangeSupport(this);
             }
             propertyChangeListeners_.addPropertyChangeListener(listener);
@@ -192,24 +180,21 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Adds a listener to be notified when the value of any constrained property changes.
-     <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
-     Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
-     @param  listener  The listener object.
+     * Adds a listener to be notified when the value of any constrained property changes.
+     * <p>Note: Only actions performed <i>via this BaseDataQueue object</i> will fire events to listeners.
+     * Data queue accesses performed by other means (such as by calling system APIs or CL commands) do not fire events to listeners.
+     *
+     * @param listener The listener object.
      **/
-    public void addVetoableChangeListener(VetoableChangeListener listener)
-    {
+    public void addVetoableChangeListener(VetoableChangeListener listener) {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Adding vetoable change listener.");
-        if (listener == null)
-        {
+        if (listener == null) {
             Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
             throw new NullPointerException("listener");
         }
-        synchronized (this)
-        {
+        synchronized (this) {
             // If first add.
-            if (vetoableChangeListeners_ == null)
-            {
+            if (vetoableChangeListeners_ == null) {
                 vetoableChangeListeners_ = new VetoableChangeSupport(this);
             }
             vetoableChangeListeners_.addVetoableChangeListener(listener);
@@ -217,8 +202,7 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     // Connects to the system and retrieves queue attributes, if needed.
-    synchronized void open() throws AS400SecurityException, IOException
-    {
+    synchronized void open() throws AS400SecurityException, IOException {
         // Connect to data queue server.
         boolean opened = impl_ == null;
         chooseImpl();
@@ -226,26 +210,22 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     // Connects to the system and retrieves client/server attributes.
-    synchronized void chooseImpl() throws AS400SecurityException, IOException
-    {
+    synchronized void chooseImpl() throws AS400SecurityException, IOException {
         if (system_ != null) system_.signon(false);
 
         // Set implementation object if not already set.
-        if (impl_ == null)
-        {
+        if (impl_ == null) {
             // Verify required attributes have been set.
-            if (system_ == null)
-            {
+            if (system_ == null) {
                 Trace.log(Trace.ERROR, "Cannot connect to data queue server before setting system.");
                 throw new ExtendedIllegalStateException("system", ExtendedIllegalStateException.PROPERTY_NOT_SET);
             }
-            if (path_.length() == 0)
-            {
+            if (path_.length() == 0) {
                 Trace.log(Trace.ERROR, "Cannot connect to data queue server before setting path.");
                 throw new ExtendedIllegalStateException("path", ExtendedIllegalStateException.PROPERTY_NOT_SET);
             }
             // Have the system object load the appropriate implementation object.
-            impl_ = (BaseDataQueueImpl)system_.loadImpl3("com.ibm.as400.access.BaseDataQueueImplNative", "com.ibm.as400.access.BaseDataQueueImplRemote", "com.ibm.as400.access.BaseDataQueueImplProxy");
+            impl_ = (BaseDataQueueImpl) system_.loadImpl3("com.ibm.as400.access.BaseDataQueueImplNative", "com.ibm.as400.access.BaseDataQueueImplRemote", "com.ibm.as400.access.BaseDataQueueImplProxy");
 
             // Set the fixed properties in the implementation object.
             impl_.setSystemAndPath(system_.getImpl(), path_, name_, library_);
@@ -253,16 +233,16 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Removes all entries from the data queue.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
+     * Removes all entries from the data queue.
+     *
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
      **/
-    public void clear() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
+    public void clear() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Clearing data queue.");
         open();
         // Send clear request.
@@ -271,16 +251,16 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Deletes the data queue.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
+     * Deletes the data queue.
+     *
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
      **/
-    public void delete() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
+    public void delete() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Deleting data queue.");
         // Don't go through open, so no open event is signaled.
         chooseImpl();
@@ -293,43 +273,37 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Checks to see if the data queue exists.
-     @return  true if the data queue exists; false otherwise.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
+     * Checks to see if the data queue exists.
+     *
+     * @return true if the data queue exists; false otherwise.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
      **/
-    public boolean exists() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException
-    {
+    public boolean exists() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking data queue existence.");
 
         // Don't use the cached attributes (in case another app / object deletes the queue).
         attributesRetrieved_ = false;
-        try
-        {
-           getMaxEntryLength();
-           return true;
-        }
-        catch (ObjectDoesNotExistException e)
-        {
-           return false;
+        try {
+            getMaxEntryLength();
+            return true;
+        } catch (ObjectDoesNotExistException e) {
+            return false;
         }
     }
 
     // Fire data queue events.
-    void fireDataQueueEvent(int id)
-    {
+    void fireDataQueueEvent(int id) {
         if (dataQueueListeners_ == null) return;
 
-        Vector targets = (Vector)dataQueueListeners_.clone();
+        Vector targets = (Vector) dataQueueListeners_.clone();
         DataQueueEvent event = new DataQueueEvent(this, id);
-        for (int i = 0; i < targets.size(); ++i)
-        {
-            DataQueueListener target = (DataQueueListener)targets.elementAt(i);
-            switch (id)
-            {
+        for (int i = 0; i < targets.size(); ++i) {
+            DataQueueListener target = (DataQueueListener) targets.elementAt(i);
+            switch (id) {
                 case DataQueueEvent.DQ_CLEARED:
                     target.cleared(event);
                     break;
@@ -347,17 +321,14 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     // Fire object events.
-    void fireObjectEvent(int id)
-    {
+    void fireObjectEvent(int id) {
         if (objectListeners_ == null) return;
 
-        Vector targets = (Vector)objectListeners_.clone();
+        Vector targets = (Vector) objectListeners_.clone();
         ObjectEvent event = new ObjectEvent(this);
-        for (int i = 0; i < targets.size(); i++)
-        {
-            ObjectListener target = (ObjectListener)targets.elementAt(i);
-            switch (id)
-            {
+        for (int i = 0; i < targets.size(); i++) {
+            ObjectListener target = (ObjectListener) targets.elementAt(i);
+            switch (id) {
                 case ObjectEvent.OBJECT_CREATED:
                     target.objectCreated(event);
                     break;
@@ -372,31 +343,59 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Returns the CCSID used for the data in this data queue.
-     @return  The CCSID used for the data in this data queue.  If the CCSID has not been set, zero (0) is returned.
+     * Returns the CCSID used for the data in this data queue.
+     *
+     * @return The CCSID used for the data in this data queue.  If the CCSID has not been set, zero (0) is returned.
      **/
-    public int getCcsid()
-    {
+    public int getCcsid() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting CCSID:", ccsid_);
         return ccsid_;
     }
 
     /**
-     Returns the text description of the data queue.
-     @return  The text description of the data queue.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
+     * Sets the CCSID to use for the data in this data queue.
+     *
+     * @param ccsid The CCSID to use for the data in this data queue.
+     * @throws PropertyVetoException If the change is vetoed.
      **/
-    public String getDescription() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
+    public void setCcsid(int ccsid) throws PropertyVetoException {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting CCSID:", ccsid);
+
+        if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
+            ccsid_ = ccsid;
+            dataConverter_ = null;  // Converter no longer points to correct ccsid.
+        } else {
+            Integer oldValue = new Integer(ccsid_);
+            Integer newValue = new Integer(ccsid);
+
+            if (vetoableChangeListeners_ != null) {
+                vetoableChangeListeners_.fireVetoableChange("ccsid", oldValue, newValue);
+            }
+
+            ccsid_ = ccsid;
+            dataConverter_ = null;  // Converter no longer points to correct ccsid.
+
+            if (propertyChangeListeners_ != null) {
+                propertyChangeListeners_.firePropertyChange("ccsid", oldValue, newValue);
+            }
+        }
+    }
+
+    /**
+     * Returns the text description of the data queue.
+     *
+     * @return The text description of the data queue.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
+     **/
+    public String getDescription() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting description.");
         open();
-        if (!attributesRetrieved_)
-        {
+        if (!attributesRetrieved_) {
             retrieveAttributes();
         }
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Description: " + description_);
@@ -404,21 +403,20 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Returns a value that indicates if entries are forced to auxiliary storage.  If true, entries are immediately written to permanent storage.  If false, written entries may be kept in memory and could be lost in the case of a power outage.
-     @return  true if entries are immediately written to permanent storage; false otherwise.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
+     * Returns a value that indicates if entries are forced to auxiliary storage.  If true, entries are immediately written to permanent storage.  If false, written entries may be kept in memory and could be lost in the case of a power outage.
+     *
+     * @return true if entries are immediately written to permanent storage; false otherwise.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
      **/
-    public boolean getForceToAuxiliaryStorage() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
+    public boolean getForceToAuxiliaryStorage() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting force to auxiliary storage.");
         open();
-        if (!attributesRetrieved_)
-        {
+        if (!attributesRetrieved_) {
             retrieveAttributes();
         }
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Force to auxiliary storage:", forceToAuxiliaryStorage_);
@@ -426,21 +424,20 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Returns the maximum entry length of the data queue.
-     @return  The maximum entry length of the data queue.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
+     * Returns the maximum entry length of the data queue.
+     *
+     * @return The maximum entry length of the data queue.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
      **/
-    public int getMaxEntryLength() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
+    public int getMaxEntryLength() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting max entry length.");
         open();
-        if (!attributesRetrieved_)
-        {
+        if (!attributesRetrieved_) {
             retrieveAttributes();
         }
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Max entry length:", maxEntryLength_);
@@ -448,228 +445,42 @@ public abstract class BaseDataQueue implements Serializable
     }
 
     /**
-     Returns the name of the data queue.
-     @return  The data queue name, or an empty string ("") if not set.
+     * Returns the name of the data queue.
+     *
+     * @return The data queue name, or an empty string ("") if not set.
      **/
-    public String getName()
-    {
+    public String getName() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting name: " + name_);
         return name_;
     }
 
     /**
-     Returns the full integrated file system path name of the data queue.
-     @return  The fully-qualified data queue name, or an empty string ("") if not set.
+     * Returns the full integrated file system path name of the data queue.
+     *
+     * @return The fully-qualified data queue name, or an empty string ("") if not set.
      **/
-    public String getPath()
-    {
+    public String getPath() {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting path: " + path_);
         return path_;
     }
 
     /**
-     Returns whether sender information is stored with each data queue entry.
-     @return  true if sender information is saved; false otherwise.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
+     * Sets the fully qualified integrated file system path name of the data queue.
+     *
+     * @param path The fully qualified integrated file system path name of the data queue.
+     * @throws PropertyVetoException If the change is vetoed.
      **/
-    public boolean getSaveSenderInformation() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting save sender information.");
-        open();
-        if (!attributesRetrieved_)
-        {
-            retrieveAttributes();
-        }
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Save sender information:", saveSenderInformation_);
-        return saveSenderInformation_;
-    }
-
-    /**
-     Returns the system object representing the system on which the data queue exists.
-     @return  The system object representing the system on which the data queue exists.  If the system has not been set, null is returned.
-     **/
-    public AS400 getSystem()
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting system: " + system_);
-        return system_;
-    }
-
-    /**
-     Returns a value that indicates if entries are read in FIFO order.  Returns true if entries are read off the data queue in FIFO order.  Returns false if entries are read off the data queue in LIFO order.
-     @return  true if entries are read off the data queue in FIFO order; false otherwise.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
-     **/
-    public boolean isFIFO() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if data queue is FIFO.");
-        open();
-        if (!attributesRetrieved_)
-        {
-            retrieveAttributes();
-        }
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "FIFO:", FIFO_);
-        return FIFO_;
-    }
-
-    /**
-     Refreshes the attributes of the data queue.
-     @exception  AS400SecurityException  If a security or authority error occurs.
-     @exception  ErrorCompletingRequestException  If an error occurs before the request is completed.
-     @exception  IOException  If an error occurs while communicating with the system.
-     @exception  IllegalObjectTypeException  If the object on the system is not the required type.
-     @exception  InterruptedException  If this thread is interrupted.
-     @exception  ObjectDoesNotExistException  If the object does not exist on the system.
-     **/
-    public void refreshAttributes() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Refreshing data queue attributes.");
-        attributesRetrieved_ = false;
-        open();
-        retrieveAttributes();
-    }
-
-    /**
-     Removes a data queue listener.
-     @param  listener  The listener object.
-     **/
-    public void removeDataQueueListener(DataQueueListener listener)
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing data queue listener.");
-        if (listener == null)
-        {
-            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
-            throw new NullPointerException("listener");
-        }
-        // If we have listeners.
-        if (dataQueueListeners_ != null)
-        {
-            dataQueueListeners_.removeElement(listener);
-        }
-    }
-
-    /**
-     Removes a object listener.
-     @param  listener  The listener object.
-     **/
-    public void removeObjectListener(ObjectListener listener)
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing object listener.");
-        if (listener == null)
-        {
-            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
-            throw new NullPointerException("listener");
-        }
-        // If we have listeners.
-        if (objectListeners_ != null)
-        {
-            objectListeners_.removeElement(listener);
-        }
-    }
-
-    /**
-     Removes a property change listener.
-     @param  listener  The listener object.
-     **/
-    public void removePropertyChangeListener(PropertyChangeListener listener)
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing property change listener.");
-        if (listener == null)
-        {
-            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
-            throw new NullPointerException("listener");
-        }
-        // If we have listeners.
-        if (propertyChangeListeners_ != null)
-        {
-            propertyChangeListeners_.removePropertyChangeListener(listener);
-        }
-    }
-
-    /**
-     Removes a vetoable change listener.
-     @param  listener  The listener object.
-     **/
-    public void removeVetoableChangeListener(VetoableChangeListener listener)
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing vetoable change listener.");
-        if (listener == null)
-        {
-            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
-            throw new NullPointerException("listener");
-        }
-        // If we have listeners.
-        if (vetoableChangeListeners_ != null)
-        {
-            vetoableChangeListeners_.removeVetoableChangeListener(listener);
-        }
-    }
-
-    // Refreshes the attributes of the data queue.
-    abstract void retrieveAttributes() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException;
-
-    /**
-     Sets the CCSID to use for the data in this data queue.
-     @param  ccsid  The CCSID to use for the data in this data queue.
-     @exception  PropertyVetoException  If the change is vetoed.
-     **/
-    public void setCcsid(int ccsid) throws PropertyVetoException
-    {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting CCSID:", ccsid);
-
-        if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null)
-        {
-            ccsid_ = ccsid;
-            dataConverter_ = null;  // Converter no longer points to correct ccsid.
-        }
-        else
-        {
-            Integer oldValue = new Integer(ccsid_);
-            Integer newValue = new Integer(ccsid);
-
-            if (vetoableChangeListeners_ != null)
-            {
-                vetoableChangeListeners_.fireVetoableChange("ccsid", oldValue, newValue);
-            }
-
-            ccsid_ = ccsid;
-            dataConverter_ = null;  // Converter no longer points to correct ccsid.
-
-            if (propertyChangeListeners_ != null)
-            {
-                propertyChangeListeners_.firePropertyChange("ccsid", oldValue, newValue);
-            }
-        }
-    }
-
-    /**
-     Sets the fully qualified integrated file system path name of the data queue.
-     @param  path  The fully qualified integrated file system path name of the data queue.
-     @exception  PropertyVetoException  If the change is vetoed.
-     **/
-    public void setPath(String path) throws PropertyVetoException
-    {
+    public void setPath(String path) throws PropertyVetoException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting path: " + path);
 
         // Check parameter.
-        if (path == null)
-        {
+        if (path == null) {
             Trace.log(Trace.ERROR, "Parameter 'path' is null.");
             throw new NullPointerException("path");
         }
 
         // Make sure we have not already connected.
-        if (impl_ != null)
-        {
+        if (impl_ != null) {
             Trace.log(Trace.ERROR, "Cannot set property 'path' after connect.");
             throw new ExtendedIllegalStateException("path", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
         }
@@ -677,21 +488,17 @@ public abstract class BaseDataQueue implements Serializable
         // Verify name is valid IFS path name.
         QSYSObjectPathName ifs = new QSYSObjectPathName(path, "DTAQ");
 
-        if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null)
-        {
+        if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             // Set instance variables.
             library_ = ifs.getLibraryName();
             name_ = ifs.getObjectName();
             path_ = path;
-        }
-        else
-        {
+        } else {
             String oldValue = path_;
             String newValue = path;
 
             // Ask for any vetos.
-            if (vetoableChangeListeners_ != null)
-            {
+            if (vetoableChangeListeners_ != null) {
                 vetoableChangeListeners_.fireVetoableChange("path", oldValue, newValue);
             }
 
@@ -700,85 +507,214 @@ public abstract class BaseDataQueue implements Serializable
             name_ = ifs.getObjectName();
             path_ = path;
 
-            if (propertyChangeListeners_ != null)
-            {
+            if (propertyChangeListeners_ != null) {
                 propertyChangeListeners_.firePropertyChange("path", oldValue, newValue);
             }
         }
     }
 
     /**
-     Sets the system object representing the system on which the data queue exists.
-     @param  system  The system object representing the system on which the data queue exists.
-     @exception  PropertyVetoException  If the change is vetoed.
+     * Returns whether sender information is stored with each data queue entry.
+     *
+     * @return true if sender information is saved; false otherwise.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
      **/
-    public void setSystem(AS400 system) throws PropertyVetoException
-    {
+    public boolean getSaveSenderInformation() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting save sender information.");
+        open();
+        if (!attributesRetrieved_) {
+            retrieveAttributes();
+        }
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Save sender information:", saveSenderInformation_);
+        return saveSenderInformation_;
+    }
+
+    /**
+     * Returns the system object representing the system on which the data queue exists.
+     *
+     * @return The system object representing the system on which the data queue exists.  If the system has not been set, null is returned.
+     **/
+    public AS400 getSystem() {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting system: " + system_);
+        return system_;
+    }
+
+    /**
+     * Sets the system object representing the system on which the data queue exists.
+     *
+     * @param system The system object representing the system on which the data queue exists.
+     * @throws PropertyVetoException If the change is vetoed.
+     **/
+    public void setSystem(AS400 system) throws PropertyVetoException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting system: " + system);
 
         // Check parameter.
-        if (system == null)
-        {
+        if (system == null) {
             Trace.log(Trace.ERROR, "Parameter 'system' is null.");
             throw new NullPointerException("system");
         }
 
         // Make sure we have not already connected.
-        if (impl_ != null)
-        {
+        if (impl_ != null) {
             Trace.log(Trace.ERROR, "Cannot set property 'system' after connect.");
             throw new ExtendedIllegalStateException("system", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
         }
 
-        if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null)
-        {
+        if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             // Set instance variable.
             system_ = system;
-        }
-        else
-        {
+        } else {
             AS400 oldValue = system_;
             AS400 newValue = system;
 
-            if (vetoableChangeListeners_ != null)
-            {
+            if (vetoableChangeListeners_ != null) {
                 vetoableChangeListeners_.fireVetoableChange("system", oldValue, newValue);
             }
 
             // Set instance variable.
             system_ = system;
 
-            if (propertyChangeListeners_ != null)
-            {
+            if (propertyChangeListeners_ != null) {
                 propertyChangeListeners_.firePropertyChange("system", oldValue, newValue);
             }
         }
     }
 
     /**
-     Returns the String representation of this data queue object.
-     @return  The String representation of this data queue object.
+     * Returns a value that indicates if entries are read in FIFO order.  Returns true if entries are read off the data queue in FIFO order.  Returns false if entries are read off the data queue in LIFO order.
+     *
+     * @return true if entries are read off the data queue in FIFO order; false otherwise.
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
      **/
-    public String toString()
-    {
-        return "(system: " + system_ + " path: "+ path_ + "):" + super.toString();
+    public boolean isFIFO() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if data queue is FIFO.");
+        open();
+        if (!attributesRetrieved_) {
+            retrieveAttributes();
+        }
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "FIFO:", FIFO_);
+        return FIFO_;
+    }
+
+    /**
+     * Refreshes the attributes of the data queue.
+     *
+     * @throws AS400SecurityException          If a security or authority error occurs.
+     * @throws ErrorCompletingRequestException If an error occurs before the request is completed.
+     * @throws IOException                     If an error occurs while communicating with the system.
+     * @throws IllegalObjectTypeException      If the object on the system is not the required type.
+     * @throws InterruptedException            If this thread is interrupted.
+     * @throws ObjectDoesNotExistException     If the object does not exist on the system.
+     **/
+    public void refreshAttributes() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Refreshing data queue attributes.");
+        attributesRetrieved_ = false;
+        open();
+        retrieveAttributes();
+    }
+
+    /**
+     * Removes a data queue listener.
+     *
+     * @param listener The listener object.
+     **/
+    public void removeDataQueueListener(DataQueueListener listener) {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing data queue listener.");
+        if (listener == null) {
+            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
+            throw new NullPointerException("listener");
+        }
+        // If we have listeners.
+        if (dataQueueListeners_ != null) {
+            dataQueueListeners_.removeElement(listener);
+        }
+    }
+
+    // Refreshes the attributes of the data queue.
+    abstract void retrieveAttributes() throws AS400SecurityException, ErrorCompletingRequestException, IOException, IllegalObjectTypeException, InterruptedException, ObjectDoesNotExistException;
+
+    /**
+     * Removes a object listener.
+     *
+     * @param listener The listener object.
+     **/
+    public void removeObjectListener(ObjectListener listener) {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing object listener.");
+        if (listener == null) {
+            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
+            throw new NullPointerException("listener");
+        }
+        // If we have listeners.
+        if (objectListeners_ != null) {
+            objectListeners_.removeElement(listener);
+        }
+    }
+
+    /**
+     * Removes a property change listener.
+     *
+     * @param listener The listener object.
+     **/
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing property change listener.");
+        if (listener == null) {
+            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
+            throw new NullPointerException("listener");
+        }
+        // If we have listeners.
+        if (propertyChangeListeners_ != null) {
+            propertyChangeListeners_.removePropertyChangeListener(listener);
+        }
+    }
+
+    /**
+     * Removes a vetoable change listener.
+     *
+     * @param listener The listener object.
+     **/
+    public void removeVetoableChangeListener(VetoableChangeListener listener) {
+        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing vetoable change listener.");
+        if (listener == null) {
+            Trace.log(Trace.ERROR, "Parameter 'listener' is null.");
+            throw new NullPointerException("listener");
+        }
+        // If we have listeners.
+        if (vetoableChangeListeners_ != null) {
+            vetoableChangeListeners_.removeVetoableChangeListener(listener);
+        }
+    }
+
+    /**
+     * Returns the String representation of this data queue object.
+     *
+     * @return The String representation of this data queue object.
+     **/
+    public String toString() {
+        return "(system: " + system_ + " path: " + path_ + "):" + super.toString();
     }
 
     // Get the CCSID to be used for this data queue, get it from the system object if not already set.
-    private int getCcsidToUse()
-    {
+    private int getCcsidToUse() {
         if (ccsid_ == 0) return system_.getCcsid();
         return ccsid_;
     }
 
-    byte[] stringToByteArray(String string) throws IOException
-    {
+    byte[] stringToByteArray(String string) throws IOException {
         if (dataConverter_ == null) dataConverter_ = new Converter(getCcsidToUse(), system_);
         return dataConverter_.stringToByteArray(string);
     }
 
-    String byteArrayToString(byte[] bytes) throws UnsupportedEncodingException
-    {
+    String byteArrayToString(byte[] bytes) throws UnsupportedEncodingException {
         if (dataConverter_ == null) dataConverter_ = new Converter(getCcsidToUse(), system_);
         return dataConverter_.byteArrayToString(bytes);
     }

@@ -19,21 +19,23 @@ package com.ibm.as400.util.commtrace;
  * It has one constructor which takes a byte array of packet data as its only argument.
  */
 public class IP4Packet extends IPPacket {
-	/**
-	 * Creates and parses the data of this header.  
-	 * @param data  The raw data of this header. 
-	 */
-	public IP4Packet(byte[] data) {
-		rawpacket= data;
-		header= new IP4Header(new BitBuf(rawpacket));
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    public IP4Packet(byte[] data) {
+        rawpacket = data;
+        header = new IP4Header(new BitBuf(rawpacket));
+    }
 
     /**
      * Returns a printable representation of this packet.
-     * @param filter	    FormatProperties object for filtering this packet.
-     * @return	    Returns a string representation of this packet.
+     *
+     * @param filter FormatProperties object for filtering this packet.
+     * @return Returns a string representation of this packet.
      */
-	public String toString(FormatProperties filter) {
-		return header.toString(filter);
-	}
+    public String toString(FormatProperties filter) {
+        return header.toString(filter);
+    }
 }

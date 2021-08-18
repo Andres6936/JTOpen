@@ -20,11 +20,12 @@ class Field {
     BitBuf data;
 
     /**
-     * Returns a copy of the raw data that makes up this field.
-     * @return The raw data for this field.
+     * Default constructor which creates field.
+     *
+     * @param data BitBuf which represents this field
      */
-    public BitBuf getData() {
-		return (BitBuf) data.clone();
+    public Field(BitBuf data) {
+        this.data = data;
     }
 
     /**
@@ -35,10 +36,11 @@ class Field {
     }
 
     /**
-     * Default constructor which creates field.  
-     * @param data         BitBuf which represents this field      
+     * Returns a copy of the raw data that makes up this field.
+     *
+     * @return The raw data for this field.
      */
-    public Field(BitBuf data) {
-        this.data = data;
+    public BitBuf getData() {
+        return (BitBuf) data.clone();
     }
 }

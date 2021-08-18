@@ -20,18 +20,17 @@ import java.sql.Date;
 /*ifdef JDBC40 
 import java.sql.NClob;
 import java.sql.RowId;
-endif */ 
+endif */
 import java.sql.SQLException;
 /*ifdef JDBC40 
 import java.sql.SQLXML;
-endif */ 
+endif */
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 final class SQLNumeric
-extends SQLDataBase
-{
+        extends SQLDataBase {
     static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
     // Private data.
@@ -49,12 +48,12 @@ extends SQLDataBase
     static final BigDecimal DOUBLE_MAX_VALUE = new BigDecimal(Double.MAX_VALUE);
     static final BigDecimal DOUBLE_MIN_VALUE = new BigDecimal(Double.MIN_VALUE);
 
-    private int                     precision_;
-    private int                     scale_;
+    private int precision_;
+    private int scale_;
     private AS400ZonedDecimal typeConverter_;
-    private BigDecimal              value_;
+    private BigDecimal value_;
     private JDProperties properties_;  // @M0A - added JDProperties so we can get the scale & precision
-    private int                     vrm_;         // @M0A
+    private int vrm_;         // @M0A
 
     SQLNumeric(int precision,
                int scale,
@@ -62,17 +61,16 @@ extends SQLDataBase
                int vrm,                  // @M0C
                JDProperties properties)  // @M0C
     {
-        super(settings); 
-        precision_      = precision;
-        scale_          = scale;
-        typeConverter_  = new AS400ZonedDecimal(precision_, scale_);
-        value_          = default_; // @C2C
-        vrm_            = vrm;         // @M0A
-        properties_     = properties;  // @M0A
+        super(settings);
+        precision_ = precision;
+        scale_ = scale;
+        typeConverter_ = new AS400ZonedDecimal(precision_, scale_);
+        value_ = default_; // @C2C
+        vrm_ = vrm;         // @M0A
+        properties_ = properties;  // @M0A
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLNumeric(precision_, scale_, settings_, vrm_, properties_);  // @M0C
     }
 
@@ -83,18 +81,15 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter, boolean ignoreConversionErrors) //@P0C
-    throws SQLException
-    {
-        value_ = ((BigDecimal)typeConverter_.toObject(rawBytes, offset));
+            throws SQLException {
+        value_ = ((BigDecimal) typeConverter_.toObject(rawBytes, offset));
     }
 
     public void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter) //@P0C
-    throws SQLException
-    {
-        try{
+            throws SQLException {
+        try {
             typeConverter_.toBytes(value_, rawBytes, offset);
-        }
-        catch(ExtendedIllegalArgumentException e){
+        } catch (ExtendedIllegalArgumentException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
         }
     }
@@ -106,85 +101,81 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void set(Object object, Calendar calendar, int scale)
-    throws SQLException
-    {
+            throws SQLException {
         BigDecimal bigDecimal = null;
 
-        if(object instanceof String) {
-            try
-            {
-                String value = SQLDataFactory.convertScientificNotation((String)object, settings_); // @F3C
-                if(scale >= 0)
+        if (object instanceof String) {
+            try {
+                String value = SQLDataFactory.convertScientificNotation((String) object, settings_); // @F3C
+                if (scale >= 0)
                     value = SQLDataFactory.truncateScale(value, scale);
                 bigDecimal = new BigDecimal(value);
-            }
-            catch(NumberFormatException e)
+            } catch (NumberFormatException e) {
+                JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
+                return;
+            } catch (StringIndexOutOfBoundsException e)        // jdk 1.3.x throws this instead of a NFE
             {
                 JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
                 return;
             }
-            catch(StringIndexOutOfBoundsException e)        // jdk 1.3.x throws this instead of a NFE
-            {
-                JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
-                return; 
-            }
-        } else if(object instanceof Number) {
+        } else if (object instanceof Number) {
             String value = SQLDataFactory.convertScientificNotation(object.toString(), settings_); // @C1C
-            if(scale >= 0)
+            if (scale >= 0)
                 value = SQLDataFactory.truncateScale(value, scale);
             bigDecimal = new BigDecimal(value);
-        } else if(object instanceof Boolean) {
-            bigDecimal = (((Boolean)object).booleanValue() == true) ? BigDecimal.valueOf(1) : BigDecimal.valueOf(0);
+        } else if (object instanceof Boolean) {
+            bigDecimal = (((Boolean) object).booleanValue() == true) ? BigDecimal.valueOf(1) : BigDecimal.valueOf(0);
 
-        } else { 
-          if (JDTrace.isTraceOn()) {
-              if (object == null) { 
-                  JDTrace.logInformation(this, "Unable to assign null object");
-                } else { 
-                    JDTrace.logInformation(this, "Unable to assign object("+object+") of class("+object.getClass().toString()+")");
+        } else {
+            if (JDTrace.isTraceOn()) {
+                if (object == null) {
+                    JDTrace.logInformation(this, "Unable to assign null object");
+                } else {
+                    JDTrace.logInformation(this, "Unable to assign object(" + object + ") of class(" + object.getClass().toString() + ")");
                 }
-          }
+            }
 
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
-            return; 
+            return;
         }
 
         // Truncate if necessary.  If we ONLY truncate on the right side, we don't    @E3C
         // need to report it.  If we truncate on the left side, then we report the    @E3A
         // number of truncated digits on both ends...this will make the dataSize      @E3A
         // and transferSize make sense on the resulting DataTruncation.               @E3A
-        truncated_ = 0; outOfBounds_ = false; 
+        truncated_ = 0;
+        outOfBounds_ = false;
         int otherScale = bigDecimal.scale();
-        if(otherScale > scale_)
+        if (otherScale > scale_)
             truncated_ += otherScale - scale_;
         value_ = bigDecimal.setScale(scale_, BigDecimal.ROUND_DOWN);       // @E3C
 
-        int otherPrecision = SQLDataFactory.getDecimalPrecision(value_); /*@H5A*/ 
+        int otherPrecision = SQLDataFactory.getDecimalPrecision(value_); /*@H5A*/
         // Check for the odd case where the precision = scale and adjust the otherPrecision @H5C
         if (precision_ == scale_) {
-          if (value_.intValue() == 0) {
-            otherPrecision = otherPrecision - 1; 
-          }
+            if (value_.intValue() == 0) {
+                otherPrecision = otherPrecision - 1;
+            }
         }
-        if(otherPrecision > precision_)
-        {                                 // @E2D @E3C
+        if (otherPrecision > precision_) {                                 // @E2D @E3C
             int digits = otherPrecision - precision_;                      // @E2D @E3C
             truncated_ += digits;                                          // @E2D @E3C
             outOfBounds_ = true;
             // This truncation doesn't really may sense
             // Set to maximum/minimum valid value
             // value_ = SQLDataFactory.truncatePrecision(value_, digits);    // @E2D @E3C
-            if (value_.doubleValue() > 0 ) {
-               value_ = SQLDataFactory.getMaximumBigDecimal(precision_,scale_);  
+            if (value_.doubleValue() > 0) {
+                value_ = SQLDataFactory.getMaximumBigDecimal(precision_, scale_);
             } else {
-              value_ = SQLDataFactory.getMinimumBigDecimal(precision_,scale_);  
+                value_ = SQLDataFactory.getMinimumBigDecimal(precision_, scale_);
             }
-            
+
         }                                                                  // @E2D @E3C
         else                                                               // @E3A
         {
-            truncated_ = 0; outOfBounds_ = false;   // No left side truncation, report nothing       @E3A
-                             // (even if there was right side truncation).    @E3A
+            truncated_ = 0;
+            outOfBounds_ = false;   // No left side truncation, report nothing       @E3A
+            // (even if there was right side truncation).    @E3A
         }
         /* @E3D
         int otherLeftSide = otherPrecision - otherScale;                            // @E2A
@@ -204,121 +195,101 @@ extends SQLDataBase
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.NUMERIC;
     }
 
-    public String getCreateParameters()
-    {
+    public String getCreateParameters() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(AS400JDBCDriver.getResource("PRECISION",null));
+        buffer.append(AS400JDBCDriver.getResource("PRECISION", null));
         buffer.append(",");
-        buffer.append(AS400JDBCDriver.getResource("SCALE",null));
+        buffer.append(AS400JDBCDriver.getResource("SCALE", null));
         return buffer.toString();
     }
 
-    public int getDisplaySize()
-    {
+    public int getDisplaySize() {
         return precision_ + 2;
     }
 
     //@F1A JDBC 3.0
-    public String getJavaClassName()
-    {
+    public String getJavaClassName() {
         return "java.math.BigDecimal";
     }
 
-    public String getLiteralPrefix()
-    {
+    public String getLiteralPrefix() {
         return null;
     }
 
-    public String getLiteralSuffix()
-    {
+    public String getLiteralSuffix() {
         return null;
     }
 
-    public String getLocalName()
-    {
+    public String getLocalName() {
         return "NUMERIC";
     }
 
-    public int getMaximumPrecision()
-    {
+    public int getMaximumPrecision() {
         // @M0C - change to check vrm and JDProperties
-        if(vrm_ >= JDUtilities.vrm530)
+        if (vrm_ >= JDUtilities.vrm530)
             return properties_.getInt(JDProperties.MAXIMUM_PRECISION);
         else
             return 31;
     }
 
-    public int getMaximumScale()
-    {
+    public int getMaximumScale() {
         // @M0C - change to check vrm and JDProperties
-        if(vrm_ >= JDUtilities.vrm530)
+        if (vrm_ >= JDUtilities.vrm530)
             return properties_.getInt(JDProperties.MAXIMUM_SCALE);
         else
             return 31;
     }
 
-    public int getMinimumScale()
-    {
+    public int getMinimumScale() {
         return 0;
     }
 
-    public int getNativeType()
-    {
+    public int getNativeType() {
         return 488;
     }
 
-    public int getPrecision()
-    {
+    public int getPrecision() {
         return precision_;
     }
 
-    public int getRadix()
-    {
+    public int getRadix() {
         return 10;
     }
 
-    public int getScale()
-    {
+    public int getScale() {
         return scale_;
     }
 
-    public int getType()
-    {
+    public int getType() {
         return java.sql.Types.NUMERIC;
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return "NUMERIC";
     }
 
-    public boolean isSigned()
-    {
+    public boolean isSigned() {
         return true;
     }
 
-    public boolean isText()
-    {
+    public boolean isText() {
         return false;
     }
 
-    public int getActualSize()
-    {
+    public int getActualSize() {
         return precision_;
     }
 
-    public int getTruncated()
-    {
+    public int getTruncated() {
         return truncated_;
     }
 
     public boolean getOutOfBounds() {
-      return outOfBounds_; 
+        return outOfBounds_;
     }
 
     //---------------------------------------------------------//
@@ -329,84 +300,75 @@ extends SQLDataBase
 
 
     public BigDecimal getBigDecimal(int scale)
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(scale >= 0)
-        {
-            if(scale >= value_.scale())
-            {
-                truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (scale >= 0) {
+            if (scale >= value_.scale()) {
+                truncated_ = 0;
+                outOfBounds_ = false;
                 return value_.setScale(scale);
-            }
-            else
-            {
+            } else {
                 truncated_ = value_.scale() - scale;
                 return value_.setScale(scale, BigDecimal.ROUND_HALF_UP);
             }
-        }
-        else
+        } else
             return value_;
     }
 
     public InputStream getBinaryStream()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public Blob getBlob()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public boolean getBoolean()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        return(value_.compareTo(BigDecimal.valueOf(0)) != 0);
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        return (value_.compareTo(BigDecimal.valueOf(0)) != 0);
     }
 
     public byte getByte()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_.compareTo(BYTE_MAX_VALUE) > 0 || value_.compareTo(BYTE_MIN_VALUE) < 0)
-        {
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_.compareTo(BYTE_MAX_VALUE) > 0 || value_.compareTo(BYTE_MIN_VALUE) < 0) {
             // we don't count the fractional part of the number as truncation
             int length = value_.toBigInteger().toByteArray().length;
             truncated_ = length - 1;
             outOfBounds_ = true;
         }
-        return(byte) value_.byteValue();
+        return (byte) value_.byteValue();
     }
 
     public byte[] getBytes()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
 
     public Date getDate(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public double getDouble()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         double d = value_.doubleValue();    //@KBA
         //@KBD This will never be the case with the current precision
         //@KBD if(value_.compareTo(DOUBLE_MAX_VALUE) > 0 || value_.compareTo(DOUBLE_MIN_VALUE) < 0)
-        if( d == Double.POSITIVE_INFINITY || d == Double.NEGATIVE_INFINITY)     //@KBA
+        if (d == Double.POSITIVE_INFINITY || d == Double.NEGATIVE_INFINITY)     //@KBA
         {
             // we don't count the fractional part of the number as truncation
             int length = value_.toBigInteger().toByteArray().length;
@@ -417,13 +379,13 @@ extends SQLDataBase
     }
 
     public float getFloat()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         float f = value_.floatValue();  //@KBA
         //@KBD Changed to avoid optimization problem with JRE 1.3
         //@KBD if(value_.compareTo(FLOAT_MAX_VALUE) > 0 || value_.compareTo(FLOAT_MIN_VALUE) < 0)
-        if(f == Float.POSITIVE_INFINITY || f == Float.NEGATIVE_INFINITY)    //@KBA
+        if (f == Float.POSITIVE_INFINITY || f == Float.NEGATIVE_INFINITY)    //@KBA
         {
             // we don't count the fractional part of the number as truncation
             int length = value_.toBigInteger().toByteArray().length;
@@ -434,11 +396,10 @@ extends SQLDataBase
     }
 
     public int getInt()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_.compareTo(INTEGER_MAX_VALUE) > 0 || value_.compareTo(INTEGER_MIN_VALUE) < 0)
-        {
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_.compareTo(INTEGER_MAX_VALUE) > 0 || value_.compareTo(INTEGER_MIN_VALUE) < 0) {
             // we don't count the fractional part of the number as truncation
             int length = value_.toBigInteger().toByteArray().length;
             truncated_ = length - 4;
@@ -448,11 +409,10 @@ extends SQLDataBase
     }
 
     public long getLong()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_.compareTo(LONG_MAX_VALUE) > 0 || value_.compareTo(LONG_MIN_VALUE) < 0)
-        {
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_.compareTo(LONG_MAX_VALUE) > 0 || value_.compareTo(LONG_MIN_VALUE) < 0) {
             // we don't count the fractional part of the number as truncation
             int length = value_.toBigInteger().toByteArray().length;
             truncated_ = length - 8;
@@ -462,67 +422,64 @@ extends SQLDataBase
     }
 
     public Object getObject()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         return value_;
     }
 
     public short getShort()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_.compareTo(SHORT_MAX_VALUE) > 0 || value_.compareTo(SHORT_MIN_VALUE) < 0)
-        {
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_.compareTo(SHORT_MAX_VALUE) > 0 || value_.compareTo(SHORT_MIN_VALUE) < 0) {
             // we don't count the fractional part of the number as truncation
             int length = value_.toBigInteger().toByteArray().length;
             truncated_ = length - 2;
             outOfBounds_ = true;
         }
-        return(short) value_.shortValue();
+        return (short) value_.shortValue();
     }
 
     public String getString()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         String stringRep = JDUtilities.bigDecimalToPlainString(value_); //@big java 1.5 support
         int decimal = stringRep.indexOf('.');
-        if(decimal == -1)
+        if (decimal == -1)
             return stringRep;
         else
             return stringRep.substring(0, decimal)
-            + settings_.getDecimalSeparator()
-            + stringRep.substring(decimal+1);
+                    + settings_.getDecimalSeparator()
+                    + stringRep.substring(decimal + 1);
     }
 
     public Time getTime(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public Timestamp getTimestamp(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
-    
+
     //@pda jdbc40
-    public String getNString() throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+    public String getNString() throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         String stringRep = value_.toString();
         int decimal = stringRep.indexOf('.');
-        if(decimal == -1)
+        if (decimal == -1)
             return stringRep;
         else
             return stringRep.substring(0, decimal)
-            + settings_.getDecimalSeparator()
-            + stringRep.substring(decimal+1);
+                    + settings_.getDecimalSeparator()
+                    + stringRep.substring(decimal + 1);
     }
 
     /* ifdef JDBC40 
@@ -540,10 +497,10 @@ extends SQLDataBase
         return null;
     }
 
-    endif */ 
-    
+    endif */
+
     public void saveValue() {
-      savedValue_ = value_; 
-   }
+        savedValue_ = value_;
+    }
 }
 

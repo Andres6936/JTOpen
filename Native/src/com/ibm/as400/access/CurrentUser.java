@@ -16,78 +16,59 @@ package com.ibm.as400.access;
 import java.io.IOException;
 
 // The currentUser class interfaces with the native code for retrieving the current user's userid and encrypted password.
-class CurrentUser
-{
-    static String getUserID(int vrm)
-    {
+class CurrentUser {
+    static String getUserID(int vrm) {
         byte[] currentUser = null;
-        try
-        {
-            if (vrm >= 0x00050400)
-            {
+        try {
+            if (vrm >= 0x00050400) {
                 currentUser = NativeMethods.getUserId();
-            }
-            else if (vrm >= 0x00050200)
-            {
-                if (NativeMethods.loadSCK())
-                {
+            } else if (vrm >= 0x00050200) {
+                if (NativeMethods.loadSCK()) {
                     currentUser = getUserIdNative();
                 }
-            }
-            else
-            {
+            } else {
                 UnixSocketUser user = new UnixSocketUser();
                 currentUser = user.getUserId();
             }
-        }
-        catch (NativeException e)
-        {
+        } catch (NativeException e) {
+            Trace.log(Trace.ERROR, "Error retrieving current userID:", e);
+        } catch (Throwable e) {
             Trace.log(Trace.ERROR, "Error retrieving current userID:", e);
         }
-        catch (Throwable e)
-        {
-            Trace.log(Trace.ERROR, "Error retrieving current userID:", e);
-        }
-        if (currentUser != null)
-        {
-        	try { //@AC4A
-        		if (Trace.isTraceOn()) Trace.log(Trace.DIAGNOSTIC, "Current userID in EBCDIC: ", currentUser);
+        if (currentUser != null) {
+            try { //@AC4A
+                if (Trace.isTraceOn()) Trace.log(Trace.DIAGNOSTIC, "Current userID in EBCDIC: ", currentUser);
                 String userID = SignonConverter.byteArrayToString(currentUser);
                 if (Trace.isTraceOn()) Trace.log(Trace.DIAGNOSTIC, "Current userID: '" + userID + "'");
                 return userID;
                 //@AC4A Start
-        	} catch (AS400SecurityException e) {
-        		if (Trace.isTraceOn()) Trace.log(Trace.DIAGNOSTIC, "Current userID convert failed, user id characters are not valid");
-        		return null;
-        	}
-        	//@AC4A End
-            
+            } catch (AS400SecurityException e) {
+                if (Trace.isTraceOn())
+                    Trace.log(Trace.DIAGNOSTIC, "Current userID convert failed, user id characters are not valid");
+                return null;
+            }
+            //@AC4A End
+
         }
         return null;
     }
 
 
-    static byte[] getUserInfo(int vrm, byte[] clientSeed, byte[] serverSeed, String info) throws AS400SecurityException, IOException
-    {
-        try
-        {
-            if (vrm >= 0x00050400)
-            {
+    static byte[] getUserInfo(int vrm, byte[] clientSeed, byte[] serverSeed, String info) throws AS400SecurityException, IOException {
+        try {
+            if (vrm >= 0x00050400) {
                 return NativeMethods.getUserInfo(clientSeed, serverSeed);
-            }
-            else if (vrm >= 0x00050200)
-            {
+            } else if (vrm >= 0x00050200) {
                 return getUserInfoNative(clientSeed, serverSeed);
             }
             UnixSocketUser user = new UnixSocketUser();
             return user.getSubstitutePassword(clientSeed, serverSeed);
-        }
-        catch (NativeException e)
-        {
-            throw AS400ImplRemote.returnSecurityException(BinaryConverter.byteArrayToInt(e.data, 0),null,info);
+        } catch (NativeException e) {
+            throw AS400ImplRemote.returnSecurityException(BinaryConverter.byteArrayToInt(e.data, 0), null, info);
         }
     }
 
     private static native byte[] getUserIdNative() throws NativeException;
+
     private static native byte[] getUserInfoNative(byte[] cSeed, byte[] sSeed) throws NativeException;
 }

@@ -21,12 +21,11 @@ import java.beans.BeanDescriptor;
 import java.beans.BeanInfo;
 
 /**
-The ToggleFormInputBeanInfo class provides
-bean information for the ToggleFormInput class.
-**/
-public class ToggleFormInputBeanInfo extends SimpleBeanInfo
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+ * The ToggleFormInputBeanInfo class provides
+ * bean information for the ToggleFormInput class.
+ **/
+public class ToggleFormInputBeanInfo extends SimpleBeanInfo {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     // Class this bean info represents.
     private final static Class beanClass = ToggleFormInput.class;
@@ -37,52 +36,48 @@ public class ToggleFormInputBeanInfo extends SimpleBeanInfo
     private static EventSetDescriptor[] events_;
     private static PropertyDescriptor[] properties_;
 
-    
-    static
-    {
-      
-      try
-      {
 
-         EventSetDescriptor changed = new EventSetDescriptor(beanClass,
-                          "propertyChange",
-                          java.beans.PropertyChangeListener.class,
-                          "propertyChange");
-         changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
-         changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
- 
-         EventSetDescriptor veto = new EventSetDescriptor(beanClass,
-                          "propertyChange",
-                          java.beans.VetoableChangeListener.class,
-                          "vetoableChange");
-         veto.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_VETO"));
-         veto.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_VETO"));
- 
-         EventSetDescriptor[] events = {changed, veto};
- 
-         events_ = events;
+    static {
 
-        // ***** PROPERTIES
-        PropertyDescriptor checked = new PropertyDescriptor("checked", beanClass,
-                                        "isChecked", "setChecked");
-        checked.setBound(true);
-        checked.setConstrained(true);
-        checked.setDisplayName(loader_.getText("PROP_NAME_CHECKED"));
-        checked.setShortDescription(loader_.getText("PROP_DESC_CHECKED"));
+        try {
 
-        PropertyDescriptor label = new PropertyDescriptor("label", beanClass,
-                                        "getLabel", "setLabel");
-        label.setBound(true);
-        label.setConstrained(true);
-        label.setDisplayName(loader_.getText("PROP_NAME_LABEL"));
-        label.setShortDescription(loader_.getText("PROP_TF_DESC_LABEL"));
-        
-        properties_ = new PropertyDescriptor[] { checked, label };
-      }
-      catch (Exception e)
-      {
-        throw new Error(e.toString());
-      }
+            EventSetDescriptor changed = new EventSetDescriptor(beanClass,
+                    "propertyChange",
+                    java.beans.PropertyChangeListener.class,
+                    "propertyChange");
+            changed.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_CHANGE"));
+            changed.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_CHANGE"));
+
+            EventSetDescriptor veto = new EventSetDescriptor(beanClass,
+                    "propertyChange",
+                    java.beans.VetoableChangeListener.class,
+                    "vetoableChange");
+            veto.setDisplayName(loader_.getText("EVT_NAME_PROPERTY_VETO"));
+            veto.setShortDescription(loader_.getText("EVT_DESC_PROPERTY_VETO"));
+
+            EventSetDescriptor[] events = {changed, veto};
+
+            events_ = events;
+
+            // ***** PROPERTIES
+            PropertyDescriptor checked = new PropertyDescriptor("checked", beanClass,
+                    "isChecked", "setChecked");
+            checked.setBound(true);
+            checked.setConstrained(true);
+            checked.setDisplayName(loader_.getText("PROP_NAME_CHECKED"));
+            checked.setShortDescription(loader_.getText("PROP_DESC_CHECKED"));
+
+            PropertyDescriptor label = new PropertyDescriptor("label", beanClass,
+                    "getLabel", "setLabel");
+            label.setBound(true);
+            label.setConstrained(true);
+            label.setDisplayName(loader_.getText("PROP_NAME_LABEL"));
+            label.setShortDescription(loader_.getText("PROP_TF_DESC_LABEL"));
+
+            properties_ = new PropertyDescriptor[]{checked, label};
+        } catch (Exception e) {
+            throw new Error(e.toString());
+        }
     }
 
     /**
@@ -92,56 +87,55 @@ public class ToggleFormInputBeanInfo extends SimpleBeanInfo
      *
      * @return BeanInfo[] containing this bean's superclass BeanInfo
      **/
-    public BeanInfo[] getAdditionalBeanInfo()
-    {
-     return new BeanInfo[] { new FormInputBeanInfo() };
+    public BeanInfo[] getAdditionalBeanInfo() {
+        return new BeanInfo[]{new FormInputBeanInfo()};
     }
 
 
     /**
-    Returns the bean descriptor.
-      @return The bean descriptor.
-    **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
+     **/
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(beanClass);
     }
 
 
     /**
-    Returns the index of the default event.
-      @return The index to the default event.
-    **/
-    public int getDefaultEventIndex()
-    {
+     * Returns the index of the default event.
+     *
+     * @return The index to the default event.
+     **/
+    public int getDefaultEventIndex() {
         return 0;
     }
 
     /**
-      Returns the index of the default property.
-      @return The index to the default property.
-    **/
-    public int getDefaultPropertyIndex()
-    {
+     * Returns the index of the default property.
+     *
+     * @return The index to the default property.
+     **/
+    public int getDefaultPropertyIndex() {
         return 0;
     }
 
     /**
-      Returns the descriptors for all events.
-      @return The descriptors for all events.
-    **/
-    public EventSetDescriptor[] getEventSetDescriptors()
-    {
+     * Returns the descriptors for all events.
+     *
+     * @return The descriptors for all events.
+     **/
+    public EventSetDescriptor[] getEventSetDescriptors() {
         return events_;
     }
 
-   
+
     /**
-    Returns the descriptors for all properties.
-      @return The descriptors for all properties.
-    **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
+     **/
+    public PropertyDescriptor[] getPropertyDescriptors() {
         return properties_;
     }
 

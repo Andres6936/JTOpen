@@ -20,26 +20,25 @@ import java.sql.Date;
 /*ifdef JDBC40 
 import java.sql.NClob;
 import java.sql.RowId;
-endif */ 
+endif */
 import java.sql.SQLException;
 /* ifdef JDBC40 
 import java.sql.SQLXML;
-endif */ 
+endif */
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 final class SQLSmallint
-extends SQLDataBase
-{
+        extends SQLDataBase {
     static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
     // Private data.
-    private short               value_;
-    private int                 scale_;                             // @A0A
-    private BigDecimal          bigDecimalValue_ = null;            // @A0A
-    private int                 vrm_;                               //@trunc3
-    
+    private short value_;
+    private int scale_;                             // @A0A
+    private BigDecimal bigDecimalValue_ = null;            // @A0A
+    private int vrm_;                               //@trunc3
+
 
     SQLSmallint(int vrm, SQLConversionSettings settings) //@trunc3
     {
@@ -48,17 +47,16 @@ extends SQLDataBase
 
     SQLSmallint(int scale, int vrm, SQLConversionSettings settings)                   // @A0A  //@trunc3
     {
-    	super(settings); 
-        
-        value_              = 0;
-        scale_              = scale;                                      // @A0A
-        if(scale_ > 0)                                                   // @C0A
-            bigDecimalValue_    = new BigDecimal(Short.toString(value_)); // @A0A
-        vrm_        = vrm;  //@trunc3
+        super(settings);
+
+        value_ = 0;
+        scale_ = scale;                                      // @A0A
+        if (scale_ > 0)                                                   // @C0A
+            bigDecimalValue_ = new BigDecimal(Short.toString(value_)); // @A0A
+        vrm_ = vrm;  //@trunc3
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLSmallint(scale_, vrm_, settings_);  //@trunc
     }
 
@@ -69,20 +67,17 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter, boolean ignoreConversionErrors) //@P0C
-    throws SQLException
-    {
+            throws SQLException {
         value_ = BinaryConverter.byteArrayToShort(rawBytes, offset);                             // @D0C
 
-        if(scale_ > 0)
-        {                                                                        // @C0A
+        if (scale_ > 0) {                                                                        // @C0A
             bigDecimalValue_ = (new BigDecimal(Short.toString(value_))).movePointLeft(scale_);   // @A0A
             value_ = (short) bigDecimalValue_.intValue();                                        // @A0A
         }                                                                                        // @C0A
     }
 
     public void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter) //@P0C
-    throws SQLException
-    {
+            throws SQLException {
         BinaryConverter.shortToByteArray(value_, rawBytes, offset);                              // @D0C
     }
 
@@ -93,12 +88,11 @@ extends SQLDataBase
     //---------------------------------------------------------//
 
     public void set(Object object, Calendar calendar, int scale)
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false;                                                      // @D9c
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;                                                      // @D9c
 
-        if(object instanceof String)
-        {
+        if (object instanceof String) {
             // @D10c new implementation
             // old ...
             //
@@ -120,26 +114,27 @@ extends SQLDataBase
             //     create.  
             boolean tryAgain = false;                                                    // @P1a
 
-            try
-            {
+            try {
                 // @P1d long longValue = (long) Double.parseDouble((String) object); 
-                int  intValue = (int) Integer.parseInt((String) object);                 // @P1a
+                int intValue = (int) Integer.parseInt((String) object);                 // @P1a
 
                 if (intValue > Short.MAX_VALUE) {
-                  truncated_ = 6;  outOfBounds_ = true; value_ = Short.MAX_VALUE; 
+                    truncated_ = 6;
+                    outOfBounds_ = true;
+                    value_ = Short.MAX_VALUE;
                 } else if (intValue < Short.MIN_VALUE) {
-                  truncated_ = 6;  outOfBounds_ = true; value_ = Short.MIN_VALUE; 
-                } else { 
-                  value_ = (short) intValue;                                                // @D9c
+                    truncated_ = 6;
+                    outOfBounds_ = true;
+                    value_ = Short.MIN_VALUE;
+                } else {
+                    value_ = (short) intValue;                                                // @D9c
                 }
-            }
-            catch(NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 tryAgain = true;                                                          // @P1a
                 // @P1d JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
             }
 
-            if(tryAgain)                                                                // @P1a
+            if (tryAgain)                                                                // @P1a
             {
                 // @P1a
                 try                                                                       // @P1a
@@ -147,24 +142,27 @@ extends SQLDataBase
                     // @P1a
                     double doubleValue = Double.valueOf((String) object).doubleValue();  // @P1a
                     // @P1a
-                    if( doubleValue > Short.MAX_VALUE ) {
-                    truncated_ = 6;  outOfBounds_ = true; value_ = Short.MAX_VALUE; 
-                    } else if  ( doubleValue < Short.MIN_VALUE ) {
-                      truncated_ = 6;  outOfBounds_ = true; value_ = Short.MIN_VALUE; 
+                    if (doubleValue > Short.MAX_VALUE) {
+                        truncated_ = 6;
+                        outOfBounds_ = true;
+                        value_ = Short.MAX_VALUE;
+                    } else if (doubleValue < Short.MIN_VALUE) {
+                        truncated_ = 6;
+                        outOfBounds_ = true;
+                        value_ = Short.MIN_VALUE;
                     } else {                                                                      // @P1a
-                      value_ = (short) doubleValue;                                          // @P1a  
+                        value_ = (short) doubleValue;                                          // @P1a
                     }
                 }                                                                         // @P1a
-                catch(NumberFormatException e)                                           // @P1a
+                catch (NumberFormatException e)                                           // @P1a
                 {
                     // @P1a
-                    JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH,e);            // @P1a
+                    JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);            // @P1a
                 }                                                                         // @P1a
             }                                                                            // @P1a
         }                                                                                // @P1a
 
-        else if(object instanceof Number)
-        {
+        else if (object instanceof Number) {
             // Compute truncation by getting the value as a long
             // and comparing it against MAX_VALUE/MIN_VALUE.  You
             // do this because truncation of the decimal portion of
@@ -172,7 +170,7 @@ extends SQLDataBase
             // whole number portion of the value is too large/small
             // for the column.
             long longValue = ((Number) object).longValue();                        // @D9c
-            if( longValue > Short.MAX_VALUE )  {
+            if (longValue > Short.MAX_VALUE) {
                 // Note:  Truncated here is set to 6 bytes.  This is based on
                 //        the idea that a long was used and a short was the
                 //        column type.  We could check for different types
@@ -181,34 +179,35 @@ extends SQLDataBase
                 //        in this case anyway (for example, you could have a
                 //        float (4 bytes) that didn't fit into a bigint (8
                 //        bytes) without some data truncation.
-				truncated_ = 6;  outOfBounds_ = true; value_ = Short.MAX_VALUE;
-				} else if  ( longValue < Short.MIN_VALUE ){
-				truncated_ = 6;  outOfBounds_ = true; value_ = Short.MIN_VALUE; 
-            
-            } else { 
+                truncated_ = 6;
+                outOfBounds_ = true;
+                value_ = Short.MAX_VALUE;
+            } else if (longValue < Short.MIN_VALUE) {
+                truncated_ = 6;
+                outOfBounds_ = true;
+                value_ = Short.MIN_VALUE;
+
+            } else {
 
 
-            // Store the value.
-            value_ = (short) longValue;                                             // @D9c
+                // Store the value.
+                value_ = (short) longValue;                                             // @D9c
             }
-        }
-
-        else if(object instanceof Boolean)
+        } else if (object instanceof Boolean)
             value_ = (((Boolean) object).booleanValue() == true) ? (short) 1 : (short) 0;
 
         else {
-          if (JDTrace.isTraceOn()) {
-              if (object == null) { 
-                  JDTrace.logInformation(this, "Unable to assign null object");
-                } else { 
-                    JDTrace.logInformation(this, "Unable to assign object("+object+") of class("+object.getClass().toString()+")");
+            if (JDTrace.isTraceOn()) {
+                if (object == null) {
+                    JDTrace.logInformation(this, "Unable to assign null object");
+                } else {
+                    JDTrace.logInformation(this, "Unable to assign object(" + object + ") of class(" + object.getClass().toString() + ")");
                 }
-          }
+            }
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         }
-        
-        if(scale_ > 0)
-        {                                                                        // @C0A
+
+        if (scale_ > 0) {                                                                        // @C0A
             bigDecimalValue_ = (new BigDecimal(Short.toString(value_))).movePointLeft(scale_);   // @A0A
             value_ = (short) bigDecimalValue_.intValue();                                        // @A0A
         }                                                                                        // @C0A
@@ -220,117 +219,98 @@ extends SQLDataBase
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.SMALLINT;
     }
 
-    public String getCreateParameters()
-    {
+    public String getCreateParameters() {
         return null;
     }
 
-    public int getDisplaySize()
-    {
+    public int getDisplaySize() {
         return 6;
     }
 
     //@F1A JDBC 3.0
-    public String getJavaClassName()
-    { 
+    public String getJavaClassName() {
         /* smallints are Integers from jdbc 4.0 spec: 
         Note � The JDBC 1.0 specification defined the Java object mapping for the
         SMALLINT and TINYINT JDBC types to be Integer. The Java language did not
         include the Byte and Short data types when the JDBC 1.0 specification was
         finalized. The mapping of SMALLINT and TINYINT to Integer is maintained to
-        preserve backwards compatibility.*/  
+        preserve backwards compatibility.*/
         //this corresponds to getObject() also
         return "java.lang.Integer"; //@int
     }
 
-    public String getLiteralPrefix()
-    {
+    public String getLiteralPrefix() {
         return null;
     }
 
-    public String getLiteralSuffix()
-    {
+    public String getLiteralSuffix() {
         return null;
     }
 
-    public String getLocalName()
-    {
+    public String getLocalName() {
         return "SMALLINT";
     }
 
-    public int getMaximumPrecision()
-    {
+    public int getMaximumPrecision() {
         return 5;
     }
 
-    public int getMaximumScale()
-    {
+    public int getMaximumScale() {
         return 0;
     }
 
-    public int getMinimumScale()
-    {
+    public int getMinimumScale() {
         return 0;
     }
 
-    public int getNativeType()
-    {
+    public int getNativeType() {
         return 500;
     }
 
-    public int getPrecision()
-    {
+    public int getPrecision() {
         return 5;
     }
 
-    public int getRadix()
-    {
+    public int getRadix() {
         return 10;
     }
 
-    public int getScale()
-    {
+    public int getScale() {
         return scale_;
     }
 
-    public int getType()
-    {
+    public int getType() {
         return java.sql.Types.SMALLINT;
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return "SMALLINT";
     }
 
-    public boolean isSigned()
-    {
+    public boolean isSigned() {
         return true;
     }
 
-    public boolean isText()
-    {
+    public boolean isText() {
         return false;
     }
 
-    public int getActualSize()
-    {
+    public int getActualSize() {
         return 2; // @D0C
     }
 
-    public int getTruncated()
-    {
+    public int getTruncated() {
         return truncated_;
     }
-        public boolean getOutOfBounds() {
-      return outOfBounds_; 
+
+    public boolean getOutOfBounds() {
+        return outOfBounds_;
     }
-    
+
 
     //---------------------------------------------------------//
     //                                                         //
@@ -340,19 +320,17 @@ extends SQLDataBase
 
 
     public BigDecimal getBigDecimal(int scale)
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(scale_ > 0)
-        {                                                   // @C0A
-            if(scale >= 0)
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (scale_ > 0) {                                                   // @C0A
+            if (scale >= 0)
                 return bigDecimalValue_.setScale(scale);                    // @A0A
             else
                 return bigDecimalValue_;
         }                                                                   // @C0A
-        else
-        {                                                              // @C0A
-            if(scale <= 0)                                                 // @C0A
+        else {                                                              // @C0A
+            if (scale <= 0)                                                 // @C0A
                 return BigDecimal.valueOf((long) value_);                  // @C0A
             else                                                            // @C0A
                 return BigDecimal.valueOf((long) value_).setScale(scale); // @C0A
@@ -360,120 +338,114 @@ extends SQLDataBase
     }
 
     public InputStream getBinaryStream()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public Blob getBlob()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public boolean getBoolean()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        return(value_ != 0);
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        return (value_ != 0);
     }
 
     public byte getByte()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(value_ > Byte.MAX_VALUE || value_ < Byte.MIN_VALUE)
-        {
-            truncated_ = 1;     outOfBounds_ = true;
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (value_ > Byte.MAX_VALUE || value_ < Byte.MIN_VALUE) {
+            truncated_ = 1;
+            outOfBounds_ = true;
         }
-        return(byte) value_;
+        return (byte) value_;
     }
 
     public byte[] getBytes()
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
 
     public Date getDate(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public double getDouble()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(scale_ > 0)                                 // @C0A
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (scale_ > 0)                                 // @C0A
             return bigDecimalValue_.doubleValue();      // @A0A
         else                                            // @C0A
-            return(double) value_;                     // @A0D @C0A
+            return (double) value_;                     // @A0D @C0A
     }
 
     public float getFloat()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(scale_ > 0)                                 // @C0A
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (scale_ > 0)                                 // @C0A
             return bigDecimalValue_.floatValue();       // @A0A
         else                                            // @C0A
-            return(float) value_;                      // @A0D @C0A
+            return (float) value_;                      // @A0D @C0A
     }
 
     public int getInt()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         return value_;
     }
 
     public long getLong()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         return value_;
     }
 
     public Object getObject()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         return new Integer(value_);              // @D2c -- used to be new Short(value_)
     }
 
     public short getShort()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
         return value_;
     }
 
     public String getString()
-    throws SQLException
-    {
-        truncated_ = 0; outOfBounds_ = false; 
-        if(scale_ > 0)                                 // @C0A
+            throws SQLException {
+        truncated_ = 0;
+        outOfBounds_ = false;
+        if (scale_ > 0)                                 // @C0A
             return bigDecimalValue_.toString();         // @A0A
         else                                            // @C0A
             return Short.toString(value_);             // @A0D @C0A
     }
 
     public Time getTime(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
 
     public Timestamp getTimestamp(Calendar calendar)
-    throws SQLException
-    {
+            throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
@@ -494,11 +466,11 @@ extends SQLDataBase
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-    endif */ 
-    
+    endif */
+
     public void saveValue() {
-      savedValue_ = new Short(value_); 
-   }
+        savedValue_ = new Short(value_);
+    }
 
 }
 

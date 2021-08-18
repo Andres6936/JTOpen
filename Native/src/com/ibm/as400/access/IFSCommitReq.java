@@ -15,27 +15,26 @@ package com.ibm.as400.access;
 
 
 /**
-Commit changes request.
-**/
-class IFSCommitReq extends IFSDataStreamReq
-{
-  private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
+ * Commit changes request.
+ **/
+class IFSCommitReq extends IFSDataStreamReq {
+    private static final String copyright = "Copyright (C) 1997-2004 International Business Machines Corporation and others.";
 
-  private static final int FILE_HANDLE_OFFSET = 22;
-  private static final int TEMPLATE_LENGTH = 6;
+    private static final int FILE_HANDLE_OFFSET = 22;
+    private static final int TEMPLATE_LENGTH = 6;
 
-/**
-Construct a commit changes request.
-@param fileHandle the file handle returned from an open request
-**/
-  IFSCommitReq(int fileHandle)
-  {
-    super(20 + TEMPLATE_LENGTH);
-    setLength(data_.length);
-    setTemplateLen(TEMPLATE_LENGTH);
-    setReqRepID(0x0006);
-    set32bit(fileHandle, FILE_HANDLE_OFFSET);
-  }
+    /**
+     * Construct a commit changes request.
+     *
+     * @param fileHandle the file handle returned from an open request
+     **/
+    IFSCommitReq(int fileHandle) {
+        super(20 + TEMPLATE_LENGTH);
+        setLength(data_.length);
+        setTemplateLen(TEMPLATE_LENGTH);
+        setReqRepID(0x0006);
+        set32bit(fileHandle, FILE_HANDLE_OFFSET);
+    }
 
 }
 

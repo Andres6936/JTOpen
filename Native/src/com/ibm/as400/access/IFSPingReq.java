@@ -14,17 +14,15 @@
 package com.ibm.as400.access;
 
 /**
- Note: The File Server doesn't yet support or recognize a "ping" request.
- This class simply provides a dummy request that we can send to the File Server, to elicit a reply.
- We expect the File Server to reject this request with a reply (class IFSReturnCodeRep) indicating "request not supported".
- That's fine, because when we receive the reply, we've verified that the connection is still alive.
+ * Note: The File Server doesn't yet support or recognize a "ping" request.
+ * This class simply provides a dummy request that we can send to the File Server, to elicit a reply.
+ * We expect the File Server to reject this request with a reply (class IFSReturnCodeRep) indicating "request not supported".
+ * That's fine, because when we receive the reply, we've verified that the connection is still alive.
  **/
-class IFSPingReq extends IFSDataStreamReq
-{
-  private static final int TEMPLATE_LENGTH = 6;
+class IFSPingReq extends IFSDataStreamReq {
+    private static final int TEMPLATE_LENGTH = 6;
 
-    IFSPingReq()
-    {
+    IFSPingReq() {
         super(20 + TEMPLATE_LENGTH);
 
         setLength(data_.length);

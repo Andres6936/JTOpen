@@ -18,17 +18,14 @@ package com.ibm.as400.access;
  * to get raw data to and from the server (things like reading and
  * writing spooled files use it).
  **/
-class NPCPData extends NPCodePoint
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class NPCPData extends NPCodePoint {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     static final long serialVersionUID = 4L;
 
 
-
-    NPCPData()
-    {
+    NPCPData() {
         super(NPCodePoint.DATA);
     }
 

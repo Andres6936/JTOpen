@@ -16,8 +16,7 @@ package com.ibm.as400.access;
 import java.io.Serializable;
 
 // Class to move SSL configuration options from proxy client to proxy server.
-class SSLOptions implements Serializable
-{
+class SSLOptions implements Serializable {
     private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
     static final long serialVersionUID = 4L;
     // Package and class name of key ring object, initialized to default.

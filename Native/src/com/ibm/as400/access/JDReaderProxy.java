@@ -18,146 +18,119 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 
-
 /**
-<p>The JDReaderProxy class provides access to Reader objects
-which are returned from Toolbox method calls.
-**/
+ * <p>The JDReaderProxy class provides access to Reader objects
+ * which are returned from Toolbox method calls.
+ **/
 class JDReaderProxy
-extends Reader
-implements ProxyFactoryImpl
-{
-  static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
+        extends Reader
+        implements ProxyFactoryImpl {
+    static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
 
-  // Private data.
+    // Private data.
+    private static final boolean[] ARGS_TO_RETURN = new boolean[]{true, false, false};
+    private long pxId_;
+    private ProxyClientConnection connection_;
 
-  private long                    pxId_;
-  private ProxyClientConnection connection_;
-
-
-  public void close() throws IOException
-  {
-    try {
-      connection_.callMethod (pxId_, "close");
+    public void close() throws IOException {
+        try {
+            connection_.callMethod(pxId_, "close");
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow1(e);
+        }
     }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow1 (e);
-    }
-  }
 
+    protected void finalize() throws Throwable {
+        connection_.callFinalize(pxId_);
+        super.finalize();
+    }
 
-  protected void finalize() throws Throwable
-  {
-    connection_.callFinalize (pxId_);
-    super.finalize();
-  }
+    // Implementation of ProxyFactoryImpl interface.
+    // This method gets called by ProxyClientConnection.callFactoryMethod().
+    public void initialize(long proxyId, ProxyClientConnection connection) {
+        pxId_ = proxyId;
+        connection_ = connection;
+    }
 
+    public void mark(int readAheadLimit) throws IOException {
+        try {
+            connection_.callMethod(pxId_, "mark",
+                    new Class[]{Integer.TYPE},
+                    new Object[]{new Integer(readAheadLimit)});
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow1(e);
+        }
+    }
 
-  // Implementation of ProxyFactoryImpl interface.
-  // This method gets called by ProxyClientConnection.callFactoryMethod().
-  public void initialize (long proxyId, ProxyClientConnection connection)
-  {
-    pxId_ = proxyId;
-    connection_ = connection;
-  }
+    public boolean markSupported() {
+        try {
+            return connection_.callMethodReturnsBoolean(pxId_, "markSupported");
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow(e);
+        }
+    }
 
-  public void mark(int readAheadLimit) throws IOException
-  {
-    try {
-      connection_.callMethod (pxId_, "mark",
-                             new Class[] { Integer.TYPE },
-                             new Object[] { new Integer (readAheadLimit) });
+    public int read() throws IOException {
+        try {
+            return connection_.callMethodReturnsInt(pxId_, "read");
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow1(e);
+        }
     }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow1 (e);
-    }
-  }
 
-  public boolean markSupported()
-  {
-    try {
-      return connection_.callMethodReturnsBoolean (pxId_, "markSupported");
+    public int read(char cbuf[]) throws IOException {
+        return read(cbuf, 0, cbuf.length);
     }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow (e);
-    }
-  }
 
+    public int read(char cbuf[],
+                    int off,
+                    int len) throws IOException {
+        try {
+            ProxyReturnValue rv = connection_.callMethod(pxId_, "read",
+                    new Class[]{char[].class,
+                            Integer.TYPE,
+                            Integer.TYPE},
+                    new Object[]{cbuf,
+                            new Integer(off),
+                            new Integer(len)},
+                    ARGS_TO_RETURN, false);
+            char[] returnDataBuffer = (char[]) rv.getArgument(0);
+            for (int i = 0; i < cbuf.length; i++) {
+                cbuf[i] = returnDataBuffer[i];
+            }
+            return rv.getReturnValueInt();
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow1(e);
+        }
+    }
 
-  public int read() throws IOException
-  {
-    try {
-      return connection_.callMethodReturnsInt (pxId_, "read");
+    public boolean ready() throws IOException {
+        try {
+            return connection_.callMethodReturnsBoolean(pxId_, "ready");
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow1(e);
+        }
     }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow1 (e);
-    }
-  }
 
-  public int read(char cbuf[]) throws IOException
-  {
-    return read (cbuf, 0, cbuf.length);
-  }
+    public void reset() throws IOException {
+        try {
+            connection_.callMethod(pxId_, "reset");
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow1(e);
+        }
+    }
 
-  private static final boolean[] ARGS_TO_RETURN = new boolean[] {true, false, false};
-
-  public int read(char cbuf[],
-                  int off,
-                  int len) throws IOException
-  {
-    try {
-      ProxyReturnValue rv = connection_.callMethod (pxId_, "read",
-                            new Class[] { char[].class,
-                                          Integer.TYPE,
-                                          Integer.TYPE },
-                            new Object[] { cbuf,
-                                           new Integer (off),
-                                           new Integer (len) },
-                            ARGS_TO_RETURN, false );
-      char[] returnDataBuffer = (char[])rv.getArgument(0);
-      for (int i=0; i<cbuf.length; i++) {
-        cbuf[i] = returnDataBuffer[i];
-      }
-      return rv.getReturnValueInt();
+    public long skip(long n) throws IOException {
+        try {
+            return connection_.callMethod(pxId_, "skip",
+                    new Class[]{Long.TYPE},
+                    new Object[]{new Long(n)})
+                    .getReturnValueLong();
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow1(e);
+        }
     }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow1 (e);
-    }
-  }
-
-  public boolean ready() throws IOException
-  {
-    try {
-      return connection_.callMethodReturnsBoolean (pxId_, "ready");
-    }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow1 (e);
-    }
-  }
-
-  public void reset() throws IOException
-  {
-    try {
-      connection_.callMethod (pxId_, "reset");
-    }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow1 (e);
-    }
-  }
-
-  public long skip(long n) throws IOException
-  {
-    try {
-      return connection_.callMethod (pxId_, "skip",
-                     new Class[] { Long.TYPE },
-                     new Object[] { new Long (n) })
-               .getReturnValueLong ();
-    }
-    catch (InvocationTargetException e) {
-      throw ProxyClientConnection.rethrow1 (e);
-    }
-  }
 
 
 }

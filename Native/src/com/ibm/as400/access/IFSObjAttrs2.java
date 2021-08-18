@@ -16,67 +16,28 @@ package com.ibm.as400.access;
 import java.io.Serializable;
 
 /**
- Encapsulates a File Server "Object Attributes 2" structure (OA2, OA2s, OA2b, or OA2c).
- OA2* structures are used in several File Server requests and replies.
- Note: This object does not include the 6 leading LL/CP bytes.
+ * Encapsulates a File Server "Object Attributes 2" structure (OA2, OA2s, OA2b, or OA2c).
+ * OA2* structures are used in several File Server requests and replies.
+ * Note: This object does not include the 6 leading LL/CP bytes.
  **/
-final class IFSObjAttrs2 implements Serializable
-{
-  // Design note: The File Server team has an include file named "vattr.h", which contains the full details for the OA2 structure.
-  static final long serialVersionUID = 4L;
-  private byte[] data_;
+final class IFSObjAttrs2 implements Serializable {
+    // Design note: The File Server team has an include file named "vattr.h", which contains the full details for the OA2 structure.
+    static final long serialVersionUID = 4L;
+    private byte[] data_;
 
 
-  IFSObjAttrs2(byte[] data)
-  {
-    data_ = data;
-  }
+    IFSObjAttrs2(byte[] data) {
+        data_ = data;
+    }
 
-  // Returns the value of the "CCSID of the object" field.
-  final int getCCSID(int datastreamLevel)
-  {
-    // Determine the offset into the OA* structure of the CCSID (or codepage) field.
-    int offsetToField = determineCCSIDOffset(datastreamLevel);
-    return (int) BinaryConverter.byteArrayToShort(data_, offsetToField) & 0x0000ffff;
-  }
-
-  // Sets the value of the "CCSID of the object" field.
-  final void setCCSID(int ccsid, int datastreamLevel)
-  {
-    int offsetToField = determineCCSIDOffset(datastreamLevel);
-    byte[] ccsidBytes = BinaryConverter.shortToByteArray((short)ccsid);
-    System.arraycopy(ccsidBytes, 0, data_, offsetToField, 2);
-  }
-
-  // Returns the contents of this OA2 structure.
-  // Does not include the 6 leading LL/CP bytes.
-  final byte[] getData()
-  {
-    return data_;
-  }
-
-  // Returns the number of bytes contained in this OA2 structure.
-  // Does not include the 6 leading LL/CP bytes.
-  final int getLength()
-  {
-    return data_.length;
-  }
-
-  // Returns the value of the "Owner user ID" field.  (Offset 64)
-  final long getOwnerUID()
-  {
-    return (long)BinaryConverter.byteArrayToInt(data_, 64) & 0x0FFFFFFFFL;
-  }
-
-
-  /**
-   Get offset of the the 2-byte CCSID (or codepage) field in the OA2x structure.
-   @return the CCSID offset
-   **/
-  static final int determineCCSIDOffset(int datastreamLevel)
-  {
-    // Note: Only if the server is reporting Datastream Level 2 (or later) will the reply have a CCSID field.
-    // If prior to Level 2, we must make do with the codepage value.
+    /**
+     * Get offset of the the 2-byte CCSID (or codepage) field in the OA2x structure.
+     *
+     * @return the CCSID offset
+     **/
+    static final int determineCCSIDOffset(int datastreamLevel) {
+        // Note: Only if the server is reporting Datastream Level 2 (or later) will the reply have a CCSID field.
+        // If prior to Level 2, we must make do with the codepage value.
 
     /*
 
@@ -124,26 +85,54 @@ final class IFSObjAttrs2 implements Serializable
      Note: Since the Toolbox will only request levels 0, 2, 8, or 16,
      the server will never report level 1.
      */
-    int offset_into_OA;  // offset into OA* structure for CCSID or codepage field
-    switch (datastreamLevel)
-    {
-      case 0:       // OA2
-        offset_into_OA = 126;  // offset of the 'codepage' field in the OA2 structure
-        break;
-      case 0xF4F4:  // OA2a
-        offset_into_OA = 142;  // offset of the 'codepage' field in the OA2a structure
-        break;
-      default:      // OA2b or OA2c
-        offset_into_OA = 134;  // offset of the 'CCSID of object' field in the OA2b/OA2c structure
-        break;
+        int offset_into_OA;  // offset into OA* structure for CCSID or codepage field
+        switch (datastreamLevel) {
+            case 0:       // OA2
+                offset_into_OA = 126;  // offset of the 'codepage' field in the OA2 structure
+                break;
+            case 0xF4F4:  // OA2a
+                offset_into_OA = 142;  // offset of the 'codepage' field in the OA2a structure
+                break;
+            default:      // OA2b or OA2c
+                offset_into_OA = 134;  // offset of the 'CCSID of object' field in the OA2b/OA2c structure
+                break;
+        }
+        return offset_into_OA;
     }
-    return offset_into_OA;
-  }
 
+    // Returns the value of the "CCSID of the object" field.
+    final int getCCSID(int datastreamLevel) {
+        // Determine the offset into the OA* structure of the CCSID (or codepage) field.
+        int offsetToField = determineCCSIDOffset(datastreamLevel);
+        return (int) BinaryConverter.byteArrayToShort(data_, offsetToField) & 0x0000ffff;
+    }
 
-  final int length()
-  {
-    return data_.length;
-  }
+    // Sets the value of the "CCSID of the object" field.
+    final void setCCSID(int ccsid, int datastreamLevel) {
+        int offsetToField = determineCCSIDOffset(datastreamLevel);
+        byte[] ccsidBytes = BinaryConverter.shortToByteArray((short) ccsid);
+        System.arraycopy(ccsidBytes, 0, data_, offsetToField, 2);
+    }
+
+    // Returns the contents of this OA2 structure.
+    // Does not include the 6 leading LL/CP bytes.
+    final byte[] getData() {
+        return data_;
+    }
+
+    // Returns the number of bytes contained in this OA2 structure.
+    // Does not include the 6 leading LL/CP bytes.
+    final int getLength() {
+        return data_.length;
+    }
+
+    // Returns the value of the "Owner user ID" field.  (Offset 64)
+    final long getOwnerUID() {
+        return (long) BinaryConverter.byteArrayToInt(data_, 64) & 0x0FFFFFFFFL;
+    }
+
+    final int length() {
+        return data_.length;
+    }
 
 }

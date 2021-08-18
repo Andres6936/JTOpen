@@ -14,34 +14,30 @@
 package com.ibm.as400.access;
 
 /**
- *  The JPingEchoDS is the datastream sent to the server
- *  and the server sends back a reply.
- *
+ * The JPingEchoDS is the datastream sent to the server
+ * and the server sends back a reply.
  **/
-class JPingEchoDS extends ClientAccessDataStream
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
+class JPingEchoDS extends ClientAccessDataStream {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     /**
-     *  Constructs a JPingEchoDS object.
+     * Constructs a JPingEchoDS object.
      *
-     *  @param serverId The AS/400 service.
-     *  @param buffer The datastream.
-     *  @param i The request correlation for this datastream.
-     *
+     * @param serverId The AS/400 service.
+     * @param buffer   The datastream.
+     * @param i        The request correlation for this datastream.
      **/
-    JPingEchoDS(int serverId, byte[] buffer)
-    {
-       super();
-       data_ = new byte[buffer.length + 20];
-       setLength(buffer.length + 20);
-       setHeaderID(0);
-       setServerID(serverId);
-       setCSInstance(0xEEEEEEEE); // The CS ID of the Ping Echo datastream (no particular reason for having 0xEEEEEEEE).
-       //setCorrelation(i);
-       setTemplateLen(buffer.length);
-       setReqRepID(0x7FFE);  // The ID of the Ping Echo datastream (no particular reason for having 0x7FFE).
-       
-       System.arraycopy(buffer, 0, data_, 20, buffer.length);
+    JPingEchoDS(int serverId, byte[] buffer) {
+        super();
+        data_ = new byte[buffer.length + 20];
+        setLength(buffer.length + 20);
+        setHeaderID(0);
+        setServerID(serverId);
+        setCSInstance(0xEEEEEEEE); // The CS ID of the Ping Echo datastream (no particular reason for having 0xEEEEEEEE).
+        //setCorrelation(i);
+        setTemplateLen(buffer.length);
+        setReqRepID(0x7FFE);  // The ID of the Ping Echo datastream (no particular reason for having 0x7FFE).
+
+        System.arraycopy(buffer, 0, data_, 20, buffer.length);
     }
 }

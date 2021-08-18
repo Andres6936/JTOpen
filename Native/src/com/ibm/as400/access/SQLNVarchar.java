@@ -17,27 +17,24 @@ package com.ibm.as400.access;
 //@PDA jdbc40 new class
 
 final class SQLNVarchar
-extends SQLVarcharBase implements SQLVariableCompressible
-{
- 
+        extends SQLVarcharBase implements SQLVariableCompressible {
+
     // Private data.
-    private int                     ccsid_; //@cca1
-	
+    private int ccsid_; //@cca1
+
     // Note: maxLength is in bytes not counting 2 for LL.
     //
-    SQLNVarchar(int maxLength, SQLConversionSettings settings)
-    {
+    SQLNVarchar(int maxLength, SQLConversionSettings settings) {
         super(settings, 0, maxLength, "", 2);
-        truncated_ = 0; outOfBounds_ = false;
-        ccsid_          = 1200;  //@cca1
-        
+        truncated_ = 0;
+        outOfBounds_ = false;
+        ccsid_ = 1200;  //@cca1
+
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLNVarchar(maxLength_, settings_);
     }
-
 
 
     //---------------------------------------------------------//
@@ -46,52 +43,45 @@ extends SQLVarcharBase implements SQLVariableCompressible
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.NVARCHAR;
     }
 
-    public int getDisplaySize()
-    {
-            return maxLength_ / 2;
+    public int getDisplaySize() {
+        return maxLength_ / 2;
     }
 
 
-    public String getLocalName()
-    {
+    public String getLocalName() {
         return "NVARCHAR";
     }
 
-    public int getMaximumPrecision()
-    {
+    public int getMaximumPrecision() {
         return 16369;
     }
 
-    public int getType()
-    {
+    public int getType() {
     	/* ifdef JDBC40 
         return java.sql.Types.NVARCHAR;
-        endif */ 
-    	/* ifndef JDBC40 */
+        endif */
+        /* ifndef JDBC40 */
         return java.sql.Types.VARCHAR;
-    	/* endif */ 
+        /* endif */
     }
 
 
-    public int getNativeType()
-    {
+    public int getNativeType() {
         return 464;
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
     	/* ifdef JDBC40 
         return "NVARCHAR";
-        endif */ 
-    	
-    	/* ifndef JDBC40 */
+        endif */
+
+        /* ifndef JDBC40 */
         return "VARCHAR";
-    	/* endif */ 
+        /* endif */
     }
 
 

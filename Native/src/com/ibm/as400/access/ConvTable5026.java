@@ -15,11 +15,9 @@ package com.ibm.as400.access;
 
 import java.io.UnsupportedEncodingException;
 
-public class ConvTable5026 extends ConvTableMixedMap
-{
-    public ConvTable5026() throws UnsupportedEncodingException
-    {
-        super(5026, 291, 2000930 );  // Use 2000930 same as generated 2005026. Was 16684 is a superset of 300.
-        
+public class ConvTable5026 extends ConvTableMixedMap {
+    public ConvTable5026() throws UnsupportedEncodingException {
+        super(5026, 291, 2000930);  // Use 2000930 same as generated 2005026. Was 16684 is a superset of 300.
+
     }
 }

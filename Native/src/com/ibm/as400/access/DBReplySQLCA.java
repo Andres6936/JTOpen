@@ -16,46 +16,36 @@ package com.ibm.as400.access;
 import java.math.BigDecimal;   //@F3A
 
 
-
-
 /**
-   Provides access to the SQLCA portion of the reply
-   data stream.
-**/
-class DBReplySQLCA
-{
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
-
-
-
-    private byte[]  data_;
-    private int     offset_;
-    private int     length_;
+ * Provides access to the SQLCA portion of the reply
+ * data stream.
+ **/
+class DBReplySQLCA {
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
     // Add 96 to offset_ for Errd1, 100 to offset_ for Errd2, etc.
-    private static final int[]   locationFromOffset_ = {96, 100, 104, 108, 112, 116};  //@F1A @F4C
+    private static final int[] locationFromOffset_ = {96, 100, 104, 108, 112, 116};  //@F1A @F4C
+    private byte[] data_;
+    private int offset_;
+    private int length_;
 
 
-    public DBReplySQLCA (byte[] data,
-                         int offset,
-                         int length)
-    {
+    public DBReplySQLCA(byte[] data,
+                        int offset,
+                        int length) {
         data_ = data;
         offset_ = offset;
-        length_ = length;    
+        length_ = length;
     }
-
 
 
     //@F1A Combined getErrd1, getErrd2, getErrd3, getErrd4 methods
-    final public int getErrd (int requestedErrd) throws DBDataStreamException
-    {
+    final public int getErrd(int requestedErrd) throws DBDataStreamException {
         if (length_ <= 6)
             return 0;
 
-        return BinaryConverter.byteArrayToInt (data_,
-                                               offset_ + locationFromOffset_[requestedErrd-1]);
+        return BinaryConverter.byteArrayToInt(data_,
+                offset_ + locationFromOffset_[requestedErrd - 1]);
     }
-
 
 
     // @E4A
@@ -68,7 +58,6 @@ class DBReplySQLCA
     //@F1D }                                                                   // @E4A
 
 
-
     //@F1D final public int getErrd2 () throws DBDataStreamException
     //@F1D {
     //@F1D     if (length_ <= 6)                                               // @D1A
@@ -76,7 +65,6 @@ class DBReplySQLCA
     //@F1D 
     //@F1D     return BinaryConverter.byteArrayToInt (data_, offset_ + 100);
     //@F1D }
-
 
 
     //@F1D final public int getErrd3 () throws DBDataStreamException
@@ -88,7 +76,6 @@ class DBReplySQLCA
     //@F1D }
 
 
-
     //@F1D final public int getErrd4 () throws DBDataStreamException           // @E6A
     //@F1D {                                                                   // @E6A
     //@F1D     if (length_ <= 6)                                               // @E6A
@@ -96,7 +83,6 @@ class DBReplySQLCA
     //@F1D                                                                     // @E6A
     //@F1D     return BinaryConverter.byteArrayToInt (data_, offset_ + 108);   // @E6A
     //@F1D }                                                                   // @E6A
-
 
 
     // @E3A
@@ -109,19 +95,19 @@ class DBReplySQLCA
     }                                                                          // @E3A
 
     // @N7A 
-    final public String getErrp(ConvTable converter)  {
-      int infoLen = 8; 
-      if (length_ <= offset_ + 88) {
-         // Data is too short
-          return ""; 
-      } else {
-        // If there are not 8 character, return as many as there are 
-        if (length_ < offset_ + 88 + infoLen) {
-          infoLen = length_ - offset_ - 88; 
+    final public String getErrp(ConvTable converter) {
+        int infoLen = 8;
+        if (length_ <= offset_ + 88) {
+            // Data is too short
+            return "";
+        } else {
+            // If there are not 8 character, return as many as there are
+            if (length_ < offset_ + 88 + infoLen) {
+                infoLen = length_ - offset_ - 88;
+            }
+            return converter.byteArrayToString(data_, offset_ + 88, infoLen);
         }
-        return converter.byteArrayToString(data_, offset_ + 88, infoLen);
-      }
-      
+
     }
 
     // @E5A
@@ -137,14 +123,13 @@ class DBReplySQLCA
         short currentLength;                                                   // @E5A
         while ((currentVariable < substitutionVariable) && (j < errml)) {       // @E5A
             ++currentVariable;                                                 // @E5A
-            currentLength = (short)(BinaryConverter.byteArrayToShort(data_, i) + 2); // @E5A
+            currentLength = (short) (BinaryConverter.byteArrayToShort(data_, i) + 2); // @E5A
             i += currentLength;                                                // @E5A
             j += currentLength;                                                // @E5A
         }                                                                      // @E5A
         currentLength = BinaryConverter.byteArrayToShort(data_, i);            // @E5A
-        return converter.byteArrayToString(data_, i+2, currentLength);         // @E5A
+        return converter.byteArrayToString(data_, i + 2, currentLength);         // @E5A
     }                                                                          // @E5A
-
 
 
     // @E2A
@@ -154,7 +139,7 @@ class DBReplySQLCA
             return false;                                                       // @E2A
         // It is actually 6 of Byte 6.                                          // @E2A
         byte b = data_[offset_ + 6];                                            // @E2A
-        return((b & (byte)0x02) > 0);                                          // @E2A
+        return ((b & (byte) 0x02) > 0);                                          // @E2A
     }                                                                           // @E2A
 
 
@@ -170,11 +155,11 @@ class DBReplySQLCA
     // We shouldn't need a "throws DBDataStreamException" because we are not handling 
     // SIGNAL 443 cases here.
     final public BigDecimal getGeneratedKey() //@P0C @F3C
-    {  
-        AS400PackedDecimal typeConverter = new AS400PackedDecimal (30, 0);      //@F3A
+    {
+        AS400PackedDecimal typeConverter = new AS400PackedDecimal(30, 0);      //@F3A
         try                                                                     //@F3A
         {                                                                       //@F3A
-            return((BigDecimal) typeConverter.toObject (data_, offset_ + 72));  //@F3A
+            return ((BigDecimal) typeConverter.toObject(data_, offset_ + 72));  //@F3A
         }                                                                       //@F3A
         catch (NumberFormatException nfe)                                       //@F3A
         {                                                                       //@F3A
@@ -183,25 +168,24 @@ class DBReplySQLCA
             return null;                                                        //@F3A
         }                                                                       //@F3A
         //@F3D return converter.byteArrayToString(data_, offset_ + 72, 16);        
-    }      
+    }
 
 
     // Return SQLCODE from sqlca
-    final public int getSQLCode () throws DBDataStreamException //@PDA
+    final public int getSQLCode() throws DBDataStreamException //@PDA
     {
-    	return BinaryConverter.byteArrayToInt (data_, offset_ + 12);
+        return BinaryConverter.byteArrayToInt(data_, offset_ + 12);
     }
-    
+
     // Returns the SQLState
     // It needs to run thru EbcdicToAscii since it is a string
-    final public String getSQLState (ConvTable converter) throws DBDataStreamException //@P0C
+    final public String getSQLState(ConvTable converter) throws DBDataStreamException //@P0C
     {
         if (length_ <= 6)
             return null;
 
-        return converter.byteArrayToString (data_, offset_ + 131, 5);
+        return converter.byteArrayToString(data_, offset_ + 131, 5);
     }
-
 
 
     final public byte getWarn5() throws DBDataStreamException            // @E1A
@@ -210,7 +194,6 @@ class DBReplySQLCA
             return 0;                                                    // @E1A
         return data_[offset_ + 124];                                     // @E1A
     }                                                                    // @E1A
-
 
 
 }   // End of DBReplySQLCA class

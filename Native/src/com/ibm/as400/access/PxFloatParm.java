@@ -20,130 +20,108 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-
 /**
-The PxFloatParm class represents a float
-parameter in a proxy datastream.
-**/
-class PxFloatParm 
-extends PxDS
-implements PxParm 
-{
-  private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
-
-
+ * The PxFloatParm class represents a float
+ * parameter in a proxy datastream.
+ **/
+class PxFloatParm
+        extends PxDS
+        implements PxParm {
+    private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
 
     // Private data.
-    private float             value_;
+    private float value_;
 
 
-
-/**
-Constructs a PxFloatParm object.
-**/
-    public PxFloatParm ()
-    { 
-        super (ProxyConstants.DS_FLOAT_PARM);
+    /**
+     * Constructs a PxFloatParm object.
+     **/
+    public PxFloatParm() {
+        super(ProxyConstants.DS_FLOAT_PARM);
     }
 
 
-
-/**
-Constructs a PxFloatParm object.
-
-@param value    The float value.
-**/
-    public PxFloatParm (float value)
-    {
-        super (ProxyConstants.DS_FLOAT_PARM);
+    /**
+     * Constructs a PxFloatParm object.
+     *
+     * @param value The float value.
+     **/
+    public PxFloatParm(float value) {
+        super(ProxyConstants.DS_FLOAT_PARM);
         value_ = value;
     }
 
 
-
-/**
-Constructs a PxFloatParm object.
-
-@param value    The float value.
-**/
-    public PxFloatParm (Float value)
-    {
-        this (value.floatValue ());
+    /**
+     * Constructs a PxFloatParm object.
+     *
+     * @param value The float value.
+     **/
+    public PxFloatParm(Float value) {
+        this(value.floatValue());
     }
 
 
-
-/**
-Returns the float value.
-
-@return The float value.
-**/
-    public float getFloatValue ()
-    {
+    /**
+     * Returns the float value.
+     *
+     * @return The float value.
+     **/
+    public float getFloatValue() {
         return value_;
     }
 
 
-
-/**
-Returns the Object value.
-
-@return The Object value.
-**/
-    public Object getObjectValue ()
-    {
-        return new Float (value_);
+    /**
+     * Returns the Object value.
+     *
+     * @return The Object value.
+     **/
+    public Object getObjectValue() {
+        return new Float(value_);
     }
 
 
-                     
-/**
-Loads this datastream by reading from an input stream.
-
-@param input    The input stream.
-@param factory  The datastream factory.  This is sometimes
-                needed when datastreams are nested.
-
-@exception IOException  If an error occurs.                
-**/
-    public void readFrom (InputStream input, PxDSFactory factory)
-        throws IOException
-    {
-        super.readFrom (input, factory);
-        DataInputStream dataInput = new DataInputStream (input);
-        value_ = dataInput.readFloat ();
+    /**
+     * Loads this datastream by reading from an input stream.
+     *
+     * @param input   The input stream.
+     * @param factory The datastream factory.  This is sometimes
+     *                needed when datastreams are nested.
+     * @throws IOException If an error occurs.
+     **/
+    public void readFrom(InputStream input, PxDSFactory factory)
+            throws IOException {
+        super.readFrom(input, factory);
+        DataInputStream dataInput = new DataInputStream(input);
+        value_ = dataInput.readFloat();
     }
 
 
-/**
-Returns the String representation of the datastream.
+    /**
+     * Returns the String representation of the datastream.
+     *
+     * @return The String representation of the datastream.
+     **/
+    public String toString() {
 
-@return The String representation of the datastream. 
-**/
-    public String toString ()
-    {
-        
-        return super.toString () + " (" + value_ + ")";
+        return super.toString() + " (" + value_ + ")";
     }
 
 
-
-/**
-Writes the contents of the datastream to an output stream.
-
-@param output   The output stream.
-
-@exception IOException  If an error occurs.                
-**/
-    public void writeTo (OutputStream output)
-        throws IOException
-    {
-        super.writeTo (output);
-        DataOutputStream dataOutput = new DataOutputStream (output);
-        dataOutput.writeFloat (value_);
-     }
-
+    /**
+     * Writes the contents of the datastream to an output stream.
+     *
+     * @param output The output stream.
+     * @throws IOException If an error occurs.
+     **/
+    public void writeTo(OutputStream output)
+            throws IOException {
+        super.writeTo(output);
+        DataOutputStream dataOutput = new DataOutputStream(output);
+        dataOutput.writeFloat(value_);
+    }
 
 
 }

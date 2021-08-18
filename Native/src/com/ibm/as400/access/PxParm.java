@@ -14,20 +14,16 @@
 package com.ibm.as400.access;
 
 
-
 /**
-The PxParm interface represents a parameter in a proxy datastream.
-This DOES NOT refer to a parameter in a method call, but instead a
-parameter that is part of some request or reply.
-**/
+ * The PxParm interface represents a parameter in a proxy datastream.
+ * This DOES NOT refer to a parameter in a method call, but instead a
+ * parameter that is part of some request or reply.
+ **/
 interface PxParm
-extends PxDSRV, PxDSWV
-{
+        extends PxDSRV, PxDSWV {
 
 
-
-    public abstract Object getObjectValue ();
-
+    public abstract Object getObjectValue();
 
 
 }

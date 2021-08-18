@@ -19,37 +19,41 @@ package com.ibm.as400.util.commtrace;
  * Destination Unreachable Header.
  */
 public class DestinationUnreachable extends Message {
-	/**
-	 * Creates and parses the data of this header.
-	 * @param data	The raw data of this header. 
-	 */
-	DestinationUnreachable(BitBuf data) {
-		super(data);
-		super.type= DSTUNR;
-	}
+    /**
+     * Creates and parses the data of this header.
+     *
+     * @param data The raw data of this header.
+     */
+    DestinationUnreachable(BitBuf data) {
+        super(data);
+        super.type = DSTUNR;
+    }
 
-	/**
-	 * Returns the length of this header.
-	 * @return	    Will always return 32.
-	 */
-	public int getHeaderLen() {
-		return 32;
-	}
+    /**
+     * Returns the length of this header.
+     *
+     * @return Will always return 32.
+     */
+    public int getHeaderLen() {
+        return 32;
+    }
 
-	/**
-	 * Returns the next header in the packet.
-	 * @return Will always return an IP6Header.
-	 */
-	public Header getNextHeader() {
-		return new IP6Header(rawpayload);
-	}
+    /**
+     * Returns the next header in the packet.
+     *
+     * @return Will always return an IP6Header.
+     */
+    public Header getNextHeader() {
+        return new IP6Header(rawpayload);
+    }
 
     /**
      * Returns a printable representation of this header.
-     * @param filter	    FormatProperties object for filtering this header.
-     * @return	    Returns a string representation of this header.
+     *
+     * @param filter FormatProperties object for filtering this header.
+     * @return Returns a string representation of this header.
      */
-	public String toString(FormatProperties filter) {
-		return printHexHeader() + "\t\t\t" + OFFPKT + ":\n" + printnext(filter);
-	}
+    public String toString(FormatProperties filter) {
+        return printHexHeader() + "\t\t\t" + OFFPKT + ":\n" + printnext(filter);
+    }
 }

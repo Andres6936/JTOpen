@@ -14,38 +14,36 @@
 package com.ibm.as400.util.servlet;
 
 /**
-*   The RowDataException class represents an exception which indicates 
-*   that a problem occurred when working with the row data.
-**/
-public class RowDataException extends Exception 
-{
-   private Exception exception_;
+ * The RowDataException class represents an exception which indicates
+ * that a problem occurred when working with the row data.
+ **/
+public class RowDataException extends Exception {
+    private Exception exception_;
 
-   /**
-   *  Constructs a default RowDataException.
-   **/
-   RowDataException() 
-   { 
-      super(); 
-   }
-  
-   /**
-   *  Constructs a RowDataException.
-   *
-   *  @param exception The exception.
-   **/
+    /**
+     * Constructs a default RowDataException.
+     **/
+    RowDataException() {
+        super();
+    }
+
+    /**
+     * Constructs a RowDataException.
+     *
+     * @param exception The exception.
+     **/
     public RowDataException(Exception exception)            // @B1C
     {
-        super(exception.getMessage());                       
+        super(exception.getMessage());
         exception_ = exception;
     }
 
-   /**
-   *  Returns the original exception.
-   *  @return The exception.
-   **/
-   public Exception getException()
-   {
-      return exception_;
-   }
+    /**
+     * Returns the original exception.
+     *
+     * @return The exception.
+     **/
+    public Exception getException() {
+        return exception_;
+    }
 }

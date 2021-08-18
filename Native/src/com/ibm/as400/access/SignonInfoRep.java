@@ -17,68 +17,56 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.GregorianCalendar;
 
-class SignonInfoRep extends ClientAccessDataStream
-{
+class SignonInfoRep extends ClientAccessDataStream {
     /**
-     Generate a new instance of this type.
-     @return a reference to the new instance
+     * Generate a new instance of this type.
+     *
+     * @return a reference to the new instance
      **/
-    public Object getNewDataStream()
-    {
-      return new SignonInfoRep();
+    public Object getNewDataStream() {
+        return new SignonInfoRep();
     }
 
-    int getRC()
-    {
+    int getRC() {
         return get32bit(20);
     }
 
-    GregorianCalendar getCurrentSignonDate()
-    {
+    GregorianCalendar getCurrentSignonDate() {
         return getDate(0x1106);
     }
 
-    GregorianCalendar getLastSignonDate()
-    {
+    GregorianCalendar getLastSignonDate() {
         return getDate(0x1107);
     }
 
-    GregorianCalendar getExpirationDate()
-    {
+    GregorianCalendar getExpirationDate() {
         return getDate(0x1108);
     }
 
     int getPWDExpirationWarning() {
-    	int offset = findCP(0x112C);
-    	if(offset==-1) return -1;
-    	return get32bit(findCP(0x112C)+6);
+        int offset = findCP(0x112C);
+        if (offset == -1) return -1;
+        return get32bit(findCP(0x112C) + 6);
     }
-    
-    int findCP(int cp)
-    {
+
+    int findCP(int cp) {
         int offset = 24;
-        while (offset < data_.length -1)
-        {
+        while (offset < data_.length - 1) {
             if (get16bit(offset + 4) == cp) return offset;
             offset += get32bit(offset);
         }
         return -1;
     }
-    
-    GregorianCalendar getDate(int cp)
-    {
+
+    GregorianCalendar getDate(int cp) {
         int offset = 24;
         GregorianCalendar date = null;
 
-        while (offset < (data_.length - 1))
-        {
-            if (get16bit(offset + 4) != cp)
-            {
+        while (offset < (data_.length - 1)) {
+            if (get16bit(offset + 4) != cp) {
                 offset += get32bit(offset);
-            }
-            else
-            {
-                date = new GregorianCalendar((int)(get16bit(offset+6))/*year*/, (int)(data_[offset+8] - 1)/*month convert to zero based*/, (int)(data_[offset+9])/*day*/, (int)(data_[offset+10])/*hour*/, (int)(data_[offset+11])/*minute*/, (int)(data_[offset+12])/*second*/);
+            } else {
+                date = new GregorianCalendar((int) (get16bit(offset + 6))/*year*/, (int) (data_[offset + 8] - 1)/*month convert to zero based*/, (int) (data_[offset + 9])/*day*/, (int) (data_[offset + 10])/*hour*/, (int) (data_[offset + 11])/*minute*/, (int) (data_[offset + 12])/*second*/);
                 break;
             }
         }
@@ -86,19 +74,14 @@ class SignonInfoRep extends ClientAccessDataStream
         return date;
     }
 
-    int getServerCCSID()
-    {
+    int getServerCCSID() {
         int offset = 24;
         int ccsid = 0;
 
-        while (offset < (data_.length - 1))
-        {
-            if (get16bit(offset + 4) != 0x1114)
-            {
+        while (offset < (data_.length - 1)) {
+            if (get16bit(offset + 4) != 0x1114) {
                 offset = offset + get32bit(offset);
-            }
-            else
-            {
+            } else {
                 ccsid = get32bit(offset + 6);
                 break;
             }
@@ -107,18 +90,13 @@ class SignonInfoRep extends ClientAccessDataStream
         return ccsid;
     }
 
-    byte[] getUserIdBytes()
-    {
+    byte[] getUserIdBytes() {
         int offset = 24;
-        while (offset < (data_.length - 1))
-        {
-            if (get16bit(offset + 4) != 0x1104)
-            {
+        while (offset < (data_.length - 1)) {
+            if (get16bit(offset + 4) != 0x1104) {
                 offset += get32bit(offset);
-            }
-            else
-            {
-                byte[] userIdBytes = {(byte)0x40, (byte)0x40, (byte)0x40, (byte)0x40, (byte)0x40, (byte)0x40, (byte)0x40, (byte)0x40, (byte)0x40, (byte)0x40};
+            } else {
+                byte[] userIdBytes = {(byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40};
                 System.arraycopy(data_, offset + 10, userIdBytes, 0, get32bit(offset) - 10);
                 return userIdBytes;
             }
@@ -127,20 +105,18 @@ class SignonInfoRep extends ClientAccessDataStream
         return null;
     }
 
-    AS400Message[] getErrorMessages(ConverterImplRemote converter) throws IOException
-    {
+    AS400Message[] getErrorMessages(ConverterImplRemote converter) throws IOException {
         return AS400ImplRemote.parseMessages(data_, 24, converter);
     }
 
-    void read(InputStream in) throws IOException
-    {
+    void read(InputStream in) throws IOException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Receiving retrieve signon information reply...");
 
         // Receive the header.
         byte[] header = new byte[20];
-        if (readFromStream(in, header, 0, 20) < 20)
-        {
-            if (Trace.traceOn_) Trace.log(Trace.ERROR, "Failed to read all of the retrieve signon information reply header.");
+        if (readFromStream(in, header, 0, 20) < 20) {
+            if (Trace.traceOn_)
+                Trace.log(Trace.ERROR, "Failed to read all of the retrieve signon information reply header.");
             throw new ConnectionDroppedException(ConnectionDroppedException.CONNECTION_DROPPED);
         }
 
@@ -153,11 +129,11 @@ class SignonInfoRep extends ClientAccessDataStream
     }
 
     /**
-     Generates a hash code for this data stream.
-     @return the hash code
+     * Generates a hash code for this data stream.
+     *
+     * @return the hash code
      **/
-    public int hashCode()
-    {
-      return 0xF004;
+    public int hashCode() {
+        return 0xF004;
     }
 }

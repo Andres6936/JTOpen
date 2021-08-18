@@ -16,16 +16,15 @@ package com.ibm.as400.access;
 import java.io.IOException;
 
 /**
-  * The PrinterImpl interface defines a set of methods
-  * needed for a full implementation of the Printer class.
+ * The PrinterImpl interface defines a set of methods
+ * needed for a full implementation of the Printer class.
  **/
 
-interface PrinterImpl extends PrintObjectImpl
-{
+interface PrinterImpl extends PrintObjectImpl {
     public abstract void setAttributes(PrintParameterList attributes)
-      throws AS400Exception,
+            throws AS400Exception,
             AS400SecurityException,
             ErrorCompletingRequestException,
-             IOException,
-             InterruptedException;
+            IOException,
+            InterruptedException;
 }

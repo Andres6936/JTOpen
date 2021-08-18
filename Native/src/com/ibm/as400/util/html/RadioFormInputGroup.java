@@ -24,50 +24,50 @@ import java.beans.VetoableChangeListener;
 import java.beans.PropertyVetoException;
 
 /**
-*  The RadioFormInputGroup class represents a group of RadioFormInput objects.  Only one
-*  RadioFormInput object can be checked in the group.  The trailing slash &quot;/&quot; on the
-*  RadioFormInputGroup tag allows it to conform to the XHTML specification.
-*  <P>
-*  This example creates a radio button group and prints out the tag.
-*  <BLOCKQUOTE><PRE>
-*  // Create some radio buttons.
-*  RadioFormInput radio0 = new RadioFormInput("age", "kid", "0-12", true);
-*  RadioFormInput radio1 = new RadioFormInput("age", "teen", "13-19", false);
-*  RadioFormInput radio2 = new RadioFormInput("age", "twentysomething", "20-29", false);
-*  RadioFormInput radio3 = new RadioFormInput("age", "thirtysomething", "30-39", false);
-*  // Create a radio button group and add the radio buttons.
-*  RadioFormInputGroup ageGroup = new RadioFormInputGroup("age");
-*  ageGroup.add(radio0);
-*  ageGroup.add(radio1);
-*  ageGroup.add(radio2);
-*  ageGroup.add(radio3);
-*  System.out.println(ageGroup.getTag());
-*  </PRE></BLOCKQUOTE>
-*  <P>
-*  Here is the output of the RadioFormInputGroup tag:<br>
-*  <BLOCKQUOTE><PRE>
-*  &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;kid&quot; checked=&quot;checked&quot; /&gt; 0-12
-*  &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;teen&quot; /&gt; 13-19
-*  &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;twentysomething&quot; /&gt; 20-29
-*  &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;thirtysomething&quot; /&gt; 30-39
-*  </PRE></BLOCKQUOTE>
-*  <p>RadioFormInputGroup objects generate the following events:
-*  <ul>
-*  <li><A HREF="ElementEvent.html">ElementEvent</A> - The events fired are:
-*    <ul>
-*    <li>elementAdded
-*    <li>elementRemoved
-*    </ul>
-*  <li>PropertyChangeEvent
-*  <li>VetoableChangeEvent
-*  </ul>
-*
-*  @see com.ibm.as400.util.html.RadioFormInput
-**/
+ * The RadioFormInputGroup class represents a group of RadioFormInput objects.  Only one
+ * RadioFormInput object can be checked in the group.  The trailing slash &quot;/&quot; on the
+ * RadioFormInputGroup tag allows it to conform to the XHTML specification.
+ * <p>
+ * This example creates a radio button group and prints out the tag.
+ * <BLOCKQUOTE><PRE>
+ * // Create some radio buttons.
+ * RadioFormInput radio0 = new RadioFormInput("age", "kid", "0-12", true);
+ * RadioFormInput radio1 = new RadioFormInput("age", "teen", "13-19", false);
+ * RadioFormInput radio2 = new RadioFormInput("age", "twentysomething", "20-29", false);
+ * RadioFormInput radio3 = new RadioFormInput("age", "thirtysomething", "30-39", false);
+ * // Create a radio button group and add the radio buttons.
+ * RadioFormInputGroup ageGroup = new RadioFormInputGroup("age");
+ * ageGroup.add(radio0);
+ * ageGroup.add(radio1);
+ * ageGroup.add(radio2);
+ * ageGroup.add(radio3);
+ * System.out.println(ageGroup.getTag());
+ * </PRE></BLOCKQUOTE>
+ * <p>
+ * Here is the output of the RadioFormInputGroup tag:<br>
+ * <BLOCKQUOTE><PRE>
+ * &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;kid&quot; checked=&quot;checked&quot; /&gt; 0-12
+ * &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;teen&quot; /&gt; 13-19
+ * &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;twentysomething&quot; /&gt; 20-29
+ * &lt;input type=&quot;radio&quot; name=&quot;age&quot; value=&quot;thirtysomething&quot; /&gt; 30-39
+ * </PRE></BLOCKQUOTE>
+ * <p>RadioFormInputGroup objects generate the following events:
+ * <ul>
+ * <li><A HREF="ElementEvent.html">ElementEvent</A> - The events fired are:
+ *   <ul>
+ *   <li>elementAdded
+ *   <li>elementRemoved
+ *   </ul>
+ * <li>PropertyChangeEvent
+ * <li>VetoableChangeEvent
+ * </ul>
+ * <p>
+ * @see com.ibm.as400.util.html.RadioFormInput
+ **/
 public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Serializable     // @Z1C
 {
-  private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
-  static final long serialVersionUID = 1787781415625086189L;
+    static final long serialVersionUID = 1787781415625086189L;
+    private static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
     private String name_;                // The name of the radio input group.
     private Vector list_;                // The list of radio buttons.
@@ -79,39 +79,35 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
     transient private Vector elementListeners;      // The list of element listeners @CRS
 
     /**
-    *  Constructs a default RadioFormInputGroup object.
-    **/
-    public RadioFormInputGroup()
-    {
+     * Constructs a default RadioFormInputGroup object.
+     **/
+    public RadioFormInputGroup() {
         super();
         list_ = new Vector();
     }
 
     /**
-    *  Constructs a RadioFormInputGroup object with the specified control <i>name</i>.
-    *  @param name The group control name.
-    **/
-    public RadioFormInputGroup(String name)
-    {
+     * Constructs a RadioFormInputGroup object with the specified control <i>name</i>.
+     *
+     * @param name The group control name.
+     **/
+    public RadioFormInputGroup(String name) {
         super();
-        try
-        {
+        try {
             setName(name);
-        }
-        catch (PropertyVetoException e)
-        {
+        } catch (PropertyVetoException e) {
         }
 
         list_ = new Vector();
     }
 
     /**
-    *  Adds a radio button to the group.  If the group does not have a name, the
-    *  name of the first radio button added will also be the group name.
-    *  @param radioButton The radio button.
-    **/
-    public void add(RadioFormInput radioButton)
-    {
+     * Adds a radio button to the group.  If the group does not have a name, the
+     * name of the first radio button added will also be the group name.
+     *
+     * @param radioButton The radio button.
+     **/
+    public void add(RadioFormInput radioButton) {
         //@B1D
 
         if (radioButton == null)
@@ -121,14 +117,10 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
         // if we don't have a name, then use the first button
         if (name_ == null)
             name_ = radioButton.getName();
-        else
-        {
-            try
-            {
+        else {
+            try {
                 radioButton.setName(name_);
-            }
-            catch ( PropertyVetoException e)
-            {
+            } catch (PropertyVetoException e) {
             }
         }
 
@@ -137,8 +129,7 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
         {
             Trace.log(Trace.ERROR, "Previous RadioButton marked as 'checked'.");
             throw new ExtendedIllegalArgumentException("checked", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
-        else if (!groupCheck_ && radioButton.isChecked())
+        } else if (!groupCheck_ && radioButton.isChecked())
             groupCheck_ = true;
 
         list_.addElement(radioButton);
@@ -148,15 +139,15 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
 
 
     /**
-    *  Adds a radio button to the group.  If the group does not have a name, the
-    *  name of the first radio button added will also be the group name.
-    *  @param name The control name of the input field.
-    *  @param value The input value used when the field is submitted.
-    *  @param label The viewable text label.
-    *  @param checked If the radio button initializes to checked.
-    *
-    *  @return A RadioFormInput object.
-    **/
+     * Adds a radio button to the group.  If the group does not have a name, the
+     * name of the first radio button added will also be the group name.
+     *
+     * @param name    The control name of the input field.
+     * @param value   The input value used when the field is submitted.
+     * @param label   The viewable text label.
+     * @param checked If the radio button initializes to checked.
+     * @return A RadioFormInput object.
+     **/
     public RadioFormInput add(String name, String value, String label, boolean checked)       //$A3A
     {
         //@B1D
@@ -169,20 +160,16 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
             throw new NullPointerException("label");
 
         //Create the RadioFormInput from the values passed in
-        RadioFormInput radioButton = new RadioFormInput(name,value,label,checked);
+        RadioFormInput radioButton = new RadioFormInput(name, value, label, checked);
 
         // make sure all the names are the same
         // if we don't have a name, then use the first button
         if (name_ == null)
             name_ = name;
-        else
-        {
-            try
-            {
+        else {
+            try {
                 radioButton.setName(name_);
-            }
-            catch ( PropertyVetoException e)
-            {
+            } catch (PropertyVetoException e) {
             }
         }
 
@@ -191,8 +178,7 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
         {
             Trace.log(Trace.ERROR, "Previous RadioButton marked as 'checked'.");
             throw new ExtendedIllegalArgumentException("checked", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
-        else if (!groupCheck_ && radioButton.isChecked())
+        } else if (!groupCheck_ && radioButton.isChecked())
             groupCheck_ = true;
 
         // Add the RadioFormInput to the group.
@@ -210,19 +196,15 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
      * The addElementListener object is added to a list of addElementListeners
      * managed by this RadioFormInputGroup. It can be removed with removeElementListener.
      *
-     * @see #removeElementListener
-     *
      * @param listener The ElementListener.
-    **/
-    public void addElementListener(ElementListener listener)
-    {
+     * @see #removeElementListener
+     **/
+    public void addElementListener(ElementListener listener) {
         if (listener == null)
-            throw new NullPointerException ("listener");
+            throw new NullPointerException("listener");
         if (elementListeners == null) elementListeners = new Vector(); //@CRS
         elementListeners.addElement(listener);
     }
-
-
 
 
     /**
@@ -230,30 +212,26 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
      * <b>vetoableChange</b> method will be called each time the value of any
      * constrained property is changed.
      *
-     * @see #removeVetoableChangeListener
-     *
      * @param listener The VetoableChangeListener.
-    **/
-    public void addVetoableChangeListener(VetoableChangeListener listener)
-    {
+     * @see #removeVetoableChangeListener
+     **/
+    public void addVetoableChangeListener(VetoableChangeListener listener) {
         if (listener == null)
-            throw new NullPointerException ("listener");
+            throw new NullPointerException("listener");
         if (vetos_ == null) vetos_ = new VetoableChangeSupport(this); //@CRS
         vetos_.addVetoableChangeListener(listener);
     }
 
     /**
-    *  Fires the element event.
-    **/
-    private void fireElementEvent(int evt)
-    {
-      if (elementListeners == null) return; //@CRS
+     * Fires the element event.
+     **/
+    private void fireElementEvent(int evt) {
+        if (elementListeners == null) return; //@CRS
         Vector targets;
         targets = (Vector) elementListeners.clone();
         ElementEvent elementEvt = new ElementEvent(this, evt);
-        for (int i = 0; i < targets.size(); i++)
-        {
-            ElementListener target = (ElementListener)targets.elementAt(i);
+        for (int i = 0; i < targets.size(); i++) {
+            ElementListener target = (ElementListener) targets.elementAt(i);
             if (evt == ElementEvent.ELEMENT_ADDED)
                 target.elementAdded(elementEvt);
             else if (evt == ElementEvent.ELEMENT_REMOVED)
@@ -263,39 +241,58 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
 
 
     /**
-    *  Returns the control name of the radio group.
-    *  @return The group control name.
-    **/
-    public String getName()
-    {
+     * Returns the control name of the radio group.
+     *
+     * @return The group control name.
+     **/
+    public String getName() {
         return name_;
     }
 
     /**
-    *  Returns a comment tag.
-    *  This method should not be called.  There is no XSL-FO support for this class.
-    *  @return The comment tag.
-    **/
-    public String getFOTag()
-    {
+     * Sets the control name of the radio group.
+     *
+     * @param name The group control name.
+     * @throws PropertyVetoException If a change is vetoed.
+     **/
+    public void setName(String name)
+            throws PropertyVetoException {
+        if (name == null)
+            throw new NullPointerException("name");
+
+        String old = name_;
+
+        if (vetos_ != null) vetos_.fireVetoableChange("name", old, name); //@CRS
+
+        name_ = name;
+
+        if (changes_ != null) changes_.firePropertyChange("name", old, name); //@CRS
+    }
+
+    /**
+     * Returns a comment tag.
+     * This method should not be called.  There is no XSL-FO support for this class.
+     *
+     * @return The comment tag.
+     **/
+    public String getFOTag() {
         //@C1
         Trace.log(Trace.ERROR, "Attempting to getFOTag() for an object that doesn't support it.");
         return "<!-- A RadioFormInputGroup was here -->";
     }
 
     /**
-    *  Returns the radio button group tag.
-    *  @return The tag.
-    **/
-    public String getTag()
-    {
+     * Returns the radio button group tag.
+     *
+     * @return The tag.
+     **/
+    public String getTag() {
         //@B1D
 
-        if (getName() == null)
-        {
+        if (getName() == null) {
             Trace.log(Trace.ERROR, "Attempting to get tag before setting name.");
             throw new ExtendedIllegalStateException(
-                                                   "name", ExtendedIllegalStateException.PROPERTY_NOT_SET );
+                    "name", ExtendedIllegalStateException.PROPERTY_NOT_SET);
         }
 
         StringBuffer s = new StringBuffer("");
@@ -304,9 +301,8 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
         Properties eProp = null;
         Properties rgProp = getAttributes();
 
-        for (int i=0; i< list_.size(); i++)
-        {
-            RadioFormInput r = (RadioFormInput)list_.elementAt(i);
+        for (int i = 0; i < list_.size(); i++) {
+            RadioFormInput r = (RadioFormInput) list_.elementAt(i);
 
             eProp = r.getAttributes();                        // @Z1A
 
@@ -324,21 +320,20 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
     }
 
     /**
-   *  Indicates if the radio group alignment is vertical.
-   *  The default value is false.
-   *  @return true if vertical; horizontal otherwise.
-   **/
-    public boolean isAlignmentVertical()
-    {
+     * Indicates if the radio group alignment is vertical.
+     * The default value is false.
+     *
+     * @return true if vertical; horizontal otherwise.
+     **/
+    public boolean isAlignmentVertical() {
         return useVertAlign_;
     }
 
     /**
-    *  Deserializes and initializes transient data.
-    **/
+     * Deserializes and initializes transient data.
+     **/
     private void readObject(java.io.ObjectInputStream in)          //$A2A
-    throws java.io.IOException, ClassNotFoundException
-    {
+            throws java.io.IOException, ClassNotFoundException {
         in.defaultReadObject();
 
         //@CRS changes_ = new PropertyChangeSupport(this);
@@ -347,11 +342,11 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
     }
 
     /**
-    *  Removes a radio button from the group.
-    *  @param radioButton The radio button.
-    **/
-    public void remove(RadioFormInput radioButton)
-    {
+     * Removes a radio button from the group.
+     *
+     * @param radioButton The radio button.
+     **/
+    public void remove(RadioFormInput radioButton) {
         //@B1D
 
         if (radioButton == null)
@@ -369,76 +364,48 @@ public class RadioFormInputGroup extends HTMLTagAttributes implements java.io.Se
      * Removes this ElementListener from the internal list.
      * If the ElementListener is not on the list, nothing is done.
      *
-     * @see #addElementListener
-     *
      * @param listener The ElementListener.
-    **/
-    public void removeElementListener(ElementListener listener)
-    {
+     * @see #addElementListener
+     **/
+    public void removeElementListener(ElementListener listener) {
         if (listener == null)
-            throw new NullPointerException ("listener");
+            throw new NullPointerException("listener");
         if (elementListeners != null) elementListeners.removeElement(listener); //@CRS
     }
-
-
 
     /**
      * Removes the VetoableChangeListener from the internal list.
      * If the VetoableChangeListener is not on the list, nothing is done.
      *
-     * @see #addVetoableChangeListener
-     *
      * @param listener The VetoableChangeListener.
-    **/
-    public void removeVetoableChangeListener(VetoableChangeListener listener)
-    {
+     * @see #addVetoableChangeListener
+     **/
+    public void removeVetoableChangeListener(VetoableChangeListener listener) {
         if (listener == null)
-            throw new NullPointerException ("listener");
+            throw new NullPointerException("listener");
         if (vetos_ != null) vetos_.removeVetoableChangeListener(listener); //@CRS
     }
 
-
     /**
-    *  Sets the control name of the radio group.
-    *  @param name The group control name.
-    *
-    *  @exception PropertyVetoException If a change is vetoed.
-    **/
-    public void setName(String name)
-    throws PropertyVetoException
-    {
-        if (name == null)
-            throw new NullPointerException("name");
-
-        String old = name_;
-
-        if (vetos_ != null) vetos_.fireVetoableChange("name", old, name ); //@CRS
-
-        name_ = name;
-
-        if (changes_ != null) changes_.firePropertyChange("name", old, name ); //@CRS
-    }
-
-
-    /**
-    *  Sets the alignment of the radio group to vertical.
-    *  The default is false.
-    *  @param verticalAlignment true if alignment is vertical; false if horizontal.
-    *
-    *  @exception PropertyVetoException If a change is vetoed.
-    **/
+     * Sets the alignment of the radio group to vertical.
+     * The default is false.
+     *
+     * @param verticalAlignment true if alignment is vertical; false if horizontal.
+     * @throws PropertyVetoException If a change is vetoed.
+     **/
     public void setVerticalAlignment(boolean verticalAlignment)                        //$A3A
-    throws PropertyVetoException
-    {
+            throws PropertyVetoException {
         //@CRS Boolean oldAlign = new Boolean(useVertAlign_);
         //@CRS Boolean newAlign = new Boolean(verticalAlignment);
-      boolean oldAlign = useVertAlign_; //@CRS
+        boolean oldAlign = useVertAlign_; //@CRS
 
-        if (vetos_ != null) vetos_.fireVetoableChange("verticalAlignment", new Boolean(oldAlign), new Boolean(verticalAlignment)); //@CRS
+        if (vetos_ != null)
+            vetos_.fireVetoableChange("verticalAlignment", new Boolean(oldAlign), new Boolean(verticalAlignment)); //@CRS
 
         useVertAlign_ = verticalAlignment;
 
-        if (changes_ != null) changes_.firePropertyChange("verticalAlignment", new Boolean(oldAlign), new Boolean(verticalAlignment)); //@CRS
+        if (changes_ != null)
+            changes_.firePropertyChange("verticalAlignment", new Boolean(oldAlign), new Boolean(verticalAlignment)); //@CRS
 
     }
 

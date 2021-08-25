@@ -16,21 +16,15 @@ package com.ibm.as400.access;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.RowId;
  endif */
-import java.sql.SQLException;
-/* ifdef JDBC40  
+/* ifdef JDBC40
 import java.sql.SQLXML;
  endif */
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
@@ -350,7 +344,7 @@ interface SQLData extends Cloneable {
     /**
      * Clears the truncated information
      */
-    public void clearTruncated();
+    void clearTruncated();
 
     /**
      * Returns true if the last conversion of this piece of
@@ -619,16 +613,17 @@ interface SQLData extends Cloneable {
             throws SQLException;
 
     //@PDA jdbc40
+
     /**
-     Converts the data to a java.sql.NClob object
-     @return the result of the conversion.
-     @exception SQLException    If the conversion is not
-     required or not possible.
+     * Converts the data to a java.sql.NClob object
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
      **/
-    /* ifdef JDBC40  
     NClob getNClob()
-    throws SQLException;
-     endif */
+            throws SQLException;
+
     //@PDA jdbc40
 
     /**
@@ -643,29 +638,28 @@ interface SQLData extends Cloneable {
             throws SQLException;
 
     //@PDA jdbc40
+
     /**
-     Converts the data to a java.sql.SQLXML object.
-     @return the result of the conversion.
-     @exception SQLException    If the conversion is not
-     required or not possible.
+     * Converts the data to a java.sql.SQLXML object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
      **/
-    /* ifdef JDBC40  
     SQLXML getSQLXML()
-    throws SQLException;
-    endif */
+            throws SQLException;
 
     //@PDA jdbc40
+
     /**
-     Converts the data to a java.sql.RowId object.
-     @return the result of the conversion.
-     @exception SQLException    If the conversion is not
-     required or not possible.
+     * Converts the data to a java.sql.RowId object.
+     *
+     * @return the result of the conversion.
+     * @throws SQLException If the conversion is not
+     *                      required or not possible.
      **/
-    /* ifdef JDBC40 
-    
     RowId getRowId()
-    throws SQLException;
-     endif */
+            throws SQLException;
 
     //@array
 

@@ -27,10 +27,10 @@ public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo
     private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     // Additional properties defined by AFPResourceList
-    private static PropertyDescriptor[] AFPRListProperties_;
+    private static final PropertyDescriptor[] AFPRListProperties_;
 
     // Class this bean info represents.
-    private final static Class beanClass = AFPResourceList.class;
+    private final static Class<AFPResourceList> beanClass = AFPResourceList.class;
 
     // Handles loading the appropriate resource bundle
     private static ResourceBundleLoader rbl_;
@@ -122,23 +122,12 @@ public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo
       * @param icon The desired icon size and color.
       * @return The Image for the icon.
       **/
-    public Image getIcon(int icon)
-    {
-        Image image = null;
-
-        switch(icon)
-        {
-            case BeanInfo.ICON_MONO_16x16:
-            case BeanInfo.ICON_COLOR_16x16:
-                image = loadImage("AFPResourceList16.gif");
-                break;
-            case BeanInfo.ICON_MONO_32x32:
-            case BeanInfo.ICON_COLOR_32x32:
-                image = loadImage("AFPResourceList32.gif");
-                break;
-        }
-
-        return image;
+    public Image getIcon(int icon) {
+        return switch (icon) {
+            case BeanInfo.ICON_MONO_16x16, BeanInfo.ICON_COLOR_16x16 -> loadImage("AFPResourceList16.gif");
+            case BeanInfo.ICON_MONO_32x32, BeanInfo.ICON_COLOR_32x32 -> loadImage("AFPResourceList32.gif");
+            default -> null;
+        };
     }
 
 }

@@ -311,14 +311,13 @@ endif */
 
         try {
             //return(new Double(getString().trim())).byteValue();           //@trunc
-            Double doubleValue = new Double(value_.trim());              //@trunc
-            double d = doubleValue.doubleValue();                           //@trunc
-            if (d > Byte.MAX_VALUE || d < Byte.MIN_VALUE) {                 //@trunc
+            double doubleValue = Double.parseDouble(value_.trim());              //@trunc
+            if (doubleValue > Byte.MAX_VALUE || doubleValue < Byte.MIN_VALUE) {                 //@trunc
                 truncated_ = 1;                                             //@trunc
                 outOfBounds_ = true;
             }
 
-            return doubleValue.byteValue();                                //@trunc
+            return (byte) doubleValue;                                //@trunc
         } catch (NumberFormatException e) {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, e);
             return -1;
@@ -359,6 +358,11 @@ endif */
             // @B1D truncated_ = 0; outOfBounds_ = false; 
             return value_;
         }
+    }
+
+    @Override
+    public NClob getNClob() throws SQLException {
+        return null;
     }
 
 

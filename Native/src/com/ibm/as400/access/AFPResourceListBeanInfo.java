@@ -53,8 +53,7 @@ public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo
             rFilter.setDisplayName(rbl_.getText("PROP_NAME_AFPR_NAME_FILTER"));
             rFilter.setShortDescription(rbl_.getText("PROP_DESC_AFPR_NAME_FILTER"));
 
-            PropertyDescriptor[] properties = {splFFilter, rFilter};
-            AFPRListProperties_ = properties;
+            AFPRListProperties_ = new PropertyDescriptor[]{splFFilter, rFilter};
         }
 
         catch (IntrospectionException e)

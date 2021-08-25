@@ -87,7 +87,7 @@ class ResourceBundleLoader {
     // Returns the text associated with the exception.                          // @B2A
     // @param  textId  the id which identifies the message text to return.      // @B2A
     // @return  the translatable text which describes the exception.            // @B2A
-    static final String getCoreText(String textId)                              // @B2A
+    static String getCoreText(String textId)                              // @B2A
     {                                                                           // @B2A
         if (coreResources_ == null)                                             // @B2A
             throw resourceException_;                                           // @B2A

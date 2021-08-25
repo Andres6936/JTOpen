@@ -18,16 +18,11 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */
-import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 /* ifdef JDBC40
@@ -147,10 +142,10 @@ final class SQLClob extends SQLDataBase {
             outOfBounds_ = false;
         } else if (!(object instanceof Clob) && //@PDC NClob extends Clob
                 !(object instanceof Reader) && //@PDC jdbc40
-                !(object instanceof InputStream) 
-/* ifdef JDBC40                 
+                !(object instanceof InputStream)
+
                 &&  !(object instanceof SQLXML)
-endif */
+
         ) //@PDC jdbc40
 
         {
@@ -185,14 +180,11 @@ endif */
                 Clob clob = (Clob) object;
                 value_ = clob.getSubString(1, (int) clob.length());
             }
-            /* ifdef JDBC40 
             else if( object instanceof SQLXML ) //@PDA jdbc40 
             {
                 SQLXML xml = (SQLXML)object;
                 value_ = xml.getString();
-            }
-            endif */
-            else {
+            } else {
                 JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
             }
 
@@ -466,14 +458,14 @@ endif */
     }
 
     //@pda jdbc40
-    /* ifdef JDBC40 
+
     public NClob getNClob() throws SQLException
     {
         if(savedObject_ != null) doConversion();
         truncated_ = 0; outOfBounds_ = false; 
         return new AS400JDBCNClob(value_, maxLength_);
     }
-   endif */
+
     //@pda jdbc40
     public String getNString() throws SQLException {
         if (savedObject_ != null) doConversion();
@@ -483,7 +475,7 @@ endif */
     }
 
     //@pda jdbc40
-    /* ifdef JDBC40 
+
     public RowId getRowId() throws SQLException
     {
         //
@@ -503,16 +495,16 @@ endif */
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-   endif */
+
     //@pda jdbc40
-    /* ifdef JDBC40 
+
     public SQLXML getSQLXML() throws SQLException
     {
         if(savedObject_ != null) doConversion();
         truncated_ = 0; outOfBounds_ = false; 
         return new AS400JDBCSQLXML(value_);     
     }
-    endif */
+
 
     // @array
     public void saveValue() throws SQLException {

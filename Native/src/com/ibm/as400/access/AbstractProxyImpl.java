@@ -16,12 +16,7 @@ package com.ibm.as400.access;
 import java.lang.reflect.InvocationTargetException;
 
 // The AbstractProxyImpl class provides a default implementation for the ProxyImpl and ProxyFactoryImpl interfaces.
-abstract class AbstractProxyImpl
-/*ifdef JDBC40
-extends ToolboxWrapper 
-endif */ 
-implements ProxyImpl, ProxyFactoryImpl
-{
+abstract class AbstractProxyImpl extends ToolboxWrapper implements ProxyImpl, ProxyFactoryImpl {
     static final String copyright = "Copyright (C) 1997-2010 International Business Machines Corporation and others.";
 
     // Private data.
@@ -30,46 +25,37 @@ implements ProxyImpl, ProxyFactoryImpl
     protected long pxId_;
 
     // Called for ProxyFactoryImpl objects:
-    protected AbstractProxyImpl()
-    {
+    protected AbstractProxyImpl() {
     }
 
     // Called for ProxyImpl objects:
-    protected AbstractProxyImpl(String className)
-    {
+    protected AbstractProxyImpl(String className) {
         className_ = className;
     }
 
     // From the ProxyImpl interface:
-    public void construct(ProxyClientConnection connection)
-    {
+    public void construct(ProxyClientConnection connection) {
         connection_ = connection;
-        try
-        {
+        try {
             pxId_ = connection_.callConstructor(className_);
-        }
-        catch (InvocationTargetException e)
-        {
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow(e);
         }
     }
 
     // Cleans up the object.
-    protected void finalize() throws Throwable
-    {
+    protected void finalize() throws Throwable {
         connection_.callFinalize(pxId_);
         super.finalize();
     }
 
     // From the ProxyImpl interface:
-    public long getPxId()
-    {
+    public long getPxId() {
         return pxId_;
     }
 
     // From the AbstractProxyImpl interface:
-    public void initialize(long pxId, ProxyClientConnection connection)
-    {
+    public void initialize(long pxId, ProxyClientConnection connection) {
         pxId_ = pxId;
         connection_ = connection;
     }

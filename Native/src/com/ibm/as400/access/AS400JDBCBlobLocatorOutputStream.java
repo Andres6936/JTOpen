@@ -15,41 +15,33 @@ package com.ibm.as400.access;
 
 import java.sql.*;
 
-final class AS400JDBCBlobLocatorOutputStream extends AS400JDBCOutputStream
-{
-  static final String copyright2 = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
+final class AS400JDBCBlobLocatorOutputStream extends AS400JDBCOutputStream {
+    static final String copyright2 = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
-  private AS400JDBCBlobLocator blob_;
+    private AS400JDBCBlobLocator blob_;
 
-  AS400JDBCBlobLocatorOutputStream(AS400JDBCBlobLocator blob, long position)
-  {
-    super(position);
-    blob_ = blob;
-  }
-
-  int doWrite(long position, byte data) throws SQLException
-  {
-    synchronized(blob_)
-    {
-      JDLobLocator locator = blob_.locator_;
-      synchronized(locator)
-      {
-        return locator.writeData(position-1, data, true);               //@K1A
-      }
+    AS400JDBCBlobLocatorOutputStream(AS400JDBCBlobLocator blob, long position) {
+        super(position);
+        blob_ = blob;
     }
-  }
 
-  int doWrite(long position, byte[] data, int offset, int length) throws SQLException
-  {
-    synchronized(blob_)
-    {
-      JDLobLocator locator = blob_.locator_;
-      synchronized(locator)
-      {
-        return locator.writeData(position-1, data, offset, length, true);       //@K1A
-      }
+    int doWrite(long position, byte data) throws SQLException {
+        synchronized (blob_) {
+            JDLobLocator locator = blob_.locator_;
+            synchronized (locator) {
+                return locator.writeData(position - 1, data, true);               //@K1A
+            }
+        }
     }
-  }
+
+    int doWrite(long position, byte[] data, int offset, int length) throws SQLException {
+        synchronized (blob_) {
+            JDLobLocator locator = blob_.locator_;
+            synchronized (locator) {
+                return locator.writeData(position - 1, data, offset, length, true);       //@K1A
+            }
+        }
+    }
 }
 
 

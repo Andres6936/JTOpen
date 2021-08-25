@@ -17,32 +17,31 @@ package com.ibm.as400.access;
 import java.sql.SQLTransientException;
 endif */
 
-/* ifndef JDBC40 */ 
+/* ifndef JDBC40 */
+
 import java.sql.SQLException;
-/* endif */ 
+/* endif */
 
 /**
  * The AS400JDBCTransientException is the JTOpen version of
- * java.sql.SQLTransientException. 
- *
- * Is it currently only used for handling EXC_CONNECTION_REESTABLISHED. 
+ * java.sql.SQLTransientException.
+ * <p>
+ * Is it currently only used for handling EXC_CONNECTION_REESTABLISHED.
  */
 
 public class AS400JDBCTransientException
 /* ifdef JDBC40
 extends SQLTransientException
 endif */
-/* ifndef JDBC40 */ 
-extends SQLException
-/* endif */ 
+        /* ifndef JDBC40 */
+        extends SQLException
+        /* endif */ {
 
-{
+    static final String copyright = "Copyright (C) 2018 International Business Machines Corporation and others.";
 
-   static final String copyright = "Copyright (C) 2018 International Business Machines Corporation and others.";
+    public AS400JDBCTransientException(String message, String sqlState, int vendorCode) {
+        super(message, sqlState, vendorCode);
+    }
 
-   public  AS400JDBCTransientException(String message, String sqlState, int vendorCode) {
-     super(message, sqlState, vendorCode); 
-   }
-  
-  
+
 }

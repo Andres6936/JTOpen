@@ -22,25 +22,24 @@ import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
 
 /**
-*  The AS400JDBCConnectionPoolDataSource class represents a factory for 
-*  AS400PooledConnection objects.
-*
-*  <P>
-*  The following is an example that creates an AS400JDBCConnectionPoolDataSource object
-*  that can be used to cache JDBC connections.
-*
-*  <blockquote><pre>
-*  // Create a data source for making the connection.
-*  AS400JDBCConnectionPoolDataSource dataSource = new AS400JDBCConnectionPoolDataSource("myAS400");
-*  datasource.setUser("myUser");
-*  datasource.setPassword("MYPWD");
-*
-*  // Get the PooledConnection.
-*  PooledConnection pooledConnection = datasource.getPooledConnection();
-*  </pre></blockquote>
-**/
-public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource implements ConnectionPoolDataSource, Referenceable, Serializable
-{
+ * The AS400JDBCConnectionPoolDataSource class represents a factory for
+ * AS400PooledConnection objects.
+ *
+ * <p>
+ * The following is an example that creates an AS400JDBCConnectionPoolDataSource object
+ * that can be used to cache JDBC connections.
+ *
+ * <blockquote><pre>
+ *  // Create a data source for making the connection.
+ *  AS400JDBCConnectionPoolDataSource dataSource = new AS400JDBCConnectionPoolDataSource("myAS400");
+ *  datasource.setUser("myUser");
+ *  datasource.setPassword("MYPWD");
+ *
+ *  // Get the PooledConnection.
+ *  PooledConnection pooledConnection = datasource.getPooledConnection();
+ *  </pre></blockquote>
+ **/
+public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource implements ConnectionPoolDataSource, Referenceable, Serializable {
     static final String copyright = "Copyright (C) 1997-2010 International Business Machines Corporation and others.";
 
     static final long serialVersionUID = 4L;
@@ -55,58 +54,60 @@ public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource imple
     //@B2D private int propertyCycle_   = 300; //@B0A
 
     /**
-    *  Constructs a default AS400JDBCConnectionPoolDataSource object.
-    **/
-    public AS400JDBCConnectionPoolDataSource()
-    {
+     * Constructs a default AS400JDBCConnectionPoolDataSource object.
+     **/
+    public AS400JDBCConnectionPoolDataSource() {
         super();
         //@B2D initializeTransient();    //@A2A
     }
 
     /**
-    *  Constructs an AS400JDBCConnectionPoolDataSource with the specified <i>serverName</i>.
-    *  @param serverName The IBM i system name.
-    **/
-    public AS400JDBCConnectionPoolDataSource(String serverName)
-    {
+     * Constructs an AS400JDBCConnectionPoolDataSource with the specified <i>serverName</i>.
+     *
+     * @param serverName The IBM i system name.
+     **/
+    public AS400JDBCConnectionPoolDataSource(String serverName) {
         super(serverName);
         //@B2D initializeTransient();    //@A2A
     }
 
     /**
-    *  Constructs an AS400JDBCConnectionPoolDataSource with the specified signon information.
-    *  @param serverName The IBM i system name.
-    *  @param user The user id.
-    *  @param password The password.
-    **/
-    public AS400JDBCConnectionPoolDataSource(String serverName, String user, String password)
-    {
+     * Constructs an AS400JDBCConnectionPoolDataSource with the specified signon information.
+     *
+     * @param serverName The IBM i system name.
+     * @param user       The user id.
+     * @param password   The password.
+     **/
+    public AS400JDBCConnectionPoolDataSource(String serverName, String user, String password) {
         super(serverName, user, password);
         //@B2D initializeTransient();    //@A2A
     }
 
     //@A1A
+
     /**
-    *  Constructs an AS400JDBCConnectionPoolDataSource with the specified signon information
-    *  to use for SSL communications with the system.
-    *  @param serverName The IBM i system name.
-    *  @param user The user id.
-    *  @param password The password.
-    *  @param keyRingNameX The key ring class name to be used for SSL communications with the system.
-    *  @param keyRingPasswordX The password for the key ring class to be used for SSL communications with the system.
-    **/
+     * Constructs an AS400JDBCConnectionPoolDataSource with the specified signon information
+     * to use for SSL communications with the system.
+     *
+     * @param serverName       The IBM i system name.
+     * @param user             The user id.
+     * @param password         The password.
+     * @param keyRingNameX     The key ring class name to be used for SSL communications with the system.
+     * @param keyRingPasswordX The password for the key ring class to be used for SSL communications with the system.
+     **/
     public AS400JDBCConnectionPoolDataSource(String serverName, String user, String password,
-                                             String keyRingNameX, String keyRingPasswordX)
-    {
+                                             String keyRingNameX, String keyRingPasswordX) {
         super(serverName, user, password, null, null);
         //@B2D initializeTransient();    //@A2A
     }
 
     // @F0A - added the following constructor to avoid some object construction
+
     /**
-    *  Constructs an AS400JDBCConnectionPoolDataSource from the specified Reference
-    *  @param reference to retrieve DataSource properties from
-    **/
+     * Constructs an AS400JDBCConnectionPoolDataSource from the specified Reference
+     *
+     * @param reference to retrieve DataSource properties from
+     **/
     AS400JDBCConnectionPoolDataSource(Reference reference) {
         super(reference);
     }
@@ -182,12 +183,12 @@ public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource imple
 
 
     /**
-  *  Returns a pooled connection that is connected to the IBM i system.
-  *  @return A pooled connection.
-  *  @exception SQLException If a database error occurs.
-  **/
-    public PooledConnection getPooledConnection() throws SQLException
-    {
+     * Returns a pooled connection that is connected to the IBM i system.
+     *
+     * @return A pooled connection.
+     * @throws SQLException If a database error occurs.
+     **/
+    public PooledConnection getPooledConnection() throws SQLException {
         PooledConnection pc = new AS400JDBCPooledConnection(getConnection());
 
         log("PooledConnection created");
@@ -212,15 +213,15 @@ public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource imple
     }
 
     /**
-    *  Returns a pooled connection that is connected to the IBM i system.
-    *  @param user The userid for the connection.
-    *  @param password The password for the connection.
-    *  @return A pooled connection.
-    *  @exception SQLException If a database error occurs.
-    **/
-    public PooledConnection getPooledConnection(String user, String password) throws SQLException
-    {
-        PooledConnection pc = new AS400JDBCPooledConnection(getConnection(user,password));
+     * Returns a pooled connection that is connected to the IBM i system.
+     *
+     * @param user     The userid for the connection.
+     * @param password The password for the connection.
+     * @return A pooled connection.
+     * @throws SQLException If a database error occurs.
+     **/
+    public PooledConnection getPooledConnection(String user, String password) throws SQLException {
+        PooledConnection pc = new AS400JDBCPooledConnection(getConnection(user, password));
 
         log("PooledConnection created");
         return pc;
@@ -276,23 +277,22 @@ public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource imple
 
 
     /**
-    *  Returns the Reference object for the data source object.
-    *  This is used by JNDI when bound in a JNDI naming service.
-    *  Contains the information necessary to reconstruct the data source 
-    *  object when it is later retrieved from JNDI via an object factory.
-    *
-    *  @return A Reference object for the data source object.
-    *  @exception NamingException If a naming error occurs resolving the object.
-    **/
-    public Reference getReference() throws NamingException
-    {
+     * Returns the Reference object for the data source object.
+     * This is used by JNDI when bound in a JNDI naming service.
+     * Contains the information necessary to reconstruct the data source
+     * object when it is later retrieved from JNDI via an object factory.
+     *
+     * @return A Reference object for the data source object.
+     * @throws NamingException If a naming error occurs resolving the object.
+     **/
+    public Reference getReference() throws NamingException {
         Reference ref = new Reference(this.getClass().getName(),
-                                      "com.ibm.as400.access.AS400JDBCObjectFactory", 
-                                      null);
+                "com.ibm.as400.access.AS400JDBCObjectFactory",
+                null);
 
         Reference dsRef = super.getReference();
-        for (int i=0; i< dsRef.size(); i++)
-            ref.add( dsRef.get(i) );
+        for (int i = 0; i < dsRef.size(); i++)
+            ref.add(dsRef.get(i));
 
         return ref;
     }
@@ -309,10 +309,9 @@ public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource imple
 
 
     /**
-    *  Deserializes and initializes transient data.
-    **/
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
-    {
+     * Deserializes and initializes transient data.
+     **/
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
         //@B2D initializeTransient();  //@A2A
     }
@@ -433,12 +432,11 @@ public class AS400JDBCConnectionPoolDataSource extends AS400JDBCDataSource imple
     //@B2D     propertyCycle_ = propertyCycle;
     //@B2D     changes_.firePropertyChange(property, old, new Integer(propertyCycle_));
     //@B2D }
-    
-   
+
+
     //@pda jdbc40
-    protected String[] getValidWrappedList()
-    {
-        return new String[] {  "com.ibm.as400.access.AS400JDBCConnectionPoolDataSource", "java.sql.ConnectionPoolDataSource" };
+    protected String[] getValidWrappedList() {
+        return new String[]{"com.ibm.as400.access.AS400JDBCConnectionPoolDataSource", "java.sql.ConnectionPoolDataSource"};
     }
 }
 

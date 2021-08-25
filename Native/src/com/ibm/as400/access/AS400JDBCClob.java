@@ -215,7 +215,8 @@ public class AS400JDBCClob implements Clob, Serializable {
 
             for (int i = offset; i <= end; ++i) {
                 int j = 0;
-                while (j < charPattern.length && data_[i + j] == charPattern[j]) ++j;
+                while (j < charPattern.length && data_[i + j] == charPattern[j])
+                    ++j;
                 if (j == charPattern.length) return i + 1;
             }
         }
@@ -255,7 +256,8 @@ public class AS400JDBCClob implements Clob, Serializable {
 
             for (int i = offset; i <= end; ++i) {
                 int j = 0;
-                while (j < charPattern.length && data_[i + j] == charPattern[j]) ++j;
+                while (j < charPattern.length && data_[i + j] == charPattern[j])
+                    ++j;
                 if (j == charPattern.length) return i + 1;
             }
         }
@@ -338,7 +340,8 @@ public class AS400JDBCClob implements Clob, Serializable {
         // return the number of chars that were set.
         char[] charsToWrite = stringToWrite.toCharArray();
         int newSize = offset + charsToWrite.length;
-        if (newSize < 0) newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
+        if (newSize < 0)
+            newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
         if (newSize > data_.length) {
             char[] temp = data_;
             data_ = new char[newSize];
@@ -385,7 +388,8 @@ public class AS400JDBCClob implements Clob, Serializable {
         // return the number of chars that were set.
         char[] charsToWrite = string.toCharArray();
         int newSize = clobOffset + lengthOfWrite;
-        if (newSize < 0) newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
+        if (newSize < 0)
+            newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
         if (newSize > data_.length) {
             char[] temp = data_;
             data_ = new char[newSize];

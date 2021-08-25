@@ -18,77 +18,73 @@ import javax.sql.ConnectionEventListener;
 import java.util.Vector;
 
 /**
-*  The AS400JDBCConnectionEventSupport class represents an event support 
-*  facility for maintaining and notifying listeners of JDBC connection events.
-**/
-class AS400JDBCConnectionEventSupport
-{
-  final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
+ * The AS400JDBCConnectionEventSupport class represents an event support
+ * facility for maintaining and notifying listeners of JDBC connection events.
+ **/
+class AS400JDBCConnectionEventSupport {
+    final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
-   private Vector connectionListeners_;              // The listener list.
-   
-   /**
-   *  Constructs a default AS400JDBCConnectionEventSupport object.
-   **/
-   public AS400JDBCConnectionEventSupport()
-   {
-      connectionListeners_ = new Vector();
-   }
+    private Vector connectionListeners_;              // The listener list.
+
+    /**
+     * Constructs a default AS400JDBCConnectionEventSupport object.
+     **/
+    public AS400JDBCConnectionEventSupport() {
+        connectionListeners_ = new Vector();
+    }
 
 
-   /**
-   *  Adds a AS400JDBCConnectionEventListener.
-   *  @param listener The listener.
-   **/
-   public void addConnectionEventListener(ConnectionEventListener listener)
-   {
-      if (listener == null)
-         throw new NullPointerException("listener");
-      connectionListeners_.addElement(listener);
-   }
+    /**
+     * Adds a AS400JDBCConnectionEventListener.
+     *
+     * @param listener The listener.
+     **/
+    public void addConnectionEventListener(ConnectionEventListener listener) {
+        if (listener == null)
+            throw new NullPointerException("listener");
+        connectionListeners_.addElement(listener);
+    }
 
-   
-   /**
-   *  Fires the connection closed event.
-   *  @param event The ConnectionEvent.
-   **/
-   public void fireCloseEvent(ConnectionEvent event)
-   {
-      Vector targets = (Vector) connectionListeners_.clone();
-      if (JDTrace.isTraceOn()) {
-        JDTrace.logInformation(this, "fireCloseEvent() for targets.size()="+targets.size());
-      }
 
-      for (int i=0; i< targets.size(); i++) 
-      {
-         ConnectionEventListener target = (ConnectionEventListener) targets.elementAt(i);
-         target.connectionClosed(event);
-      }
-   }
-   
-   /**
-   *  Fires the connection error event.
-   *  @param event The ConnectionEvent.
-   **/
-   public void fireErrorEvent(ConnectionEvent event)
-   {
-      Vector targets = (Vector) connectionListeners_.clone();
-      for (int i=0; i< targets.size(); i++) 
-      {
-         ConnectionEventListener target = (ConnectionEventListener) targets.elementAt(i);
-         target.connectionErrorOccurred(event);
-      }
-   }
+    /**
+     * Fires the connection closed event.
+     *
+     * @param event The ConnectionEvent.
+     **/
+    public void fireCloseEvent(ConnectionEvent event) {
+        Vector targets = (Vector) connectionListeners_.clone();
+        if (JDTrace.isTraceOn()) {
+            JDTrace.logInformation(this, "fireCloseEvent() for targets.size()=" + targets.size());
+        }
 
-   /**
-   *  Removes a ConnectionEventListener.
-   *  @param listener The listener to be removed.
-   **/
-   public void removeConnectionEventListener(ConnectionEventListener listener)
-   {
-      if (listener == null)
-         throw new NullPointerException("listener");
-      connectionListeners_.removeElement(listener);
-   }
+        for (int i = 0; i < targets.size(); i++) {
+            ConnectionEventListener target = (ConnectionEventListener) targets.elementAt(i);
+            target.connectionClosed(event);
+        }
+    }
+
+    /**
+     * Fires the connection error event.
+     *
+     * @param event The ConnectionEvent.
+     **/
+    public void fireErrorEvent(ConnectionEvent event) {
+        Vector targets = (Vector) connectionListeners_.clone();
+        for (int i = 0; i < targets.size(); i++) {
+            ConnectionEventListener target = (ConnectionEventListener) targets.elementAt(i);
+            target.connectionErrorOccurred(event);
+        }
+    }
+
+    /**
+     * Removes a ConnectionEventListener.
+     *
+     * @param listener The listener to be removed.
+     **/
+    public void removeConnectionEventListener(ConnectionEventListener listener) {
+        if (listener == null)
+            throw new NullPointerException("listener");
+        connectionListeners_.removeElement(listener);
+    }
 
 }

@@ -15,27 +15,23 @@ package com.ibm.as400.access;
 
 import java.sql.*;
 
-final class AS400JDBCBlobOutputStream extends AS400JDBCOutputStream
-{
-  static final String copyright2 = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
-  
-  private AS400JDBCBlob blob_;
+final class AS400JDBCBlobOutputStream extends AS400JDBCOutputStream {
+    static final String copyright2 = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
-  AS400JDBCBlobOutputStream(AS400JDBCBlob blob, long position)
-  {
-    super(position);
-    blob_ = blob;
-  }
+    private AS400JDBCBlob blob_;
 
-  int doWrite(long position, byte data) throws SQLException
-  {
-    return blob_.setByte(position, data);
-  }
+    AS400JDBCBlobOutputStream(AS400JDBCBlob blob, long position) {
+        super(position);
+        blob_ = blob;
+    }
 
-  int doWrite(long position, byte[] data, int offset, int length) throws SQLException
-  {
-    return blob_.setBytes(position, data, offset, length);
-  }
+    int doWrite(long position, byte data) throws SQLException {
+        return blob_.setByte(position, data);
+    }
+
+    int doWrite(long position, byte[] data, int offset, int length) throws SQLException {
+        return blob_.setBytes(position, data, offset, length);
+    }
 }
 
 

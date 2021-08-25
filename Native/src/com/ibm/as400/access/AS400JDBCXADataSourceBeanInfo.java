@@ -19,56 +19,53 @@ import java.beans.BeanInfo;
 import java.beans.SimpleBeanInfo;
 
 
-
 /**
-*  The AS400JDBCXADataSourceBeanInfo class provides bean information
-*  for the AS400JDBCXADataSource class.
-**/
-public class AS400JDBCXADataSourceBeanInfo extends SimpleBeanInfo
-{
-  static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
+ * The AS400JDBCXADataSourceBeanInfo class provides bean information
+ * for the AS400JDBCXADataSource class.
+ **/
+public class AS400JDBCXADataSourceBeanInfo extends SimpleBeanInfo {
+    static final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
 
-   // Class this bean info represents.
-   private final static Class beanClass = AS400JDBCXADataSource.class;        // @A1c
+    // Class this bean info represents.
+    private final static Class beanClass = AS400JDBCXADataSource.class;        // @A1c
 
-   /**
-   *  Returns additional bean information from the AS400JDBCXADataSourceBeanInfo superclass.
-   *  @return The bean information.
-   **/
-   public BeanInfo[] getAdditionalBeanInfo()
-   {
-      return new BeanInfo[] { new AS400JDBCDataSourceBeanInfo() };
-   }
+    /**
+     * Returns additional bean information from the AS400JDBCXADataSourceBeanInfo superclass.
+     *
+     * @return The bean information.
+     **/
+    public BeanInfo[] getAdditionalBeanInfo() {
+        return new BeanInfo[]{new AS400JDBCDataSourceBeanInfo()};
+    }
 
-   /**
-     Returns the bean descriptor.
-     @return The bean descriptor.
-   **/
-   public BeanDescriptor getBeanDescriptor()
-   {
-       return new BeanDescriptor(beanClass);
-   }
+    /**
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
+     **/
+    public BeanDescriptor getBeanDescriptor() {
+        return new BeanDescriptor(beanClass);
+    }
 
-   /**
-     Returns an image for the icon.
-
-     @param icon    The icon size and color.
-     @return        The image.
-   **/
-   public Image getIcon (int icon)
-   {
-       Image image = null;
-       switch (icon) {
-           case BeanInfo.ICON_MONO_16x16:
-           case BeanInfo.ICON_COLOR_16x16:
-               image = loadImage ("AS400JDBCXADataSourceBeanInfo16.gif");
-               break;
-           case BeanInfo.ICON_MONO_32x32:
-           case BeanInfo.ICON_COLOR_32x32:
-               image = loadImage ("AS400JDBCXADataSourceBeanInfo32.gif");
-               break;
-       }
-       return image;
-   }
+    /**
+     * Returns an image for the icon.
+     *
+     * @param icon The icon size and color.
+     * @return The image.
+     **/
+    public Image getIcon(int icon) {
+        Image image = null;
+        switch (icon) {
+            case BeanInfo.ICON_MONO_16x16:
+            case BeanInfo.ICON_COLOR_16x16:
+                image = loadImage("AS400JDBCXADataSourceBeanInfo16.gif");
+                break;
+            case BeanInfo.ICON_MONO_32x32:
+            case BeanInfo.ICON_COLOR_32x32:
+                image = loadImage("AS400JDBCXADataSourceBeanInfo32.gif");
+                break;
+        }
+        return image;
+    }
 }

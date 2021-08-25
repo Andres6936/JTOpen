@@ -16,6 +16,7 @@ package com.ibm.as400.access;
 /* ifdef JDBC40
 import java.sql.DatabaseMetaData;
 endif */
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -26,9 +27,9 @@ endif */
 
 
 /**
-<p>The AS400JDBCResultSetMetaData class describes the
-columns in a result set.
-**/
+ * <p>The AS400JDBCResultSetMetaData class describes the
+ * columns in a result set.
+ **/
 //
 // Implementation notes:
 //
@@ -44,101 +45,102 @@ public class AS400JDBCResultSetMetaData
 /* ifdef JDBC40
 extends ToolboxWrapper
 endif */
-implements ResultSetMetaData
-{
+        implements ResultSetMetaData {
     static final String copyright = "Copyright (C) 1997-2010 International Business Machines Corporation and others.";
 
     // Private static final ints
     // Searchable constants
     //@G1A @G2C
-    static final int SQL_UNSEARCHABLE       = 0xF0;  // isSearchable = false
-    static final int SQL_LIKE_ONLY          = 0xF1;  // will not be returned by our IBM i system
-    static final int SQL_ALL_EXCEPT_LIKE    = 0xF2;  // isSearchable = true
-    static final int SQL_SEARCHABLE         = 0xF3;  // isSearchable = true
+    static final int SQL_UNSEARCHABLE = 0xF0;  // isSearchable = false
+    static final int SQL_LIKE_ONLY = 0xF1;  // will not be returned by our IBM i system
+    static final int SQL_ALL_EXCEPT_LIKE = 0xF2;  // isSearchable = true
+    static final int SQL_SEARCHABLE = 0xF3;  // isSearchable = true
 
     // Updateable constants
     //@G1A @G2C
-    static final int SQL_READ_ONLY          = 0xF0;  // isReadOnly = true, isWriteable = false
-    static final int SQL_WRITE_CAPABLE      = 0xF1;  // isReadOnly = false, isWriteable = true
+    static final int SQL_READ_ONLY = 0xF0;  // isReadOnly = true, isWriteable = false
+    static final int SQL_WRITE_CAPABLE = 0xF1;  // isReadOnly = false, isWriteable = true
     static final int SQL_READ_WRITE_UNKNOWN = 0xF2;  // will not be returned by our IBM i system
-
+    SQLConversionSettings settings_;  /*@Q8A*/
     // Private data.
-    private String              catalog_;
-    private int                 concurrency_;
-    private String              cursorName_;
-    private JDRow               row_;
+    private String catalog_;
+    private int concurrency_;
+    private String cursorName_;
     private DBExtendedColumnDescriptors extendedColumnDescriptors_;   //@G1A
-    private ConvTable           convTable_;                           //@G1A
-    private AS400JDBCConnection    con_;                                 //@in1
-    SQLConversionSettings       settings_;  /*@Q8A*/
-    
+    private JDRow row_;
+    private ConvTable convTable_;                           //@G1A
+    private AS400JDBCConnection con_;                                 //@in1
+
     /**
-    Constructs an AS400JDBCResultSetMetaData object.
-    @param  catalog                     The catalog.
-    @param  concurrency                 The result set concurrency.
-    @param  cursorName                  The cursor name.
-    @param  row                         The row.
-    @param  extendedColumnDescriptors   The extended column descriptors.
-    @param  convTable                   The converter table to use to convert column descriptors.
-     * @throws SQLException  If a database error occurs.
-    **/
+     * Constructs an AS400JDBCResultSetMetaData object.
+     *
+     * @param catalog                   The catalog.
+     * @param concurrency               The result set concurrency.
+     * @param cursorName                The cursor name.
+     * @param row                       The row.
+     * @param extendedColumnDescriptors The extended column descriptors.
+     * @param convTable                 The converter table to use to convert column descriptors.
+     * @throws SQLException If a database error occurs.
+     **/
     AS400JDBCResultSetMetaData(String catalog,
-                                int concurrency,
-                                String cursorName,
-                                JDRow row,
-                                DBExtendedColumnDescriptors extendedColumnDescriptors,   //@G1A
-                                ConvTable convTable,                                     //@G1A
-                                AS400JDBCConnection con) throws SQLException                                 //@in1
+                               int concurrency,
+                               String cursorName,
+                               JDRow row,
+                               DBExtendedColumnDescriptors extendedColumnDescriptors,   //@G1A
+                               ConvTable convTable,                                     //@G1A
+                               AS400JDBCConnection con) throws SQLException                                 //@in1
     {
-        catalog_        = catalog;
-        concurrency_    = concurrency;
-        cursorName_     = cursorName;
-        row_            = row;
+        catalog_ = catalog;
+        concurrency_ = concurrency;
+        cursorName_ = cursorName;
+        row_ = row;
         extendedColumnDescriptors_ = extendedColumnDescriptors;                          //@G1A
-        convTable_      = convTable;                                                     //@G1A
-        con_            = con;                                                           //@in1
-        settings_       = SQLConversionSettings.getConversionSettings ( con_); /*@Q8A*/
+        convTable_ = convTable;                                                     //@G1A
+        con_ = con;                                                           //@in1
+        settings_ = SQLConversionSettings.getConversionSettings(con_); /*@Q8A*/
     }
 
     /**
-    Throws an exception if the specified column index is not
-    valid.
-    @param  columnIndex   The column index (1-based).
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Throws an exception if the specified column index is not
+     * valid.
+     *
+     * @param columnIndex The column index (1-based).
+     * @throws SQLException If the column index is not valid.
+     **/
     private void checkIndex(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         // Validate the column index.
-        if((columnIndex < 1))
-            JDError.throwSQLException(this, JDError.EXC_DESCRIPTOR_INDEX_INVALID,columnIndex+"<1");
-        if((columnIndex > row_.getFieldCount()))
-          JDError.throwSQLException(this, JDError.EXC_DESCRIPTOR_INDEX_INVALID, columnIndex+">"+row_.getFieldCount());
+        if ((columnIndex < 1))
+            JDError.throwSQLException(this, JDError.EXC_DESCRIPTOR_INDEX_INVALID, columnIndex + "<1");
+        if ((columnIndex > row_.getFieldCount()))
+            JDError.throwSQLException(this, JDError.EXC_DESCRIPTOR_INDEX_INVALID, columnIndex + ">" + row_.getFieldCount());
     }
 
     /**
-    Returns the catalog name of the table for a column.
-    @param  columnIndex     The column index (1-based).
-    @return                 The catalog name.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the catalog name of the table for a column.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The catalog name.
+     * @throws SQLException If the column index is not valid.
+     **/
     public String getCatalogName(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return catalog_;
     }
 
     // JDBC 2.0
+
     /**
-    Returns the name of a Java class whose instances are
-    created if ResultSet.getObject() is called to retrieve
-    from the column.  The actual class created may be a subclass
-    of the returned class.
-    @param  columnIndex     The column index (1-based).
-    @return                 The class name.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the name of a Java class whose instances are
+     * created if ResultSet.getObject() is called to retrieve
+     * from the column.  The actual class created may be a subclass
+     * of the returned class.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The class name.
+     * @throws SQLException If the column index is not valid.
+     **/
     //
     // Implementation note:
     //
@@ -149,8 +151,7 @@ implements ResultSetMetaData
     //   to return.  I will assume so in the mean time.
     //
     public String getColumnClassName(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         SQLData sqlData = row_.getSQLType(columnIndex);
         String className = sqlData.getObject().getClass().getName();
@@ -158,40 +159,41 @@ implements ResultSetMetaData
     }
 
     /**
-    Returns the number of columns in the result set.
-    @return     The number of columns.
-    @exception  SQLException    If an error occurs.
-    **/
+     * Returns the number of columns in the result set.
+     *
+     * @return The number of columns.
+     * @throws SQLException If an error occurs.
+     **/
     public int getColumnCount()
-    throws SQLException
-    {
+            throws SQLException {
         return row_.getFieldCount();
     }
 
     /**
-    Returns the normal maximum width of a column.
-    @param  columnIndex     The column index (1-based).
-    @return                 The normal maximum width
-                            (in characters).
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the normal maximum width of a column.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The normal maximum width
+     * (in characters).
+     * @throws SQLException If the column index is not valid.
+     **/
     public int getColumnDisplaySize(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return row_.getSQLType(columnIndex).getDisplaySize();
     }
 
     /**
-    Returns the suggested label for use in printouts
-    or displays for a column.
-    @param  columnIndex     The column index (1-based).
-    @return                 The column label if the user set the
-                            driver property "extended metadata" to true and
-                            the system returns us a column label,
-                            otherwise the column name.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the suggested label for use in printouts
+     * or displays for a column.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The column label if the user set the
+     * driver property "extended metadata" to true and
+     * the system returns us a column label,
+     * otherwise the column name.
+     * @throws SQLException If the column index is not valid.
+     **/
     //
     // Implementation note:
     //
@@ -207,19 +209,18 @@ implements ResultSetMetaData
     // to true) which will flow back to us without an extra call to the ROI server.
     //
     public String getColumnLabel(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         // @G1A If we have column descriptors, use them to get the column label.                             //@G1A
-        if(extendedColumnDescriptors_ != null)                                                              //@G1A
+        if (extendedColumnDescriptors_ != null)                                                              //@G1A
         {
             //@G1A
             DBColumnDescriptorsDataFormat dataFormat = extendedColumnDescriptors_.getColumnDescriptors(columnIndex, convTable_, settings_);    //@KBA //@Q8C  // Fix for JTOpen Bug 4034 The ccsid for the column may be 65535, if that is the case, we want to use the job's ccsid
-            if(dataFormat != null)  //@KBA  The data format returned by the host server will be null for columns created by expressions, use old way
+            if (dataFormat != null)  //@KBA  The data format returned by the host server will be null for columns created by expressions, use old way
             {                      //@D9A
                 String columnLabel = dataFormat.getColumnLabel(convTable_); //@D9A
-                  // Only return if the returned label length is greater than zero 
-                if(columnLabel != null  && columnLabel.length() > 0)        //@D9A@P6C
+                // Only return if the returned label length is greater than zero
+                if (columnLabel != null && columnLabel.length() > 0)        //@D9A@P6C
                     return columnLabel;                                     //@D9A
                 //@D9D return dataFormat.getColumnLabel(convTable_);   //@KBA
                 //@KBD return extendedColumnDescriptors_.getColumnDescriptors(columnIndex).getColumnLabel(convTable_);  //@G1A
@@ -231,117 +232,117 @@ implements ResultSetMetaData
     }
 
     /**
-    Returns the name of a column.
-    @param  columnIndex     The column index (1-based).
-    @return                 The column name.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the name of a column.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The column name.
+     * @throws SQLException If the column index is not valid.
+     **/
     public String getColumnName(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
-        String columnName =row_.getFieldName(columnIndex);
+        String columnName = row_.getFieldName(columnIndex);
         if (JDTrace.isTraceOn()) {
-          JDTrace.logInformation (this, "getColumnName("+columnIndex+") returned " + columnName);
+            JDTrace.logInformation(this, "getColumnName(" + columnIndex + ") returned " + columnName);
         }
         return columnName;
     }
 
     /**
-    Returns the type of a column.  If the type is a distinct type,
-    this returns the underlying type.
-    @param  columnIndex     The column index (1-based).
-    @return                 The SQL type code defined in java.sql.Types.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the type of a column.  If the type is a distinct type,
+     * this returns the underlying type.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The SQL type code defined in java.sql.Types.
+     * @throws SQLException If the column index is not valid.
+     **/
     public int getColumnType(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return row_.getSQLType(columnIndex).getType();
     }
 
-    
+
     /**
-    Returns the CCSID of a character column. 
-    Returns 0 if the column is not a character column. 
-    @param  columnIndex     The column index (1-based).
-    @return                 CCSID of a character column, otherwise 0.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the CCSID of a character column.
+     * Returns 0 if the column is not a character column.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return CCSID of a character column, otherwise 0.
+     * @throws SQLException If the column index is not valid.
+     **/
     /* @V8A */
     public int getColumnCCSID(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
-        return row_.getCCSID(columnIndex); 
+        return row_.getCCSID(columnIndex);
     }
 
 
     /**
-    Returns the type name of a column.  If the type is a distinct
-    type, this returns the underlying type name.
-    @param  columnIndex     The column index (1-based).
-    @return                 The column type name.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the type name of a column.  If the type is a distinct
+     * type, this returns the underlying type name.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The column type name.
+     * @throws SQLException If the column index is not valid.
+     **/
     public String getColumnTypeName(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
-        return row_.getSQLTypeName(columnIndex);    /*@L1C*/ 
+        return row_.getSQLTypeName(columnIndex);    /*@L1C*/
     }
 
     /**
-    Returns the precision of a column.  This is the number
-    of decimal digits the column may hold.
-    @param  columnIndex     The column index (1-based).
-    @return                 The precision.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the precision of a column.  This is the number
+     * of decimal digits the column may hold.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The precision.
+     * @throws SQLException If the column index is not valid.
+     **/
     public int getPrecision(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return row_.getSQLType(columnIndex).getPrecision();
     }
 
     /**
-    Returns the scale of a column.  This is number of digits
-    to the right of the decimal point.
-    @param  columnIndex     The column index (1-based).
-    @return                 The scale.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the scale of a column.  This is number of digits
+     * to the right of the decimal point.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The scale.
+     * @throws SQLException If the column index is not valid.
+     **/
     public int getScale(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return row_.getSQLType(columnIndex).getScale();
     }
 
     /**
-    Returns the schema name of the table for a column.
-    This method is supported only if the user has set the
-    driver property "extended metadata" to true.
-    @param  columnIndex     The column index (1-based).
-    @return                 The schema name if the user set the
-                            driver property "extended metadata" to true and
-                            the system returns us a schema name,
-                            otherwise "".
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the schema name of the table for a column.
+     * This method is supported only if the user has set the
+     * driver property "extended metadata" to true.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The schema name if the user set the
+     * driver property "extended metadata" to true and
+     * the system returns us a schema name,
+     * otherwise "".
+     * @throws SQLException If the column index is not valid.
+     **/
     public String getSchemaName(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
 
         // @G1A If we have column descriptors, use them to get the schema name.  //@G1A
-        if(extendedColumnDescriptors_ != null)                                  //@G1A
+        if (extendedColumnDescriptors_ != null)                                  //@G1A
         {
             //@G1A
-            DBColumnDescriptorsDataFormat dataFormat = extendedColumnDescriptors_.getColumnDescriptors(columnIndex, convTable_,settings_);    //@KBA //@ss1//@Q8C
-            if(dataFormat != null) //@KBA  Depending on the query, dataFormat returned by the host server may be null.  For example, if a union was used or an expression
+            DBColumnDescriptorsDataFormat dataFormat = extendedColumnDescriptors_.getColumnDescriptors(columnIndex, convTable_, settings_);    //@KBA //@ss1//@Q8C
+            if (dataFormat != null) //@KBA  Depending on the query, dataFormat returned by the host server may be null.  For example, if a union was used or an expression
                 return dataFormat.getBaseTableSchemaName(convTable_);   //@G1A
         }                                                                        //@G1A
 
@@ -350,27 +351,26 @@ implements ResultSetMetaData
     }
 
     /**
-    Returns the column's table name.
-    This method is supported only if the user has set the
-    driver property "extended metadata" to true.
-    @param  columnIndex     The column index (1-based).
-    @return                 The base table name if the user set the
-                            driver property "extended metadata" to true and
-                            the system returns us a table name,
-                            otherwise "".
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Returns the column's table name.
+     * This method is supported only if the user has set the
+     * driver property "extended metadata" to true.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return The base table name if the user set the
+     * driver property "extended metadata" to true and
+     * the system returns us a table name,
+     * otherwise "".
+     * @throws SQLException If the column index is not valid.
+     **/
     public String getTableName(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
 
         // Changed to get the Base Table Name for a column if the extended metadata property is true
         // because we already have the information, we should return it to the user if they want it...
-        if(extendedColumnDescriptors_ != null)
-        {
+        if (extendedColumnDescriptors_ != null) {
             DBColumnDescriptorsDataFormat dataFormat = extendedColumnDescriptors_.getColumnDescriptors(columnIndex, convTable_, settings_);    //@KBA //@ss1 //@Q8C
-            if(dataFormat != null)                                                                                      //@KBA  Depending on the query, dataFormat returned by the host server may be null.  For example, if a union was used or an expression
+            if (dataFormat != null)                                                                                      //@KBA  Depending on the query, dataFormat returned by the host server may be null.  For example, if a union was used or an expression
                 return dataFormat.getBaseTableName(convTable_);                                                         //@KBA
             //@KBD return extendedColumnDescriptors_.getColumnDescriptors(columnIndex).getBaseTableName(convTable_);       //K1C  use to call getBaseTableSchemaName
         }
@@ -380,16 +380,16 @@ implements ResultSetMetaData
     }
 
     /**
-    Indicates if the column is automatically numbered.
-    @param  columnIndex     The column index (1-based).
-    @return                 True if column is autoincrement, false otherwise.
-    @exception  SQLException    If the column index is not valid.
-    Note:  connection property "extended metadata" must be true for this method to be return accurate information.
-    If the "extended metadata" connection property is not set to true, then this method will always return false.
-    **/
+     * Indicates if the column is automatically numbered.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return True if column is autoincrement, false otherwise.
+     * @throws SQLException If the column index is not valid.
+     *                      Note:  connection property "extended metadata" must be true for this method to be return accurate information.
+     *                      If the "extended metadata" connection property is not set to true, then this method will always return false.
+     **/
     public boolean isAutoIncrement(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
 
         // Only run the query to get the information if the table name can be found.  The table name
@@ -397,16 +397,15 @@ implements ResultSetMetaData
         // @A9A
 
         String tableName = this.getTableName(columnIndex);
-        if ((tableName == null) || (tableName.length() == 0) ) {
-         	return false;
+        if ((tableName == null) || (tableName.length() == 0)) {
+            return false;
         }
 
         //return false; //@in1 add implementation instead of always returning false
 
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try
-        {
+        try {
             ps = con_.prepareStatement("SELECT identity_generation " +
                     "FROM QSYS2" + getCatalogSeparator() + "SYSCOLUMNS" +
                     " WHERE identity_generation is not null" +
@@ -418,39 +417,35 @@ implements ResultSetMetaData
             ps.setString(3, this.getSchemaName(columnIndex));
 
             rs = ps.executeQuery();
-            if ( rs.next())
+            if (rs.next())
                 return true;
             else
                 return false;
 
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             throw e;
-        }
-        finally
-        {
-            try{
-            if(rs != null)
-                rs.close();
-            }catch(Exception e){
-              JDTrace.logException(this, "isAutoIncrement rs.close()", e);  
+        } finally {
+            try {
+                if (rs != null)
+                    rs.close();
+            } catch (Exception e) {
+                JDTrace.logException(this, "isAutoIncrement rs.close()", e);
             } //allow next close to execute
-            if(ps != null)
+            if (ps != null)
                 ps.close();
         }
     }
 
     /**
-    Indicates if the column is case sensitive.
-    @param  columnIndex     The column index (1-based).
-    @return                 true if the column is case sensitive;
-                            false otherwise.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if the column is case sensitive.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return true if the column is case sensitive;
+     * false otherwise.
+     * @throws SQLException If the column index is not valid.
+     **/
     public boolean isCaseSensitive(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
 
         // In DB2 for IBM i, all text types
@@ -459,96 +454,96 @@ implements ResultSetMetaData
     }
 
     /**
-    Indicates if the column is a currency value.
-    @param  columnIndex     The column index (1-based).
-    @return                 Always false.  DB2 for IBM i
-                            does not directly support currency
-                            values.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if the column is a currency value.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return Always false.  DB2 for IBM i
+     * does not directly support currency
+     * values.
+     * @throws SQLException If the column index is not valid.
+     **/
     public boolean isCurrency(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return false;
     }
 
     /**
-    Indicates if a write on the column will definitely succeed.
-    @param  columnIndex     The column index (1-based).
-    @return                 Always false.  The driver does
-                            not check if the user has the
-                            necessary authority to write to
-                            the column.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if a write on the column will definitely succeed.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return Always false.  The driver does
+     * not check if the user has the
+     * necessary authority to write to
+     * the column.
+     * @throws SQLException If the column index is not valid.
+     **/
     public boolean isDefinitelyWritable(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return false;
     }
 
     /**
-    Indicates if the column can contain an SQL NULL value.
-    @param  columnIndex     The column index (1-based).
-    @return                 true if the column is can contain
-                            an SQL NULL value; false otherwise.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if the column can contain an SQL NULL value.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return true if the column is can contain
+     * an SQL NULL value; false otherwise.
+     * @throws SQLException If the column index is not valid.
+     **/
     public int isNullable(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         return row_.isNullable(columnIndex);
     }
 
     /**
-    Indicates if the column is read-only.
-    @param  columnIndex     The column index (1-based).
-    @return                 true if the column is read-only;
-                            false otherwise.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if the column is read-only.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return true if the column is read-only;
+     * false otherwise.
+     * @throws SQLException If the column index is not valid.
+     **/
     public boolean isReadOnly(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
 
         // @G1A If we have column descriptors, use them to get searchable label.              //@G1A
-        if(extendedColumnDescriptors_ != null)// && concurrency_ != ResultSet.CONCUR_READ_ONLY) //@G1A @G3C @36072
+        if (extendedColumnDescriptors_ != null)// && concurrency_ != ResultSet.CONCUR_READ_ONLY) //@G1A @G3C @36072
         {
             //@G1A
-            if(extendedColumnDescriptors_.getUpdateable(columnIndex) == (byte)SQL_READ_ONLY) //@G1A @G2C
+            if (extendedColumnDescriptors_.getUpdateable(columnIndex) == (byte) SQL_READ_ONLY) //@G1A @G2C
                 return true;                                                                  //@G1A
             else                                                                              //@G1A
                 return false;                                                                 //@G1A
         }                                                                                     //@G1A
 
         // else use "old" way
-        return(concurrency_ == ResultSet.CONCUR_READ_ONLY);
+        return (concurrency_ == ResultSet.CONCUR_READ_ONLY);
     }
 
     /**
-    Indicates if the column be used in a where clause.
-    @param  columnIndex     The column index (1-based).
-    @return                 If the user has set the "extended metadata" driver property to true,
-                            returns true if the column can be used in a where clause
-                            with any comparison operator except LIKE, returns
-                            false if the column cannot be used in a where clause.
-                            If the "extended metadata" driver property is set to false,
-                            true will always be returned.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if the column be used in a where clause.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return If the user has set the "extended metadata" driver property to true,
+     * returns true if the column can be used in a where clause
+     * with any comparison operator except LIKE, returns
+     * false if the column cannot be used in a where clause.
+     * If the "extended metadata" driver property is set to false,
+     * true will always be returned.
+     * @throws SQLException If the column index is not valid.
+     **/
     public boolean isSearchable(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
         // @G1A If we have column descriptors, use them to get searchable label.           //@G1A
-        if(extendedColumnDescriptors_ != null)                                            //@G1A
+        if (extendedColumnDescriptors_ != null)                                            //@G1A
         {
             //@G1A
-            if(extendedColumnDescriptors_.getSearchable(columnIndex) == (byte)SQL_UNSEARCHABLE) //@G1A @G2C
+            if (extendedColumnDescriptors_.getSearchable(columnIndex) == (byte) SQL_UNSEARCHABLE) //@G1A @G2C
                 return false;                                                              //@G1A
             else                                                                           //@G1A
                 return true;                                                               //@G1A
@@ -559,65 +554,64 @@ implements ResultSetMetaData
     }
 
     /**
-    Indicates if the column can contain a signed value.
-    @param  columnIndex     The column index (1-based).
-    @return                 true if the column is signed;
-                            false otherwise.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if the column can contain a signed value.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return true if the column is signed;
+     * false otherwise.
+     * @throws SQLException If the column index is not valid.
+     **/
     public boolean isSigned(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         checkIndex(columnIndex);
-        return(row_.getSQLType(columnIndex).isSigned());
+        return (row_.getSQLType(columnIndex).isSigned());
     }
 
     /**
-    Indicates if it is possible for a write on the column to succeed.
-    The write may fail even if this method returns true.
-    The accuracy of this method will be improved if the "extended metadata"
-    property is set to true.
-    @param  columnIndex     The column index (1-based).
-    @return                 true if it is possible for a write on
-                            the column to succeed; false otherwise.
-    @exception  SQLException    If the column index is not valid.
-    **/
+     * Indicates if it is possible for a write on the column to succeed.
+     * The write may fail even if this method returns true.
+     * The accuracy of this method will be improved if the "extended metadata"
+     * property is set to true.
+     *
+     * @param columnIndex The column index (1-based).
+     * @return true if it is possible for a write on
+     * the column to succeed; false otherwise.
+     * @throws SQLException If the column index is not valid.
+     **/
     public boolean isWritable(int columnIndex)
-    throws SQLException
-    {
+            throws SQLException {
         //@G1D checkIndex (columnIndex);
         //@G1D return(concurrency_ != ResultSet.CONCUR_READ_ONLY);
         return !isReadOnly(columnIndex);   //@G1A
     }
 
     /**
-    Returns the name of the SQL cursor in use by this result set.
-    @return     The cursor name.
-    **/
-    public String toString()
-    {
+     * Returns the name of the SQL cursor in use by this result set.
+     *
+     * @return The cursor name.
+     **/
+    public String toString() {
         return cursorName_;
     }
 
 
     //@pda jdbc40
-    protected String[] getValidWrappedList()
-    {
-        return new String[] {  "com.ibm.as400.access.AS400JDBCResultSetMetaData", "java.sql.ResultSetMetaData" };
+    protected String[] getValidWrappedList() {
+        return new String[]{"com.ibm.as400.access.AS400JDBCResultSetMetaData", "java.sql.ResultSetMetaData"};
     }
 
     //@in1 (copied from AS400JDBCDatabaseMetadata)
+
     /**
-    Returns the naming convention used when referring to tables.
-    This depends on the naming convention specified in the connection
-    properties.
-
-    @return     If using SQL naming convention, "." is returned. If
-                using system naming convention, "/" is returned.
-
-    @exception  SQLException    This exception is never thrown.
-    **/
-    private String getCatalogSeparator ()
+     * Returns the naming convention used when referring to tables.
+     * This depends on the naming convention specified in the connection
+     * properties.
+     *
+     * @return If using SQL naming convention, "." is returned. If
+     * using system naming convention, "/" is returned.
+     * @throws SQLException This exception is never thrown.
+     **/
+    private String getCatalogSeparator()
             throws SQLException {
         String catalogSeparator;
         if (con_.getProperties().equals(JDProperties.NAMING, JDProperties.NAMING_SQL))

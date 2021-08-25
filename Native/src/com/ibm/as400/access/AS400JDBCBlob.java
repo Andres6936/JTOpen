@@ -263,7 +263,8 @@ public class AS400JDBCBlob implements Blob, Serializable {
         // would overflow past the 2 GB boundary, we don't throw an error, we just
         // return the number of bytes that were set.
         int newSize = offset + bytesToWrite.length;
-        if (newSize < 0) newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
+        if (newSize < 0)
+            newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
         if (newSize > data_.length) {
             byte[] temp = data_;
             data_ = new byte[newSize];
@@ -306,7 +307,8 @@ public class AS400JDBCBlob implements Blob, Serializable {
         // would overflow past the 2 GB boundary, we don't throw an error, we just
         // return the number of bytes that were set.
         int newSize = blobOffset + lengthOfWrite;
-        if (newSize < 0) newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
+        if (newSize < 0)
+            newSize = 0x7FFFFFFF; // In case the addition resulted in overflow.
         if (newSize > data_.length) {
             byte[] temp = data_;
             data_ = new byte[newSize];

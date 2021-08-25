@@ -22,13 +22,12 @@ import java.beans.SimpleBeanInfo;
 /**
  * The AS400JDBCConnectionPoolDataSourceBeanInfo class provides bean information
  * for the AS400JDBCConnectionPoolDataSource class.
-**/
-public class AS400JDBCConnectionPoolDataSourceBeanInfo extends SimpleBeanInfo
-{
-  static final String copyright = "Copyright (C) 1997-2010 International Business Machines Corporation and others.";
+ **/
+public class AS400JDBCConnectionPoolDataSourceBeanInfo extends SimpleBeanInfo {
+    static final String copyright = "Copyright (C) 1997-2010 International Business Machines Corporation and others.";
 
 
-  // Class this bean info represents.
+    // Class this bean info represents.
     private static final Class beanClass = AS400JDBCConnectionPoolDataSource.class;
 
     //@B1D private static PropertyDescriptor[] propertyDescriptors_; //@B0A
@@ -36,7 +35,7 @@ public class AS400JDBCConnectionPoolDataSourceBeanInfo extends SimpleBeanInfo
     //@B1D private static final BeanInfo[] additionalBeanInfo_; //@B0A
 
 
-  //@B0A
+    //@B0A
     //@B1D static
     //@B1D {
     //@B1D   try
@@ -99,49 +98,48 @@ public class AS400JDBCConnectionPoolDataSourceBeanInfo extends SimpleBeanInfo
     //@B1D }
 
 
-  /**
-   * Returns additional bean information from the AS400JDBCConnectionPoolDataSource superclass.
-   * @return The bean information.
-  **/
-  public BeanInfo[] getAdditionalBeanInfo()
-  {
-        return new BeanInfo[] { new AS400JDBCDataSourceBeanInfo()};
+    /**
+     * Returns additional bean information from the AS400JDBCConnectionPoolDataSource superclass.
+     *
+     * @return The bean information.
+     **/
+    public BeanInfo[] getAdditionalBeanInfo() {
+        return new BeanInfo[]{new AS400JDBCDataSourceBeanInfo()};
         //@B1D return additionalBeanInfo_; //@B0A
     }
 
 
-  /**
-   * Returns the bean descriptor.
-   * @return The bean descriptor.
-  **/
-  public BeanDescriptor getBeanDescriptor()
-  {
+    /**
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
+     **/
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(beanClass);
         //@B1D return beanDescriptor_; //@B0A
     }
 
 
-  /**
-   * Returns an image for the icon.
-   * @param icon The icon size and color.
-   * @return The image.
-  **/
-  public Image getIcon(int icon)
-  {
-    Image image = null;
-    switch(icon)
-    {
-      case BeanInfo.ICON_MONO_16x16:
-      case BeanInfo.ICON_COLOR_16x16:
-        image = loadImage ("AS400JDBCConnectionPoolDataSource16.gif");
-        break;
-      case BeanInfo.ICON_MONO_32x32:
-      case BeanInfo.ICON_COLOR_32x32:
-        image = loadImage ("AS400JDBCConnectionPoolDataSource32.gif");
-        break;
+    /**
+     * Returns an image for the icon.
+     *
+     * @param icon The icon size and color.
+     * @return The image.
+     **/
+    public Image getIcon(int icon) {
+        Image image = null;
+        switch (icon) {
+            case BeanInfo.ICON_MONO_16x16:
+            case BeanInfo.ICON_COLOR_16x16:
+                image = loadImage("AS400JDBCConnectionPoolDataSource16.gif");
+                break;
+            case BeanInfo.ICON_MONO_32x32:
+            case BeanInfo.ICON_COLOR_32x32:
+                image = loadImage("AS400JDBCConnectionPoolDataSource32.gif");
+                break;
+        }
+        return image;
     }
-    return image;
-  }
 
 
     //@B1D /**

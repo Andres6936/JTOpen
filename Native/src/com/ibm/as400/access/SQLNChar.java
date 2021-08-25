@@ -17,18 +17,14 @@ import java.io.CharConversionException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.sql.Blob;
-import java.sql.Clob;
+import java.sql.*;
 /*ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */
-import java.sql.SQLException;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.net.URL;
 
@@ -141,15 +137,12 @@ final class SQLNChar
             value = clob.getSubString(1, (int) clob.length());
         } else if (object instanceof Reader) {
             value = getStringFromReader((Reader) object, ALL_READER_BYTES, this);
-        }
-
-        /* ifdef JDBC40
-        else if(object instanceof SQLXML) //@PDA jdbc40
+        } else if(object instanceof SQLXML) //@PDA jdbc40
         {
             SQLXML xml = (SQLXML)object;
             value = xml.getString();
         }
-        endif */
+
 
         if (value == null) {
             if (JDTrace.isTraceOn()) {
@@ -251,21 +244,15 @@ final class SQLNChar
     }
 
     public int getType() {
-    	/* ifdef JDBC40 
+
         return java.sql.Types.NCHAR;
-        endif */
-        /* ifndef JDBC40 */
-        return java.sql.Types.CHAR;
-        /* endif */
+
     }
 
     public String getTypeName() {
-    	/* ifdef JDBC40 
+
         return "NCHAR";
-        endif */
-        /* ifndef JDBC40 */
-        return "CHAR";
-        /* endif */
+
     }
 
     public boolean isSigned() {
@@ -380,7 +367,7 @@ final class SQLNChar
         }
     }
 
-/* ifdef JDBC40 
+
     public RowId getRowId() throws SQLException
     {
         
@@ -410,7 +397,7 @@ final class SQLNChar
         truncated_ = 0; outOfBounds_ = false; 
         return new AS400JDBCSQLXML(getString());     
     }
-endif */
+
 
     public void saveValue() {
         savedValue_ = originalValue_;

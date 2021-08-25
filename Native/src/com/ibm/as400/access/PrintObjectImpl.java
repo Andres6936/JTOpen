@@ -20,21 +20,20 @@ import java.io.IOException;
  * needed for a full implementation of the PrintObject class.
  **/
 
-interface PrintObjectImpl
-{
+interface PrintObjectImpl {
 
     /**
      * The getAttrValue (package scope) method is introduced to allow the
      * propagation of any changes made to attrs (by updateAttrs) to the ImplRemote
      * object.
+     *
      * @return attr value
      **/
-    public abstract NPCPAttribute getAttrValue();
+    NPCPAttribute getAttrValue();
 
 
-
-    public abstract Integer getIntegerAttribute(int attributeID)
-        throws AS400Exception,
+    Integer getIntegerAttribute(int attributeID)
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
@@ -42,9 +41,8 @@ interface PrintObjectImpl
             RequestNotSupportedException;
 
 
-
-    public abstract Float getFloatAttribute(int attributeID)
-        throws AS400Exception,
+    Float getFloatAttribute(int attributeID)
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
@@ -52,9 +50,8 @@ interface PrintObjectImpl
             RequestNotSupportedException;
 
 
-
-    public abstract String getStringAttribute(int attributeID)
-        throws AS400Exception,
+    String getStringAttribute(int attributeID)
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
@@ -62,8 +59,8 @@ interface PrintObjectImpl
             RequestNotSupportedException;
 
 
-    public abstract Integer getSingleIntegerAttribute(int attributeID)
-        throws AS400Exception,
+    Integer getSingleIntegerAttribute(int attributeID)
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
@@ -71,9 +68,8 @@ interface PrintObjectImpl
             RequestNotSupportedException;
 
 
-
-    public abstract Float getSingleFloatAttribute(int attributeID)
-        throws AS400Exception,
+    Float getSingleFloatAttribute(int attributeID)
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
@@ -81,9 +77,8 @@ interface PrintObjectImpl
             RequestNotSupportedException;
 
 
-
-    public abstract String getSingleStringAttribute(int attributeID)
-        throws AS400Exception,
+    String getSingleStringAttribute(int attributeID)
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
@@ -93,22 +88,21 @@ interface PrintObjectImpl
     /**
      * The setPrintObjectAttrs (package scope) method is introduced to allow
      * the propagation of PrintObject property changes to the ImplRemote object.
-     * @param idCodePoint 
-     * @param cpAttrs 
-     * @param type 
+     *
+     * @param idCodePoint
+     * @param cpAttrs
+     * @param type
      **/
-    public abstract void setPrintObjectAttrs(NPCPID idCodePoint,
-                                             NPCPAttribute cpAttrs,
-                                             int type);
+    void setPrintObjectAttrs(NPCPID idCodePoint,
+                             NPCPAttribute cpAttrs,
+                             int type);
 
 
-
-    public abstract void setSystem(AS400Impl system);  // @A1C
-
+    void setSystem(AS400Impl system);  // @A1C
 
 
-    public abstract void update()
-        throws AS400Exception,
+    void update()
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,

@@ -160,10 +160,13 @@ class ResourceBundleLoader {
         return systemValueResource_.getString(textId).trim();
     }
 
-    // Returns the system value MRI text for the specified Locale.
-    // @param  textId  the id which identifies the text to return.
-    // @param locale The locale to use.
-    // @return  the translatable system value MRI text.
+    /**
+     * Returns the system value MRI text for the specified Locale.
+     *
+     * @param textId the id which identifies the text to return.
+     * @param locale The locale to use.
+     * @return the translatable system value MRI text.
+     */
     static String getSystemValueText(String textId, Locale locale) {
         ResourceBundle bundle = ResourceBundle.getBundle("com.ibm.as400.access.SVMRI", locale);
         if (bundle != null) {
@@ -175,9 +178,12 @@ class ResourceBundleLoader {
         return systemValueResource_.getString(textId).trim();
     }
 
-    // Returns the text associated with the exception.
-    // @param  textId  the id which identifies the message text to return.
-    // @return  the translatable text which describes the exception.
+    /**
+     * Returns the text associated with the exception.
+     *
+     * @param textId the id which identifies the message text to return.
+     * @return the translatable text which describes the exception.
+     */
     static String getText(String textId) {
         if (resources_ == null) {
             throw resourceException_;
@@ -227,11 +233,14 @@ class ResourceBundleLoader {
         return substitute(text, new Object[]{value0, value1});
     }
 
-    // @B0A
-    // Returns the text associated with an MRI key, with subsitution variables.
-    // @param  textId  the id which identifies the message text to return.
-    // @param  values  The replacement values.
-    // @return  The text string with all substitution variables replaced.
+    /**
+     * #B0A
+     * Returns the text associated with an MRI key, with subsitution variables.
+     *
+     * @param textId the id which identifies the message text to return.
+     * @param values The replacement values.
+     * @return The text string with all substitution variables replaced.
+     */
     static String getText(String textId, Object[] values) {
         String text = getText(textId);
         return substitute(text, values);

@@ -18,19 +18,14 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */
-import java.sql.SQLException;
 /* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 final class SQLVarbinary
@@ -379,7 +374,7 @@ final class SQLVarbinary
         return BinaryConverter.bytesToHexString(getBytes());
     }
 
-/* ifdef JDBC40 
+
     //@PDA jdbc40
     public RowId getRowId() throws SQLException
     {
@@ -393,7 +388,7 @@ final class SQLVarbinary
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-endif */
+
 
     public void saveValue() {
         savedValue_ = value_;

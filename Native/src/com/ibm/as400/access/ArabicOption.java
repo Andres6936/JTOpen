@@ -40,7 +40,7 @@ package com.ibm.as400.access;
  * final instances.
  */
 
-class ArabicOption {
+record ArabicOption(int value, int mask) {
     /**
      * Value identifying Near.
      * <p>
@@ -122,9 +122,9 @@ class ArabicOption {
     public static final ArabicOption SEEN_NEAR
             = new ArabicOption(ArabicOptionSet.ISEEN_NEAR, ArabicOptionSet.SEEN_MASK);
 
-/**
- *  Seen option values:
- */
+
+    // Seen option values:
+
     /**
      * Value identifying Auto.
      * <p>
@@ -161,9 +161,9 @@ class ArabicOption {
     public static final ArabicOption TASHKEEL_KEEP
             = new ArabicOption(ArabicOptionSet.ITASHKEEL_KEEP, ArabicOptionSet.TASHKEEL_MASK);
 
-/**
- *  Yeh Hamza option values:
- */
+
+    // Yeh Hamza option values:
+
     /**
      * Value identifying Customized At Begin.
      * <p>
@@ -297,13 +297,5 @@ class ArabicOption {
      */
     /*public*/ static final ArabicOption TASHKEEL_CUSTOMIZED_WITHWIDTH
             = new ArabicOption(ArabicOptionSet.ITASHKEEL_CUSTOMIZED_WITHWIDTH, ArabicOptionSet.TASHKEEL_MASK);
-
-    int value;
-    int mask;
-
-    private ArabicOption(int initValue, int initMask) {
-        value = initValue;
-        mask = initMask;
-    }
 }
 

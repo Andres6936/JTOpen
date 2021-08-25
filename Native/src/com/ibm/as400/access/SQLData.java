@@ -16,15 +16,16 @@ package com.ibm.as400.access;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.sql.*;
-/* ifdef JDBC40
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
 import java.sql.NClob;
-import java.sql.Ref;
 import java.sql.RowId;
- endif */
-/* ifdef JDBC40
+import java.sql.SQLException;
 import java.sql.SQLXML;
- endif */
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**

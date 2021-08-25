@@ -200,22 +200,28 @@ class ResourceBundleLoader {
         }                                                                       // @B1A
     }
 
-    // @B0A
-    // Returns the text associated with an MRI key, with subsitution variables.
-    // @param  textId  the id which identifies the message text to return.
-    // @param  value  The replacement value.
-    // @return  The text string with the substitution variable replaced.
+    /**
+     * #B0A
+     * Returns the text associated with an MRI key, with subsitution variables.
+     *
+     * @param textId the id which identifies the message text to return.
+     * @param value  The replacement value.
+     * @return The text string with the substitution variable replaced.
+     */
     static String getText(String textId, Object value) {
         String text = getText(textId);
         return substitute(text, value);
     }
 
-    // @B0A
-    // Returns the text associated with an MRI key, with subsitution variables.
-    // @param  textId  the id which identifies the message text to return.
-    // @param  value0  The first replacement value.
-    // @param  value1  The second replacement value.
-    // @return  The text string with the substitution variable replaced.
+    /**
+     * #B0A
+     * Returns the text associated with an MRI key, with subsitution variables.
+     *
+     * @param textId the id which identifies the message text to return.
+     * @param value0 The first replacement value.
+     * @param value1 The second replacement value.
+     * @return The text string with the substitution variable replaced.
+     */
     static String getText(String textId, Object value0, Object value1) {
         String text = getText(textId);
         return substitute(text, new Object[]{value0, value1});

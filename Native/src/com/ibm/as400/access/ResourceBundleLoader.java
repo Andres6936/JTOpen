@@ -246,28 +246,37 @@ class ResourceBundleLoader {
         return substitute(text, values);
     }
 
-    // Replaces a single substitution variable in a string.
-    // @param  text  The text string, with a single substitution variable (e.g. "Error &0 has occurred.")
-    // @param  value  The replacement value.
-    // @return  The text string with the substitution variable replaced.
+    /**
+     * Replaces a single substitution variable in a string.
+     *
+     * @param text  The text string, with a single substitution variable (e.g. "Error &0 has occurred.")
+     * @param value The replacement value.
+     * @return The text string with the substitution variable replaced.
+     */
     static String substitute(String text, Object value) {
         return substitute(text, new Object[]{value});
     }
 
-    // @B0A
-    // Replaces a single substitution variable in a string.
-    // @param  text  The text string, with a single substitution variable (e.g. "Error &0 has occurred.")
-    // @param  value0  The first replacement value.
-    // @param  value1  The second replacement value.
-    // @return  The text string with the substitution variable replaced.
+    /**
+     * #B0A
+     * Replaces a single substitution variable in a string.
+     *
+     * @param text   The text string, with a single substitution variable (e.g. "Error &0 has occurred.")
+     * @param value0 The first replacement value.
+     * @param value1 The second replacement value.
+     * @return The text string with the substitution variable replaced.
+     */
     static String substitute(String text, Object value0, Object value1) {
         return substitute(text, new Object[]{value0, value1});
     }
 
-    // Replaces substitution variables in a string.
-    // @param  text  The text string, with substitution variables (e.g. "Error &0 in table &1.")
-    // @param  values  The replacement values.
-    // @return  The text string with all substitution variables replaced.
+    /**
+     * Replaces substitution variables in a string.
+     *
+     * @param text   The text string, with substitution variables (e.g. "Error &0 in table &1.")
+     * @param values The replacement values.
+     * @return The text string with all substitution variables replaced.
+     */
     static String substitute(String text, Object[] values) {
         String result = text;
         for (int i = 0; i < values.length; ++i) {

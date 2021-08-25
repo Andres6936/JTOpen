@@ -26,10 +26,10 @@ interface ProxyImpl {
      *
      * @param connection The connection.
      **/
-    public abstract void construct(ProxyClientConnection connection);
+    void construct(ProxyClientConnection connection);
 
 
-    public long getPxId();
+    long getPxId();
 
 
 }

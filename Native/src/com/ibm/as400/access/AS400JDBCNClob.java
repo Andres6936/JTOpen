@@ -14,26 +14,14 @@
 package com.ibm.as400.access;
 
 import java.io.Serializable;
-
-/* ifdef JDBC40 
 import java.sql.NClob;
-endif */
+
 
 /**
  * The AS400JDBCNClob class provides access to character large objects. The data
  * is valid only within the current transaction.
  */
-
-//@PDA jdbc40 new class
-
-public class AS400JDBCNClob extends AS400JDBCClob 
-/* ifdef JDBC40 
-   implements NClob, Serializable
-   endif */
-        /* ifndef JDBC40 */
-        implements Serializable
-        /* endif */ {
-
+public class AS400JDBCNClob extends AS400JDBCClob implements NClob, Serializable {
 
     /**
      * Constructs an AS400JDBCNClob object. The data is contained in the String.

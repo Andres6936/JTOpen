@@ -21,22 +21,15 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.Types;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.RowId;
  endif */
-import java.sql.SQLException;
-/* ifdef JDBC40  
+/* ifdef JDBC40
 import java.sql.SQLXML;
  endif */
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 /**
@@ -876,7 +869,7 @@ public abstract class SQLDataBase implements SQLData {
      @exception SQLException    If the conversion is not
      required or not possible.
      **/
-    /* ifdef JDBC40  
+
     public NClob getNClob() throws SQLException
     {
         truncated_ = 0; outOfBounds_ = false; 
@@ -886,7 +879,7 @@ public abstract class SQLDataBase implements SQLData {
         String string = getNString();
         return new AS400JDBCNClob(string, string.length());
     }
-     endif */
+
     //@PDA jdbc40
 
     /**
@@ -918,10 +911,10 @@ public abstract class SQLDataBase implements SQLData {
      @exception SQLException    If the conversion is not
      required or not possible.
      **/
-    /* ifdef JDBC40  
+
     public abstract SQLXML getSQLXML()
     throws SQLException;
-    endif */
+
 
     //@PDA jdbc40
     /**
@@ -930,11 +923,11 @@ public abstract class SQLDataBase implements SQLData {
      @exception SQLException    If the conversion is not
      required or not possible.
      **/
-    /* ifdef JDBC40 
-    
+
+
     public abstract RowId getRowId()
     throws SQLException;
-     endif */
+
 
     //@array
 

@@ -102,7 +102,7 @@ interface SQLData extends Cloneable {
      *
      * @return The clone.
      **/
-    public abstract Object clone();
+    Object clone();
 
     //---------------------------------------------------------//
     //                                                         //
@@ -122,10 +122,10 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the raw bytes are not in
      *                      the expected format.
      **/
-    public abstract void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter, boolean ignoreConversionErrors)
+    void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter, boolean ignoreConversionErrors)
             throws SQLException;
 
-    public abstract void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter)
+    void convertFromRawBytes(byte[] rawBytes, int offset, ConvTable converter)
             throws SQLException;
 
     /**
@@ -137,7 +137,7 @@ interface SQLData extends Cloneable {
      * @param ccsidConverter the converter.
      * @throws SQLException If a database error occurs.
      **/
-    public abstract void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter)
+    void convertToRawBytes(byte[] rawBytes, int offset, ConvTable ccsidConverter)
             throws SQLException;
 
 
@@ -150,7 +150,7 @@ interface SQLData extends Cloneable {
      * @param ccsidConverter the converter.
      * @throws SQLException If a database error occurs.
      **/
-    public abstract void validateRawTruncatedData(byte[] rawBytes, int offset, ConvTable ccsidConverter)
+    void validateRawTruncatedData(byte[] rawBytes, int offset, ConvTable ccsidConverter)
             throws SQLException;
 
 
@@ -176,7 +176,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the Java object is not an
      *                      appropriate type.
      **/
-    public abstract void set(Object object, Calendar calendar, int scale)
+    void set(Object object, Calendar calendar, int scale)
             throws SQLException;
 
     //---------------------------------------------------------//
@@ -193,7 +193,7 @@ interface SQLData extends Cloneable {
      *
      * @return the SQL type constant.
      **/
-    public abstract int getSQLType();
+    int getSQLType();
 
     /**
      * Returns the parameters used in creating the
@@ -202,7 +202,7 @@ interface SQLData extends Cloneable {
      * @return the parameters, separated by commas,
      * or null if none.
      **/
-    public abstract String getCreateParameters();
+    String getCreateParameters();
 
     /**
      * Returns the display size.  This is defined in Appendix
@@ -210,7 +210,7 @@ interface SQLData extends Cloneable {
      *
      * @return the display size (in characters).
      **/
-    public abstract int getDisplaySize();
+    int getDisplaySize();
 
     //@F1A JDBC 3.0
 
@@ -219,21 +219,21 @@ interface SQLData extends Cloneable {
      *
      * @return the Java class name.
      **/
-    public abstract String getJavaClassName();
+    String getJavaClassName();
 
     /**
      * Returns the prefix used to quote a literal.
      *
      * @return the prefix, or null if none.
      **/
-    public abstract String getLiteralPrefix();
+    String getLiteralPrefix();
 
     /**
      * Returns the suffix used to quote a literal.
      *
      * @return the suffix, or null if none.
      **/
-    public abstract String getLiteralSuffix();
+    String getLiteralSuffix();
 
     /**
      * Returns the localized version of the name of the
@@ -241,7 +241,7 @@ interface SQLData extends Cloneable {
      *
      * @return the name, or null.
      **/
-    public abstract String getLocalName();
+    String getLocalName();
 
     /**
      * Returns the maximum precision of the type. This is
@@ -250,7 +250,7 @@ interface SQLData extends Cloneable {
      *
      * @return the maximum precision.
      **/
-    public abstract int getMaximumPrecision();
+    int getMaximumPrecision();
 
     /**
      * Returns the maximum scale of the type.  This is
@@ -259,7 +259,7 @@ interface SQLData extends Cloneable {
      *
      * @return the maximum scale.
      **/
-    public abstract int getMaximumScale();
+    int getMaximumScale();
 
     /**
      * Returns the minimum scale of the type.  This is
@@ -268,14 +268,14 @@ interface SQLData extends Cloneable {
      *
      * @return the minimum scale.
      **/
-    public abstract int getMinimumScale();
+    int getMinimumScale();
 
     /**
      * Returns the native IBM i identifier for the type.
      *
      * @return the native type.
      **/
-    public abstract int getNativeType();
+    int getNativeType();
 
     /**
      * Returns the precision of the type. This is
@@ -284,14 +284,14 @@ interface SQLData extends Cloneable {
      *
      * @return the precision.
      **/
-    public abstract int getPrecision();
+    int getPrecision();
 
     /**
      * Returns the radix for the type.
      *
      * @return the radix.
      **/
-    public abstract int getRadix();
+    int getRadix();
 
     /**
      * Returns the scale of the type. This is
@@ -300,28 +300,28 @@ interface SQLData extends Cloneable {
      *
      * @return the scale.
      **/
-    public abstract int getScale();
+    int getScale();
 
     /**
      * Returns the type constant associated with the type.
      *
      * @return SQL type code defined in java.sql.Types.
      **/
-    public abstract int getType();
+    int getType();
 
     /**
      * Returns the name of the data type.
      *
      * @return the name.
      **/
-    public abstract String getTypeName();
+    String getTypeName();
 
     /**
      * Indicates whether the type is signed.
      *
      * @return true or false
      **/
-    public abstract boolean isSigned();
+    boolean isSigned();
 
     /**
      * Indicates whether the type is text.  This also
@@ -330,14 +330,14 @@ interface SQLData extends Cloneable {
      *
      * @return true or false
      **/
-    public abstract boolean isText();
+    boolean isText();
 
     /**
      * Returns the actual size of this piece of data in bytes.
      *
      * @return the actual size of this piece of data in bytes.
      **/
-    public abstract int getActualSize();
+    int getActualSize();
 
     /**
      * Returns the number of bytes truncated by the last conversion
@@ -345,7 +345,7 @@ interface SQLData extends Cloneable {
      *
      * @return the number of bytes truncated by the last conversion
      **/
-    public abstract int getTruncated();
+    int getTruncated();
 
     /**
      * Clears the truncated information
@@ -360,12 +360,12 @@ interface SQLData extends Cloneable {
      *
      * @return out of bounds indicator
      */
-    public abstract boolean getOutOfBounds();
+    boolean getOutOfBounds();
 
     /**
      * Clear the out of bounds flag
      */
-    public abstract void clearOutOfBounds();
+    void clearOutOfBounds();
 
     //---------------------------------------------------------//
     //                                                         //
@@ -388,7 +388,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract InputStream getAsciiStream()
+    InputStream getAsciiStream()
             throws SQLException;
 
     /**
@@ -399,7 +399,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract BigDecimal getBigDecimal(int scale)
+    BigDecimal getBigDecimal(int scale)
             throws SQLException;
 
     /**
@@ -409,7 +409,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract InputStream getBinaryStream()
+    InputStream getBinaryStream()
             throws SQLException;
 
     /**
@@ -419,7 +419,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Blob getBlob()
+    Blob getBlob()
             throws SQLException;
 
     /**
@@ -429,7 +429,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract boolean getBoolean()
+    boolean getBoolean()
             throws SQLException;
 
     /**
@@ -439,7 +439,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract byte getByte()
+    byte getByte()
             throws SQLException;
 
     /**
@@ -450,7 +450,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract byte[] getBytes()
+    byte[] getBytes()
             throws SQLException;
 
     /**
@@ -460,7 +460,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Reader getCharacterStream()
+    Reader getCharacterStream()
             throws SQLException;
 
     /**
@@ -470,7 +470,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Clob getClob()
+    Clob getClob()
             throws SQLException;
 
     /**
@@ -481,7 +481,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Date getDate(Calendar calendar)
+    Date getDate(Calendar calendar)
             throws SQLException;
 
     /**
@@ -491,7 +491,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract double getDouble()
+    double getDouble()
             throws SQLException;
 
     /**
@@ -501,7 +501,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract float getFloat()
+    float getFloat()
             throws SQLException;
 
     /**
@@ -511,7 +511,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract int getInt()
+    int getInt()
             throws SQLException;
 
     /**
@@ -521,7 +521,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract long getLong()
+    long getLong()
             throws SQLException;
 
     /**
@@ -534,7 +534,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Object getObject()
+    Object getObject()
             throws SQLException;
 
 
@@ -550,7 +550,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Object getBatchableObject()
+    Object getBatchableObject()
             throws SQLException;
 
 
@@ -561,7 +561,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract short getShort()
+    short getShort()
             throws SQLException;
 
     /**
@@ -571,7 +571,7 @@ interface SQLData extends Cloneable {
      * @return the result of the conversion.
      * @throws SQLException If a database error occurs.
      **/
-    public abstract String getString()
+    String getString()
             throws SQLException;
 
     /**
@@ -582,7 +582,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Time getTime(Calendar calendar)
+    Time getTime(Calendar calendar)
             throws SQLException;
 
     /**
@@ -593,7 +593,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Timestamp getTimestamp(Calendar calendar)
+    Timestamp getTimestamp(Calendar calendar)
             throws SQLException;
 
     /**
@@ -603,7 +603,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract InputStream getUnicodeStream()
+    InputStream getUnicodeStream()
             throws SQLException;
 
     //@PDA jdbc40
@@ -615,7 +615,7 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Reader getNCharacterStream()
+    Reader getNCharacterStream()
             throws SQLException;
 
     //@PDA jdbc40
@@ -626,7 +626,7 @@ interface SQLData extends Cloneable {
      required or not possible.
      **/
     /* ifdef JDBC40  
-    public abstract NClob getNClob()
+    NClob getNClob()
     throws SQLException;
      endif */
     //@PDA jdbc40
@@ -637,9 +637,9 @@ interface SQLData extends Cloneable {
      * @return the result of the conversion.
      * @throws SQLException If the conversion is not
      *                      required or not possible.
-     *                      public abstract void clearOutOfBounds();
+     *                      void clearOutOfBounds();
      **/
-    public abstract String getNString()
+    String getNString()
             throws SQLException;
 
     //@PDA jdbc40
@@ -650,7 +650,7 @@ interface SQLData extends Cloneable {
      required or not possible.
      **/
     /* ifdef JDBC40  
-    public abstract SQLXML getSQLXML()
+    SQLXML getSQLXML()
     throws SQLException;
     endif */
 
@@ -663,7 +663,7 @@ interface SQLData extends Cloneable {
      **/
     /* ifdef JDBC40 
     
-    public abstract RowId getRowId()
+    RowId getRowId()
     throws SQLException;
      endif */
 
@@ -676,21 +676,21 @@ interface SQLData extends Cloneable {
      * @throws SQLException If the conversion is not
      *                      required or not possible.
      **/
-    public abstract Array getArray()
+    Array getArray()
             throws SQLException;
 
-    public abstract void updateSettings(SQLConversionSettings settings);
+    void updateSettings(SQLConversionSettings settings);
 
     /**
      * Save the current value.  Called before the statement is executed so that
      * the previous value can be restored if the statement needs to be
      * seamlessly re-executed
      */
-    public abstract void saveValue() throws SQLException;
+    void saveValue() throws SQLException;
 
     /**
      * Obtain the save value.  All values are "wrapped" to the corresponding Java type
      */
-    public abstract Object getSavedValue();
+    Object getSavedValue();
 
 }

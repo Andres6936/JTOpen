@@ -23,29 +23,24 @@ endif */
 
 //@PDA jdbc40 new class
 
-final class SQLLongNVarchar 
-extends SQLVarcharBase implements SQLVariableCompressible
-{
-  
+import java.sql.RowId;
+import java.sql.SQLException;
+import java.sql.SQLXML;
+
+final class SQLLongNVarchar
+        extends SQLVarcharBase implements SQLVariableCompressible {
+
     // Private data.
 
     // Note: maxLength is in bytes not counting 2 for LL.
     //
-    SQLLongNVarchar(int maxLength, SQLConversionSettings settings)
-    {
-        super(settings,0,maxLength,"");
+    SQLLongNVarchar(int maxLength, SQLConversionSettings settings) {
+        super(settings, 0, maxLength, "");
     }
 
-    public Object clone()
-    {
+    public Object clone() {
         return new SQLLongNVarchar(maxLength_, settings_);  //@pdc
     }
- 
-
-
-
-    
-    
 
 
     //---------------------------------------------------------//
@@ -54,48 +49,32 @@ extends SQLVarcharBase implements SQLVariableCompressible
     //                                                         //
     //---------------------------------------------------------//
 
-    public int getSQLType()
-    {
+    public int getSQLType() {
         return SQLData.LONG_NVARCHAR;
     }
 
 
-
-
-    public String getLocalName()
-    {
-        return "LONGNVARCHAR";      
+    public String getLocalName() {
+        return "LONGNVARCHAR";
     }
 
 
-    public int getNativeType()
-    {
+    public int getNativeType() {
         return 456;
     }
 
 
-    public int getType()
-    {
-    	/* ifdef JDBC40 
+    public int getType() {
         return java.sql.Types.NVARCHAR;  //@P3C
-        endif */ 
-    	/* ifndef JDBC40 */
-      
-    	return java.sql.Types.VARCHAR;  //@P3C
-    	
-    	/* endif */ 
-    	
-    	 
     }
 
-    public String getTypeName()
-    {
-    	/* ifdef JDBC40 
-        return "LONGNVARCHAR";    
-        endif */ 
-    	/* ifndef JDBC40 */ 
-    	return "LONGVARCHAR";
-    	/* endif */ 
+    public String getTypeName() {
+        return "LONGNVARCHAR";
+    }
+
+    @Override
+    public RowId getRowId() throws SQLException {
+        return null;
     }
 
     //---------------------------------------------------------//
@@ -104,29 +83,12 @@ extends SQLVarcharBase implements SQLVariableCompressible
     //                                                         //
     //---------------------------------------------------------//
 
-
-
-
-
-
-
-
-
-
-
-
- /* ifdef JDBC40 
-
-    
-    public SQLXML getSQLXML() throws SQLException
-    {
+    @Override
+    public SQLXML getSQLXML() throws SQLException {
         //This is written in terms of getString(), since it will
         // handle truncating to the max field size if needed.
         truncated_ = 0; outOfBounds_ = false; 
         return new AS400JDBCSQLXML(getString());     
     }
-
-  endif */ 
- 
 }
 

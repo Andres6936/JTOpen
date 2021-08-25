@@ -16,18 +16,14 @@ package com.ibm.as400.access;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.sql.Blob;
-import java.sql.Clob;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
-endif */ 
-import java.sql.Time;
-import java.sql.Timestamp;
+endif */
 import java.util.Calendar;
 import java.net.URL;
 
@@ -281,18 +277,14 @@ extends SQLDataBase  implements SQLVariableCompressible
             Clob clob = (Clob)object;                                              // @C1C
             value = clob.getSubString(1, (int)clob.length());                      // @C1C  @D1
         }                                                                     // @C1C
-        else if(object instanceof Reader)
+        else if (object instanceof Reader) {
+            value = getStringFromReader((Reader) object, ALL_READER_BYTES, this);
+        } else if (object instanceof SQLXML) //@PDA jdbc40
         {
-          value = getStringFromReader((Reader) object, ALL_READER_BYTES, this);
-        }
-            
-        /* ifdef JDBC40 
-        else if(object instanceof SQLXML) //@PDA jdbc40 
-        {    
-            SQLXML xml = (SQLXML)object;
+            SQLXML xml = (SQLXML) object;
             value = xml.getString();
-        }   
-        endif */         
+        }
+
 
         if(value == null)           {                                                // @C1C
           if (JDTrace.isTraceOn()) {
@@ -535,7 +527,6 @@ extends SQLDataBase  implements SQLVariableCompressible
         } 
     }
 
-    /* ifdef JDBC40 
     //@pda jdbc40
     public RowId getRowId() throws SQLException
     {
@@ -551,7 +542,6 @@ extends SQLDataBase  implements SQLVariableCompressible
         truncated_ = 0; outOfBounds_ = false; 
         return new AS400JDBCSQLXML(getString());     
     }
-    endif */ 
     
     public void saveValue() {
        savedValue_ = untruncatedValue_; 

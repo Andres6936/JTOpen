@@ -15,20 +15,14 @@ package com.ibm.as400.access;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */ 
-import java.sql.SQLException;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
-endif */ 
-import java.sql.Time;
-import java.sql.Timestamp;
+endif */
 import java.util.Calendar;
 
 final class SQLDBClobLocator implements SQLLocator
@@ -155,10 +149,10 @@ final class SQLDBClobLocator implements SQLLocator
         else if( !(object instanceof Reader) &&
            !(object instanceof InputStream) &&
            ( !(object instanceof Clob))
-  /* ifdef JDBC40          
-           &&   !(object instanceof SQLXML)
-    endif*/        
-           )
+
+                &&   !(object instanceof SQLXML)
+
+        )
         {
           if (JDTrace.isTraceOn()) {
               if (object == null) { 
@@ -464,9 +458,7 @@ final class SQLDBClobLocator implements SQLLocator
             {
                 JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
             }
-        }
-        /* ifdef JDBC40 
-        else if( object instanceof SQLXML ) //@PDA jdbc40
+        } else if( object instanceof SQLXML ) //@PDA jdbc40
         {
             SQLXML xml = (SQLXML)object;
            
@@ -474,9 +466,7 @@ final class SQLDBClobLocator implements SQLLocator
             // @J2C Use the length of the output array (not input String)
             byte[] outByteArray = converter_.stringToByteArray(stringVal); 
             locator_.writeData(0L, outByteArray, 0, outByteArray.length, true); //@xml4           
-        }
-        endif */ 
-        else
+        } else
         {
             JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         }
@@ -527,12 +517,12 @@ final class SQLDBClobLocator implements SQLLocator
 
     public String getLocalName()
     {
-/* ifdef JDBC40 
-      // @P3A
+
+        // @P3A
       if (ccsid_ == 1200 ) {
         return "NCLOB"; 
       }
-  endif */       
+
         return "DBCLOB"; 
     }
 
@@ -573,12 +563,12 @@ final class SQLDBClobLocator implements SQLLocator
 
     public int getType()
     {
-/* ifdef JDBC40 
-      // @P3A
+
+        // @P3A
       if (ccsid_ == 1200 ) {
         return java.sql.Types.NCLOB;  
       }
-  endif */       
+
         return java.sql.Types.CLOB;
     }
 
@@ -897,7 +887,7 @@ final class SQLDBClobLocator implements SQLLocator
     }
     
     //@pda jdbc40
-    /* ifdef JDBC40 
+
 
     public NClob getNClob() throws SQLException
     {
@@ -914,7 +904,7 @@ final class SQLDBClobLocator implements SQLLocator
         return new AS400JDBCNClobLocator(new JDLobLocator(locator_), converter_, savedObject_, scale_);        
  
     }
-   endif */ 
+
     //@pda jdbc40
     public String getNString() throws SQLException
     {
@@ -936,7 +926,7 @@ final class SQLDBClobLocator implements SQLLocator
     }
 
     //@pda jdbc40
-    /* ifdef JDBC40 
+
     public RowId getRowId() throws SQLException
     {
         //
@@ -955,10 +945,10 @@ final class SQLDBClobLocator implements SQLLocator
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-endif */ 
+
     //@pda jdbc40
-/* ifdef JDBC40 
-      public SQLXML getSQLXML() throws SQLException
+
+    public SQLXML getSQLXML() throws SQLException
     {
         truncated_ = 0; outOfBounds_ = false; 
         if(savedObject_ != null)//@loch
@@ -972,7 +962,7 @@ endif */
         //return new AS400JDBCSQLXML( getString().toCharArray() );  
         return new AS400JDBCSQLXMLLocator(new JDLobLocator(locator_), converter_, savedObject_, scale_, false); //@xml3 //@xml4
     }
-endif */ 
+
     // @array
     public Array getArray() throws SQLException
     {

@@ -16,18 +16,14 @@ package com.ibm.as400.access;
 import java.io.CharConversionException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.sql.Date;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */
-import java.sql.SQLException;
 /* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 final class SQLDate
@@ -670,23 +666,21 @@ final class SQLDate
     }
 
     //@pda jdbc40
-    /* ifdef JDBC40
 
     public RowId getRowId() throws SQLException
     {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-    endif */
 
     //@pda jdbc40
-    /* ifdef JDBC40
-	public SQLXML getSQLXML() throws SQLException
+
+    public SQLXML getSQLXML() throws SQLException
     {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-    endif */
+
     // @array
 
     public void saveValue() throws SQLException {

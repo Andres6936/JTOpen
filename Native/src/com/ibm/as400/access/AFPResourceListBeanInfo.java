@@ -13,17 +13,16 @@
 
 package com.ibm.as400.access;
 
-import java.beans.PropertyDescriptor;
+import java.awt.*;
 import java.beans.BeanDescriptor;
-import java.beans.IntrospectionException;
 import java.beans.BeanInfo;
-import java.awt.Image;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 
 /**
-BeanInfo for AFPResourceList class.
-**/
-public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo
-{
+ * BeanInfo for AFPResourceList class.
+ */
+public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo {
     private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     // Additional properties defined by AFPResourceList
@@ -32,42 +31,34 @@ public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo
     // Class this bean info represents.
     private final static Class<AFPResourceList> beanClass = AFPResourceList.class;
 
-    // Handles loading the appropriate resource bundle
-    private static ResourceBundleLoader rbl_;
-
-    static
-    {
-        try
-        {
+    static {
+        try {
             PropertyDescriptor splFFilter =
-              new PropertyDescriptor("spooledFileFilter", beanClass);
+                    new PropertyDescriptor("spooledFileFilter", beanClass);
             splFFilter.setBound(true);
             splFFilter.setConstrained(true);
-            splFFilter.setDisplayName(rbl_.getText("PROP_NAME_AFPR_SPLF_FILTER"));
-            splFFilter.setShortDescription(rbl_.getText("PROP_DESC_AFPR_SPLF_FILTER"));
+            splFFilter.setDisplayName(ResourceBundleLoader.getText("PROP_NAME_AFPR_SPLF_FILTER"));
+            splFFilter.setShortDescription(ResourceBundleLoader.getText("PROP_DESC_AFPR_SPLF_FILTER"));
 
             PropertyDescriptor rFilter =
-              new PropertyDescriptor("resourceFilter", beanClass);
+                    new PropertyDescriptor("resourceFilter", beanClass);
             rFilter.setBound(true);
             rFilter.setConstrained(true);
-            rFilter.setDisplayName(rbl_.getText("PROP_NAME_AFPR_NAME_FILTER"));
-            rFilter.setShortDescription(rbl_.getText("PROP_DESC_AFPR_NAME_FILTER"));
+            rFilter.setDisplayName(ResourceBundleLoader.getText("PROP_NAME_AFPR_NAME_FILTER"));
+            rFilter.setShortDescription(ResourceBundleLoader.getText("PROP_DESC_AFPR_NAME_FILTER"));
 
             AFPRListProperties_ = new PropertyDescriptor[]{splFFilter, rFilter};
-        }
-
-        catch (IntrospectionException e)
-        {
+        } catch (IntrospectionException e) {
             throw new Error(e.toString());
         }
     }
 
     /**
-    Returns the bean descriptor.
-    @return The bean descriptor.
-    **/
-    public BeanDescriptor getBeanDescriptor()
-    {
+     * Returns the bean descriptor.
+     *
+     * @return The bean descriptor.
+     **/
+    public BeanDescriptor getBeanDescriptor() {
         return new BeanDescriptor(beanClass);
     }
 
@@ -81,11 +72,11 @@ public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo
     // public int getDefaultPropertyIndex()
 
     /**
-    Returns the descriptors for all properties.
-    @return The descriptors for all properties.
-    **/
-    public PropertyDescriptor[] getPropertyDescriptors()
-    {
+     * Returns the descriptors for all properties.
+     *
+     * @return The descriptors for all properties.
+     **/
+    public PropertyDescriptor[] getPropertyDescriptors() {
         // Per the JavaBean spec, properties are discrete, named attributes
         // of a Java Bean that can affect its appearance or its behavior.
 
@@ -100,27 +91,28 @@ public class AFPResourceListBeanInfo extends PrintObjectListBeanInfo
         combinedProperties = new PropertyDescriptor[combinedSize];
 
         // copy PrintObjectList properties
-        System.arraycopy( printObjectListProperties,          // source
-                          0,                                  // --offset
-                          combinedProperties,                 // destination
-                          0,                                  // --offset
-                          printObjectListProperties.length ); // length
+        System.arraycopy(printObjectListProperties,          // source
+                0,                                  // --offset
+                combinedProperties,                 // destination
+                0,                                  // --offset
+                printObjectListProperties.length); // length
 
         // copy AFPResourceList properties
-        System.arraycopy( AFPRListProperties_,                // source
-                          0,                                  // --offset
-                          combinedProperties,                 // destination
-                          printObjectListProperties.length,   // --offset
-                          AFPRListProperties_.length );       // length
+        System.arraycopy(AFPRListProperties_,                // source
+                0,                                  // --offset
+                combinedProperties,                 // destination
+                printObjectListProperties.length,   // --offset
+                AFPRListProperties_.length);       // length
 
         return combinedProperties;
     }
 
     /**
-      * Returns an Image for this bean's icon.
-      * @param icon The desired icon size and color.
-      * @return The Image for the icon.
-      **/
+     * Returns an Image for this bean's icon.
+     *
+     * @param icon The desired icon size and color.
+     * @return The Image for the icon.
+     **/
     public Image getIcon(int icon) {
         return switch (icon) {
             case BeanInfo.ICON_MONO_16x16, BeanInfo.ICON_COLOR_16x16 -> loadImage("AFPResourceList16.gif");

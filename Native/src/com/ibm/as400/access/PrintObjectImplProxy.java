@@ -22,197 +22,166 @@ import java.lang.reflect.InvocationTargetException;
  * Unless commented otherwise, the implementations of the methods below
  * are merely proxy calls to the corresponding method in the remote
  * implementation class (PrintObjectImplRemote).
- **/
-
+ */
 abstract class PrintObjectImplProxy extends AbstractProxyImpl
-implements PrintObjectImpl, ProxyImpl
-{
+        implements PrintObjectImpl, ProxyImpl {
     private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
-    PrintObjectImplProxy(String className)
-    {
+    PrintObjectImplProxy(String className) {
         super(className);
     }
-
 
 
     /**
      * Invokes getAttrValue() on the server to retrieve the PrintObject
      * attributes.
      **/
-    public NPCPAttribute getAttrValue()
-    {
+    public NPCPAttribute getAttrValue() {
         try {
             return (NPCPAttribute) connection_.callMethod(pxId_,
-                                                          "getAttrValue").getReturnValue();
-        }
-        catch (InvocationTargetException e) {
+                    "getAttrValue").getReturnValue();
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow(e);
         }
     }
 
 
-
     public Integer getIntegerAttribute(int attributeID)
-        throws AS400Exception,
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
             InterruptedException,
-            RequestNotSupportedException
-    {
+            RequestNotSupportedException {
         try {
             return (Integer) connection_.callMethod(pxId_, "getIntegerAttribute",
-                                                    new Class[] { Integer.TYPE },
-                                                    new Object[] { new Integer (attributeID)}).getReturnValue();
-        }
-        catch (InvocationTargetException e) {
+                    new Class[]{Integer.TYPE},
+                    new Object[]{attributeID}).getReturnValue();
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow6a(e);
         }
     }
-
 
 
     public Float getFloatAttribute(int attributeID)
-        throws AS400Exception,
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
             InterruptedException,
-            RequestNotSupportedException
-    {
+            RequestNotSupportedException {
         try {
             return (Float) connection_.callMethod(pxId_, "getFloatAttribute",
-                                                  new Class[] { Integer.TYPE },
-                                                  new Object[] { new Integer (attributeID)}).getReturnValue();
-        }
-        catch (InvocationTargetException e) {
+                    new Class[]{Integer.TYPE},
+                    new Object[]{attributeID}).getReturnValue();
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow6a(e);
         }
     }
 
 
-
     public String getStringAttribute(int attributeID)
-        throws AS400Exception,
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
             InterruptedException,
-            RequestNotSupportedException
-        {
+            RequestNotSupportedException {
         try {
             return (String) connection_.callMethod(pxId_, "getStringAttribute",
-                                                   new Class[] { Integer.TYPE },
-                                                   new Object[] { new Integer (attributeID)}).getReturnValue();
-        }
-        catch (InvocationTargetException e) {
-                throw ProxyClientConnection.rethrow6a(e);
+                    new Class[]{Integer.TYPE},
+                    new Object[]{attributeID}).getReturnValue();
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow6a(e);
         }
     }
 
 
     public Integer getSingleIntegerAttribute(int attributeID)
-        throws AS400Exception,
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
             InterruptedException,
-            RequestNotSupportedException
-    {
+            RequestNotSupportedException {
         try {
             return (Integer) connection_.callMethod(pxId_, "getIntegerAttribute",
-                                                    new Class[] { Integer.TYPE },
-                                                    new Object[] { new Integer (attributeID)}).getReturnValue();
-        }
-        catch (InvocationTargetException e) {
+                    new Class[]{Integer.TYPE},
+                    new Object[]{attributeID}).getReturnValue();
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow6a(e);
         }
     }
-
 
 
     public Float getSingleFloatAttribute(int attributeID)
-        throws AS400Exception,
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
             InterruptedException,
-            RequestNotSupportedException
-    {
+            RequestNotSupportedException {
         try {
             return (Float) connection_.callMethod(pxId_, "getFloatAttribute",
-                                                  new Class[] { Integer.TYPE },
-                                                  new Object[] { new Integer (attributeID)}).getReturnValue();
-        }
-        catch (InvocationTargetException e) {
+                    new Class[]{Integer.TYPE},
+                    new Object[]{attributeID}).getReturnValue();
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow6a(e);
         }
     }
 
 
-
     public String getSingleStringAttribute(int attributeID)
-        throws AS400Exception,
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
             InterruptedException,
-            RequestNotSupportedException
-        {
+            RequestNotSupportedException {
         try {
             return (String) connection_.callMethod(pxId_, "getStringAttribute",
-                                                   new Class[] { Integer.TYPE },
-                                                   new Object[] { new Integer (attributeID)}).getReturnValue();
-        }
-        catch (InvocationTargetException e) {
-                throw ProxyClientConnection.rethrow6a(e);
+                    new Class[]{Integer.TYPE},
+                    new Object[]{attributeID}).getReturnValue();
+        } catch (InvocationTargetException e) {
+            throw ProxyClientConnection.rethrow6a(e);
         }
     }
 
 
     public void setPrintObjectAttrs(NPCPID idCodePoint,
                                     NPCPAttribute cpAttrs,
-                                    int type)
-    {
+                                    int type) {
         try {
-            connection_.callMethod (pxId_, "setPrintObjectAttrs",
-                            new Class[] { NPCPID.class, NPCPAttribute.class, Integer.TYPE },
-                            new Object[] { idCodePoint, cpAttrs, new Integer (type)});
-        }
-        catch (InvocationTargetException e) {
+            connection_.callMethod(pxId_, "setPrintObjectAttrs",
+                    new Class[]{NPCPID.class, NPCPAttribute.class, Integer.TYPE},
+                    new Object[]{idCodePoint, cpAttrs, type});
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow(e);
         }
     }
 
 
-
-    final public void setSystem(AS400Impl system)
-    {
+    final public void setSystem(AS400Impl system) {
         try {
-            connection_.callMethod (pxId_, "setSystem",
-                                    new Class[] { AS400Impl.class },
-                                    new Object[] { system });
-        }
-        catch (InvocationTargetException e) {
+            connection_.callMethod(pxId_, "setSystem",
+                    new Class[]{AS400Impl.class},
+                    new Object[]{system});
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow(e);
         }
     }
-
 
 
     public void update()
-        throws AS400Exception,
+            throws
             AS400SecurityException,
             ErrorCompletingRequestException,
             IOException,
             InterruptedException,
-            RequestNotSupportedException
-    {
+            RequestNotSupportedException {
         try {
             connection_.callMethod(pxId_, "update");
-        }
-        catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
             throw ProxyClientConnection.rethrow6a(e);
         }
     }

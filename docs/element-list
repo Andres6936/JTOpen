@@ -1,0 +1,13 @@
+com.ibm.as400.access
+com.ibm.as400.access.jdbcClient
+com.ibm.as400.access.list
+com.ibm.as400.data
+com.ibm.as400.micro
+com.ibm.as400.resource
+com.ibm.as400.security
+com.ibm.as400.security.auth
+com.ibm.as400.util
+com.ibm.as400.util.commtrace
+com.ibm.as400.util.html
+com.ibm.as400.util.servlet
+com.ibm.as400.vaccess

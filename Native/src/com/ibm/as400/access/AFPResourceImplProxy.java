@@ -15,19 +15,17 @@ package com.ibm.as400.access;
 
 
 /**
-  * The AFPResourceImplProxy class implements proxy versions of
-  * the public methods defined in the AFPResourceImpl class.
-  * The implementations are merely calls to the remote implementation
-  * class.
- **/
+ * The AFPResourceImplProxy class implements proxy versions of
+ * the public methods defined in the AFPResourceImpl class.
+ * The implementations are merely calls to the remote implementation
+ * class.
+ */
 
 class AFPResourceImplProxy extends PrintObjectImplProxy
-implements ProxyImpl
-{
+        implements ProxyImpl {
     static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
-    AFPResourceImplProxy() 
-    {
+    AFPResourceImplProxy() {
         super("AFPResource");
-    }  
+    }
 }

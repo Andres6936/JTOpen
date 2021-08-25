@@ -19,14 +19,10 @@ import java.math.BigDecimal;
 import java.sql.NClob;
 import java.sql.RowId;
 endif */
-import java.sql.SQLException;
+import java.sql.*;
 /* ifdef JDBC40 
 import java.sql.SQLXML;
 endif */
-import java.sql.Blob;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 // This uses a double instead of a BigDecimal (like SQLNumeric does).
@@ -365,10 +361,7 @@ final class SQLNumeric2
         return null;
     }
 
-    
 
-
-    /* ifdef JDBC40 
     //@pda jdbc40
     public RowId getRowId() throws SQLException
     {
@@ -382,7 +375,7 @@ final class SQLNumeric2
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-    endif */
+
 
     public void saveValue() {
         savedValue_ = new Double(value_);

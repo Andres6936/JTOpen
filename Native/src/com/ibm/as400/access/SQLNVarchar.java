@@ -61,12 +61,9 @@ final class SQLNVarchar
     }
 
     public int getType() {
-    	/* ifdef JDBC40 
+
         return java.sql.Types.NVARCHAR;
-        endif */
-        /* ifndef JDBC40 */
-        return java.sql.Types.VARCHAR;
-        /* endif */
+
     }
 
 
@@ -75,13 +72,9 @@ final class SQLNVarchar
     }
 
     public String getTypeName() {
-    	/* ifdef JDBC40 
-        return "NVARCHAR";
-        endif */
 
-        /* ifndef JDBC40 */
-        return "VARCHAR";
-        /* endif */
+        return "NVARCHAR";
+
     }
 
 

@@ -36,62 +36,65 @@ import java.util.Calendar;
 /**
  * The SQLData interface represents native SQL data.  A specific
  * implementation of this interface will implement a specific
- * type of SQL data.
- *
- * <p>The implementation's constructor should not necessarily
- * initialize the data.  That is done via the set() methods.
- **/
-interface SQLData
-        extends Cloneable {
-    //NATIVE_ARRAY is defined here for the array type received from zda.  But zda does not have a visible array type.
-    //zda uses a bit that flags if the stream is an array.
-    //So we just define it here as 10000.  This number is not important; it just needs to be different from other native type numbers.
-    //This is used in SQLDataFactory and other array related classes.
-    public static final short NATIVE_ARRAY = 10000; //@array 
+ * type of SQL data. <br><br>
+ * <p>
+ * The implementation's constructor should not necessarily
+ * initialize the data. That is done via the set() methods.
+ */
+interface SQLData extends Cloneable {
+    /**
+     * <i>NATIVE_ARRAY</i> is defined here for the array type received from zda.
+     * But zda does not have a visible array type.
+     * zda uses a bit that flags if the stream is an array.
+     * So we just define it here as 10000.  This number is not important; it
+     * just needs to be different from other native type numbers.
+     * <p>This is used in {@code SQLDataFactory} and other array related classes.</p>
+     */
+    short NATIVE_ARRAY = 10000; //@array
 
-    public static final int UNDEFINED = 0;
-    public static final int BIGINT = 1;
-    public static final int BINARY = 2;
-    public static final int BLOB = 3;
-    public static final int BLOB_LOCATOR = 4;
-    public static final int CHAR = 5;
-    public static final int CHAR_FOR_BIT_DATA = 6;
-    public static final int CLOB = 7;
-    public static final int CLOB_LOCATOR = 8;
-    public static final int DATALINK = 9;
-    public static final int DATE = 10;
-    public static final int DBCLOB = 11;
-    public static final int DBCLOB_LOCATOR = 12;
-    public static final int DECIMAL = 13;
-    public static final int DECIMAL_USING_DOUBLE = 14;
-    public static final int DOUBLE = 15;
-    public static final int FLOAT = 16;
-    public static final int GRAPHIC = 17;
-    public static final int INTEGER = 18;
-    public static final int LONG_VARCHAR = 19;
-    public static final int LONG_VARCHAR_FOR_BIT_DATA = 20;
-    public static final int LONG_VARGRAPHIC = 21;
-    public static final int NUMERIC = 22;
-    public static final int NUMERIC_USING_DOUBLE = 23;
-    public static final int REAL = 24;
-    public static final int ROWID = 25;
-    public static final int SMALLINT = 26;
-    public static final int TIME = 27;
-    public static final int TIMESTAMP = 28;
-    public static final int VARBINARY = 29;
-    public static final int VARCHAR = 30;
-    public static final int VARCHAR_FOR_BIT_DATA = 31;
-    public static final int VARGRAPHIC = 32;
-    public static final int NCLOB = 33;         //@PDA jdbc40 (jdbc40 just added here for info)
-    public static final int NCLOB_LOCATOR = 34; //@PDA jdbc40
-    public static final int NCHAR = 35;         //@PDA jdbc40
-    public static final int NVARCHAR = 36;      //@PDA jdbc40
-    public static final int LONG_NVARCHAR = 37; //@pda jdbc40
-    public static final int DECFLOAT = 38;      //@DFA 
-    public static final int ARRAY = 39;         //@array
-    public static final int XML_LOCATOR = 40;   //@xml3
-    public static final int BOOLEAN = 41;
-    public static final int ALL_READER_BYTES = -2;
+    int UNDEFINED = 0;
+    int BIGINT = 1;
+    int BINARY = 2;
+    int BLOB = 3;
+    int BLOB_LOCATOR = 4;
+    int CHAR = 5;
+    int CHAR_FOR_BIT_DATA = 6;
+    int CLOB = 7;
+    int CLOB_LOCATOR = 8;
+    int DATALINK = 9;
+    int DATE = 10;
+    int DBCLOB = 11;
+    int DBCLOB_LOCATOR = 12;
+    int DECIMAL = 13;
+    int DECIMAL_USING_DOUBLE = 14;
+    int DOUBLE = 15;
+    int FLOAT = 16;
+    int GRAPHIC = 17;
+    int INTEGER = 18;
+    int LONG_VARCHAR = 19;
+    int LONG_VARCHAR_FOR_BIT_DATA = 20;
+    int LONG_VARGRAPHIC = 21;
+    int NUMERIC = 22;
+    int NUMERIC_USING_DOUBLE = 23;
+    int REAL = 24;
+    int ROWID = 25;
+    int SMALLINT = 26;
+    int TIME = 27;
+    int TIMESTAMP = 28;
+    int VARBINARY = 29;
+    int VARCHAR = 30;
+    int VARCHAR_FOR_BIT_DATA = 31;
+    int VARGRAPHIC = 32;
+    int NCLOB = 33;         //@PDA jdbc40 (jdbc40 just added here for info)
+    int NCLOB_LOCATOR = 34; //@PDA jdbc40
+    int NCHAR = 35;         //@PDA jdbc40
+    int NVARCHAR = 36;      //@PDA jdbc40
+    int LONG_NVARCHAR = 37; //@pda jdbc40
+    int DECFLOAT = 38;      //@DFA
+    int ARRAY = 39;         //@array
+    int XML_LOCATOR = 40;   //@xml3
+    int BOOLEAN = 41;
+    int ALL_READER_BYTES = -2;
 
     /**
      * Returns a clone of the SQLData object.  Use this sparingly

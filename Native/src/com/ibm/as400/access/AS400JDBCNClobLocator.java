@@ -20,10 +20,9 @@ endif */
 //@PDA jdbc40 new class
 
 
-public class AS400JDBCNClobLocator extends AS400JDBCClobLocator 
-/* ifdef JDBC40 
-implements NClob
-endif */ {
+import java.sql.NClob;
+
+public class AS400JDBCNClobLocator extends AS400JDBCClobLocator implements NClob {
 
     /**
      * Constructs an AS400JDBCNClobLocator object.  The data for the

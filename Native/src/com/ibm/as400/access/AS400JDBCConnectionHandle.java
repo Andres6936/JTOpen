@@ -58,11 +58,11 @@ endif */
  *  connection.close();
  *  </pre></blockquote>
  **/
-public class AS400JDBCConnectionHandle 
-/* ifdef JDBC40
+public class AS400JDBCConnectionHandle
+
 extends ToolboxWrapper
-endif */
-        implements Connection //@A5A
+
+implements Connection //@A5A
 //@A5D extends AS400JDBCConnection
 {
 
@@ -1912,21 +1912,15 @@ endif */
     }
     
 
-    /* ifdef JDBC40 
       public void abort(Executor executor) throws SQLException {
         validateConnection();
         connection_.abort(executor);         
       }
-    endif */
-      
 
-
-    /* ifdef JDBC40 
       public int getNetworkTimeout() throws SQLException {
               validateConnection();
           return connection_.getNetworkTimeout(); 
       }
-    endif */
 
 
     public String getSchema() throws SQLException {
@@ -1934,45 +1928,16 @@ endif */
         return connection_.getSchema();
     }
 
-    @Override
-    public void abort(Executor executor) throws SQLException {
-
-    }
-
-    @Override
-    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-
-    }
-
-    @Override
-    public int getNetworkTimeout() throws SQLException {
-        return 0;
-    }
-
-
-    /* ifdef JDBC40 
       public void setNetworkTimeout(Executor executor, int milliseconds)
           throws SQLException {
           validateConnection(); 
           connection_.setNetworkTimeout(executor, milliseconds); 
         
       }
-    endif */
 
 
     public void setSchema(String schema) throws SQLException {
         validateConnection();
         connection_.setSchema(schema);
-    }
-
-
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
     }
 }

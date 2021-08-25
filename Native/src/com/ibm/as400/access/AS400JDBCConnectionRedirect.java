@@ -2236,20 +2236,7 @@ endif */
         return null;
     }
 
-    @Override
-    public NClob createNClob() throws SQLException {
-        return null;
-    }
 
-    @Override
-    public SQLXML createSQLXML() throws SQLException {
-        return null;
-    }
-
-    @Override
-    public boolean isValid(int timeout) throws SQLException {
-        return false;
-    }
 
     public synchronized Array createArrayOf(String typeName, Object[] elements)
             throws SQLException {
@@ -2327,15 +2314,7 @@ endif */
 
     }
 
-    @Override
-    public void abort(Executor executor) throws SQLException {
 
-    }
-
-    @Override
-    public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-
-    }
 
     public synchronized int getNetworkTimeout() throws SQLException {
         boolean retryOperation = true;
@@ -2497,22 +2476,8 @@ endif */
         return reconnectUrlStrings_;
     }
 
-    @Override
-    public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
-    }
 
-    @Override
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
-    }
-   
-  
-  
-  
-  
-  /* ifdef JDBC40
-  public synchronized boolean isValid(int timeout) throws SQLException {
+    public synchronized boolean isValid(int timeout) throws SQLException {
     boolean retryOperation = true;
     while (retryOperation) {
       try {
@@ -2525,9 +2490,7 @@ endif */
     return false;
   
   }
-  endif */
 
-   /*ifdef JDBC40
   public synchronized NClob createNClob() throws SQLException {
       boolean retryOperation = true;
       while (retryOperation) {
@@ -2541,10 +2504,9 @@ endif */
     return null;
 
   }
-endif */
 
-/*ifdef JDBC40
-  public synchronized SQLXML createSQLXML() throws SQLException {
+
+    public synchronized SQLXML createSQLXML() throws SQLException {
         boolean retryOperation = true;
       while (retryOperation) {
         try {
@@ -2556,11 +2518,9 @@ endif */
     JDError.throwSQLException(JDError.EXC_INTERNAL); 
     return null;
   }
-  endif */
 
-  
-  /* ifdef JDBC40
-  public synchronized void abort(Executor executor) throws SQLException  {
+
+    public synchronized void abort(Executor executor) throws SQLException  {
           boolean retryOperation = true;
       while (retryOperation) {
         try {
@@ -2571,11 +2531,9 @@ endif */
       }
     }
 }
-    
-endif */
 
-/* ifdef JDBC40
-  public synchronized void setNetworkTimeout(Executor executor, int milliseconds)
+
+    public synchronized void setNetworkTimeout(Executor executor, int milliseconds)
       throws SQLException  {
                 boolean retryOperation = true;
       while (retryOperation) {
@@ -2590,8 +2548,6 @@ endif */
     }
 }
 
-      
-endif */
 
 
 }

@@ -18,19 +18,14 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
+import java.sql.*;
 /* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */
-import java.sql.SQLException;
 /* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 final class SQLDBClob extends SQLDataBase {
@@ -411,11 +406,9 @@ endif */
         if (savedObject_ != null) doConversion();
         truncated_ = 0;
         outOfBounds_ = false;
-/* ifdef JDBC40 
         if (ccsid_ == 1200 ) {
            return new AS400JDBCNClob(value_, maxLength_);
         }
-  endif */
 
 
         return new AS400JDBCClob(value_, maxLength_);
@@ -470,7 +463,6 @@ endif */
     }
 
     //@pda jdbc40
-    /* ifdef JDBC40
 
     public NClob getNClob() throws SQLException
     {
@@ -478,7 +470,6 @@ endif */
         truncated_ = 0; outOfBounds_ = false;
         return new AS400JDBCNClob(value_, maxLength_);
     }
-    endif */
     //@pda jdbc40
     public String getNString() throws SQLException {
         if (savedObject_ != null) doConversion();
@@ -493,7 +484,7 @@ endif */
     }
 
     //@pda jdbc40
-    /* ifdef JDBC40
+
 
     public RowId getRowId() throws SQLException
     {
@@ -514,17 +505,17 @@ endif */
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
-    endif */
+
 
     //@pda jdbc40
-    /* ifdef JDBC40
+
     public SQLXML getSQLXML() throws SQLException
     {
         if(savedObject_ != null) doConversion();
         truncated_ = 0; outOfBounds_ = false;
         return new AS400JDBCSQLXML(value_);
     }
-    endif */
+
     // @array
 
 

@@ -19,19 +19,14 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.math.BigDecimal;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-/* ifdef JDBC40 
+import java.sql.*;
+/* ifdef JDBC40
 import java.sql.NClob;
 import java.sql.RowId;
 endif */
-import java.sql.SQLException;
-/* ifdef JDBC40 
+/* ifdef JDBC40
 import java.sql.SQLXML;
 endif */
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
 final class SQLBlob extends SQLDataBase {
@@ -505,11 +500,15 @@ final class SQLBlob extends SQLDataBase {
         return null;
     }
 
-    /* ifdef JDBC40 
+    @Override
+    public NClob getNClob() throws SQLException {
+        JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
+        return null;
+    }
+
 
     //@PDA jdbc40
-    public RowId getRowId() throws SQLException
-    {
+    public RowId getRowId() throws SQLException {
         JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH);
         return null;
     }
@@ -523,7 +522,7 @@ final class SQLBlob extends SQLDataBase {
         return new AS400JDBCSQLXML(value_, maxLength_); //@xml2
         //return new AS400JDBCSQLXML(string, string.length());  //@xml2
     }
-   endif */
+
     // @array
 
     public void saveValue() throws SQLException {

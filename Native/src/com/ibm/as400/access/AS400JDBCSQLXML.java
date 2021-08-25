@@ -13,52 +13,26 @@
 
 package com.ibm.as400.access;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.sql.SQLException;
-/* ifdef JDBC40
-import java.sql.SQLXML;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-endif */
-
-/* ifdef JDBC40
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.Result;
-endif */
-/* ifdef JDBC40
-import javax.xml.transform.Source;
-import javax.xml.transform.dom.DOMResult;
-endif */
-/* ifdef JDBC40
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.sax.SAXSource;
-import javax.xml.transform.stax.StAXResult;
-import javax.xml.transform.stax.StAXSource;
-import org.xml.sax.InputSource;
-import javax.xml.parsers.ParserConfigurationException;
-endif */
-
-/* ifdef JDBC40
-import org.xml.sax.SAXException;
-
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
-endif */
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stax.StAXResult;
+import javax.xml.transform.stax.StAXSource;
+import java.io.*;
+import java.sql.SQLException;
+import java.sql.SQLXML;
+
 //@PDA jdbc40 new class
 //@xml2 whole class is redesigned after that of The Native Driver
 
@@ -72,12 +46,8 @@ endif */
  * This class should not be used if JDK 1.6 is not in use.
  **/
 public class AS400JDBCSQLXML
-/* ifdef JDBC40
-implements SQLXML, Serializable
-endif */
-        /* ifndef JDBC40 */
-        implements Serializable
-        /* endif */ {
+
+        implements SQLXML, Serializable {
 
     static final int MAX_XML_SIZE = AS400JDBCDatabaseMetaData.MAX_LOB_LENGTH; //@xml3
     // We may internally store the SQLXML object as a DOM document
@@ -521,7 +491,7 @@ endif */
                 s = sb.toString();
 
                 break; // end of BLOB case
-                /* ifdef JDBC40
+
             case DOM_DOCUMENT:
 
                 DOMImplementation implementation = domDocument_.getImplementation();
@@ -532,7 +502,7 @@ endif */
                 s  = lsSerializer.writeToString(domDocument_);
 
                 break;
-                endif */
+
 
             case 0:
                 //freed already
@@ -850,7 +820,7 @@ endif */
     //JDBC40DOC      *   if an XML parser exception occurs.
     //JDBC40DOC      *   An exception is thrown if the state is not readable.
     //JDBC40DOC      */
-    /* ifdef JDBC40
+
     public synchronized <T extends Source> T getSource(Class<T> sourceClass) throws SQLException
     {
         String classname;
@@ -937,7 +907,7 @@ endif */
         }
 
     }
-            endif */
+
 
     /**
      * Retrieves a stream that can be used to write the XML value that this SQLXML instance represents.
@@ -1005,7 +975,7 @@ endif */
     //JDBC40DOC      *   An exception is thrown if the state is not writable.
     //JDBC40DOC      *
     //JDBC40DOC      */
-    /* ifdef JDBC40
+
     public synchronized <T extends Result> T setResult(Class<T> resultClass) throws SQLException
     {
         String classname;
@@ -1077,7 +1047,6 @@ endif */
         }
     }
 
-    endif */
 
     /**
      * This method frees the object and releases the
@@ -1110,9 +1079,9 @@ endif */
         }
 
         if (clobValue_ != null) {
-/* ifdef JDBC40
+
             clobValue_.free();
-    endif */
+
             clobValue_ = null;
         }
 

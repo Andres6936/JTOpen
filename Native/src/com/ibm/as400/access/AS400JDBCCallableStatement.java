@@ -4217,51 +4217,51 @@ public class AS400JDBCCallableStatement
             if (b == 0 && wasNull()) {
                 return null;
             } else {
-                return new Byte(b);
+                return b;
             }
         } else if (type == Short.class) {
             short s = getShort(parameterIndex);
             if (s == 0 && wasNull()) {
                 return null;
             } else {
-                return new Short(s);
+                return s;
             }
         } else if (type == Integer.class) {
             int i = getInt(parameterIndex);
             if (i == 0 && wasNull()) {
                 return null;
             } else {
-                return new Integer(i);
+                return i;
             }
         } else if (type == Long.class) {
             long l = getLong(parameterIndex);
             if (l == 0 && wasNull()) {
                 return null;
             } else {
-                return new Long(l);
+                return l;
             }
         } else if (type == Float.class) {
             float f = getFloat(parameterIndex);
             if (f == 0 && wasNull()) {
                 return null;
             } else {
-                return new Float(f);
+                return f;
             }
         } else if (type == Double.class) {
             double d = getDouble(parameterIndex);
             if (d == 0 && wasNull()) {
                 return null;
             } else {
-                return new Double(d);
+                return d;
             }
         } else if (type == BigDecimal.class) {
             return getBigDecimal(parameterIndex);
         } else if (type == Boolean.class) {
             boolean b = getBoolean(parameterIndex);
-            if (b == false && wasNull()) {
+            if (!b && wasNull()) {
                 return null;
             } else {
-                return new Boolean(b);
+                return b;
             }
 
         } else if (type == Date.class) {

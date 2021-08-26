@@ -50,22 +50,22 @@ public abstract class AS400AbstractTime implements AS400DataType {
     private int length_;  // number of bytes occupied by the IBM i value
     private transient GregorianCalendar calendar_;
     private transient SimpleDateFormat dateFormatter_;
-  private transient CharConverter charConverter_;
+    private transient CharConverter charConverter_;
 
-  // Hashtables of SimpleDateFormat keyed by TimeZone
-  private static Hashtable hashDateFormatterXSD_ = null ;       // used by AS400Date
-  private static Hashtable hashTimeFormatterXSD_ = null ;       // used by AS400Time
-  private static Hashtable hashTimestampFormatterXSD_ = null ;  // used by AS400Timestamp
+    // Hashtables of SimpleDateFormat keyed by TimeZone
+    private static Hashtable<TimeZone, SimpleDateFormat> hashDateFormatterXSD_ = null;       // used by AS400Date
+    private static Hashtable<TimeZone, SimpleDateFormat> hashTimeFormatterXSD_ = null;       // used by AS400Time
+    private static Hashtable<TimeZone, SimpleDateFormat> hashTimestampFormatterXSD_ = null;  // used by AS400Timestamp
 
-  // Map of 'century' digit values to Date objects that specify that start of each century.
-  private transient Date[] centuryMap_;
-  // Note: In our code for this class and its subclasses, we will fully qualify references to class java.util.Date and java.sql.Date, in order to eliminate any possible confusion between the two classes.
+    // Map of 'century' digit values to Date objects that specify that start of each century.
+    private transient Date[] centuryMap_;
+    // Note: In our code for this class and its subclasses, we will fully qualify references to class java.util.Date and java.sql.Date, in order to eliminate any possible confusion between the two classes.
 
-  private int format_;
-  private Character separator_;
-  private boolean separatorHasBeenSet_ = false;  // indicates whether separator was explicitly set by the application
+    private int format_;
+    private Character separator_;
+    private boolean separatorHasBeenSet_ = false;  // indicates whether separator was explicitly set by the application
 
-  private TimeZone timeZone_ = null;             // We need to know the timezone
+    private TimeZone timeZone_ = null;             // We need to know the timezone
 
   
   /**
@@ -396,15 +396,15 @@ public abstract class AS400AbstractTime implements AS400DataType {
       synchronized (AS400Date.class)
       {
         if (hashDateFormatterXSD_ == null) {
-           hashDateFormatterXSD_ = new Hashtable();
+            hashDateFormatterXSD_ = new Hashtable<>();
         }
       }
     }
-    SimpleDateFormat dateFormatterXSD = (SimpleDateFormat) hashDateFormatterXSD_.get(timezone); 
+      SimpleDateFormat dateFormatterXSD = hashDateFormatterXSD_.get(timezone);
     if (dateFormatterXSD == null) {
       synchronized (AS400Date.class)
       {
-        dateFormatterXSD = (SimpleDateFormat) hashDateFormatterXSD_.get(timezone); 
+          dateFormatterXSD = hashDateFormatterXSD_.get(timezone);
         if (dateFormatterXSD == null) {
           dateFormatterXSD = new SimpleDateFormat(DATE_PATTERN_XSD);
           dateFormatterXSD.setTimeZone(timezone);
@@ -423,15 +423,15 @@ public abstract class AS400AbstractTime implements AS400DataType {
       synchronized (AS400Time.class)
       {
         if (hashTimeFormatterXSD_ == null) {
-           hashTimeFormatterXSD_ = new Hashtable();
+            hashTimeFormatterXSD_ = new Hashtable<>();
         }
       }
     }
-    SimpleDateFormat timeFormatterXSD = (SimpleDateFormat) hashTimeFormatterXSD_.get(timeZone); 
+      SimpleDateFormat timeFormatterXSD = hashTimeFormatterXSD_.get(timeZone);
     if (timeFormatterXSD == null) {
       synchronized (AS400Time.class)
       {
-        timeFormatterXSD = (SimpleDateFormat) hashTimeFormatterXSD_.get(timeZone);
+          timeFormatterXSD = hashTimeFormatterXSD_.get(timeZone);
         if (timeFormatterXSD == null) {
           timeFormatterXSD = new SimpleDateFormat(TIME_PATTERN_XSD);
           timeFormatterXSD.setTimeZone(timeZone);
@@ -450,15 +450,15 @@ public abstract class AS400AbstractTime implements AS400DataType {
       synchronized (AS400Timestamp.class)
       {
         if (hashTimestampFormatterXSD_ == null) {
-           hashTimestampFormatterXSD_ = new Hashtable();
+            hashTimestampFormatterXSD_ = new Hashtable<>();
         }
       }
     }
-    SimpleDateFormat timestampFormatterXSD = (SimpleDateFormat) hashTimestampFormatterXSD_.get(timeZone); 
+      SimpleDateFormat timestampFormatterXSD = hashTimestampFormatterXSD_.get(timeZone);
     if (timestampFormatterXSD == null) {
       synchronized (AS400Timestamp.class)
       {
-        timestampFormatterXSD = (SimpleDateFormat) hashTimestampFormatterXSD_.get(timeZone); 
+          timestampFormatterXSD = hashTimestampFormatterXSD_.get(timeZone);
         if (timestampFormatterXSD == null) {
           timestampFormatterXSD = new SimpleDateFormat(TIMESTAMP_PATTERN_XSD);
           // Note: We deal with "nanoseconds" elsewhere, in the AS400Timestamp class.

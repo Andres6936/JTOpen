@@ -18,10 +18,7 @@ import java.beans.PropertyChangeSupport;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
 import java.beans.VetoableChangeSupport;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.net.Socket;
@@ -3534,11 +3531,12 @@ public class AS400 implements Serializable {
                 counter++;
                 try {
                     switch (pwState) {
-                        case VALIDATE:
-                            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Validate security...");
+                        case VALIDATE -> {
+                            if (Trace.traceOn_)
+                                Trace.log(Trace.DIAGNOSTIC, "Validate security...");
                             sendSignonRequest();
-                            break;
-                        case PROMPT:
+                        }
+                        case PROMPT -> {
                             if (!isGuiAvailable() && forcePrompt_)                                               //@prompt
                             {                                                                                   //@prompt
                                 //JDBC flagged id/pass as invalid and set forcePrompt, but GUI not available    //@prompt
@@ -3547,7 +3545,8 @@ public class AS400 implements Serializable {
                                 handlerCanceled_ = true;  // Don't submit exception to handler.                 //@prompt
                                 throw new AS400SecurityException(AS400SecurityException.SIGNON_CHAR_NOT_VALID); //@prompt
                             }                                                                                   //@prompt
-                            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Calling SignonHandler...");
+                            if (Trace.traceOn_)
+                                Trace.log(Trace.DIAGNOSTIC, "Calling SignonHandler...");
                             // If bytes_ has not been set, tell the handler something is missing.
                             SignonEvent soEvent = new SignonEvent(this, reconnecting);
                             proceed = soHandler.connectionInitiated(soEvent, credVault_.isEmpty());
@@ -3557,7 +3556,6 @@ public class AS400 implements Serializable {
                                 handlerCanceled_ = true;  // Don't submit exception to handler.
                                 throw new AS400SecurityException(AS400SecurityException.SIGNON_CANCELED);
                             }
-
                             sendSignonRequest();
 
                             // See if we should cache the password.
@@ -3566,10 +3564,11 @@ public class AS400 implements Serializable {
                                     Trace.log(Trace.DIAGNOSTIC, "Setting password cache entry from SignonHandler...");
                                 setCacheEntry(systemName_, userId_, credVault_);
                             }
-                            break;
-                        default:  // This should never happen.
+                        }
+                        default -> {  // This should never happen.
                             Trace.log(Trace.ERROR, "Invalid password prompt state:", pwState);
                             throw new InternalErrorException(InternalErrorException.SECURITY_INVALID_STATE, pwState);
+                        }
                     }
 
                     // Check for number of days to expiration, and warn if within threshold.
@@ -3587,32 +3586,14 @@ public class AS400 implements Serializable {
                     Trace.log(Trace.ERROR, "Security exception in sign-on:", e);
                     SignonEvent soEvent = new SignonEvent(this, reconnecting, e);
                     switch (e.getReturnCode()) {
-                        case AS400SecurityException.PASSWORD_EXPIRED:
-                            proceed = soHandler.passwordExpired(soEvent);
-                            break;
-                        case AS400SecurityException.PASSWORD_NOT_SET:
-                            proceed = soHandler.passwordMissing(soEvent);
-                            break;
-                        case AS400SecurityException.PASSWORD_INCORRECT:
-                        case AS400SecurityException.PASSWORD_OLD_NOT_VALID:
-                            proceed = soHandler.passwordIncorrect(soEvent);
-                            break;
-                        case AS400SecurityException.PASSWORD_LENGTH_NOT_VALID:
-                        case AS400SecurityException.PASSWORD_NEW_TOO_LONG:
-                        case AS400SecurityException.PASSWORD_NEW_TOO_SHORT:
-                            proceed = soHandler.passwordLengthIncorrect(soEvent);
-                            break;
-                        case AS400SecurityException.PASSWORD_INCORRECT_USERID_DISABLE:
-                            proceed = soHandler.userIdAboutToBeDisabled(soEvent);
-                            break;
-                        case AS400SecurityException.USERID_UNKNOWN:
-                            proceed = soHandler.userIdUnknown(soEvent);
-                            break;
-                        case AS400SecurityException.USERID_DISABLE:
-                            proceed = soHandler.userIdDisabled(soEvent);
-                            break;
-                        default:
-                            soHandler.exceptionOccurred(soEvent);  // Handler rethrows if can't handle.
+                        case AS400SecurityException.PASSWORD_EXPIRED -> proceed = soHandler.passwordExpired(soEvent);
+                        case AS400SecurityException.PASSWORD_NOT_SET -> proceed = soHandler.passwordMissing(soEvent);
+                        case AS400SecurityException.PASSWORD_INCORRECT, AS400SecurityException.PASSWORD_OLD_NOT_VALID -> proceed = soHandler.passwordIncorrect(soEvent);
+                        case AS400SecurityException.PASSWORD_LENGTH_NOT_VALID, AS400SecurityException.PASSWORD_NEW_TOO_LONG, AS400SecurityException.PASSWORD_NEW_TOO_SHORT -> proceed = soHandler.passwordLengthIncorrect(soEvent);
+                        case AS400SecurityException.PASSWORD_INCORRECT_USERID_DISABLE -> proceed = soHandler.userIdAboutToBeDisabled(soEvent);
+                        case AS400SecurityException.USERID_UNKNOWN -> proceed = soHandler.userIdUnknown(soEvent);
+                        case AS400SecurityException.USERID_DISABLE -> proceed = soHandler.userIdDisabled(soEvent);
+                        default -> soHandler.exceptionOccurred(soEvent);  // Handler rethrows if can't handle.
                     }
                     if (!proceed) {
                         throw e;
@@ -3642,6 +3623,7 @@ public class AS400 implements Serializable {
     }
 
     // Help de-serialize the object.
+    @Serial
     private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
         if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "De-serializing AS400 object.");
         in.defaultReadObject();

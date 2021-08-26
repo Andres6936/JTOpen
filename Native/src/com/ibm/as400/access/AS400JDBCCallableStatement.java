@@ -2113,16 +2113,6 @@ public class AS400JDBCCallableStatement
     }
 
     @Override
-    public RowId getRowId(int parameterIndex) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public RowId getRowId(String parameterName) throws SQLException {
-        return null;
-    }
-
-    @Override
     public void setRowId(String parameterName, RowId x) throws SQLException {
 
     }
@@ -3240,27 +3230,25 @@ public class AS400JDBCCallableStatement
     }
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Retrieves the value of the designated JDBC <code>NCLOB</code> parameter as a
-    //JDBC40DOC      * <code>java.sql.NClob</code> object in the Java programming language.
-    //JDBC40DOC      *
-    //JDBC40DOC      * @param parameterIndex the first parameter is 1, the second is 2, and
-    //JDBC40DOC      * so on
-    //JDBC40DOC      * @return the parameter value as a <code>NClob</code> object in the
-    //JDBC40DOC      * Java programming language.  If the value was SQL <code>NULL</code>, the
-    //JDBC40DOC      * value <code>null</code> is returned.
-    //JDBC40DOC      * @exception SQLException if the driver does not support national
-    //JDBC40DOC      *         character sets;  if the driver can detect that a data conversion
-    //JDBC40DOC      *  error could occur; if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
-    public NClob getNClob(int parameterIndex) throws SQLException
-    {
-        synchronized(internalLock_)
-        {
+
+    /**
+     * Retrieves the value of the designated JDBC <code>NCLOB</code> parameter as a
+     * <code>java.sql.NClob</code> object in the Java programming language.
+     *
+     * @param parameterIndex the first parameter is 1, the second is 2, and
+     *                       so on
+     * @return the parameter value as a <code>NClob</code> object in the
+     * Java programming language.  If the value was SQL <code>NULL</code>, the
+     * value <code>null</code> is returned.
+     * @throws SQLException                    if the driver does not support national
+     *                                         character sets;  if the driver can detect that a data conversion
+     *                                         error could occur; if a database access error occurs or
+     *                                         this method is called on a closed <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
+    public NClob getNClob(int parameterIndex) throws SQLException {
+        synchronized (internalLock_) {
             checkOpen();
 
             SQLData data = null;
@@ -3300,7 +3288,7 @@ public class AS400JDBCCallableStatement
                    case Types.JAVA_OBJECT:
                      break;
                    default:
-                     JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, "P#="+parameterIndex);
+                     JDError.throwSQLException(this, JDError.EXC_DATA_TYPE_MISMATCH, "P#=" + parameterIndex);
                 }
 
                 // Get the data and check for SQL NULL.
@@ -3312,29 +3300,30 @@ public class AS400JDBCCallableStatement
             return value;
         }
     }
-    endif */
+
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Retrieves the value of a JDBC <code>NCLOB</code> parameter as a
-    //JDBC40DOC      * <code>java.sql.NClob</code> object in the Java programming language.
-    //JDBC40DOC      * @param parameterName the name of the parameter
-    //JDBC40DOC      * @return the parameter value as a <code>NClob</code> object in the
-    //JDBC40DOC      *         Java programming language.  If the value was SQL <code>NULL</code>,
-    //JDBC40DOC      *         the value <code>null</code> is returned.
-    //JDBC40DOC      * @exception SQLException if the driver does not support national
-    //JDBC40DOC      *         character sets;  if the driver can detect that a data conversion
-    //JDBC40DOC      *  error could occur; if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
+
+    /**
+     * Retrieves the value of a JDBC <code>NCLOB</code> parameter as a
+     * <code>java.sql.NClob</code> object in the Java programming language.
+     *
+     * @param parameterName the name of the parameter
+     * @return the parameter value as a <code>NClob</code> object in the
+     * Java programming language.  If the value was SQL <code>NULL</code>,
+     * the value <code>null</code> is returned.
+     * @throws SQLException                    if the driver does not support national
+     *                                         character sets;  if the driver can detect that a data conversion
+     *                                         error could occur; if a database access error occurs or
+     *                                         this method is called on a closed <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
     public NClob getNClob(String parameterName) throws SQLException
     {
         return getNClob(findParameterIndex(parameterName));  
     }
-    endif */
+
 
     //@PDA jdbc40
 
@@ -3418,20 +3407,20 @@ public class AS400JDBCCallableStatement
     }
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Retrieves the value of the designated JDBC <code>ROWID</code> parameter as a
-    //JDBC40DOC      * <code>java.sql.RowId</code> object.
-    //JDBC40DOC      *
-    //JDBC40DOC      * @param parameterIndex the first parameter is 1, the second is 2,...
-    //JDBC40DOC      * @return a <code>RowId</code> object that represents the JDBC <code>ROWID</code>
-    //JDBC40DOC      *     value is used as the designated parameter. If the parameter contains
-    //JDBC40DOC      * a SQL <code>NULL</code>, then a <code>null</code> value is returned.
-    //JDBC40DOC      * @throws SQLException if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
+
+    /**
+     * Retrieves the value of the designated JDBC <code>ROWID</code> parameter as a
+     * <code>java.sql.RowId</code> object.
+     *
+     * @param parameterIndex the first parameter is 1, the second is 2,...
+     * @return a <code>RowId</code> object that represents the JDBC <code>ROWID</code>
+     * value is used as the designated parameter. If the parameter contains
+     * a SQL <code>NULL</code>, then a <code>null</code> value is returned.
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
     public RowId getRowId(int parameterIndex) throws SQLException
     {
         synchronized(internalLock_)
@@ -3465,7 +3454,7 @@ public class AS400JDBCCallableStatement
                     JDError.throwSQLException(this, JDError.EXC_PARAMETER_TYPE_INVALID);
 
                 // Verify that the output parameter is registered.
-                if(registered_[parameterIndex-1] == false)
+                if (registered_[parameterIndex - 1] == false)
                     JDError.throwSQLException(this, JDError.EXC_PARAMETER_TYPE_INVALID);
 
                 // Get the data and check for SQL NULL.
@@ -3477,41 +3466,40 @@ public class AS400JDBCCallableStatement
             return value;
         }
     }
-    endif */
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Retrieves the value of the designated JDBC <code>ROWID</code> parameter as a
-    //JDBC40DOC      * <code>java.sql.RowId</code> object.
-    //JDBC40DOC      *
-    //JDBC40DOC      * @param parameterName the name of the parameter
-    //JDBC40DOC      * @return a <code>RowId</code> object that represents the JDBC <code>ROWID</code>
-    //JDBC40DOC      *     value is used as the designated parameter. If the parameter contains
-    //JDBC40DOC      * a SQL <code>NULL</code>, then a <code>null</code> value is returned.
-    //JDBC40DOC      * @throws SQLException if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
-    public RowId getRowId(String parameterName) throws SQLException
-    {
-        return getRowId(findParameterIndex(parameterName));  
+
+    /**
+     * Retrieves the value of the designated JDBC <code>ROWID</code> parameter as a
+     * <code>java.sql.RowId</code> object.
+     *
+     * @param parameterName the name of the parameter
+     * @return a <code>RowId</code> object that represents the JDBC <code>ROWID</code>
+     * value is used as the designated parameter. If the parameter contains
+     * a SQL <code>NULL</code>, then a <code>null</code> value is returned.
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
+    public RowId getRowId(String parameterName) throws SQLException {
+        return getRowId(findParameterIndex(parameterName));
     }
-    endif */
+
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Retrieves the value of the designated <code>SQL XML</code> parameter as a
-    //JDBC40DOC      * <code>java.sql.SQLXML</code> object in the Java programming language.
-    //JDBC40DOC      * @param parameterIndex index of the first parameter is 1, the second is 2, ...
-    //JDBC40DOC      * @return a <code>SQLXML</code> object that maps an <code>SQL XML</code> value
-    //JDBC40DOC      * @throws SQLException if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
+
+    /**
+     * Retrieves the value of the designated <code>SQL XML</code> parameter as a
+     * <code>java.sql.SQLXML</code> object in the Java programming language.
+     *
+     * @param parameterIndex index of the first parameter is 1, the second is 2, ...
+     * @return a <code>SQLXML</code> object that maps an <code>SQL XML</code> value
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
     public SQLXML getSQLXML(int parameterIndex) throws SQLException
     {
         synchronized(internalLock_)
@@ -3541,11 +3529,11 @@ public class AS400JDBCCallableStatement
                 validateParameterIndex(parameterIndex); 
 
                 // Check that the parameter is an output parameter.
-                if(! parameterRow_.isOutput(parameterIndex))
+                if (!parameterRow_.isOutput(parameterIndex))
                     JDError.throwSQLException(this, JDError.EXC_PARAMETER_TYPE_INVALID);
 
                 // Verify that the output parameter is registered.
-                if(registered_[parameterIndex-1] == false)
+                if (registered_[parameterIndex - 1] == false)
                     JDError.throwSQLException(this, JDError.EXC_PARAMETER_TYPE_INVALID);
 
                 // Get the data and check for SQL NULL.
@@ -3557,25 +3545,25 @@ public class AS400JDBCCallableStatement
             return value;
         }
     }
-    endif */
+
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Retrieves the value of the designated <code>SQL XML</code> parameter as a
-    //JDBC40DOC      * <code>java.sql.SQLXML</code> object in the Java programming language.
-    //JDBC40DOC      * @param parameterName the name of the parameter
-    //JDBC40DOC      * @return a <code>SQLXML</code> object that maps an <code>SQL XML</code> value
-    //JDBC40DOC      * @throws SQLException if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
+
+    /**
+     * Retrieves the value of the designated <code>SQL XML</code> parameter as a
+     * <code>java.sql.SQLXML</code> object in the Java programming language.
+     * @param parameterName the name of the parameter
+     * @return a <code>SQLXML</code> object that maps an <code>SQL XML</code> value
+     * @throws SQLException if a database access error occurs or
+     * this method is called on a closed <code>CallableStatement</code>
+     * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
+     * this method
+     */
     public SQLXML getSQLXML(String parameterName) throws SQLException
     {
         return getSQLXML(findParameterIndex(parameterName));  
     } 
-    endif */
+
 
     //@PDA jdbc40
 
@@ -3879,28 +3867,8 @@ public class AS400JDBCCallableStatement
     }
 
     @Override
-    public NClob getNClob(int parameterIndex) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public NClob getNClob(String parameterName) throws SQLException {
-        return null;
-    }
-
-    @Override
     public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
 
-    }
-
-    @Override
-    public SQLXML getSQLXML(int parameterIndex) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public SQLXML getSQLXML(String parameterName) throws SQLException {
-        return null;
     }
 
     //@PDA jdbc40

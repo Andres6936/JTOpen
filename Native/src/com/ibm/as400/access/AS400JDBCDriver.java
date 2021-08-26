@@ -20,6 +20,7 @@ import java.sql.*;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 endif */
+import java.util.Objects;
 import java.util.Properties;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -846,16 +847,16 @@ endif JAVA9 */
 
         // If trace property was set to true, turn on tracing.  If trace property was set to false,
         // turn off tracing.  If trace property was not set, do not change.
-        if (JDProperties.isTraceSet(null, info) == JDProperties.TRACE_SET_ON) {
+        if (Objects.equals(JDProperties.isTraceSet(null, info), JDProperties.TRACE_SET_ON)) {
             if (!JDTrace.isTraceOn())
                 JDTrace.setTraceOn(true);
-        } else if (JDProperties.isTraceSet(null, info) == JDProperties.TRACE_SET_OFF) {
+        } else if (Objects.equals(JDProperties.isTraceSet(null, info), JDProperties.TRACE_SET_OFF)) {
             if (JDTrace.isTraceOn())
                 JDTrace.setTraceOn(false);
         }
 
         // If toolbox trace is set to datastream.  Turn on datastream tracing.
-        if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_DATASTREAM) {
+        if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_DATASTREAM)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -863,7 +864,7 @@ endif JAVA9 */
             Trace.setTraceDatastreamOn(true);
         }
         // If toolbox trace is set to diagnostic.  Turn on diagnostic tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_DIAGNOSTIC) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_DIAGNOSTIC)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -871,7 +872,7 @@ endif JAVA9 */
             Trace.setTraceDiagnosticOn(true);
         }
         // If toolbox trace is set to error.  Turn on error tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_ERROR) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_ERROR)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -879,7 +880,7 @@ endif JAVA9 */
             Trace.setTraceErrorOn(true);
         }
         // If toolbox trace is set to information.  Turn on information tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_INFORMATION) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_INFORMATION)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -887,7 +888,7 @@ endif JAVA9 */
             Trace.setTraceInformationOn(true);
         }
         // If toolbox trace is set to warning.  Turn on warning tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_WARNING) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_WARNING)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -895,7 +896,7 @@ endif JAVA9 */
             Trace.setTraceWarningOn(true);
         }
         // If toolbox trace is set to conversion.  Turn on conversion tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_CONVERSION) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_CONVERSION)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -903,7 +904,7 @@ endif JAVA9 */
             Trace.setTraceConversionOn(true);
         }
         // If toolbox trace is set to proxy.  Turn on proxy tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_PROXY) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_PROXY)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -911,7 +912,7 @@ endif JAVA9 */
             Trace.setTraceProxyOn(true);
         }
         // If toolbox trace is set to pcml.  Turn on pcml tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_PCML) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_PCML)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -919,7 +920,7 @@ endif JAVA9 */
             Trace.setTracePCMLOn(true);
         }
         // If toolbox trace is set to jdbc.  Turn on jdbc tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_JDBC) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_JDBC)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -927,7 +928,7 @@ endif JAVA9 */
             Trace.setTraceJDBCOn(true);
         }
         // If toolbox trace is set to all.  Turn on tracing for all categories.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_ALL) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_ALL)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -935,7 +936,7 @@ endif JAVA9 */
             Trace.setTraceAllOn(true);
         }
         // If toolbox trace is set to thread.  Turn on thread tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_THREAD) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_THREAD)) {
             //@K1A
             if (!Trace.isTraceOn()) {
                 Trace.setTraceOn(true);
@@ -943,7 +944,7 @@ endif JAVA9 */
             Trace.setTraceThreadOn(true);
         }
         // If toolbox trace is set to none.  Turn off tracing.
-        else if (JDProperties.isToolboxTraceSet(null, info) == JDProperties.TRACE_TOOLBOX_NONE) {
+        else if (Objects.equals(JDProperties.isToolboxTraceSet(null, info), JDProperties.TRACE_TOOLBOX_NONE)) {
             //@K1A
             if (Trace.isTraceOn()) {
                 Trace.setTraceOn(false);
@@ -1192,11 +1193,6 @@ endif JAVA9 */
         return true;
     }
 
-    @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return null;
-    }
-
 
     //@B6A -- This logic was formerly in the initializeConnection() method.
     private Connection prepareConnection(AS400 as400, JDDataSourceURL dataSourceUrl,
@@ -1208,17 +1204,17 @@ endif JAVA9 */
 
         //if == "", then take platform defaults...do not set 
         //only get/set properties is one is updated
-        if (jdProperties.getString(JDProperties.KEEP_ALIVE).equals("") == false) {
+        if (!jdProperties.getString(JDProperties.KEEP_ALIVE).equals("")) {
             if (sockProps == null)
                 sockProps = as400.getSocketProperties();
             sockProps.setKeepAlive(jdProperties.getBoolean(JDProperties.KEEP_ALIVE));
         }
-        if (jdProperties.getString(JDProperties.RECEIVE_BUFFER_SIZE).equals("") == false) {
+        if (!jdProperties.getString(JDProperties.RECEIVE_BUFFER_SIZE).equals("")) {
             if (sockProps == null)
                 sockProps = as400.getSocketProperties();
             sockProps.setReceiveBufferSize(jdProperties.getInt(JDProperties.RECEIVE_BUFFER_SIZE));
         }
-        if (jdProperties.getString(JDProperties.SEND_BUFFER_SIZE).equals("") == false) {
+        if (!jdProperties.getString(JDProperties.SEND_BUFFER_SIZE).equals("")) {
             if (sockProps == null)
                 sockProps = as400.getSocketProperties();
             sockProps.setSendBufferSize(jdProperties.getInt(JDProperties.SEND_BUFFER_SIZE));
@@ -1234,14 +1230,14 @@ endif JAVA9 */
         }
 
         //@timeout
-        if (jdProperties.getString(JDProperties.LOGIN_TIMEOUT).equals("") == false) {
+        if (!jdProperties.getString(JDProperties.LOGIN_TIMEOUT).equals("")) {
             if (sockProps == null)
                 sockProps = as400.getSocketProperties();
             sockProps.setLoginTimeout(jdProperties.getInt(JDProperties.LOGIN_TIMEOUT) * 1000); //@STIMEOUT
         }
 
         //@STIMEOUT
-        if (jdProperties.getString(JDProperties.SOCKET_TIMEOUT).equals("") == false) {
+        if (!jdProperties.getString(JDProperties.SOCKET_TIMEOUT).equals("")) {
             if (sockProps == null)
                 sockProps = as400.getSocketProperties();
             sockProps.setSoTimeout(jdProperties.getInt(JDProperties.SOCKET_TIMEOUT)); //@STIMEOUT already in milliseconds
@@ -1294,11 +1290,10 @@ endif JAVA9 */
     public String toString() {
         return DRIVER_NAME_;    // @D0C
     }
-	
-/*ifdef JDBC40 
-  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+
+
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
     throw new SQLFeatureNotSupportedException(); 
   }
-endif */
 
 }

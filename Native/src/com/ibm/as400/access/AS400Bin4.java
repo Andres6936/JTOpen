@@ -58,7 +58,7 @@ public class AS400Bin4 implements AS400DataType {
      * @return The Integer object with a value of zero.
      **/
     public Object getDefaultValue() {
-        return new Integer(defaultValue);
+        return defaultValue;
     }
 
     /**
@@ -87,7 +87,7 @@ public class AS400Bin4 implements AS400DataType {
      **/
     public byte[] toBytes(Object javaValue) {
         byte[] as400Value = new byte[SIZE];
-        BinaryConverter.intToByteArray(((Integer) javaValue).intValue(), as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
+        BinaryConverter.intToByteArray((Integer) javaValue, as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
         return as400Value;
     }
 
@@ -112,7 +112,7 @@ public class AS400Bin4 implements AS400DataType {
      **/
     public int toBytes(Object javaValue, byte[] as400Value) {
         // BinaryConverter will throw the ArrayIndexException's
-        BinaryConverter.intToByteArray(((Integer) javaValue).intValue(), as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
+        BinaryConverter.intToByteArray((Integer) javaValue, as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
         return SIZE;
     }
 
@@ -139,7 +139,7 @@ public class AS400Bin4 implements AS400DataType {
      **/
     public int toBytes(Object javaValue, byte[] as400Value, int offset) {
         // BinaryConverter will throw the ArrayIndexException's
-        BinaryConverter.intToByteArray(((Integer) javaValue).intValue(), as400Value, offset);  // Allow this line to throw ClassCastException and NullPointerException
+        BinaryConverter.intToByteArray((Integer) javaValue, as400Value, offset);  // Allow this line to throw ClassCastException and NullPointerException
         return SIZE;
     }
 
@@ -188,7 +188,7 @@ public class AS400Bin4 implements AS400DataType {
      **/
     public Object toObject(byte[] as400Value) {
         // BinaryConverter will throw the ArrayIndexException's
-        return new Integer(BinaryConverter.byteArrayToInt(as400Value, 0));
+        return BinaryConverter.byteArrayToInt(as400Value, 0);
     }
 
     /**
@@ -200,6 +200,6 @@ public class AS400Bin4 implements AS400DataType {
      **/
     public Object toObject(byte[] as400Value, int offset) {
         // BinaryConverter will throw the ArrayIndexException's
-        return new Integer(BinaryConverter.byteArrayToInt(as400Value, offset));
+        return BinaryConverter.byteArrayToInt(as400Value, offset);
     }
 }

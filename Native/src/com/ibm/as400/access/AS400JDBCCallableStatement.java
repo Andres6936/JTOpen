@@ -4291,14 +4291,12 @@ public class AS400JDBCCallableStatement
             return getRef(parameterIndex);
         } else if (type == URL.class) {
             return getURL(parameterIndex);
-/* ifdef JDBC40
       } else if (type == NClob.class){
         return getNClob(parameterIndex);
       } else if (type == RowId.class){
         return getRowId(parameterIndex);
       } else if (type == SQLXML.class){
         return getSQLXML(parameterIndex);
-endif */
         } else if (type == Object.class) {
             return getObject(parameterIndex);
         }

@@ -37,7 +37,7 @@ public class AS400Array implements AS400DataType {
      **/
     public AS400Array(AS400DataType type, int size) {
         if (size < 0) {
-            throw new ExtendedIllegalArgumentException("size (" + String.valueOf(size) + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
+            throw new ExtendedIllegalArgumentException("size (" + size + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
         }
         this.allowChanges = false;
         // only store clones
@@ -138,7 +138,7 @@ public class AS400Array implements AS400DataType {
             throw new ExtendedIllegalStateException("NumberOfElements", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
         }
         if (size < 0) {
-            throw new ExtendedIllegalArgumentException("size (" + String.valueOf(size) + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
+            throw new ExtendedIllegalArgumentException("size (" + size + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
         }
         this.arraySize = size;
     }
@@ -214,7 +214,7 @@ public class AS400Array implements AS400DataType {
         Object[] javaArray = (Object[]) javaValue;  // let this line to throw ClassCastException
         if (javaArray.length != size)  // Check for correct number of elements
         {
-            throw new ExtendedIllegalArgumentException("javaValue (" + javaValue.toString() + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
+            throw new ExtendedIllegalArgumentException("javaValue (" + javaValue + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
         }
         // Convert array by iterating over elements, allow elements to do own validity checking
         for (int i = 0; i < size; ++i) {

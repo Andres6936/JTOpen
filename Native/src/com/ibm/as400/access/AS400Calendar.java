@@ -40,8 +40,7 @@ public class AS400Calendar {
             return returnCalendar;
         } else {
             // Create a new gregorianCalendar for the current timezone and locale
-            Calendar gregorianCalendar = new GregorianCalendar();
-            return gregorianCalendar;
+            return new GregorianCalendar();
         }
 
     }
@@ -64,8 +63,7 @@ public class AS400Calendar {
             return returnCalendar;
         } else {
             // Create a new gregorianCalendar for the current timezone and locale
-            Calendar gregorianCalendar = new GregorianCalendar(timezone);
-            return gregorianCalendar;
+            return new GregorianCalendar(timezone);
         }
 
     }

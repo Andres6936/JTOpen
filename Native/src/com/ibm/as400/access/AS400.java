@@ -165,9 +165,9 @@ public class AS400 implements Serializable {
     private static final int FINISHED = 0;
 
     // System list:  elements are 3 element Object[]: systemName, userId, credential vault
-    private static Vector systemList = new Vector();
+    private static final Vector systemList = new Vector();
     // Default users is a hash from systemName to userId.
-    private static Hashtable defaultUsers = new Hashtable();
+    private static final Hashtable defaultUsers = new Hashtable();
     // Number of days previous to password expiration to start to warn user.
     private static int expirationWarning = 7;
     // Whether to use system value QPWDEXPWRN to calculate days previous to password expiration.
@@ -328,7 +328,7 @@ public class AS400 implements Serializable {
             String propVal = SystemProperties.getProperty(SystemProperties.AS400_GUI_AVAILABLE);
             if (propVal != null) {
                 try {
-                    defaultGuiAvailable_ = Boolean.valueOf(propVal).booleanValue();
+                    defaultGuiAvailable_ = Boolean.parseBoolean(propVal);
                 } catch (Exception e) {
                     Trace.log(Trace.WARNING, "Error retrieving guiAvailable property value:", e);
                 }
@@ -340,7 +340,7 @@ public class AS400 implements Serializable {
             String propVal = SystemProperties.getProperty(SystemProperties.AS400_MUST_ADD_LANGUAGE_LIBRARY);
             if (propVal != null) {
                 try {
-                    defaultMustAddLanguageLibrary_ = Boolean.valueOf(propVal).booleanValue();
+                    defaultMustAddLanguageLibrary_ = Boolean.parseBoolean(propVal);
                 } catch (Exception e) {
                     Trace.log(Trace.WARNING, "Error retrieving mustAddLanguageLibrary property value:", e);
                 }
@@ -352,7 +352,7 @@ public class AS400 implements Serializable {
             String propVal = SystemProperties.getProperty(SystemProperties.AS400_MUST_USE_SOCKETS);
             if (propVal != null) {
                 try {
-                    defaultMustUseSockets_ = Boolean.valueOf(propVal).booleanValue();
+                    defaultMustUseSockets_ = Boolean.parseBoolean(propVal);
                 } catch (Exception e) {
                     Trace.log(Trace.WARNING, "Error retrieving mustUseSockets property value:", e);
                 }
@@ -364,7 +364,7 @@ public class AS400 implements Serializable {
             String propVal = SystemProperties.getProperty(SystemProperties.AS400_MUST_USE_NET_SOCKETS);
             if (propVal != null) {
                 try {
-                    defaultMustUseNetSockets_ = Boolean.valueOf(propVal).booleanValue();
+                    defaultMustUseNetSockets_ = Boolean.parseBoolean(propVal);
                 } catch (Exception e) {
                     Trace.log(Trace.WARNING, "Error retrieving mustUseNetSockets property value:", e);
                 }
@@ -376,7 +376,7 @@ public class AS400 implements Serializable {
             String propVal = SystemProperties.getProperty(SystemProperties.AS400_MUST_USE_SUPPLIED_PROFILE);
             if (propVal != null) {
                 try {
-                    defaultMustUseSuppliedProfile_ = Boolean.valueOf(propVal).booleanValue();
+                    defaultMustUseSuppliedProfile_ = Boolean.parseBoolean(propVal);
                 } catch (Exception e) {
                     Trace.log(Trace.WARNING, "Error retrieving mustUseSuppliedProfile property value:", e);
                 }
@@ -388,7 +388,7 @@ public class AS400 implements Serializable {
             String propVal = SystemProperties.getProperty(SystemProperties.AS400_THREAD_USED);
             if (propVal != null) {
                 try {
-                    defaultThreadUsed_ = Boolean.valueOf(propVal).booleanValue();
+                    defaultThreadUsed_ = Boolean.parseBoolean(propVal);
                 } catch (Exception e) {
                     Trace.log(Trace.WARNING, "Error retrieving threadUsed property value:", e);
                 }
@@ -533,7 +533,7 @@ public class AS400 implements Serializable {
 
         // Was a refresh threshold specified?
         if (refreshThreshold != null) {
-            constructWithProfileToken(systemName, new ManagedProfileTokenVault(tokenProvider, refreshThreshold.intValue()));
+            constructWithProfileToken(systemName, new ManagedProfileTokenVault(tokenProvider, refreshThreshold));
         } else {
             constructWithProfileToken(systemName, new ManagedProfileTokenVault(tokenProvider));
         }
@@ -785,32 +785,22 @@ public class AS400 implements Serializable {
         return AS400.nativeVersion;
     }
 
-    private static final String credTypeToString(int credType) {
-        String result;
-        switch (credType) {
-            case AUTHENTICATION_SCHEME_PASSWORD:
-                result = "password";
-                break;
-            case AUTHENTICATION_SCHEME_GSS_TOKEN:
-                result = "GSS token";
-                break;
-            case AUTHENTICATION_SCHEME_PROFILE_TOKEN:
-                result = "profile token";
-                break;
-            case AUTHENTICATION_SCHEME_IDENTITY_TOKEN:
-                result = "identity token";
-                break;
-            default:
-                result = "unrecognized";
-        }
-        return result;
+    private static String credTypeToString(int credType) {
+        return switch (credType) {
+            case AUTHENTICATION_SCHEME_PASSWORD -> "password";
+            case AUTHENTICATION_SCHEME_GSS_TOKEN -> "GSS token";
+            case AUTHENTICATION_SCHEME_PROFILE_TOKEN -> "profile token";
+            case AUTHENTICATION_SCHEME_IDENTITY_TOKEN -> "identity token";
+            default -> "unrecognized";
+        };
     }
 
     /**
      * Clears the password cache for all systems within this Java virtual machine.
      **/
     public static void clearPasswordCache() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Clearing password cache.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Clearing password cache.");
         synchronized (AS400.systemList) {
             AS400.systemList.removeAllElements();
         }
@@ -953,26 +943,17 @@ public class AS400 implements Serializable {
     // Converts a service constant to a service name.
     public static String getServerName(int service)//@Q10
     {
-        switch (service) {
-            case AS400.FILE:
-                return "as-file";
-            case AS400.PRINT:
-                return "as-netprt";
-            case AS400.COMMAND:
-                return "as-rmtcmd";
-            case AS400.DATAQUEUE:
-                return "as-dtaq";
-            case AS400.DATABASE:
-                return "as-database";
-            case AS400.RECORDACCESS:
-                return "as-ddm";
-            case AS400.CENTRAL:
-                return "as-central";
-            case AS400.SIGNON:
-                return "as-signon";
-            default:
-                throw new ExtendedIllegalArgumentException("service (" + service + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
-        }
+        return switch (service) {
+            case AS400.FILE -> "as-file";
+            case AS400.PRINT -> "as-netprt";
+            case AS400.COMMAND -> "as-rmtcmd";
+            case AS400.DATAQUEUE -> "as-dtaq";
+            case AS400.DATABASE -> "as-database";
+            case AS400.RECORDACCESS -> "as-ddm";
+            case AS400.CENTRAL -> "as-central";
+            case AS400.SIGNON -> "as-signon";
+            default -> throw new ExtendedIllegalArgumentException("service (" + service + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
+        };
     }
 
     /**
@@ -1009,10 +990,10 @@ public class AS400 implements Serializable {
                 InetAddress localInet = InetAddress.getLocalHost();
                 InetAddress[] remoteInet = InetAddress.getAllByName(systemName);
 
-                for (int i = 0; i < remoteInet.length; ++i) {
+                for (InetAddress inetAddress : remoteInet) {
                     if (Trace.traceOn_)
-                        Trace.log(Trace.DIAGNOSTIC, "Comparing local address " + localInet + " to " + remoteInet[i]);
-                    if (localInet.equals(remoteInet[i])) {
+                        Trace.log(Trace.DIAGNOSTIC, "Comparing local address " + localInet + " to " + inetAddress);
+                    if (localInet.equals(inetAddress)) {
                         return true;
                     }
                 }
@@ -1198,7 +1179,7 @@ public class AS400 implements Serializable {
     // Convenience method to determine if systemName is local system.
     static boolean resolveSystemNameLocal(String systemName) {
         if (AS400.onAS400) {
-            if (systemName.length() == 0 || isSystemNameLocal(systemName)) return true;
+            return systemName.length() == 0 || isSystemNameLocal(systemName);
         }
         return false;
     }
@@ -1383,11 +1364,7 @@ public class AS400 implements Serializable {
     public static boolean isTurkish() {
         Locale defaultLocale = Locale.getDefault();
         Locale Turkishlocale = new Locale("tr", "TR", "");
-        if (defaultLocale.equals(Turkishlocale)) {
-            return true;
-        } else {
-            return false;
-        }
+        return defaultLocale.equals(Turkishlocale);
     }
 
     /**
@@ -1427,7 +1404,7 @@ public class AS400 implements Serializable {
         String SetASPGrp = "SETASPGRP ASPGRP(" + IASPGroup + ") CURLIB(*CURUSR) USRLIBL(*CURUSR)"; //@P2C Default value *CURSYSBAS will override the user profile/jobd set libs.
         Trace.log(Trace.DIAGNOSTIC, "AS400 Call command of setaspgrp " + SetASPGrp);
         CommandCall commandCall = new CommandCall(this);
-        if (commandCall.run(SetASPGrp) != true) {
+        if (!commandCall.run(SetASPGrp)) {
             Trace.log(Trace.ERROR, this, "Command SETASPGRP Failed with iasp " + IASPGroup);
         } else
             aspName = IASPGroup;
@@ -1460,7 +1437,7 @@ public class AS400 implements Serializable {
         String SetASPGrp = "SETASPGRP ASPGRP(" + IASPGroup + ") CURLIB(" + currentLib + ") USRLIBL(*CURUSR)"; //@P2C Default value *CURSYSBAS will override the user profile/jobd set libs.
         Trace.log(Trace.DIAGNOSTIC, "Call command of setaspgrp " + SetASPGrp);
         CommandCall commandCall = new CommandCall(this);
-        if (commandCall.run(SetASPGrp) != true) {
+        if (!commandCall.run(SetASPGrp)) {
             Trace.log(Trace.ERROR, this, "Command SETASPGRP Failed with iasp " + IASPGroup);
         } else
             aspName = IASPGroup;
@@ -1500,7 +1477,7 @@ public class AS400 implements Serializable {
         String SetASPGrp = "SETASPGRP ASPGRP(" + IASPGroup + ") CURLIB(" + currentLib + ") USRLIBL(" + librariesForThread + ")"; //@P2C Default value *CURSYSBAS will override the user profile/jobd set libs.
         Trace.log(Trace.DIAGNOSTIC, "Call command of setaspgrp " + SetASPGrp);
         CommandCall commandCall = new CommandCall(this);
-        if (commandCall.run(SetASPGrp) != true) {
+        if (!commandCall.run(SetASPGrp)) {
             Trace.log(Trace.ERROR, this, "Command SETASPGRP Failed with iasp " + IASPGroup);
         } else
             aspName = IASPGroup;
@@ -1550,14 +1527,14 @@ public class AS400 implements Serializable {
 
         this.currentLib_ = currentLib;
         this.librariesForThread_ = "";
-        for (int i = 0; i < librariesForThread.length; i++)
-            this.librariesForThread_ += librariesForThread[i].toUpperCase() + " ";
+        for (String s : librariesForThread)
+            this.librariesForThread_ += s.toUpperCase() + " ";
         this.librariesForThread_ = this.librariesForThread_.substring(0, this.librariesForThread_.length() - 1);
 
         String SetASPGrp = "SETASPGRP ASPGRP(" + IASPGroup + ") CURLIB(" + currentLib + ") USRLIBL(" + librariesForThread_ + ")"; //@P2C Default value *CURSYSBAS will override the user profile/jobd set libs.
         Trace.log(Trace.DIAGNOSTIC, "Call command of setaspgrp " + SetASPGrp);
         CommandCall commandCall = new CommandCall(this);
-        if (commandCall.run(SetASPGrp) != true) {
+        if (!commandCall.run(SetASPGrp)) {
             Trace.log(Trace.ERROR, this, "Command SETASPGRP Failed with iasp " + IASPGroup);
         } else
             aspName = IASPGroup;
@@ -2075,8 +2052,8 @@ public class AS400 implements Serializable {
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             ccsid_ = ccsid;
         } else {
-            Integer oldValue = new Integer(ccsid_);
-            Integer newValue = new Integer(ccsid);
+            Integer oldValue = ccsid_;
+            Integer newValue = ccsid;
 
             if (vetoableChangeListeners_ != null) {
                 vetoableChangeListeners_.fireVetoableChange("ccsid", oldValue, newValue);
@@ -2107,9 +2084,8 @@ public class AS400 implements Serializable {
                 }
 
                 // Divide by number of seconds in day, round up.
-                int days = (int) (((lExpiration - lNow) / 0x5265C00) + 1);
 
-                return days;
+                return (int) (((lExpiration - lNow) / 0x5265C00) + 1);
             }
         }
         // No expiration date.
@@ -2323,11 +2299,10 @@ public class AS400 implements Serializable {
             nlv_ = ExecutionEnvironment.getNlv(locale_);
         } else {
             Locale oldValue = locale_;
-            Locale newValue = locale;
 
             locale_ = locale;
             nlv_ = ExecutionEnvironment.getNlv(locale_);
-            propertyChangeListeners_.firePropertyChange("locale", oldValue, newValue);
+            propertyChangeListeners_.firePropertyChange("locale", oldValue, locale);
         }
     }
 
@@ -2905,15 +2880,14 @@ public class AS400 implements Serializable {
             systemNameLocal_ = resolveSystemNameLocal(systemName);
         } else {
             String oldValue = systemName_;
-            String newValue = systemName;
 
             if (vetoableChangeListeners_ != null) {
-                vetoableChangeListeners_.fireVetoableChange("systemName", oldValue, newValue);
+                vetoableChangeListeners_.fireVetoableChange("systemName", oldValue, systemName);
             }
             systemName_ = systemName;
             systemNameLocal_ = resolveSystemNameLocal(systemName);
             if (propertyChangeListeners_ != null) {
-                propertyChangeListeners_.firePropertyChange("systemName", oldValue, newValue);
+                propertyChangeListeners_.firePropertyChange("systemName", oldValue, systemName);
             }
         }
     }
@@ -3253,8 +3227,8 @@ public class AS400 implements Serializable {
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             guiAvailable_ = guiAvailable;
         } else {
-            Boolean oldValue = new Boolean(guiAvailable_);
-            Boolean newValue = new Boolean(guiAvailable);
+            Boolean oldValue = guiAvailable_;
+            Boolean newValue = guiAvailable;
 
             if (vetoableChangeListeners_ != null) {
                 vetoableChangeListeners_.fireVetoableChange("guiAvailable", oldValue, newValue);
@@ -3353,8 +3327,8 @@ public class AS400 implements Serializable {
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             threadUsed_ = useThreads;
         } else {
-            Boolean oldValue = new Boolean(threadUsed_);
-            Boolean newValue = new Boolean(useThreads);
+            Boolean oldValue = threadUsed_;
+            Boolean newValue = useThreads;
 
             if (vetoableChangeListeners_ != null) {
                 vetoableChangeListeners_.fireVetoableChange("threadUsed", oldValue, newValue);
@@ -3388,8 +3362,8 @@ public class AS400 implements Serializable {
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             useDefaultUser_ = useDefaultUser;
         } else {
-            Boolean oldValue = new Boolean(useDefaultUser_);
-            Boolean newValue = new Boolean(useDefaultUser);
+            Boolean oldValue = useDefaultUser_;
+            Boolean newValue = useDefaultUser;
 
             if (vetoableChangeListeners_ != null) {
                 vetoableChangeListeners_.fireVetoableChange("useDefaultUser", oldValue, newValue);
@@ -3424,8 +3398,8 @@ public class AS400 implements Serializable {
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             usePasswordCache_ = usePasswordCache;
         } else {
-            Boolean oldValue = new Boolean(usePasswordCache_);
-            Boolean newValue = new Boolean(usePasswordCache);
+            Boolean oldValue = usePasswordCache_;
+            Boolean newValue = usePasswordCache;
 
             if (vetoableChangeListeners_ != null) {
                 vetoableChangeListeners_.fireVetoableChange("usePasswordCache", oldValue, newValue);

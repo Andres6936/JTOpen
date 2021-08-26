@@ -24,13 +24,13 @@ import java.util.Vector;
 class AS400JDBCConnectionEventSupport {
     final String copyright = "Copyright (C) 1997-2001 International Business Machines Corporation and others.";
 
-    private Vector connectionListeners_;              // The listener list.
+    private final Vector<ConnectionEventListener> connectionListeners_;              // The listener list.
 
     /**
      * Constructs a default AS400JDBCConnectionEventSupport object.
      **/
     public AS400JDBCConnectionEventSupport() {
-        connectionListeners_ = new Vector();
+        connectionListeners_ = new Vector<>();
     }
 
 

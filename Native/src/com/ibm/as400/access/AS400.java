@@ -232,7 +232,7 @@ public class AS400 implements Serializable {
     transient int ccsid_ = 0;
 
     // List of connection event bean listeners.
-    private transient Vector connectionListeners_ = null;  // Set on first add.
+    private transient Vector<ConnectionListener> connectionListeners_ = null;  // Set on first add.
     // Inner class that connects connection events that occur in the ImplRemote to this class.
     private transient ConnectionListener dispatcher_ = null;  // Set on first add.
     // List of property change event bean listeners.
@@ -1578,7 +1578,7 @@ public class AS400 implements Serializable {
         synchronized (this) {
             // If first add.
             if (connectionListeners_ == null) {
-                connectionListeners_ = new Vector();
+                connectionListeners_ = new Vector<>();
                 dispatcher_ = new ConnectionListener() {
                     public void connected(ConnectionEvent event) {
                         fireConnectEvent(event, true);
@@ -1988,9 +1988,9 @@ public class AS400 implements Serializable {
         // If we have made it this far, we know we have listeners.
         event.setSource(this);
 
-        Vector targets = (Vector) connectionListeners_.clone();
+        Vector<ConnectionListener> targets = (Vector<ConnectionListener>) connectionListeners_.clone();
         for (int i = 0; i < targets.size(); ++i) {
-            ConnectionListener target = (ConnectionListener) targets.elementAt(i);
+            ConnectionListener target = targets.elementAt(i);
             if (connect) {
                 target.connected(event);
             } else {

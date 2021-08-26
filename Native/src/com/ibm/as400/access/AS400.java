@@ -1535,8 +1535,8 @@ public class AS400 implements Serializable {
                 Trace.log(Trace.ERROR, this, "Up to 250 libraries can be set for SETASPGRP USRLIBL");
                 throw new ExtendedIllegalArgumentException("setIASPGroup Libraries for current thread librariesForThread(" + librariesForThread.length + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);
             } else
-                for (int i = 0; i < librariesForThread.length; i++) {
-                    String value = librariesForThread[i];
+                for (String s : librariesForThread) {
+                    String value = s;
                     if (value == null || value.length() < 1 || value.length() > 10) {
                         Trace.log(Trace.ERROR, "Length of parameter in 'librariesForThread' is not valid: '" + value + "'");
                         throw new ExtendedIllegalArgumentException("setIASPGroup parameter in librariesForThread (" + value + ")", ExtendedIllegalArgumentException.LENGTH_NOT_VALID);

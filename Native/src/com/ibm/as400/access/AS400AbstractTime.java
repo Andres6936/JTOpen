@@ -25,32 +25,31 @@ import java.util.TimeZone;
 /**
  An abstract base class for converters between IBM i date/time values and corresponding Java objects.
  **/
-public abstract class AS400AbstractTime implements AS400DataType
-{
-  static final long serialVersionUID = 4L;
-  static final boolean DEBUG = false;
+public abstract class AS400AbstractTime implements AS400DataType {
+    static final long serialVersionUID = 4L;
+    static final boolean DEBUG = false;
 
-  static final Locale LOCALE_DEFAULT = Locale.US;  // keep things simple
-  static final TimeZone TIMEZONE_GMT = TimeZone.getTimeZone("GMT-0");
+    static final Locale LOCALE_DEFAULT = Locale.US;  // keep things simple
+    static final TimeZone TIMEZONE_GMT = TimeZone.getTimeZone("GMT-0");
 
-  // Separator characters.  Used by AS400Date and AS400Time.
-  static final Character AMPERSAND = new Character('&');
-  static final Character BLANK = new Character(' ');
-  static final Character COLON = new Character(':');
-  static final Character COMMA = new Character(',');
-  static final Character HYPHEN = new Character('-');
-  static final Character PERIOD = new Character('.');
-  static final Character SLASH = new Character('/');
+    // Separator characters.  Used by AS400Date and AS400Time.
+    static final Character AMPERSAND = '&';
+    static final Character BLANK = ' ';
+    static final Character COLON = ':';
+    static final Character COMMA = ',';
+    static final Character HYPHEN = '-';
+    static final Character PERIOD = '.';
+    static final Character SLASH = '/';
 
-  // Standard XML-Schema format patterns for parsing dates and times.
-  // For specifications, see http://www.w3.org/TR/xmlschema-2/
-  static final String DATE_PATTERN_XSD = "yyyy-MM-dd";
-  static final String TIME_PATTERN_XSD = "HH:mm:ss";
-  static final String TIMESTAMP_PATTERN_XSD = "yyyy-MM-dd'T'HH:mm:ss";
+    // Standard XML-Schema format patterns for parsing dates and times.
+    // For specifications, see http://www.w3.org/TR/xmlschema-2/
+    static final String DATE_PATTERN_XSD = "yyyy-MM-dd";
+    static final String TIME_PATTERN_XSD = "HH:mm:ss";
+    static final String TIMESTAMP_PATTERN_XSD = "yyyy-MM-dd'T'HH:mm:ss";
 
-  private int length_;  // number of bytes occupied by the IBM i value
-  private transient GregorianCalendar calendar_;
-  private transient SimpleDateFormat dateFormatter_;
+    private int length_;  // number of bytes occupied by the IBM i value
+    private transient GregorianCalendar calendar_;
+    private transient SimpleDateFormat dateFormatter_;
   private transient CharConverter charConverter_;
 
   // Hashtables of SimpleDateFormat keyed by TimeZone
@@ -381,7 +380,7 @@ public abstract class AS400AbstractTime implements AS400DataType
     if (centuryDigit == null) return getDateFormatter();
     else
     {
-      Date d = getStartDateForCentury(centuryDigit.intValue());
+        Date d = getStartDateForCentury(centuryDigit);
       getDateFormatter();
       dateFormatter_.set2DigitYearStart(d);
       return dateFormatter_;

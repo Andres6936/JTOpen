@@ -30,9 +30,9 @@ public class AS400BeanInfo extends SimpleBeanInfo {
     private static final String copyright = "Copyright (C) 1997-2003 International Business Machines Corporation and others.";
 
     // Class this bean info represents.
-    private static final Class BEAN_CLASS = AS400.class;
+    private static final Class<AS400> BEAN_CLASS = AS400.class;
 
-    private static EventSetDescriptor[] eventSetDescriptors;
+    private static final EventSetDescriptor[] eventSetDescriptors;
     static PropertyDescriptor[] propertyDescriptors;
 
     static {
@@ -180,14 +180,10 @@ public class AS400BeanInfo extends SimpleBeanInfo {
      * @return The Image for the icon.
      **/
     public Image getIcon(int icon) {
-        switch (icon) {
-            case BeanInfo.ICON_MONO_16x16:
-            case BeanInfo.ICON_COLOR_16x16:
-                return loadImage("AS40016.gif");
-            case BeanInfo.ICON_MONO_32x32:
-            case BeanInfo.ICON_COLOR_32x32:
-                return loadImage("AS40032.gif");
-        }
-        return null;
+        return switch (icon) {
+            case BeanInfo.ICON_MONO_16x16, BeanInfo.ICON_COLOR_16x16 -> loadImage("AS40016.gif");
+            case BeanInfo.ICON_MONO_32x32, BeanInfo.ICON_COLOR_32x32 -> loadImage("AS40032.gif");
+            default -> null;
+        };
     }
 }

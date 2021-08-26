@@ -57,7 +57,7 @@ public class AS400Bin2 implements AS400DataType {
      * @return The Short object with a value of zero.
      **/
     public Object getDefaultValue() {
-        return new Short(defaultValue);
+        return defaultValue;
     }
 
     /**
@@ -86,7 +86,7 @@ public class AS400Bin2 implements AS400DataType {
      **/
     public byte[] toBytes(Object javaValue) {
         byte[] as400Value = new byte[SIZE];
-        BinaryConverter.shortToByteArray(((Short) javaValue).shortValue(), as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
+        BinaryConverter.shortToByteArray((Short) javaValue, as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
         return as400Value;
     }
 
@@ -111,7 +111,7 @@ public class AS400Bin2 implements AS400DataType {
      **/
     public int toBytes(Object javaValue, byte[] as400Value) {
         // BinaryConverter will throw the ArrayIndexException's
-        BinaryConverter.shortToByteArray(((Short) javaValue).shortValue(), as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
+        BinaryConverter.shortToByteArray((Short) javaValue, as400Value, 0);  // Allow this line to throw ClassCastException and NullPointerException
         return SIZE;
     }
 
@@ -138,7 +138,7 @@ public class AS400Bin2 implements AS400DataType {
      **/
     public int toBytes(Object javaValue, byte[] as400Value, int offset) {
         // BinaryConverter will throw the ArrayIndexException's
-        BinaryConverter.shortToByteArray(((Short) javaValue).shortValue(), as400Value, offset);  // Allow this line to throw ClassCastException and NullPointerException
+        BinaryConverter.shortToByteArray((Short) javaValue, as400Value, offset);  // Allow this line to throw ClassCastException and NullPointerException
         return SIZE;
     }
 
@@ -164,7 +164,7 @@ public class AS400Bin2 implements AS400DataType {
      **/
     public Object toObject(byte[] as400Value) {
         // BinaryConverter will throw the ArrayIndexException's
-        return new Short(BinaryConverter.byteArrayToShort(as400Value, 0));
+        return BinaryConverter.byteArrayToShort(as400Value, 0);
     }
 
     /**
@@ -176,7 +176,7 @@ public class AS400Bin2 implements AS400DataType {
      **/
     public Object toObject(byte[] as400Value, int offset) {
         // BinaryConverter will throw the ArrayIndexException's
-        return new Short(BinaryConverter.byteArrayToShort(as400Value, offset));
+        return BinaryConverter.byteArrayToShort(as400Value, offset);
     }
 
     /**

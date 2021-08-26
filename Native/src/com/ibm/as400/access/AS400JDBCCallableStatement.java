@@ -2112,11 +2112,6 @@ public class AS400JDBCCallableStatement
         }
     }
 
-    @Override
-    public void setRowId(String parameterName, RowId x) throws SQLException {
-
-    }
-
     /**
      * Returns the value of an SQL DATALINK output parameter as a
      * java.net.URL object.
@@ -3804,39 +3799,34 @@ public class AS400JDBCCallableStatement
         setClob(findParameterIndex(parameterName), reader, length);
     }
 
-    @Override
-    public void setNClob(String parameterName, NClob value) throws SQLException {
-
-    }
-
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Sets the designated parameter to a <code>java.sql.NClob</code> object. The object
-    //JDBC40DOC      * implements the <code>java.sql.NClob</code> interface. This <code>NClob</code>
-    //JDBC40DOC      * object maps to a SQL <code>NCLOB</code>.
-    //JDBC40DOC      * @param parameterName the name of the parameter to be set
-    //JDBC40DOC      * @param value the parameter value
-    //JDBC40DOC      * @throws SQLException if the driver does not support national
-    //JDBC40DOC      *         character sets;  if the driver can detect that a data conversion
-    //JDBC40DOC      *  error could occur; if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
-    public void setNClob(String parameterName, NClob value) throws SQLException
-    {
-        if(JDTrace.isTraceOn())
-        {  
-            JDTrace.logInformation(this, "setNClob()"); 
-            if(value == null) 
+
+    /**
+     * Sets the designated parameter to a <code>java.sql.NClob</code> object. The object
+     * implements the <code>java.sql.NClob</code> interface. This <code>NClob</code>
+     * object maps to a SQL <code>NCLOB</code>.
+     *
+     * @param parameterName the name of the parameter to be set
+     * @param value         the parameter value
+     * @throws SQLException                    if the driver does not support national
+     *                                         character sets;  if the driver can detect that a data conversion
+     *                                         error could occur; if a database access error occurs or
+     *                                         this method is called on a closed <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
+    public void setNClob(String parameterName, NClob value) throws SQLException {
+        if (JDTrace.isTraceOn()) {
+            JDTrace.logInformation(this, "setNClob()");
+            if (value == null)
                 JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: NULL");
-            else JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " length: " + value.length());
+            else
+                JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " length: " + value.length());
         }
 
         setNClob(findParameterIndex(parameterName), value);
     }
-    endif */
+
 
     //@PDA jdbc40
 
@@ -3866,10 +3856,6 @@ public class AS400JDBCCallableStatement
         setNCharacterStream(findParameterIndex(parameterName), value, length);
     }
 
-    @Override
-    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
-
-    }
 
     //@PDA jdbc40
 
@@ -3906,61 +3892,58 @@ public class AS400JDBCCallableStatement
     }
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Sets the designated parameter to the given <code>java.sql.RowId</code> object. The
-    //JDBC40DOC      * driver converts this to a SQL <code>ROWID</code> when it sends it to the
-    //JDBC40DOC      * database.
-    //JDBC40DOC      *
-    //JDBC40DOC      * @param parameterName the name of the parameter
-    //JDBC40DOC      * @param x the parameter value
-    //JDBC40DOC      * @throws SQLException if a database access error occurs or
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code>
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
-    public void setRowId(String parameterName, RowId x) throws SQLException
-    {
-        if(JDTrace.isTraceOn())
-        {  
-            JDTrace.logInformation(this, "setRowId()"); 
-            if(x == null) 
-                JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: NULL");  
-            else JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: " + x.toString());
-        }   
+
+    /**
+     * Sets the designated parameter to the given <code>java.sql.RowId</code> object. The
+     * driver converts this to a SQL <code>ROWID</code> when it sends it to the
+     * database.
+     *
+     * @param parameterName the name of the parameter
+     * @param x             the parameter value
+     * @throws SQLException                    if a database access error occurs or
+     *                                         this method is called on a closed <code>CallableStatement</code>
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
+    public void setRowId(String parameterName, RowId x) throws SQLException {
+        if (JDTrace.isTraceOn()) {
+            JDTrace.logInformation(this, "setRowId()");
+            if (x == null)
+                JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: NULL");
+            else
+                JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: " + x.toString());
+        }
 
         setRowId(findParameterIndex(parameterName), x);
     }
-   endif */
+
 
     //@PDA jdbc40
-    //JDBC40DOC     /**
-    //JDBC40DOC      * Sets the designated parameter to the given <code>java.sql.SQLXML</code> object. The driver converts this to an
-    //JDBC40DOC      * <code>SQL XML</code> value when it sends it to the database.
-    //JDBC40DOC      *
-    //JDBC40DOC      * @param parameterName the name of the parameter
-    //JDBC40DOC      * @param xmlObject a <code>SQLXML</code> object that maps an <code>SQL XML</code> value
-    //JDBC40DOC      * @throws SQLException if a database access error occurs,
-    //JDBC40DOC      * this method is called on a closed <code>CallableStatement</code> or
-    //JDBC40DOC      * the <code>java.xml.transform.Result</code>,
-    //JDBC40DOC      *  <code>Writer</code> or <code>OutputStream</code> has not been closed for the <code>SQLXML</code> object
-    //JDBC40DOC      * @exception SQLFeatureNotSupportedException if the JDBC driver does not support
-    //JDBC40DOC      * this method
-    //JDBC40DOC      */
-    /* ifdef JDBC40 
-    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException
-    {
-        if(JDTrace.isTraceOn())
-        {  
-            JDTrace.logInformation(this, "setClob()"); 
-            if(xmlObject == null) 
+
+    /**
+     * Sets the designated parameter to the given <code>java.sql.SQLXML</code> object. The driver converts this to an
+     * <code>SQL XML</code> value when it sends it to the database.
+     *
+     * @param parameterName the name of the parameter
+     * @param xmlObject     a <code>SQLXML</code> object that maps an <code>SQL XML</code> value
+     * @throws SQLException                    if a database access error occurs,
+     *                                         this method is called on a closed <code>CallableStatement</code> or
+     *                                         the <code>java.xml.transform.Result</code>,
+     *                                         <code>Writer</code> or <code>OutputStream</code> has not been closed for the <code>SQLXML</code> object
+     * @throws SQLFeatureNotSupportedException if the JDBC driver does not support
+     *                                         this method
+     */
+    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+        if (JDTrace.isTraceOn()) {
+            JDTrace.logInformation(this, "setClob()");
+            if (xmlObject == null)
                 JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " value: NULL");
             else JDTrace.logInformation(this, "parameter index: " + findParameterIndex(parameterName) + " length: " + xmlObject.toString().length());
         }
 
         setSQLXML(findParameterIndex(parameterName), xmlObject);
     }
-    endif */
+
 
     //@PDA jdbc40 
 

@@ -69,7 +69,7 @@ public class AS400Bin1 implements AS400DataType {
      * @return The Byte object with a value of zero.
      **/
     public Object getDefaultValue() {
-        return new Byte(DEFAULT_VALUE);
+        return DEFAULT_VALUE;
     }
 
     // Implements method of interface AS400DataType.
@@ -105,7 +105,7 @@ public class AS400Bin1 implements AS400DataType {
     public byte[] toBytes(Object javaValue) {
         // Allow this line to throw ClassCastException and NullPointerException.
         byte[] as400Value = new byte[SIZE];
-        as400Value[0] = ((Byte) javaValue).byteValue();
+        as400Value[0] = (Byte) javaValue;
 
         return as400Value;
     }
@@ -133,7 +133,7 @@ public class AS400Bin1 implements AS400DataType {
      **/
     public int toBytes(Object javaValue, byte[] as400Value) {
         // Allow this line to throw ClassCastException and NullPointerException.
-        as400Value[0] = ((Byte) javaValue).byteValue();
+        as400Value[0] = (Byte) javaValue;
         return SIZE;
     }
 
@@ -161,7 +161,7 @@ public class AS400Bin1 implements AS400DataType {
      **/
     public int toBytes(Object javaValue, byte[] as400Value, int offset) {
         // Allow this line to throw ClassCastException and NullPointerException.
-        as400Value[offset] = ((Byte) javaValue).byteValue();
+        as400Value[offset] = (Byte) javaValue;
         return SIZE;
     }
 
@@ -187,7 +187,7 @@ public class AS400Bin1 implements AS400DataType {
      * @return A Byte object corresponding to the data type.
      **/
     public Object toObject(byte[] as400Value) {
-        return new Byte(as400Value[0]);
+        return as400Value[0];
     }
 
     // Implements method of interface AS400DataType.
@@ -200,7 +200,7 @@ public class AS400Bin1 implements AS400DataType {
      * @return A Byte object corresponding to the data type.
      **/
     public Object toObject(byte[] as400Value, int offset) {
-        return new Byte(as400Value[offset]);
+        return as400Value[offset];
     }
 
     /**

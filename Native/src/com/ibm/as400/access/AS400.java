@@ -769,7 +769,7 @@ public class AS400 implements Serializable {
     private static int getNativeVersion() {
         try {
             if (AS400.nativeVersion == -1) {
-                AS400.nativeVersion = Class.forName("com.ibm.as400.access.NativeVersion").newInstance().hashCode();
+                AS400.nativeVersion = Class.forName("com.ibm.as400.access.NativeVersion").getDeclaredConstructor().newInstance().hashCode();
             }
         } catch (ClassNotFoundException e) {
             if (Trace.traceOn_)

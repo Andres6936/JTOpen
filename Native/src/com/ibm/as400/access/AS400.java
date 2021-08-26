@@ -13,25 +13,16 @@
 
 package com.ibm.as400.access;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
-import java.beans.VetoableChangeSupport;
-import java.io.*;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.net.Socket;
-import java.net.URL;
-import java.util.GregorianCalendar;
-import java.util.Hashtable;
-import java.util.Locale;
-import java.util.StringTokenizer;
-import java.util.TimeZone;
-import java.util.Vector;
-
 import com.ibm.as400.security.auth.ProfileTokenCredential;
 import com.ibm.as400.security.auth.ProfileTokenProvider;
+
+import java.beans.*;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.*;
 
 /**
  * Represents the authentication information and a set of connections to the IBM i host servers.
@@ -288,10 +279,12 @@ public class AS400 implements Serializable {
     static {
         try {
             String s = System.getProperty("os.name");
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Detected os.name:", s);
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Detected os.name:", s);
             if (s != null && s.equalsIgnoreCase("OS/400")) {
                 String version = System.getProperty("os.version");
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Detected os.version:", version);
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Detected os.version:", version);
                 if (version != null) {
                     char[] versionChars = version.toCharArray();
                     if (versionChars.length == 6) {
@@ -403,7 +396,8 @@ public class AS400 implements Serializable {
      **/
     public AS400() {
         super();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object.");
         construct();
         systemNameLocal_ = resolveSystemNameLocal("");
         proxyServer_ = resolveProxyServer(proxyServer_);
@@ -411,6 +405,7 @@ public class AS400 implements Serializable {
         // Default to password authentication
         credVault_ = new PasswordVault();
     }
+
     /**
      * Constructs an AS400 object.  It uses the specified system name.
      * <p>If running on IBM i to another system or to itself, the user ID and password of the current job are used.
@@ -420,7 +415,8 @@ public class AS400 implements Serializable {
      **/
     public AS400(String systemName) {
         super();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object, system name: '" + systemName + "'");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object, system name: '" + systemName + "'");
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
@@ -482,7 +478,8 @@ public class AS400 implements Serializable {
         super();
         if (Trace.traceOn_)
             Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object with profile token, system name: '" + systemName + "'");
-        if (PASSWORD_TRACE) Trace.log(Trace.DIAGNOSTIC, "profile token: " + profileToken);
+        if (PASSWORD_TRACE)
+            Trace.log(Trace.DIAGNOSTIC, "profile token: " + profileToken);
 
         if (profileToken == null) {
             throw new NullPointerException("profileToken");
@@ -526,7 +523,8 @@ public class AS400 implements Serializable {
         if (tokenProvider == null) {
             throw new NullPointerException("tokenProvider");
         }
-        if (PASSWORD_TRACE) Trace.log(Trace.DIAGNOSTIC, "profile token provider:", tokenProvider.getClass().getName());
+        if (PASSWORD_TRACE)
+            Trace.log(Trace.DIAGNOSTIC, "profile token provider:", tokenProvider.getClass().getName());
 
         // Was a refresh threshold specified?
         if (refreshThreshold != null) {
@@ -547,7 +545,8 @@ public class AS400 implements Serializable {
         super();
         if (Trace.traceOn_)
             Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object, system name: '" + systemName + "' user ID: '" + userId + "'");
-        if (PASSWORD_TRACE) Trace.log(Trace.DIAGNOSTIC, "password: '" + password + "'");
+        if (PASSWORD_TRACE)
+            Trace.log(Trace.DIAGNOSTIC, "password: '" + password + "'");
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
@@ -632,7 +631,8 @@ public class AS400 implements Serializable {
         super();
         if (Trace.traceOn_)
             Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object, system name: '" + systemName + "' user ID: '" + userId + "' proxy server: '" + proxyServer + "'");
-        if (PASSWORD_TRACE) Trace.log(Trace.DIAGNOSTIC, "password: '" + password + "'");
+        if (PASSWORD_TRACE)
+            Trace.log(Trace.DIAGNOSTIC, "password: '" + password + "'");
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
@@ -673,7 +673,8 @@ public class AS400 implements Serializable {
      **/
     public AS400(AS400 system) {
         super();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object, system: " + system);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Constructing AS400 object, system: " + system);
         if (system == null) {
             throw new NullPointerException("system");
         }
@@ -811,7 +812,8 @@ public class AS400 implements Serializable {
     public static void clearPasswordCache(String systemName) {
         String longName = null;
         boolean isLocalHost = false;
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Clearing password cache, system name:", systemName);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Clearing password cache, system name:", systemName);
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
@@ -893,7 +895,8 @@ public class AS400 implements Serializable {
      **/
     public static void setDefaultSignonHandler(SignonHandler handler) {
         if (Trace.traceOn_) {
-            if (handler == null) Trace.log(Trace.DIAGNOSTIC, "Setting the default sign-on handler to null.");
+            if (handler == null)
+                Trace.log(Trace.DIAGNOSTIC, "Setting the default sign-on handler to null.");
             else if (defaultSignonHandler_ != null)
                 Trace.log(Trace.DIAGNOSTIC, "Replacing default sign-on handler, formerly an instance of " + defaultSignonHandler_.getClass().getName());
         }
@@ -907,12 +910,14 @@ public class AS400 implements Serializable {
      * @return The default user ID for this system.  A null is returned if there is not a default user.
      **/
     public static String getDefaultUser(String systemName) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting the default user, system name:", systemName);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting the default user, system name:", systemName);
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
         String defaultUser = (String) AS400.defaultUsers.get(resolveSystem(systemName));
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Default user:", defaultUser);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Default user:", defaultUser);
         return defaultUser;
     }
 
@@ -933,7 +938,8 @@ public class AS400 implements Serializable {
      * @param days The number of days before expiration to start the warning.  Set to -1 to turn off warning.
      **/
     public static void setPasswordExpirationWarningDays(int days) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting the password expiration warning days:", days);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting the password expiration warning days:", days);
         AS400.expirationWarning = days;
     }
 
@@ -966,11 +972,13 @@ public class AS400 implements Serializable {
             try {
                 timeZone = system.getTimeZone();
             } catch (Exception e) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Exception obtaining timezone ", e);
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Exception obtaining timezone ", e);
             }
         }
         if (timeZone == null) {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Defaulting to local timezone");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Defaulting to local timezone");
             timeZone = TimeZone.getDefault();
         }
 
@@ -980,7 +988,8 @@ public class AS400 implements Serializable {
     // Check if systemName refers to the system we are running on.
     private static boolean isSystemNameLocal(String systemName) {
         if (systemName.equalsIgnoreCase("localhost")) {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "System name is 'localhost'.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "System name is 'localhost'.");
             return true;
         } else {
             try {
@@ -998,7 +1007,8 @@ public class AS400 implements Serializable {
                 Trace.log(Trace.ERROR, "Error retrieving host address information:", e);
             }
         }
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "System name is not local.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "System name is not local.");
         return false;
     }
 
@@ -1040,14 +1050,16 @@ public class AS400 implements Serializable {
         try {
             return Class.forName(impl).newInstance();
         } catch (ClassNotFoundException e1) {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Class not found:", e1.getMessage());
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Class not found:", e1.getMessage());
         } catch (IllegalAccessException e2) {
             Trace.log(Trace.ERROR, "Unexpected IllegalAccessException:", e2);
         } catch (InstantiationException e3) {
             Trace.log(Trace.ERROR, "Unexpected InstantiationException:", e3);
         }
 
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Load of implementation failed:", impl);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Load of implementation failed:", impl);
 
         return null;
     }
@@ -1058,7 +1070,8 @@ public class AS400 implements Serializable {
      * @param systemName The name of the IBM i system.
      **/
     public static void removeDefaultUser(String systemName) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing the default user, system name:", systemName);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Removing the default user, system name:", systemName);
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
@@ -1163,10 +1176,12 @@ public class AS400 implements Serializable {
         if (AS400.onAS400) {
             // If system name is null, then make it a localhost.
             if (systemName.length() == 0) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Resolving initial system name to 'localhost'.");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Resolving initial system name to 'localhost'.");
                 return "localhost";
             } else if (isSystemNameLocal(systemName)) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Resolving system name to 'localhost'.");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Resolving system name to 'localhost'.");
                 return "localhost";
             }
         }
@@ -1192,7 +1207,8 @@ public class AS400 implements Serializable {
             try {
                 Class.forName("com.ibm.as400.access.CurrentUser");
             } catch (Throwable t) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "CurrentUser class is not available:", t);
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "CurrentUser class is not available:", t);
                 currentUserAvailable = false;
             }
             currentUserTried = true;
@@ -1207,18 +1223,21 @@ public class AS400 implements Serializable {
             boolean tryToGetCurrentUserID = false;
             // If user ID is not set and we're using user ID/password, then we get it and set it up.
             if (userId.length() == 0 && byteType == 0) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Resolving initial user ID.");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Resolving initial user ID.");
                 tryToGetCurrentUserID = true;
             }
             // If we are running on the system, then *CURRENT for user ID means we want to connect using current user ID.
             if (userId.equals("*CURRENT")) {
                 // Get current user ID and use it.
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Replacing *CURRENT as user ID.");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Replacing *CURRENT as user ID.");
                 tryToGetCurrentUserID = true;
             }
             if (tryToGetCurrentUserID) {
                 String currentUserID = CurrentUser.getUserID(AS400.nativeVRM.getVersionReleaseModification());
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Current user ID:", currentUserID);
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Current user ID:", currentUserID);
                 if (currentUserID != null) return currentUserID;
                 if (Trace.traceOn_)
                     Trace.log(Trace.DIAGNOSTIC, "Current user ID information not available, user ID: '" + userId + "'");
@@ -1236,11 +1255,13 @@ public class AS400 implements Serializable {
 //                    return userId;
 //                }
 //            }
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Prepending 'Q' to numeric user ID.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Prepending 'Q' to numeric user ID.");
             userId = "Q" + userId;
         }
 
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "User ID: '" + userId + "'");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "User ID: '" + userId + "'");
         return userId;
     }
 
@@ -1304,7 +1325,8 @@ public class AS400 implements Serializable {
             }
         }
         // Already have a default user, fail the op.
-        if (Trace.traceOn_) Trace.log(Trace.WARNING, "Default user already set, set default user failed.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.WARNING, "Default user already set, set default user failed.");
         return false;
     }
 
@@ -1318,7 +1340,8 @@ public class AS400 implements Serializable {
      * @param gssMgr The GSS manager object.  The object's type must be org.ietf.jgss.GSSManager, the object is set to type Object only to avoid a JDK release dependency.
      **/
     public static void setGSSManager(Object gssMgr) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting GSS manager: '" + gssMgr + "'");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting GSS manager: '" + gssMgr + "'");
         gssManager_ = gssMgr;
     }
 
@@ -1333,7 +1356,8 @@ public class AS400 implements Serializable {
         if (AS400.onAS400 && !mustUseSuppliedProfile && currentUserAvailable()) {
             String currentUserID = CurrentUser.getUserID(AS400.nativeVRM.getVersionReleaseModification());
             if (currentUserID == null) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Current userID information not available.");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Current userID information not available.");
                 result = false;
             } else {
                 result = userId.equals(currentUserID);
@@ -1344,9 +1368,12 @@ public class AS400 implements Serializable {
         } else {
             result = false;
             if (Trace.traceOn_) {
-                if (!AS400.onAS400) Trace.log(Trace.DIAGNOSTIC, "Not running on IBM i.");
-                if (mustUseSuppliedProfile) Trace.log(Trace.DIAGNOSTIC, "Caller specified must use supplied profile.");
-                if (!currentUserAvailable()) Trace.log(Trace.DIAGNOSTIC, "Class CurrentUser is not available.");
+                if (!AS400.onAS400)
+                    Trace.log(Trace.DIAGNOSTIC, "Not running on IBM i.");
+                if (mustUseSuppliedProfile)
+                    Trace.log(Trace.DIAGNOSTIC, "Caller specified must use supplied profile.");
+                if (!currentUserAvailable())
+                    Trace.log(Trace.DIAGNOSTIC, "Class CurrentUser is not available.");
             }
         }
 
@@ -1543,7 +1570,8 @@ public class AS400 implements Serializable {
      * @param listener The listener object.
      **/
     public void addConnectionListener(ConnectionListener listener) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Adding connection listener.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Adding connection listener.");
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -1563,7 +1591,8 @@ public class AS400 implements Serializable {
             }
             // If this is the first add and we are already connected.
             if (impl_ != null && connectionListeners_.isEmpty()) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Enabling connection listener dispatcher.");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Enabling connection listener dispatcher.");
                 impl_.addConnectionListener(dispatcher_);
             }
             connectionListeners_.addElement(listener);
@@ -1576,7 +1605,8 @@ public class AS400 implements Serializable {
      * @param listener The listener object.
      **/
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Adding property change listener.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Adding property change listener.");
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -1595,7 +1625,8 @@ public class AS400 implements Serializable {
      * @param listener The listener object.
      **/
     public void addVetoableChangeListener(VetoableChangeListener listener) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Adding vetoable change listener.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Adding vetoable change listener.");
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -1614,7 +1645,8 @@ public class AS400 implements Serializable {
      * @return true if properties are frozen, false otherwise.
      **/
     public boolean arePropertiesFrozen() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if properties are frozen:", propertiesFrozen_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if properties are frozen:", propertiesFrozen_);
         return propertiesFrozen_;
     }
 
@@ -1632,7 +1664,8 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public boolean authenticate(String userId, String password) throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Authenticating signon information:", userId);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Authenticating signon information:", userId);
         return validateSignon(userId, password);
     }
 
@@ -1647,7 +1680,8 @@ public class AS400 implements Serializable {
      **/
     public boolean canUseNativeOptimizations() {
         if (AS400.onAS400 && !mustUseSockets_ && systemNameLocal_ && proxyServer_.length() == 0 && credVault_.getType() == AUTHENTICATION_SCHEME_PASSWORD && getNativeVersion() == 2) {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Using native optimizations.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Using native optimizations.");
             return true;
         } else {
             if (Trace.traceOn_) {
@@ -1739,7 +1773,8 @@ public class AS400 implements Serializable {
 
             signonInfo_ = impl_.changePassword(systemName_, systemNameLocal_, userId_, CredentialVault.encode(proxySeed, remoteSeed, BinaryConverter.charArrayToByteArray(oldPassword.toCharArray())), CredentialVault.encode(proxySeed, remoteSeed, BinaryConverter.charArrayToByteArray(newPassword.toCharArray())));
 
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Password changed successfully.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Password changed successfully.");
 
             // Update credential vault with new password.
             credVault_.empty();
@@ -1754,7 +1789,8 @@ public class AS400 implements Serializable {
 
             // If there is a connection listener.  Connect the remote implementation connection events to this object.
             if (connectionListeners_ != null && !connectionListeners_.isEmpty()) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Enabling connection listener dispatcher.");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Enabling connection listener dispatcher.");
                 impl_.addConnectionListener(dispatcher_);
             }
         }
@@ -1808,7 +1844,8 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public void connectService(int service, int overridePort) throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Connecting service:", service);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Connecting service:", service);
         // Validate parameter.
         if (service < 0 || service > 7) {
             throw new ExtendedIllegalArgumentException("service (" + service + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
@@ -1830,7 +1867,8 @@ public class AS400 implements Serializable {
             signon(service == AS400.SIGNON);
 
             impl_.connect(service, overridePort, skipSignonServer);
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Service connected:", AS400.getServerName(service));
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Service connected:", AS400.getServerName(service));
         } finally {
             // After the thread to connect server, notify the thread to refresh profile token credential.
             if (credVault_ instanceof ProfileTokenVault) {
@@ -1851,12 +1889,14 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public Socket connectToPort(int port) throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Connecting port:", port);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Connecting port:", port);
 
         chooseImpl();
         signon(false);
         Socket s = impl_.connectToPort(port);
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Port connected:", s.getPort());
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Port connected:", s.getPort());
         return s;
     }
 
@@ -1871,12 +1911,14 @@ public class AS400 implements Serializable {
      **/
     //@N5A Add this interface for L1C for the issue of DHCP server has listened on 942 for STRTCPSVR on localhost.
     public Socket connectToPort(int port, boolean forceNonLocalhost) throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Connecting port:", port);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Connecting port:", port);
 
         chooseImpl();
         signon(false);
         Socket s = impl_.connectToPort(port, forceNonLocalhost);
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Port connected:", s.getPort());
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Port connected:", s.getPort());
         return s;
     }
 
@@ -1885,7 +1927,8 @@ public class AS400 implements Serializable {
         // See if we are running on IBM i.
         if (AS400.onAS400) {
             // OK, we are running on IBM i.
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Running on IBM i.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Running on IBM i.");
             // Running on IBM i, don't prompt.
             guiAvailable_ = false;
         }
@@ -1897,7 +1940,8 @@ public class AS400 implements Serializable {
      * @see #resetAllServices
      **/
     public void disconnectAllServices() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Disconnecting all services...");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Disconnecting all services...");
         if (impl_ != null) {
             impl_.disconnect(AS400.FILE);
             impl_.disconnect(AS400.PRINT);
@@ -1908,7 +1952,8 @@ public class AS400 implements Serializable {
             impl_.disconnect(AS400.CENTRAL);
             impl_.disconnect(AS400.SIGNON);
         }
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "All services disconnected.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "All services disconnected.");
     }
 
     /**
@@ -1927,7 +1972,8 @@ public class AS400 implements Serializable {
      *                </ul>
      **/
     public void disconnectService(int service) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Disconnecting service:", service);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Disconnecting service:", service);
         // Validate parameter.
         if (service < 0 || service > 7) {
             throw new ExtendedIllegalArgumentException("service (" + service + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
@@ -2007,7 +2053,8 @@ public class AS400 implements Serializable {
      * @return The authentication scheme in use for this object.
      **/
     public int getAuthenticationScheme() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting authentication scheme, scheme:", credVault_.getType());
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting authentication scheme, scheme:", credVault_.getType());
         return credVault_.getType();
     }
 
@@ -2020,12 +2067,14 @@ public class AS400 implements Serializable {
         if (ccsid_ == 0) {
             if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting CCSID.");
             try {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Retrieving CCSID from system...");
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Retrieving CCSID from system...");
                 chooseImpl();
                 signon(false);
                 ccsid_ = signonInfo_.serverCCSID;
             } catch (Exception e) {
-                if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Taking best guess CCSID:", e);
+                if (Trace.traceOn_)
+                    Trace.log(Trace.DIAGNOSTIC, "Taking best guess CCSID:", e);
                 ccsid_ = ExecutionEnvironment.getBestGuessAS400Ccsid();
             }
             if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "CCSID:", ccsid_);
@@ -2040,7 +2089,8 @@ public class AS400 implements Serializable {
      * @throws PropertyVetoException If any of the registered listeners vetos the property change.
      **/
     public void setCcsid(int ccsid) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting CCSID:", ccsid);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting CCSID:", ccsid);
         if (propertiesFrozen_) {
             Trace.log(Trace.ERROR, "Cannot set CCSID after connection has been made.");
             throw new ExtendedIllegalStateException("ccsid", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
@@ -2126,7 +2176,8 @@ public class AS400 implements Serializable {
      * @return The GSS name string, or an empty string ("") if not set.
      **/
     public synchronized String getGSSName() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting GSS name:", gssName_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting GSS name:", gssName_);
         return gssName_;
     }
 
@@ -2136,7 +2187,8 @@ public class AS400 implements Serializable {
      * @param gssName The GSS name string.
      **/
     public void setGSSName(String gssName) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting GSS name: '" + gssName + "'");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting GSS name: '" + gssName + "'");
 
         if (gssName == null) {
             throw new NullPointerException("gssName");
@@ -2162,7 +2214,8 @@ public class AS400 implements Serializable {
      * </ul>
      **/
     public int getGSSOption() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting GSS option:", gssOption_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting GSS option:", gssOption_);
         return gssOption_;
     }
 
@@ -2177,7 +2230,8 @@ public class AS400 implements Serializable {
      *                  </ul>
      **/
     public void setGSSOption(int gssOption) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting GSS option:", gssOption);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting GSS option:", gssOption);
         if (gssOption < 0 || gssOption > 2) {
             throw new ExtendedIllegalArgumentException("gssOption (" + gssOption + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
         }
@@ -2215,14 +2269,16 @@ public class AS400 implements Serializable {
      * @throws InterruptedException   If this thread is interrupted.
      **/
     public String getJobCCSIDEncoding() throws AS400SecurityException, IOException, InterruptedException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting job CCSID encoding.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting job CCSID encoding.");
         if (signonInfo_ == null) {        /*@V1A*/
             chooseImpl();
             signon(false);
         }
         int ccsid = signonInfo_.serverCCSID;
         String encoding = impl_.ccsidToEncoding(ccsid);
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Job CCSID encoding:", encoding);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Job CCSID encoding:", encoding);
         return encoding;
     }
 
@@ -2243,7 +2299,8 @@ public class AS400 implements Serializable {
      * @return The array of job objects.
      **/
     public Job[] getJobs(int service) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting jobs, service:", service);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting jobs, service:", service);
         // Validate parameter.
         if (service < 0 || service > 7) {
             Trace.log(Trace.ERROR, "Value of parameter 'service' is not valid:", service);
@@ -2254,8 +2311,10 @@ public class AS400 implements Serializable {
         String[] jobStrings = impl_.getJobs(service);
         Job[] jobs = new Job[jobStrings.length];
         for (int i = 0; i < jobStrings.length; ++i) {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Constructing Job for job:", jobStrings[i]);
-            if (jobStrings[i] == null || jobStrings[i].length() == 0) return new Job[0];
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Constructing Job for job:", jobStrings[i]);
+            if (jobStrings[i] == null || jobStrings[i].length() == 0)
+                return new Job[0];
             StringTokenizer tokenizer = new StringTokenizer(jobStrings[i], "/");
             String jobNumber = tokenizer.nextToken();
             String jobUser = tokenizer.nextToken();
@@ -2272,7 +2331,8 @@ public class AS400 implements Serializable {
      * @return The Locale object.
      **/
     public Locale getLocale() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting locale: " + locale_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting locale: " + locale_);
         return locale_;
     }
 
@@ -2282,7 +2342,8 @@ public class AS400 implements Serializable {
      * @param locale The Locale object.
      **/
     public void setLocale(Locale locale) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting locale: " + locale);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting locale: " + locale);
         if (locale == null) {
             throw new NullPointerException("locale");
         }
@@ -2312,13 +2373,15 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public int getModification() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting modification level.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting modification level.");
         if (signonInfo_ == null) {     /*@V1A*/
             chooseImpl();
             signon(false);
         }
         int modification = signonInfo_.version.getModificationLevel();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Modification level:", modification);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Modification level:", modification);
 
         return modification;
     }
@@ -2342,13 +2405,15 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public GregorianCalendar getPasswordExpirationDate() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting password expiration date.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting password expiration date.");
         if (signonInfo_ == null) {       /*@V1A*/
             chooseImpl();
             signon(false);
         }
         GregorianCalendar expire = signonInfo_.expirationDate;
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Password expiration date: " + expire);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Password expiration date: " + expire);
 
         return (expire == null) ? null : (GregorianCalendar) expire.clone();
     }
@@ -2363,7 +2428,8 @@ public class AS400 implements Serializable {
      */
     public void setUseSystemPasswordExpirationWarningDays(boolean useSystem) {
         if (useSystem) {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Use system password expiration(QPWDEXPWRN) warning.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Use system password expiration(QPWDEXPWRN) warning.");
             useSystemExpirationWarning_ = true;
         } else {
             if (Trace.traceOn_)
@@ -2420,7 +2486,8 @@ public class AS400 implements Serializable {
         signon(false);
 
         boolean warn = getDaysToExpiration() <= getSystemPasswordExpirationWarningDays();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "In password expiration warning days: " + warn);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "In password expiration warning days: " + warn);
 
         return warn;
     }
@@ -2435,13 +2502,15 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      */
     public int getPasswordExpirationDays() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting password expiration warning days.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting password expiration warning days.");
 
         chooseImpl();
         signon(false);
 
         int days = getDaysToExpiration();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Password expiration days: " + days);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Password expiration days: " + days);
 
         return days;
     }
@@ -2455,13 +2524,15 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public GregorianCalendar getPreviousSignonDate() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting previous signon date.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting previous signon date.");
         if (signonInfo_ == null) {     /*@V1A*/
             chooseImpl();
             signon(false);
         }
         GregorianCalendar last = signonInfo_.lastSignonDate;
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Previous signon date: " + last);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Previous signon date: " + last);
 
         return (last == null) ? null : (GregorianCalendar) last.clone();
     }
@@ -2522,7 +2593,8 @@ public class AS400 implements Serializable {
      * @param profileToken The profile token.
      **/
     public void setProfileToken(ProfileTokenCredential profileToken) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting profile token.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting profile token.");
 
         if (profileToken == null) {
             throw new NullPointerException("profileToken");
@@ -2676,7 +2748,8 @@ public class AS400 implements Serializable {
      * @return The name of the middle-tier machine where the proxy server is running, or an empty string ("") if not set.
      **/
     public String getProxyServer() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting proxy server:", proxyServer_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting proxy server:", proxyServer_);
         return proxyServer_;
     }
 
@@ -2688,7 +2761,8 @@ public class AS400 implements Serializable {
      * @throws PropertyVetoException If any of the registered listeners vetos the property change.
      **/
     public void setProxyServer(String proxyServer) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting proxy server:", proxyServer);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting proxy server:", proxyServer);
 
         if (impl_ != null) {
             Trace.log(Trace.ERROR, "Cannot set proxy server after connection has been made.");
@@ -2720,13 +2794,15 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public int getRelease() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting release level.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting release level.");
         if (signonInfo_ == null) {   /*@V1A*/
             chooseImpl();
             signon(false);
         }
         int release = signonInfo_.version.getRelease();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Release level:", release);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Release level:", release);
 
         return release;
     }
@@ -2748,7 +2824,8 @@ public class AS400 implements Serializable {
      * @return The port specified in the service port table.  The value {@link #USE_PORT_MAPPER USE_PORT_MAPPER} will be returned if the service has not been set, and the service has not been connected.
      **/
     public int getServicePort(int service) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting service port, service:", service);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting service port, service:", service);
         // Validate parameter.
         if (service < 0 || service > 7) {
             throw new ExtendedIllegalArgumentException("service (" + service + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
@@ -2781,7 +2858,8 @@ public class AS400 implements Serializable {
         signon(false);
 
         GregorianCalendar current = signonInfo_.currentSignonDate;
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Signon date: " + current);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Signon date: " + current);
 
         return (current == null) ? null : (GregorianCalendar) current.clone();
     }
@@ -2808,7 +2886,8 @@ public class AS400 implements Serializable {
      **/
     public void setSignonHandler(SignonHandler handler) {
         if (Trace.traceOn_) {
-            if (handler == null) Trace.log(Trace.DIAGNOSTIC, "Setting the sign-on handler to null.");
+            if (handler == null)
+                Trace.log(Trace.DIAGNOSTIC, "Setting the sign-on handler to null.");
             if (signonHandler_ != null)
                 Trace.log(Trace.DIAGNOSTIC, "Sign-on handler was formerly an instance of " + signonHandler_.getClass().getName());
         }
@@ -2821,7 +2900,8 @@ public class AS400 implements Serializable {
      * @return The socket options object.
      **/
     public SocketProperties getSocketProperties() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting socket properties.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting socket properties.");
         SocketProperties socketProperties = new SocketProperties();
         socketProperties.copyValues(socketProperties_);
         return socketProperties;
@@ -2833,7 +2913,8 @@ public class AS400 implements Serializable {
      * @param socketProperties The set of socket options to set.  The options are copied from this object, not shared.
      **/
     public void setSocketProperties(SocketProperties socketProperties) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting socket properties: " + socketProperties);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting socket properties: " + socketProperties);
         if (socketProperties == null) {
             throw new NullPointerException("socketProperties");
         }
@@ -2862,7 +2943,8 @@ public class AS400 implements Serializable {
      * @throws PropertyVetoException If any of the registered listeners vetos the property change.
      **/
     public void setSystemName(String systemName) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting system name:", systemName);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting system name:", systemName);
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
@@ -2935,11 +3017,13 @@ public class AS400 implements Serializable {
             InterruptedException,
             IOException,
             ObjectDoesNotExistException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting time zone for System");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting time zone for System");
         if (timezone_ == null) {
             timezone_ = DateTimeConverter.timeZoneForSystem(this);
         }
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Time zone:", timezone_.getDisplayName());
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Time zone:", timezone_.getDisplayName());
         return timezone_;
     }
 
@@ -2949,7 +3033,8 @@ public class AS400 implements Serializable {
      * @return The user ID, or an empty string ("") if not set.
      **/
     public String getUserId() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting user ID:", userId_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting user ID:", userId_);
         userId_ = resolveUserId(userId_, credVault_.getType(), mustUseSuppliedProfile_);
         return userId_;
     }
@@ -2961,7 +3046,8 @@ public class AS400 implements Serializable {
      * @throws PropertyVetoException If any of the registered listeners vetos the property change.
      **/
     public void setUserId(String userId) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting user ID: '" + userId + "'");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting user ID: '" + userId + "'");
         if (userId == null) {
             throw new NullPointerException("userId");
         }
@@ -3008,7 +3094,8 @@ public class AS400 implements Serializable {
     public String getUserId(boolean forceRefresh) {
         if (!forceRefresh) return getUserId();
         else {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting current user ID:", userId_);
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "Getting current user ID:", userId_);
             String currentUserID = userId_;
             if (systemNameLocal_ && AS400.onAS400) {
                 try {
@@ -3035,13 +3122,15 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public int getVersion() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Getting version level.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Getting version level.");
         if (signonInfo_ == null) {   /*@V1A*/
             chooseImpl();
             signon(false);
         }
         int version = signonInfo_.version.getVersion();
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Version level:", version);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Version level:", version);
 
         return version;
     }
@@ -3078,7 +3167,8 @@ public class AS400 implements Serializable {
      * @throws UnsupportedEncodingException If the Character Encoding is not supported.
      **/
     public void initializeConverter(int ccsid) throws UnsupportedEncodingException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Initializing converter for CCSID:", ccsid);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Initializing converter for CCSID:", ccsid);
         chooseImpl();
         try {
             signon(false);
@@ -3097,7 +3187,8 @@ public class AS400 implements Serializable {
      * @see #isConnectionAlive
      **/
     public boolean isConnected() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking for any service connection...");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking for any service connection...");
         if (isConnected(AS400.FILE) ||
                 isConnected(AS400.PRINT) ||
                 isConnected(AS400.COMMAND) ||
@@ -3106,10 +3197,12 @@ public class AS400 implements Serializable {
                 isConnected(AS400.RECORDACCESS) ||
                 isConnected(AS400.CENTRAL) ||
                 isConnected(AS400.SIGNON)) {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "A service is connected.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "A service is connected.");
             return true;
         } else {
-            if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "No service is connected.");
+            if (Trace.traceOn_)
+                Trace.log(Trace.DIAGNOSTIC, "No service is connected.");
             return false;
         }
     }
@@ -3133,7 +3226,8 @@ public class AS400 implements Serializable {
      * @see #isConnectionAlive
      **/
     public boolean isConnected(int service) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking for service connection:", service);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking for service connection:", service);
         // Validate parameter.
         if (service < 0 || service > 7) {
             throw new ExtendedIllegalArgumentException("service (" + service + ")", ExtendedIllegalArgumentException.PARAMETER_VALUE_NOT_VALID);
@@ -3141,7 +3235,8 @@ public class AS400 implements Serializable {
 
         if (impl_ == null) return false;
         boolean connected = impl_.isConnected(service);
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Service connection:", connected);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Service connection:", connected);
         return connected;
     }
 
@@ -3157,13 +3252,15 @@ public class AS400 implements Serializable {
      * @see AS400JPing
      **/
     public boolean isConnectionAlive() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Testing connection...");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Testing connection...");
 
         boolean alive;
         if (impl_ == null) alive = false;
         else alive = impl_.isConnectionAlive();
 
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Connection status:", alive);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Connection status:", alive);
         return alive;
     }
 
@@ -3190,13 +3287,15 @@ public class AS400 implements Serializable {
      * @see AS400JPing
      **/
     public boolean isConnectionAlive(int service) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Testing connection...");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Testing connection...");
 
         boolean alive;
         if (impl_ == null) alive = false;
         else alive = impl_.isConnectionAlive(service);
 
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Connection status:", alive);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Connection status:", alive);
         return alive;
     }
 
@@ -3206,7 +3305,8 @@ public class AS400 implements Serializable {
      * @return true if using GUI; false otherwise.
      **/
     public boolean isGuiAvailable() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if GUI is available:", guiAvailable_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if GUI is available:", guiAvailable_);
         return guiAvailable_;
     }
 
@@ -3219,7 +3319,8 @@ public class AS400 implements Serializable {
      * @see SignonHandler
      **/
     public void setGuiAvailable(boolean guiAvailable) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting GUI available:", guiAvailable);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting GUI available:", guiAvailable);
 
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             guiAvailable_ = guiAvailable;
@@ -3243,7 +3344,8 @@ public class AS400 implements Serializable {
      * @return true if you are running on the local system; false otherwise.
      **/
     public boolean isLocal() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if local:", systemNameLocal_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if local:", systemNameLocal_);
         return systemNameLocal_;
     }
 
@@ -3253,7 +3355,8 @@ public class AS400 implements Serializable {
      * @return true if you have indicated that the services must use sockets; false otherwise.
      **/
     public boolean isMustUseSockets() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if must use sockets:", mustUseSockets_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if must use sockets:", mustUseSockets_);
         return mustUseSockets_;
     }
 
@@ -3264,7 +3367,8 @@ public class AS400 implements Serializable {
      * @param mustUseSockets true to use sockets; false otherwise.
      **/
     public void setMustUseSockets(boolean mustUseSockets) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting 'must use sockets':", mustUseSockets);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting 'must use sockets':", mustUseSockets);
         if (propertiesFrozen_) {
             Trace.log(Trace.ERROR, "Cannot set 'must use sockets' after connection has been made.");
             throw new ExtendedIllegalStateException("mustUseSockets", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
@@ -3278,7 +3382,8 @@ public class AS400 implements Serializable {
      * @return true if checkboxes should be shown; false otherwise.
      **/
     public boolean isShowCheckboxes() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if checkboxes are shown:", showCheckboxes_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if checkboxes are shown:", showCheckboxes_);
         return showCheckboxes_;
     }
 
@@ -3288,7 +3393,8 @@ public class AS400 implements Serializable {
      * @param showCheckboxes true to show checkboxes; false otherwise.
      **/
     public void setShowCheckboxes(boolean showCheckboxes) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting show checkboxes:", showCheckboxes);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting show checkboxes:", showCheckboxes);
         showCheckboxes_ = showCheckboxes;
     }
 
@@ -3298,7 +3404,8 @@ public class AS400 implements Serializable {
      * @return true if threads are used; false otherwise.
      **/
     public boolean isThreadUsed() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if thread is used:", threadUsed_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if thread is used:", threadUsed_);
         return threadUsed_;
     }
 
@@ -3314,7 +3421,8 @@ public class AS400 implements Serializable {
      * @throws PropertyVetoException If any of the registered listeners vetos the property change.
      **/
     public void setThreadUsed(boolean useThreads) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting thread used:", useThreads);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting thread used:", useThreads);
 
         if (propertiesFrozen_) {
             Trace.log(Trace.ERROR, "Cannot set thread used after connection has been made.");
@@ -3343,7 +3451,8 @@ public class AS400 implements Serializable {
      * @return true if default user should be used; false otherwise.
      **/
     public boolean isUseDefaultUser() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if default user is used:", useDefaultUser_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if default user is used:", useDefaultUser_);
         return useDefaultUser_;
     }
 
@@ -3354,7 +3463,8 @@ public class AS400 implements Serializable {
      * @throws PropertyVetoException If any of the registered listeners vetos the property change.
      **/
     public void setUseDefaultUser(boolean useDefaultUser) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting use default user:", useDefaultUser);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting use default user:", useDefaultUser);
 
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             useDefaultUser_ = useDefaultUser;
@@ -3378,7 +3488,8 @@ public class AS400 implements Serializable {
      * @return true if password cache is being used; false otherwise.
      **/
     public boolean isUsePasswordCache() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if password cache is used:", usePasswordCache_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if password cache is used:", usePasswordCache_);
         return usePasswordCache_;
     }
 
@@ -3390,7 +3501,8 @@ public class AS400 implements Serializable {
      * @throws PropertyVetoException If any of the registered listeners vetos the property change.
      **/
     public void setUsePasswordCache(boolean usePasswordCache) throws PropertyVetoException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting use password cache:", usePasswordCache);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting use password cache:", usePasswordCache);
 
         if (propertyChangeListeners_ == null && vetoableChangeListeners_ == null) {
             usePasswordCache_ = usePasswordCache;
@@ -3416,7 +3528,8 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      */
     public boolean isUsePassphrase() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if use password phrase");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if use password phrase");
 
         chooseImpl();
         signon(false);
@@ -3425,7 +3538,8 @@ public class AS400 implements Serializable {
         if (impl_ instanceof AS400ImplRemote)
             ret = ((AS400ImplRemote) impl_).getPasswordType();
 
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Use password phrase: " + ret);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Use password phrase: " + ret);
 
         return ret;
     }
@@ -3582,7 +3696,8 @@ public class AS400 implements Serializable {
                     }
                     pwState = FINISHED;  // If we got this far, we're done.
                 } catch (AS400SecurityException e) {
-                    if (handlerCanceled_) throw e;  // Handler already gave up on this event.
+                    if (handlerCanceled_)
+                        throw e;  // Handler already gave up on this event.
                     Trace.log(Trace.ERROR, "Security exception in sign-on:", e);
                     SignonEvent soEvent = new SignonEvent(this, reconnecting, e);
                     switch (e.getReturnCode()) {
@@ -3625,7 +3740,8 @@ public class AS400 implements Serializable {
     // Help de-serialize the object.
     @Serial
     private void readObject(ObjectInputStream in) throws ClassNotFoundException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "De-serializing AS400 object.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "De-serializing AS400 object.");
         in.defaultReadObject();
 
         construct();
@@ -3655,7 +3771,8 @@ public class AS400 implements Serializable {
      * @param listener The listener object.
      **/
     public void removeConnectionListener(ConnectionListener listener) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing connection listener.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Removing connection listener.");
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -3678,7 +3795,8 @@ public class AS400 implements Serializable {
      * @param listener The listener object.
      **/
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing property change listener.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Removing property change listener.");
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -3694,7 +3812,8 @@ public class AS400 implements Serializable {
      * @param listener The listener object.
      **/
     public void removeVetoableChangeListener(VetoableChangeListener listener) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Removing vetoable change listener.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Removing vetoable change listener.");
         if (listener == null) {
             throw new NullPointerException("listener");
         }
@@ -3711,7 +3830,8 @@ public class AS400 implements Serializable {
      * @see #disconnectAllServices
      **/
     public synchronized void resetAllServices() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Resetting all services.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Resetting all services.");
         disconnectAllServices();
         signonInfo_ = null;
         propertiesFrozen_ = false;
@@ -3720,7 +3840,8 @@ public class AS400 implements Serializable {
 
     // Send sign-on request to sign-on server.
     private void sendSignonRequest() throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Signing-on without prompting...");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Signing-on without prompting...");
         // No prompting.
         if (credVault_.isEmpty() && !userIdMatchesLocal(userId_, mustUseSuppliedProfile_)) {
             throw new AS400SecurityException(AS400SecurityException.PASSWORD_NOT_SET);
@@ -3759,7 +3880,8 @@ public class AS400 implements Serializable {
      * @param identityToken The identity token.
      **/
     public void setIdentityToken(byte[] identityToken) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting identity token.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting identity token.");
 
         if (identityToken == null) {
             throw new NullPointerException("identityToken");
@@ -3782,7 +3904,8 @@ public class AS400 implements Serializable {
             throw new NullPointerException("gssCredential");
         }
 
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting GSS credential: '" + gssCredential + "'");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting GSS credential: '" + gssCredential + "'");
 
         synchronized (this) {
             gssCredential_ = gssCredential;
@@ -3803,7 +3926,8 @@ public class AS400 implements Serializable {
      * @param nlv    The NLV.
      **/
     public void setLocale(Locale locale, String nlv) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting locale: " + locale + ", nlv: " + nlv_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting locale: " + locale + ", nlv: " + nlv_);
         if (locale == null) {
             throw new NullPointerException("locale");
         }
@@ -3836,7 +3960,8 @@ public class AS400 implements Serializable {
      * @param mustAddLanguageLibrary true to add language library; false otherwise.
      **/
     public void setMustAddLanguageLibrary(boolean mustAddLanguageLibrary) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting must add language library:", mustAddLanguageLibrary_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting must add language library:", mustAddLanguageLibrary_);
         if (propertiesFrozen_) {
             Trace.log(Trace.ERROR, "Cannot set must add language library after connection has been made.");
             throw new ExtendedIllegalStateException("mustAddLanguageLibrary", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
@@ -3850,7 +3975,8 @@ public class AS400 implements Serializable {
      * @return true if must use Internet domain sockets only; false otherwise.
      **/
     public boolean isMustUseNetSockets() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Checking if must use net sockets:", mustUseNetSockets_);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Checking if must use net sockets:", mustUseNetSockets_);
         return mustUseNetSockets_;
     }
 
@@ -3861,7 +3987,8 @@ public class AS400 implements Serializable {
      * @param mustUseNetSockets true to use Internet domain sockets only; false otherwise.
      **/
     public void setMustUseNetSockets(boolean mustUseNetSockets) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting 'must use net sockets':", mustUseNetSockets);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting 'must use net sockets':", mustUseNetSockets);
         if (propertiesFrozen_) {
             Trace.log(Trace.ERROR, "Cannot set 'must use net sockets' after connection has been made.");
             throw new ExtendedIllegalStateException("mustUseNetSockets", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
@@ -3887,7 +4014,8 @@ public class AS400 implements Serializable {
      * @param mustUseSuppliedProfile true to use a supplied profile only; false otherwise.
      **/
     public void setMustUseSuppliedProfile(boolean mustUseSuppliedProfile) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting 'must use supplied profile':", mustUseSuppliedProfile);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting 'must use supplied profile':", mustUseSuppliedProfile);
         if (propertiesFrozen_) {
             Trace.log(Trace.ERROR, "Cannot set 'must use supplied profile' after connection has been made.");
             throw new ExtendedIllegalStateException("mustUseSuppliedProfile", ExtendedIllegalStateException.PROPERTY_NOT_CHANGED);
@@ -3934,7 +4062,8 @@ public class AS400 implements Serializable {
      * @param port    The port to use for this service.  The value {@link #USE_PORT_MAPPER USE_PORT_MAPPER} can be used to specify that the next connection to this service should ask the port mapper server for the port number.
      **/
     public void setServicePort(int service, int port) {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting service port, service " + service + ", port " + port);
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting service port, service " + service + ", port " + port);
 
         // Validate parameters.
         if (service < 0 || service > 7) {
@@ -3958,7 +4087,8 @@ public class AS400 implements Serializable {
      * Sets the ports in the service port table for all the services for this system name to their default values.  This causes the connections to this system name to use the default ports for those services rather than querying the port number through a port mapper connection.  The use of this method can reduce the number of connections made to the system.
      **/
     public void setServicePortsToDefault() {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Setting service ports to default.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Setting service ports to default.");
 
         // Validate state.
         if (systemName_.length() == 0 && !systemNameLocal_) {
@@ -4081,7 +4211,8 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public boolean validateSignon(String password) throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Validating Signon, with password.");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Validating Signon, with password.");
 
         if (password == null) {
             throw new NullPointerException("password");
@@ -4115,7 +4246,8 @@ public class AS400 implements Serializable {
      * @throws IOException            If an error occurs while communicating with the system.
      **/
     public boolean validateSignon(String userId, String password) throws AS400SecurityException, IOException {
-        if (Trace.traceOn_) Trace.log(Trace.DIAGNOSTIC, "Validating signon, user ID: '" + userId + "'");
+        if (Trace.traceOn_)
+            Trace.log(Trace.DIAGNOSTIC, "Validating signon, user ID: '" + userId + "'");
 
         if (userId == null) {
             throw new NullPointerException("userId");

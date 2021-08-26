@@ -155,7 +155,7 @@ public class AS400 implements Serializable {
     // System list:  elements are 3 element Object[]: systemName, userId, credential vault
     private static final Vector systemList = new Vector();
     // Default users is a hash from systemName to userId.
-    private static final Hashtable defaultUsers = new Hashtable();
+    private static final Hashtable<String, String> defaultUsers = new Hashtable<>();
     // Number of days previous to password expiration to start to warn user.
     private static int expirationWarning = 7;
     // Whether to use system value QPWDEXPWRN to calculate days previous to password expiration.
@@ -915,7 +915,7 @@ public class AS400 implements Serializable {
         if (systemName == null) {
             throw new NullPointerException("systemName");
         }
-        String defaultUser = (String) AS400.defaultUsers.get(resolveSystem(systemName));
+        String defaultUser = AS400.defaultUsers.get(resolveSystem(systemName));
         if (Trace.traceOn_)
             Trace.log(Trace.DIAGNOSTIC, "Default user:", defaultUser);
         return defaultUser;

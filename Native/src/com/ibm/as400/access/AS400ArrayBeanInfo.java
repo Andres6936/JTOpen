@@ -27,9 +27,9 @@ public class AS400ArrayBeanInfo extends SimpleBeanInfo
   private static final String copyright = "Copyright (C) 1997-2000 International Business Machines Corporation and others.";
 
     // Class this bean info represents.
-    private final static Class beanClass = AS400Array.class;
+    private final static Class<AS400Array> beanClass = AS400Array.class;
 
-    private static PropertyDescriptor[] properties_;
+    private static final PropertyDescriptor[] properties_;
 
     static
     {
@@ -43,9 +43,7 @@ public class AS400ArrayBeanInfo extends SimpleBeanInfo
             type.setShortDescription(ResourceBundleLoader.getText("PROP_DESC_AS400ARRAY_TYPE"));
             type.setDisplayName(ResourceBundleLoader.getText("PROP_NAME_AS400ARRAY_TYPE"));
 
-            PropertyDescriptor properties[] = {numberOfElements, type};
-
-            properties_ = properties;
+            properties_ = new PropertyDescriptor[]{numberOfElements, type};
         }
         catch (Exception e)
         {
@@ -77,23 +75,13 @@ public class AS400ArrayBeanInfo extends SimpleBeanInfo
       * @param icon The desired icon size and color.
       * @return The Image for the icon.
       **/
-    public Image getIcon(int icon)
-    {
-        Image image = null;
+    public Image getIcon(int icon) {
 
-        switch(icon)
-        {
-            case BeanInfo.ICON_MONO_16x16:
-            case BeanInfo.ICON_COLOR_16x16:
-                image = loadImage("AS400Array16.gif");
-                break;
-            case BeanInfo.ICON_MONO_32x32:
-            case BeanInfo.ICON_COLOR_32x32:
-                image = loadImage("AS400Array32.gif");
-                break;
-        }
-
-        return image;
+        return switch (icon) {
+            case BeanInfo.ICON_MONO_16x16, BeanInfo.ICON_COLOR_16x16 -> loadImage("AS400Array16.gif");
+            case BeanInfo.ICON_MONO_32x32, BeanInfo.ICON_COLOR_32x32 -> loadImage("AS400Array32.gif");
+            default -> null;
+        };
     }
 }
 

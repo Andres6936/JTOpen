@@ -366,21 +366,6 @@ public class AS400JDBCCallableStatementRedirect extends
         return getURL(findParameterIndex(parameterName));
     }
 
-    @Override
-    public RowId getRowId(int parameterIndex) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public RowId getRowId(String parameterName) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void setRowId(String parameterName, RowId x) throws SQLException {
-
-    }
-
 
     public Reader getCharacterStream(int parameterIndex) throws SQLException {
         return ((AS400JDBCCallableStatement) cstmt_).getCharacterStream(parameterIndex);
@@ -495,12 +480,6 @@ public class AS400JDBCCallableStatementRedirect extends
 
     }
 
-    @Override
-    public void setNClob(String parameterName, NClob value) throws SQLException {
-
-    }
-
-
     public void setNClob(String parameterName, Reader reader) throws SQLException {
         setNClob(findParameterIndex(parameterName), reader);
 
@@ -510,31 +489,6 @@ public class AS400JDBCCallableStatementRedirect extends
     public void setNClob(String parameterName, Reader reader, long length) throws SQLException {
         setNClob(findParameterIndex(parameterName), reader, length);
 
-    }
-
-    @Override
-    public NClob getNClob(int parameterIndex) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public NClob getNClob(String parameterName) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
-
-    }
-
-    @Override
-    public SQLXML getSQLXML(int parameterIndex) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public SQLXML getSQLXML(String parameterName) throws SQLException {
-        return null;
     }
 
 
@@ -554,7 +508,6 @@ public class AS400JDBCCallableStatementRedirect extends
         return ((AS400JDBCCallableStatement) cstmt_).getObject(parameter, type);
     }
 
-    /* ifdef JDBC40
 
       public void setNClob(String parameterName, NClob clob) throws SQLException {
         setNClob(findParameterIndex(parameterName), clob);
@@ -604,8 +557,6 @@ public class AS400JDBCCallableStatementRedirect extends
       }
 
 
-
-    endif */
     public void setObject(String parameterName,
                           Object x,
                          /* ifdef JDBC42        

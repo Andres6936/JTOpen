@@ -1,8 +1,8 @@
 package com.taylor.access;
 
 import com.ibm.as400.access.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class TestAS400 {
         power.connectService(AS400.FILE);
         power.connectService(AS400.COMMAND);
         power.connectService(AS400.DATABASE);
-        Assert.assertTrue(power.isConnected());
+        Assertions.assertTrue(power.isConnected());
 
         IFSFile file = new IFSFile(power, "/archivo.csv");
         BufferedReader reader = new BufferedReader(new IFSFileReader(file));

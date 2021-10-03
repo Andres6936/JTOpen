@@ -1,8 +1,8 @@
 package com.taylor.access;
 
 import com.ibm.as400.access.*;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class TestFileChooser {
         power.connectService(AS400.FILE);
         power.connectService(AS400.COMMAND);
         power.connectService(AS400.DATABASE);
-        Assert.assertTrue(power.isConnected());
+        Assertions.assertTrue(power.isConnected());
 
         IFSJavaFile dir = new IFSJavaFile(power, "/");
         JFileChooser chooser = new JFileChooser(dir, new IFSSystemView(power));

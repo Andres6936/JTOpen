@@ -10,7 +10,7 @@ import java.io.IOException;
 public class TestAS400 {
     @Test
     public void testConnection() throws AS400SecurityException, IOException, ObjectDoesNotExistException, InterruptedException, ErrorCompletingRequestException {
-        AS400 power = new AS400("192.168.1.3", "JBURIT", "HDGTDVI5");
+        AS400 power = new AS400("pub400.com", "JADAN", "HDgtDVi5");
         power.connectService(AS400.FILE);
         power.connectService(AS400.COMMAND);
         power.connectService(AS400.DATABASE);
